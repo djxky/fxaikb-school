@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>飞象 AI · AI 录题进度</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+<link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260522a" />
+<style>
+  /* AI 录题进度页 · 视觉对齐飞象「AI 智能录题」截图，但不要上传区/不要 tab/加 KB 分组 */
+  .recp-page{
+    max-width:1080px;
+    margin:0 auto;
+    padding:24px 22px 96px;
+  }
+  .recp-bcbar{
+    display:flex; align-items:center; gap:6px;
+    font-size:12px; color:var(--text-3);
+    margin-bottom:18px;
+  }
+  .recp-bcbar a{
+    color:var(--text-3);
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:3px;
+    padding:3px 6px;
+    border-radius:5px;
+    transition:background-color .12s, color .12s;
+    cursor:pointer;
+  }
+  .recp-bcbar a:hover{ background:var(--surface-2); color:var(--text); }
+  .recp-bcbar > [data-lucide]{ width:11px; height:11px; color:var(--text-4); }
+  .recp-bcbar .recp-bcbar-current{ color:var(--text); font-weight:500; padding:3px 6px; }
+
+  /* Hero 区 · 大字品牌 + 副标题 + 主按钮 */
+  .recp-hero{
+    display:flex; align-items:flex-start; gap:24px;
+    padding:24px 28px;
+    background:linear-gradient(135deg, #FBF7EE 0%, #FAFAF7 100%);
+    border:1px solid #ECE3CC;
+    border-radius:14px;
+    margin-bottom:20px;
+  }
+  .recp-hero-text{
+    flex:1; min-width:0;
+  }
+  .recp-hero-title{
+    font-size:32px;
+    font-weight:700;
+    letter-spacing:-.012em;
+    line-height:1.15;
+    color:#1A1A1A;
+    margin-bottom:6px;
+  }
+  .recp-hero-title .recp-brand{
+    background:linear-gradient(135deg,#D9B96A 0%,#A87E2C 100%);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+    font-style:italic;
+    font-weight:800;
+    margin-right:4px;
+  }
+  .recp-hero-sub{
+    font-size:13px;
+    color:var(--text-2);
+    line-height:1.7;
+    max-width:480px;
+  }
+  .recp-hero-actions{
+    display:flex; align-items:center; gap:8px;
+    flex-shrink:0;
+  }
+  .recp-record-btn{
+    display:inline-flex; align-items:center; gap:6px;
+    height:38px;
+    padding:0 18px;
+    border-radius:8px;
+    border:none;
+    background:linear-gradient(135deg,#C9A76E 0%,#A87E2C 100%);
+    color:#fff;
+    font-size:13.5px;
+    font-weight:600;
+    cursor:pointer;
+    font-family:inherit;
+    box-shadow:0 2px 6px rgba(168,126,44,.28);
+    transition:filter .12s, box-shadow .12s, transform .08s;
+  }
+  .recp-record-btn:hover{ filter:brightness(1.05); box-shadow:0 4px 12px rgba(168,126,44,.34); }
+  .recp-record-btn:active{ transform:translateY(1px); }
+  .recp-record-btn [data-lucide]{ width:15px; height:15px; }
+
+  /* 列表区头部 */
+  .recp-list-head{
+    display:flex; align-items:center; gap:10px;
+    margin-bottom:14px;
+    padding-bottom:12px;
+    border-bottom:1px solid var(--border);
+  }
+  .recp-list-title{
+    font-size:16px;
+    font-weight:700;
+    color:var(--text);
+    letter-spacing:-.005em;
+  }
+  .recp-list-meta{
+    font-size:12px;
+    color:var(--text-3);
+    font-weight:400;
+  }
+  .recp-toolbar{
+    margin-left:auto;
+    display:flex; align-items:center; gap:8px;
+  }
+  .recp-tool-select,
+  .recp-tool-search{
+    height:30px;
+    border:1px solid #D8D3C9;
+    border-radius:7px;
+    background:#FFFFFF;
+    font-size:12.5px;
+    color:var(--text);
+    font-family:inherit;
+    transition:border-color .12s, box-shadow .12s;
+  }
+  .recp-tool-select{
+    padding:0 26px 0 10px;
+    cursor:pointer;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%239A968F' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+    background-repeat:no-repeat;
+    background-position:right 8px center;
+    -webkit-appearance:none;
+    appearance:none;
+  }
+  .recp-tool-select:hover,
+  .recp-tool-select:focus{
+    border-color:#A87E2C;
+    outline:none;
+    box-shadow:0 0 0 3px rgba(168,126,44,.10);
+  }
+  .recp-tool-search{
+    display:inline-flex; align-items:center; gap:6px;
+    padding:0 10px;
+    width:200px;
+  }
+  .recp-tool-search [data-lucide]{ width:12px; height:12px; color:var(--text-3); flex-shrink:0; }
+  .recp-tool-search input{
+    flex:1; min-width:0;
+    border:none; outline:none; background:transparent;
+    font-size:12.5px;
+    color:var(--text);
+    font-family:inherit;
+    height:28px;
+  }
+  .recp-tool-search input::placeholder{ color:var(--text-4); }
+  .recp-tool-search:focus-within{
+    border-color:#A87E2C;
+    box-shadow:0 0 0 3px rgba(168,126,44,.10);
+  }
+
+  /* 任务列表容器 · 扁平时间倒序 · 不分组（避免状态切换时任务跳组） */
+  .recp-items{
+    border:1px solid var(--border);
+    border-radius:10px;
+    background:var(--surface);
+    overflow:hidden;
+  }
+
+  /* 列表项 */
+  .recp-item{
+    display:flex; align-items:center; gap:12px;
+    padding:12px 14px;
+    border-bottom:1px solid var(--border);
+    font-size:13px;
+    color:var(--text);
+    transition:background-color .12s;
+  }
+  .recp-item:last-child{ border-bottom:none; }
+  .recp-item:hover{ background:#FCFAF5; }
+
+  .recp-item-icon{
+    width:36px; height:36px;
+    border-radius:7px;
+    display:inline-flex; align-items:center; justify-content:center;
+    color:#fff;
+    flex-shrink:0;
+  }
+  .recp-item-icon [data-lucide]{ width:16px; height:16px; }
+  .recp-item-icon--pdf{ background:#D93D2A; }
+  .recp-item-icon--docx{ background:#2B5BD7; }
+
+  .recp-item-main{
+    flex:1; min-width:0;
+  }
+  .recp-item-name-line{
+    display:flex; align-items:center; gap:8px;
+    margin-bottom:4px;
+  }
+  .recp-item-name{
+    font-size:13.5px;
+    font-weight:500;
+    color:var(--text);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    max-width:520px;
+  }
+  .recp-item-state{
+    display:inline-flex; align-items:center; gap:3px;
+    padding:2px 8px;
+    border-radius:10px;
+    font-size:11px;
+    font-weight:500;
+    flex-shrink:0;
+  }
+  .recp-item-state [data-lucide]{ width:11px; height:11px; }
+  .recp-item-state.is-parsing{ background:#FBF7EE; color:#A87E2C; border:1px solid #ECE3CC; }
+  .recp-item-state.is-pending{ background:#EAF1FF; color:#2B5BD7; border:1px solid #C7DBFF; }
+  .recp-item-state.is-done{ background:#EEF6F0; color:#2A8F47; border:1px solid #D3E5D5; }
+  .recp-item-state.is-failed{ background:#FFEEE9; color:#D93D2A; border:1px solid #F5C9BB; }
+  .recp-item-state .is-spin{ animation:recp-spin .9s linear infinite; }
+  @keyframes recp-spin{ to{ transform:rotate(360deg); } }
+
+  .recp-item-sub{
+    display:flex; align-items:center; gap:6px;
+    font-size:11.5px;
+    color:var(--text-4);
+    flex-wrap:wrap;
+  }
+  .recp-item-sub > span{ flex-shrink:0; }
+  .recp-item-sub .sep{ color:var(--text-4); opacity:.6; }
+  .recp-item-sub .recp-item-meta-strong{ color:var(--text-2); font-weight:500; }
+  .recp-item-kb{
+    display:inline-flex; align-items:center; gap:3px;
+    color:var(--text-2);
+    font-weight:500;
+  }
+  .recp-item-kb [data-lucide]{ width:11px; height:11px; color:var(--gold-deep); }
+
+  .recp-item-actions{
+    display:flex; align-items:center; gap:6px;
+    flex-shrink:0;
+  }
+  .recp-item-action{
+    display:inline-flex; align-items:center; gap:4px;
+    height:30px;
+    padding:0 12px;
+    border-radius:6px;
+    border:1px solid #D8D3C9;
+    background:#fff;
+    color:var(--text-2);
+    font-size:12px;
+    font-weight:500;
+    cursor:pointer;
+    text-decoration:none;
+    font-family:inherit;
+    transition:all .12s;
+  }
+  .recp-item-action [data-lucide]{ width:13px; height:13px; }
+  .recp-item-action:hover{ border-color:#A87E2C; color:#7A5615; background:#FBF7EE; }
+  .recp-item-action.is-primary{
+    background:linear-gradient(135deg,#C9A76E 0%,#A87E2C 100%);
+    color:#fff;
+    border:none;
+    box-shadow:0 1px 3px rgba(168,126,44,.28);
+  }
+  .recp-item-action.is-primary:hover{ filter:brightness(1.05); box-shadow:0 2px 6px rgba(168,126,44,.36); }
+  .recp-item-action.is-muted{
+    background:transparent;
+    border-color:transparent;
+    color:var(--text-3);
+    cursor:default;
+    pointer-events:none;
+  }
+
+  /* 进度百分比 */
+  .recp-progress{
+    display:inline-flex; align-items:center; gap:6px;
+    font-size:11.5px;
+    color:#A87E2C;
+    font-weight:500;
+    font-variant-numeric:tabular-nums;
+  }
+  .recp-progress-bar{
+    width:80px; height:4px;
+    background:#F2EEE5;
+    border-radius:2px;
+    overflow:hidden;
+    position:relative;
+  }
+  .recp-progress-bar-fill{
+    height:100%;
+    background:linear-gradient(90deg,#D9B96A 0%,#A87E2C 100%);
+    border-radius:2px;
+    transition:width .4s ease-out;
+  }
+
+  /* 已入库角标 */
+  .recp-committed-badge{
+    display:inline-flex; align-items:center; gap:3px;
+    padding:1px 6px;
+    border-radius:4px;
+    background:#EEF6F0;
+    color:#2A8F47;
+    font-size:10.5px;
+    font-weight:500;
+    border:1px solid #D3E5D5;
+  }
+  .recp-committed-badge [data-lucide]{ width:10px; height:10px; }
+
+  /* 空态 */
+  .recp-empty{
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    padding:80px 20px;
+    text-align:center;
+  }
+  .recp-empty-icon{
+    width:56px; height:56px;
+    border-radius:50%;
+    background:var(--surface-2);
+    display:inline-flex; align-items:center; justify-content:center;
+    margin-bottom:14px;
+  }
+  .recp-empty-icon [data-lucide]{
+    width:24px; height:24px;
+    color:var(--text-3);
+  }
+  .recp-empty-title{
+    font-size:14.5px;
+    font-weight:600;
+    color:var(--text);
+    margin-bottom:6px;
+  }
+  .recp-empty-sub{
+    font-size:12.5px;
+    color:var(--text-3);
+    margin-bottom:18px;
+    max-width:320px;
+    line-height:1.6;
+  }
+
+  /* 搜索无结果 */
+  .recp-noresult{
+    padding:32px 14px;
+    text-align:center;
+    font-size:12.5px;
+    color:var(--text-3);
+  }
+  .recp-noresult [data-lucide]{ width:16px; height:16px; vertical-align:-3px; margin-right:4px; }
+
+  /* 时间相对显示 */
+  .recp-rel-time{ color:var(--text-4); }
+</style>
+</head>
+<body data-page="ai-qbank" data-subpage="ai-record-jobs">
+
+<div class="app" id="app" data-view="wiki" data-chat="closed">
+  <aside class="sidebar-left" id="feixiang-sidebar"></aside>
+
+  <main class="workspace">
+    <header class="topbar" id="v28-topbar"></header>
+
+    <div class="workspace-scroll">
+      <section class="recp-page">
+        <nav class="recp-bcbar" data-doc="ai-record-jobs-bcbar">
+          <a onclick="window.location.href='school-wiki.html'">
+            <i data-lucide="home"></i>首页
+          </a>
+          <i data-lucide="chevron-right"></i>
+          <a onclick="window.location.href='ai-qbank.html'">AI 题库</a>
+          <i data-lucide="chevron-right"></i>
+          <span class="recp-bcbar-current">AI 录题进度</span>
+        </nav>
+
+        <div class="recp-hero">
+          <div class="recp-hero-text">
+            <h1 class="recp-hero-title"><span class="recp-brand">Ai</span>录题</h1>
+            <p class="recp-hero-sub">从知识库的 PDF / Word 自动解析为题目，AI 识别题面 / 答案 / 知识点 / 难度，老师校对后入题库。<br/>团队知识库由管理员触发，个人知识库老师自行触发。</p>
+          </div>
+          <div class="recp-hero-actions">
+            <button class="recp-record-btn" id="recp-record-btn" data-doc="ai-record-entry">
+              <i data-lucide="sparkles"></i>
+              <span>+ AI 录题</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="recp-list-head">
+          <span class="recp-list-title">AI 处理进度</span>
+          <span class="recp-list-meta" id="recp-list-meta"></span>
+          <div class="recp-toolbar">
+            <select class="recp-tool-select" id="recp-filter-kb">
+              <option value="">全部知识库</option>
+            </select>
+            <select class="recp-tool-select" id="recp-filter-state">
+              <option value="">全部状态</option>
+              <option value="review-pending">待校对</option>
+              <option value="parsing">解析中</option>
+              <option value="committed">已入库</option>
+              <option value="failed">失败</option>
+            </select>
+            <label class="recp-tool-search">
+              <i data-lucide="search"></i>
+              <input id="recp-search-input" type="text" placeholder="搜索文件名…" autocomplete="off" />
+            </label>
+          </div>
+        </div>
+
+        <div id="recp-list-root"></div>
+      </section>
+    </div>
+  </main>
+
+  <aside class="sidebar-right"></aside>
+</div>
+
+<div id="toast"></div>
+
+<script src="assets/feixiang-shell.js"></script>
+<script>renderFeixiangSidebar('');</script>
+<script src="assets/v28-shell.js?v=20260522b"></script>
+<script src="assets/v28.js?v=20260522e"></script>
+<script src="assets/shared/v28-modals.js?v=20260522a"></script>
+<script>
+  (function(){
+    const root = document.getElementById('recp-list-root');
+    const metaEl = document.getElementById('recp-list-meta');
+    const kbSel = document.getElementById('recp-filter-kb');
+    const stateSel = document.getElementById('recp-filter-state');
+    const searchInp = document.getElementById('recp-search-input');
+    const recordBtn = document.getElementById('recp-record-btn');
+
+    /* —— 视图状态 —— */
+    let filterKb = '';
+    let filterState = '';
+    let keyword = '';
+
+    /* —— 状态元数据 ——
+     * 不再分组,统一按 createdAt 倒序扁平展示,避免任务在 parsing → review-pending 状态跳变时
+     * 视觉位置突然变化导致老师"刚才那个任务怎么不见了"的错觉
+     */
+    const STATE_META = {
+      'review-pending': { label:'待校对', cls:'is-pending', icon:'circle-dot',     spin:false },
+      'parsing':        { label:'解析中', cls:'is-parsing', icon:'loader-2',       spin:true  },
+      'failed':         { label:'失败',   cls:'is-failed',  icon:'x-circle',       spin:false },
+      'committed':      { label:'已入库', cls:'is-done',    icon:'check-circle-2', spin:false }
+    };
+
+    /* —— 辅助 —— */
+    function escHtml(s){
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+      }[c]));
+    }
+    function fmtRelTime(ts){
+      if(!ts) return '';
+      const delta = Date.now() - ts;
+      if(delta < 60_000) return '刚刚';
+      if(delta < 3600_000) return Math.floor(delta / 60_000) + ' 分钟前';
+      if(delta < 86_400_000) return Math.floor(delta / 3600_000) + ' 小时前';
+      return Math.floor(delta / 86_400_000) + ' 天前';
+    }
+    /* 解析中进度 = (已用时 / 总解析时长) 百分比，最大 95% (留 5% 给完成切换) */
+    function calcProgress(job){
+      if(!job._parseMs) return 0;
+      const elapsed = Date.now() - job.createdAt;
+      const ratio = Math.min(elapsed / job._parseMs, 0.95);
+      return Math.max(2, Math.round(ratio * 100));
+    }
+
+    /* —— KB 筛选下拉 · 从任务池 + 当前任务里聚合 —— */
+    function rebuildKbFilter(){
+      if(!window.V28RecordJobs || !kbSel) return;
+      const set = new Set();
+      V28RecordJobs.list().forEach(j => { if(j.kbLabel) set.add(j.kbLabel); });
+      /* 也把池里的 KB 名字带上，便于切换 */
+      try{
+        (V28RecordJobs._pool() || []).forEach(f => { if(f.kbLabel) set.add(f.kbLabel); });
+      }catch(e){}
+      const current = filterKb;
+      const opts = ['<option value="">全部知识库</option>']
+        .concat([...set].map(k => `<option value="${escHtml(k)}">${escHtml(k)}</option>`));
+      kbSel.innerHTML = opts.join('');
+      if(current && set.has(current)) kbSel.value = current;
+    }
+
+    /* —— 列表过滤 ——
+     * 排序统一按 createdAt 倒序（V28RecordJobs.list() 已经是新→旧）
+     * 不再做状态分组,避免任务状态切换时跳位
+     */
+    function buildView(){
+      const all = window.V28RecordJobs ? V28RecordJobs.list() : [];
+
+      const kw = keyword.trim().toLowerCase();
+      const filtered = all.filter(j => {
+        if(filterKb && j.kbLabel !== filterKb) return false;
+        if(filterState && j.state !== filterState) return false;
+        if(kw && !j.fileName.toLowerCase().includes(kw)) return false;
+        return true;
+      });
+
+      return { all, filtered };
+    }
+
+    /* —— 渲染列表 —— */
+    function renderList(){
+      const { all, filtered } = buildView();
+
+      /* 头部 meta · 总览数据保留,作为"现在状态如何"的快速感知 */
+      if(metaEl){
+        if(all.length === 0){
+          metaEl.textContent = '';
+        } else {
+          const parsing = all.filter(j => j.state === 'parsing').length;
+          const pending = all.filter(j => j.state === 'review-pending').length;
+          const parts = [];
+          if(pending) parts.push(`${pending} 个待校对`);
+          if(parsing) parts.push(`${parsing} 个解析中`);
+          parts.push(`共 ${all.length} 个任务`);
+          metaEl.textContent = '· ' + parts.join(' · ');
+        }
+      }
+
+      /* 空态 */
+      if(all.length === 0){
+        root.innerHTML = `
+          <div class="recp-empty">
+            <div class="recp-empty-icon"><i data-lucide="inbox"></i></div>
+            <div class="recp-empty-title">还没有 AI 录题任务</div>
+            <div class="recp-empty-sub">点 [+ AI 录题] 从知识库选 PDF / Word 文件，AI 自动解析为题目，老师校对后入题库。</div>
+            <button class="recp-record-btn" data-action="open-record">
+              <i data-lucide="sparkles"></i><span>+ AI 录题</span>
+            </button>
+          </div>
+        `;
+        if(window.lucide) lucide.createIcons();
+        return;
+      }
+      if(filtered.length === 0){
+        root.innerHTML = `
+          <div class="recp-noresult">
+            <i data-lucide="folder-search"></i>没有匹配的任务，可调整筛选或搜索条件。
+          </div>
+        `;
+        if(window.lucide) lucide.createIcons();
+        return;
+      }
+
+      /* 扁平时间倒序渲染（V28RecordJobs.list 已经按 createdAt 倒序） */
+      root.innerHTML = `<div class="recp-items">${filtered.map(renderItem).join('')}</div>`;
+      if(window.lucide) lucide.createIcons();
+      bindRowActions();
+    }
+
+    function renderItem(job){
+      const meta = STATE_META[job.state];
+      const ext = (job.fileType || '').toLowerCase();
+      const iconCls = ext === 'docx' || ext === 'doc' ? 'recp-item-icon--docx' : 'recp-item-icon--pdf';
+
+      /* 时间 */
+      const timeStr =
+        job.committedAt ? `已入库 · ${fmtRelTime(job.committedAt)}` :
+        job.parseDoneAt ? `解析完成 · ${fmtRelTime(job.parseDoneAt)}` :
+        `提交于 ${fmtRelTime(job.createdAt)}`;
+
+      /* 解析中进度 */
+      const progressHtml = job.state === 'parsing'
+        ? (() => {
+            const pct = calcProgress(job);
+            return `
+              <div class="recp-progress">
+                <div class="recp-progress-bar"><div class="recp-progress-bar-fill" style="width:${pct}%"></div></div>
+                <span>${pct}%</span>
+              </div>
+            `;
+          })()
+        : '';
+
+      /* 题数 chip */
+      const qInfo = job.state !== 'parsing'
+        ? `<span class="sep">·</span><span class="recp-item-meta-strong">${job.questionCount} 题</span>`
+        : '';
+
+      /* 已入库角标（在文件名右侧，提示去重） */
+      const committedBadge = job.state === 'committed'
+        ? `<span class="recp-committed-badge"><i data-lucide="check"></i>已入库 ${job.questionCount} 题</span>`
+        : '';
+
+      /* 操作区 */
+      let actions = '';
+      if(job.state === 'review-pending'){
+        actions = `
+          <a class="recp-item-action is-primary" href="ai-review.html?jobId=${job.id}">
+            去校对<i data-lucide="arrow-right"></i>
+          </a>
+        `;
+      } else if(job.state === 'committed'){
+        actions = `
+          <button class="recp-item-action" data-action="re-record" data-jobid="${job.id}" title="再次解析此文件，会与已入库题目合并；可能产生重复题">
+            <i data-lucide="refresh-cw"></i>重新录题
+          </button>
+        `;
+      } else if(job.state === 'failed'){
+        actions = `
+          <button class="recp-item-action" data-action="retry" data-jobid="${job.id}">
+            <i data-lucide="rotate-cw"></i>重新解析
+          </button>
+        `;
+      } else if(job.state === 'parsing'){
+        actions = `<span class="recp-item-action is-muted">解析中…</span>`;
+      }
+
+      return `
+        <div class="recp-item" data-jobid="${job.id}">
+          <span class="recp-item-icon ${iconCls}"><i data-lucide="file-text"></i></span>
+          <div class="recp-item-main">
+            <div class="recp-item-name-line">
+              <span class="recp-item-name" title="${escHtml(job.fileName)}">${escHtml(job.fileName)}</span>
+              <span class="recp-item-state ${meta.cls}">
+                <i data-lucide="${meta.icon}" class="${meta.spin ? 'is-spin' : ''}"></i>${meta.label}
+              </span>
+              ${committedBadge}
+            </div>
+            <div class="recp-item-sub">
+              ${progressHtml}
+              ${progressHtml ? '<span class="sep">·</span>' : ''}
+              <span class="recp-item-kb"><i data-lucide="library"></i>${escHtml(job.kbLabel || '')}</span>
+              <span class="sep">·</span>
+              <span>${escHtml(job.fileSize || '')}</span>
+              ${qInfo}
+              <span class="sep">·</span>
+              <span class="recp-rel-time">${escHtml(timeStr)}</span>
+            </div>
+          </div>
+          <div class="recp-item-actions">${actions}</div>
+        </div>
+      `;
+    }
+
+    function bindRowActions(){
+      /* 重新录题（已入库 → 二次确认 → 再开 RecordDialog 默认勾选这个文件） */
+      root.querySelectorAll('[data-action="re-record"]').forEach(el => {
+        el.addEventListener('click', () => {
+          const id = el.getAttribute('data-jobid');
+          const j = window.V28RecordJobs && V28RecordJobs.get(id);
+          if(!j) return;
+          if(!confirm(`《${j.fileName}》已入库 ${j.questionCount} 题。\n再次录题会与已有题目合并，可能产生重复题。\n\n确认重新录题？`)) return;
+          openRecordDialog({ preselectFileIds:[j.fileId] });
+        });
+      });
+      /* 失败重试（演示态：toast 提示） */
+      root.querySelectorAll('[data-action="retry"]').forEach(el => {
+        el.addEventListener('click', () => {
+          showToast('（演示）失败重试由后台重新排队解析');
+        });
+      });
+      /* 空态再次触发 */
+      const openBtn = root.querySelector('[data-action="open-record"]');
+      if(openBtn) openBtn.addEventListener('click', () => openRecordDialog());
+    }
+
+    /* —— 主入口：打开 V28RecordDialog —— */
+    function openRecordDialog(opts){
+      if(!window.V28RecordDialog){ showToast('AI 录题模块加载失败'); return; }
+      V28RecordDialog.open({
+        preselectFileIds: opts && opts.preselectFileIds,
+        onSubmit: (jobs) => {
+          if(jobs && jobs.length){
+            showToast(`已开始解析 ${jobs.length} 个文件 · 解析完成会自动通知`);
+          }
+          /* 留在 09，不跳转，主动滚动到列表顶部新任务 */
+          requestAnimationFrame(() => {
+            const first = root.querySelector('.recp-item');
+            if(first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+          });
+        }
+      });
+    }
+
+    /* —— 事件绑定 —— */
+    if(recordBtn){
+      recordBtn.addEventListener('click', () => openRecordDialog());
+    }
+    if(kbSel){
+      kbSel.addEventListener('change', e => { filterKb = e.target.value; renderList(); });
+    }
+    if(stateSel){
+      stateSel.addEventListener('change', e => { filterState = e.target.value; renderList(); });
+    }
+    if(searchInp){
+      searchInp.addEventListener('input', e => { keyword = e.target.value; renderList(); });
+    }
+
+    /* —— 初始化 + 订阅状态变化 + 周期刷新（更新进度条/相对时间） —— */
+    function init(){
+      rebuildKbFilter();
+      renderList();
+      if(window.V28RecordJobs && V28RecordJobs.subscribe){
+        V28RecordJobs.subscribe(() => {
+          rebuildKbFilter();
+          renderList();
+        });
+      }
+    }
+    if(document.readyState === 'loading'){
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    /* 1s 节奏更新解析中进度条 + 相对时间 · 不依赖 subscribe */
+    setInterval(() => {
+      const hasParsing = window.V28RecordJobs && V28RecordJobs.parsingCount() > 0;
+      if(hasParsing) renderList();
+    }, 1000);
+  })();
+</script>
+
+<!-- pin-comments: 多人评论 -->
+<script>
+  window.PIN_COMMENTS = {
+    url: 'https://dfiuujabnxacqqfclntz.supabase.co',
+    anonKey: 'sb_publishable_GoSMz1ffqZxAOOPtA6KQHA_Vj7gmUMJ',
+    projectKey: 'fxaikb',
+    pageKey: 'ai-record-jobs.html'
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./assets/shared/pin-comments.js"></script>
+</body>
+</html>

@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>飞象 AI · AI 录题校对</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+<link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260522a" />
+<style>
+  .rv-page{
+    max-width:920px;
+    margin:0 auto;
+    padding:24px 22px 96px;
+  }
+  .rv-bcbar{
+    display:flex; align-items:center; gap:6px;
+    font-size:12px; color:var(--text-3);
+    margin-bottom:16px;
+  }
+  .rv-bcbar a{
+    color:var(--text-3);
+    text-decoration:none;
+    display:inline-flex; align-items:center; gap:3px;
+    padding:3px 6px;
+    border-radius:5px;
+    transition:background-color .12s, color .12s;
+  }
+  .rv-bcbar a:hover{ background:var(--surface-2); color:var(--text-1); }
+  .rv-bcbar a [data-lucide]{ width:12px; height:12px; }
+  .rv-bcbar > [data-lucide]{ width:11px; height:11px; color:var(--text-4); }
+  .rv-bcbar .rv-bcbar-current{ color:var(--text-1); font-weight:500; padding:3px 6px; }
+
+  /* 文件信息条 */
+  .rv-fileinfo{
+    display:flex; align-items:center; gap:14px;
+    padding:16px 18px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    margin-bottom:16px;
+  }
+  .rv-fileinfo-icon{
+    width:42px; height:42px;
+    border-radius:8px;
+    display:inline-flex; align-items:center; justify-content:center;
+    color:#fff;
+    flex-shrink:0;
+  }
+  .rv-fileinfo-icon [data-lucide]{ width:18px; height:18px; }
+  .rv-fileinfo-icon.is-pdf{ background:#D93D2A; }
+  .rv-fileinfo-icon.is-docx{ background:#2B5BD7; }
+  .rv-fileinfo-main{ flex:1; min-width:0; }
+  .rv-fileinfo-name{
+    font-size:15px;
+    font-weight:600;
+    color:var(--text-1);
+    white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    line-height:1.4;
+  }
+  .rv-fileinfo-sub{
+    margin-top:3px;
+    font-size:11.5px;
+    color:var(--text-4);
+    display:flex; align-items:center; gap:6px; flex-wrap:wrap;
+  }
+  .rv-fileinfo-sub b{ color:var(--text-2); font-weight:600; }
+  .rv-fileinfo-state{
+    display:inline-flex; align-items:center; gap:4px;
+    padding:4px 10px;
+    border-radius:5px;
+    background:#EAF1FF;
+    border:1px solid #C7DBFF;
+    color:#2B5BD7;
+    font-size:11.5px;
+    font-weight:500;
+    flex-shrink:0;
+  }
+  .rv-fileinfo-state [data-lucide]{ width:11px; height:11px; }
+  .rv-fileinfo-state.is-done{
+    background:#F0F4EE;
+    border-color:#DCE8D5;
+    color:#2A8F47;
+  }
+
+  /* 主区:左右两栏占位(视觉示意校对页骨架,不接交互) */
+  .rv-stub{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:18px;
+  }
+  .rv-stub-col{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:14px;
+    min-height:280px;
+    position:relative;
+    overflow:hidden;
+  }
+  .rv-stub-col-head{
+    display:flex; align-items:center; gap:6px;
+    font-size:12.5px;
+    font-weight:600;
+    color:var(--text-2);
+    padding-bottom:10px;
+    margin-bottom:12px;
+    border-bottom:1px dashed var(--border);
+  }
+  .rv-stub-col-head [data-lucide]{ width:13px; height:13px; color:var(--gold-deep); }
+  .rv-stub-col-head .rv-stub-col-tag{
+    margin-left:auto;
+    font-size:10.5px;
+    font-weight:500;
+    color:var(--text-4);
+    padding:2px 7px;
+    border:1px solid var(--border);
+    border-radius:4px;
+    background:var(--surface-2);
+  }
+
+  /* 左:PDF 框示意 */
+  .rv-stub-pdf{
+    position:relative;
+    background:#FAFAF8;
+    border:1px solid var(--border);
+    border-radius:8px;
+    aspect-ratio:3 / 4;
+    margin:0 auto;
+    max-width:240px;
+    padding:14px;
+  }
+  .rv-stub-pdf::before{
+    content:"PDF · 第 3 / 12 页";
+    position:absolute;
+    top:8px; left:50%; transform:translateX(-50%);
+    font-size:9px;
+    color:var(--text-4);
+    background:var(--surface);
+    padding:1px 8px;
+    border-radius:3px;
+    border:1px solid var(--border);
+  }
+  .rv-stub-lines{
+    margin-top:18px;
+    display:flex; flex-direction:column; gap:5px;
+  }
+  .rv-stub-lines > span{
+    display:block;
+    height:6px;
+    background:#E6E2D8;
+    border-radius:3px;
+  }
+  .rv-stub-lines > span.short{ width:60%; }
+  .rv-stub-lines > span.mid{ width:82%; }
+  .rv-stub-frame{
+    position:absolute;
+    border:1.5px solid var(--gold);
+    border-radius:4px;
+    background:rgba(168,126,44,.06);
+    pointer-events:none;
+  }
+  .rv-stub-frame::after{
+    content:attr(data-label);
+    position:absolute;
+    bottom:-9px; right:-2px;
+    font-size:9px;
+    font-weight:700;
+    color:#fff;
+    background:var(--gold-deep);
+    padding:1px 6px;
+    border-radius:3px;
+    line-height:1.3;
+  }
+  .rv-stub-frame.is-answer{ border-color:#2B5BD7; background:rgba(43,91,215,.05); }
+  .rv-stub-frame.is-answer::after{ background:#2B5BD7; }
+
+  /* 右:题目卡片占位 */
+  .rv-stub-qcard{
+    background:var(--surface-2);
+    border:1px solid var(--border);
+    border-radius:8px;
+    padding:10px 12px;
+    margin-bottom:8px;
+    font-size:11.5px;
+    color:var(--text-2);
+    line-height:1.6;
+  }
+  .rv-stub-qcard-head{
+    display:flex; align-items:center; gap:6px;
+    margin-bottom:5px;
+    color:var(--text-3);
+    font-size:10.5px;
+  }
+  .rv-stub-qcard-head b{
+    color:var(--gold-deep);
+    font-weight:700;
+  }
+  .rv-stub-qcard-tag{
+    font-size:9.5px;
+    padding:1px 6px;
+    background:var(--gold-bg);
+    color:var(--gold-deep);
+    border-radius:3px;
+    font-weight:500;
+  }
+
+  /* 说明卡 */
+  .rv-callout{
+    background:var(--gold-bg);
+    border:1px solid rgba(168,126,44,.28);
+    border-radius:12px;
+    padding:16px 18px;
+    display:flex; align-items:flex-start; gap:12px;
+    margin-bottom:18px;
+  }
+  .rv-callout-icon{
+    width:32px; height:32px;
+    background:var(--gold);
+    color:#fff;
+    border-radius:8px;
+    display:inline-flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .rv-callout-icon [data-lucide]{ width:16px; height:16px; }
+  .rv-callout-body{ flex:1; min-width:0; }
+  .rv-callout-title{
+    font-size:13px;
+    font-weight:600;
+    color:var(--gold-deep);
+    margin-bottom:4px;
+  }
+  .rv-callout-text{
+    font-size:12px;
+    color:var(--text-2);
+    line-height:1.7;
+  }
+  .rv-callout-text code{
+    font-family:inherit;
+    background:rgba(168,126,44,.14);
+    padding:1px 5px;
+    border-radius:3px;
+    font-size:11.5px;
+    color:var(--gold-deep);
+  }
+
+  /* 底部操作 */
+  .rv-actions{
+    display:flex; gap:10px; justify-content:flex-end;
+    padding-top:10px;
+  }
+  .rv-btn{
+    display:inline-flex; align-items:center; gap:5px;
+    height:38px;
+    padding:0 18px;
+    border-radius:8px;
+    font-size:13px;
+    font-weight:500;
+    cursor:pointer;
+    font-family:inherit;
+    transition:background-color .12s, border-color .12s, color .12s, box-shadow .12s;
+    border:1px solid transparent;
+  }
+  .rv-btn [data-lucide]{ width:14px; height:14px; }
+  .rv-btn.ghost{
+    background:var(--surface);
+    border-color:var(--border);
+    color:var(--text-2);
+  }
+  .rv-btn.ghost:hover{ background:var(--surface-2); border-color:var(--text-4); color:var(--text-1); }
+  .rv-btn.primary{
+    background:linear-gradient(135deg,#C9A76E 0%,#A87E2C 100%);
+    border:none;
+    color:#fff;
+    font-weight:600;
+    box-shadow:0 1px 3px rgba(168,126,44,.28);
+  }
+  .rv-btn.primary:hover{ filter:brightness(1.05); box-shadow:0 3px 8px rgba(168,126,44,.34); }
+  .rv-btn.primary:active{ transform:translateY(1px); }
+  .rv-btn:disabled{ opacity:.5; cursor:not-allowed; }
+
+  /* 已入库后只读态 */
+  .rv-page[data-committed="true"] .rv-stub{ opacity:.7; }
+  .rv-page[data-committed="true"] .rv-actions .rv-btn.primary{ display:none; }
+</style>
+</head>
+<body data-page="ai-qbank" data-subpage="ai-review">
+
+<div class="app" id="app" data-view="wiki" data-chat="closed">
+  <aside class="sidebar-left" id="feixiang-sidebar"></aside>
+
+  <main class="workspace">
+    <header class="topbar" id="v28-topbar"></header>
+
+    <div class="workspace-scroll">
+      <section class="rv-page" id="rv-page">
+        <nav class="rv-bcbar" data-doc="ai-review-bcbar">
+          <a href="ai-qbank.html"><i data-lucide="arrow-left"></i>AI 题库</a>
+          <i data-lucide="chevron-right"></i>
+          <span class="rv-bcbar-current">AI 录题校对</span>
+        </nav>
+
+        <div class="rv-fileinfo" data-doc="ai-review-fileinfo">
+          <div class="rv-fileinfo-icon is-pdf" id="rv-file-icon"><i data-lucide="file-text"></i></div>
+          <div class="rv-fileinfo-main">
+            <div class="rv-fileinfo-name" id="rv-file-name">2024 杭州中考真题.pdf</div>
+            <div class="rv-fileinfo-sub">
+              <span id="rv-file-kb">初中数学教研组</span>
+              <span>·</span>
+              <span>AI 解析出 <b id="rv-file-q">18</b> 题</span>
+              <span>·</span>
+              <span id="rv-file-time">刚刚解析完成</span>
+            </div>
+          </div>
+          <div class="rv-fileinfo-state" id="rv-file-state">
+            <i data-lucide="circle-dot"></i>
+            <span>待校对</span>
+          </div>
+        </div>
+
+        <div class="rv-stub" data-doc="ai-review-stub">
+          <div class="rv-stub-col">
+            <div class="rv-stub-col-head">
+              <i data-lucide="file-text"></i>
+              <span>源文件预览</span>
+              <span class="rv-stub-col-tag">示意 · 非真实交互</span>
+            </div>
+            <div class="rv-stub-pdf">
+              <div class="rv-stub-lines">
+                <span class="mid"></span>
+                <span></span>
+                <span class="mid"></span>
+                <span class="short"></span>
+                <span></span>
+                <span class="mid"></span>
+                <span class="short"></span>
+                <span></span>
+                <span class="mid"></span>
+                <span class="short"></span>
+                <span></span>
+                <span class="mid"></span>
+              </div>
+              <span class="rv-stub-frame"          style="top:42px; left:14px; right:14px; height:46px;" data-label="Q1"></span>
+              <span class="rv-stub-frame is-answer" style="top:96px; left:14px; right:14px; height:30px;" data-label="A1"></span>
+              <span class="rv-stub-frame"          style="top:138px; left:14px; right:14px; height:58px;" data-label="Q2"></span>
+              <span class="rv-stub-frame is-answer" style="top:206px; left:14px; right:14px; height:30px;" data-label="A2"></span>
+            </div>
+          </div>
+
+          <div class="rv-stub-col">
+            <div class="rv-stub-col-head">
+              <i data-lucide="sparkles"></i>
+              <span>AI 录题结果</span>
+              <span class="rv-stub-col-tag">示意 · 非真实交互</span>
+            </div>
+            <div class="rv-stub-qcard">
+              <div class="rv-stub-qcard-head">
+                <b>Q1</b>
+                <span class="rv-stub-qcard-tag">选择题</span>
+                <span class="rv-stub-qcard-tag">中等</span>
+              </div>
+              如图，二次函数 y = x² − 2x − 3 的图像与 x 轴的交点坐标是…
+            </div>
+            <div class="rv-stub-qcard">
+              <div class="rv-stub-qcard-head">
+                <b>Q2</b>
+                <span class="rv-stub-qcard-tag">解答题</span>
+                <span class="rv-stub-qcard-tag">难</span>
+              </div>
+              已知抛物线 y = ax² + bx + c 过点 (1, 0)、(3, 0)，顶点纵坐标为 −1…
+            </div>
+            <div class="rv-stub-qcard">
+              <div class="rv-stub-qcard-head">
+                <b>Q3</b>
+                <span class="rv-stub-qcard-tag">应用题</span>
+                <span class="rv-stub-qcard-tag">中等</span>
+              </div>
+              一球从高台抛出，忽略空气阻力，其运动轨迹满足 h = −5t² + 20t + 3…
+            </div>
+          </div>
+        </div>
+
+        <div class="rv-callout" data-doc="ai-review-scope">
+          <div class="rv-callout-icon"><i data-lucide="info"></i></div>
+          <div class="rv-callout-body">
+            <div class="rv-callout-title">AI 录题校对功能由独立「AI 智能录题」项目提供</div>
+            <div class="rv-callout-text">
+              本期 v28 demo 仅展示<b>校对页面骨架</b>：左侧 PDF 框选 Q/A、右侧逐题编辑、上下移、删除、插入空题、转人工录题等完整交互，由独立项目 <code>AI 智能录题</code> 实现（参考 PRD：<a href="https://confluence.zhenguanyu.com/pages/viewpage.action?pageId=1069439767" target="_blank" style="color:var(--gold-deep); text-decoration:underline;">上传文件 AI 自动录题</a>）。<br/>
+              v28 这边的入口仅承接<b>「KB 已有文件 → 录题任务 → 校对入库」</b>的流程。校对完成后题目入「我的知识库」<small style="color:var(--text-4);">（与「飞象作业星 · 我的资源」共用）</small>。
+            </div>
+          </div>
+        </div>
+
+        <div class="rv-actions" data-doc="ai-review-actions">
+          <button class="rv-btn ghost" id="rv-back-btn">
+            <i data-lucide="arrow-left"></i>
+            <span>返回 AI 题库</span>
+          </button>
+          <button class="rv-btn primary" id="rv-commit-btn" data-doc="ai-review-commit">
+            <i data-lucide="check-circle-2"></i>
+            <span id="rv-commit-label">演示 · 跳过校对，直接入题库</span>
+          </button>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <aside class="sidebar-right"></aside>
+</div>
+
+<div id="toast"></div>
+
+<script src="assets/feixiang-shell.js"></script>
+<script>renderFeixiangSidebar('');</script>
+<script src="assets/v28-shell.js?v=20260522b"></script>
+<script src="assets/v28.js?v=20260522e"></script>
+<script src="assets/shared/v28-modals.js?v=20260522a"></script>
+<script>
+  (function(){
+    /* URL ?jobId=rec-xxx → 从 V28RecordJobs 读取真实任务数据
+     * 没有 jobId 或任务不存在 → 用 mock 默认数据,保证页面独立可访问 */
+    const jobId = new URLSearchParams(location.search).get('jobId');
+    const job = (jobId && window.V28RecordJobs) ? V28RecordJobs.get(jobId) : null;
+
+    const elPage = document.getElementById('rv-page');
+    const elName = document.getElementById('rv-file-name');
+    const elKb = document.getElementById('rv-file-kb');
+    const elQ = document.getElementById('rv-file-q');
+    const elTime = document.getElementById('rv-file-time');
+    const elState = document.getElementById('rv-file-state');
+    const elIcon = document.getElementById('rv-file-icon');
+    const elCommitBtn = document.getElementById('rv-commit-btn');
+    const elCommitLabel = document.getElementById('rv-commit-label');
+    const elBackBtn = document.getElementById('rv-back-btn');
+
+    function fmtRel(ts){
+      if(!ts) return '';
+      const delta = Date.now() - ts;
+      if(delta < 60_000) return '刚刚';
+      if(delta < 3600_000) return Math.floor(delta / 60_000) + ' 分钟前';
+      if(delta < 86_400_000) return Math.floor(delta / 3600_000) + ' 小时前';
+      return Math.floor(delta / 86_400_000) + ' 天前';
+    }
+
+    function render(){
+      if(job){
+        elName.textContent = job.fileName;
+        elKb.textContent = job.kbLabel || '未归类';
+        elQ.textContent = String(job.questionCount);
+        elIcon.className = 'rv-fileinfo-icon ' + (job.fileType === 'pdf' ? 'is-pdf' : 'is-docx');
+
+        if(job.state === 'committed'){
+          elPage.setAttribute('data-committed', 'true');
+          elState.className = 'rv-fileinfo-state is-done';
+          elState.innerHTML = '<i data-lucide="check-circle-2"></i><span>已入库</span>';
+          elTime.textContent = '入库 ' + fmtRel(job.committedAt);
+        } else if(job.state === 'review-pending'){
+          elState.innerHTML = '<i data-lucide="circle-dot"></i><span>待校对</span>';
+          elTime.textContent = '解析完成 ' + fmtRel(job.parseDoneAt);
+        } else if(job.state === 'parsing'){
+          elState.innerHTML = '<i data-lucide="loader-2" class="is-spin"></i><span>解析中</span>';
+          elTime.textContent = '提交于 ' + fmtRel(job.createdAt);
+          elCommitBtn.disabled = true;
+          elCommitLabel.textContent = '解析中，请稍候…';
+        }
+      } else {
+        /* mock 兜底 · 没参数也能看 */
+        elTime.textContent = '示例数据';
+      }
+      try{ window.lucide && window.lucide.createIcons(); }catch(e){}
+    }
+
+    elBackBtn.addEventListener('click', () => {
+      window.location.href = 'ai-qbank.html';
+    });
+    elCommitBtn.addEventListener('click', () => {
+      if(elCommitBtn.disabled) return;
+      if(job && window.V28RecordJobs){
+        V28RecordJobs.markCommitted(job.id);
+        showToast(`${job.questionCount} 题已入题库 · 返回 AI 题库查看`);
+      } else {
+        showToast('已入题库（演示）');
+      }
+      setTimeout(() => {
+        window.location.href = 'ai-qbank.html';
+      }, 800);
+    });
+
+    render();
+  })();
+</script>
+
+<!-- pin-comments: 多人评论 -->
+<script>
+  window.PIN_COMMENTS = {
+    url: 'https://dfiuujabnxacqqfclntz.supabase.co',
+    anonKey: 'sb_publishable_GoSMz1ffqZxAOOPtA6KQHA_Vj7gmUMJ',
+    projectKey: 'fxaikb',
+    pageKey: 'ai-review.html'
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./assets/shared/pin-comments.js"></script>
+
+<style>
+  /* loader-2 旋转动画(用在文件状态条) */
+  [data-lucide="loader-2"].is-spin{ animation:rv-spin .9s linear infinite; transform-origin:center; }
+  @keyframes rv-spin{ to{ transform:rotate(360deg); } }
+</style>
+</body>
+</html>
