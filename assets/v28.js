@@ -838,7 +838,8 @@ function switchView(v, entryName){
   /* 进入文件夹视图：记住左栏状态后自动折叠到 dock，给文件树腾空间 */
   if(v === 'folder' && prevView !== 'folder'){
     _prevLeftBeforeFolder = app.dataset.left || 'expanded';
-    app.dataset.left = 'collapsed';
+    /* 飞象老师校园版：sidebar 是金色 VIP 设计 240px，不再自动折叠 */
+    /* app.dataset.left = 'collapsed'; */
     refreshCollapseIcons();
   }
   /* 离开文件夹视图：恢复用户原本的左栏状态 */
@@ -2487,10 +2488,12 @@ document.addEventListener('DOMContentLoaded', () => {
     syncPersonalHeroCounts();
   }
 
-  /* Wiki 条目页：1:1 双栏阅读，左栏永久 collapsed 让出空间 */
+  /* 飞象老师校园版：sidebar 240px 永远 expanded，不再永久 collapsed */
+  /* Wiki 条目页原本默认折叠让出空间，现保持展开
   if(document.body.dataset.page === 'wiki-entry' && app){
     app.dataset.left = 'collapsed';
   }
+  */
 
   const params = new URLSearchParams(window.location.search);
   if(params.get('imported') === '1'){
