@@ -64,32 +64,28 @@ function accountMenuAction(label){
  * 不显示文件数量（避免信息噪音误导老师按数量选 KB）
  * groupLabel 用于分隔个人/团队两段，仅显示在下拉内
  */
+/* 飞象老师校园版：知识库只有「我的」+「学校」两个，团队知识库概念已废除 */
 const TOP_SEARCH_SCOPES = [
-  { id:'all',         label:'全部' },
-  { id:'personal',    label:'我的知识库',     group:'mine' },
-  { id:'math-group',  label:'初中数学教研组', group:'team' },
-  { id:'school',      label:'北京 101 中学', group:'team' },
-  { id:'grade-2',     label:'初二数学备课组', group:'team' },
-  { id:'grade-3',     label:'初三数学备课组', group:'team' }
+  { id:'all',      label:'全部' },
+  { id:'personal', label:'我的知识库', group:'mine' },
+  { id:'school',   label:'学校知识库', group:'school' }
 ];
 
-/* mock 数据池 · 每条加 kb 字段（personal / math-group）用于范围过滤
- * 对话历史归 personal（属于张老师个人，不属于任何团队 KB）
- */
+/* mock 数据池 · kb 字段只有 personal / school 两种 */
 const TOP_SEARCH_POOL = [
   /* Wiki 词条 */
-  { type:'wiki', label:'Wiki', icon:'book-open', kb:'math-group', main:'二次函数图像与性质', sub:'Wiki · 初中数学教研组 · 引用 12 份资料', href:'wiki-entry.html' },
-  { type:'wiki', label:'Wiki', icon:'book-open', kb:'math-group', main:'相似三角形的判定方法', sub:'Wiki · 初中数学教研组 · 引用 8 份资料', href:'wiki-entry.html' },
-  { type:'wiki', label:'Wiki', icon:'book-open', kb:'math-group', main:'圆与切线的位置关系', sub:'Wiki · 初中数学教研组 · 引用 5 份资料', href:'wiki-entry.html' },
-  { type:'wiki', label:'Wiki', icon:'book-open', kb:'math-group', main:'勾股定理及其逆定理', sub:'Wiki · 初中数学教研组 · 引用 9 份资料', href:'wiki-entry.html' },
+  { type:'wiki', label:'Wiki', icon:'book-open', kb:'school',   main:'二次函数图像与性质', sub:'Wiki · 学校知识库 · 引用 12 份资料', href:'wiki-entry.html' },
+  { type:'wiki', label:'Wiki', icon:'book-open', kb:'school',   main:'相似三角形的判定方法', sub:'Wiki · 学校知识库 · 引用 8 份资料', href:'wiki-entry.html' },
+  { type:'wiki', label:'Wiki', icon:'book-open', kb:'school',   main:'圆与切线的位置关系', sub:'Wiki · 学校知识库 · 引用 5 份资料', href:'wiki-entry.html' },
+  { type:'wiki', label:'Wiki', icon:'book-open', kb:'school',   main:'勾股定理及其逆定理', sub:'Wiki · 学校知识库 · 引用 9 份资料', href:'wiki-entry.html' },
   /* 文件 */
-  { type:'file', label:'文件', icon:'presentation',     kb:'personal',   main:'二次函数·导入课件.pptx', sub:'文件 · 我的知识库 · 4.2 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'file-text',        kb:'math-group', main:'二次函数公开课教案.docx', sub:'文件 · 初中数学教研组 · 王老师上传 · 1.8 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'image',            kb:'math-group', main:'相似三角形板书照片.jpg', sub:'文件 · 初中数学教研组 · 李老师上传 · 2.1 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'file-spreadsheet', kb:'personal',   main:'八年级期中成绩单.xlsx', sub:'文件 · 我的知识库 · 38 KB', href:'file-preview.html' },
+  { type:'file', label:'文件', icon:'presentation',     kb:'personal', main:'二次函数·导入课件.pptx', sub:'文件 · 我的知识库 · 4.2 MB', href:'file-preview.html' },
+  { type:'file', label:'文件', icon:'file-text',        kb:'school',   main:'二次函数公开课教案.docx', sub:'文件 · 学校知识库 · 王老师上传 · 1.8 MB', href:'file-preview.html' },
+  { type:'file', label:'文件', icon:'image',            kb:'school',   main:'相似三角形板书照片.jpg', sub:'文件 · 学校知识库 · 李老师上传 · 2.1 MB', href:'file-preview.html' },
+  { type:'file', label:'文件', icon:'file-spreadsheet', kb:'personal', main:'八年级期中成绩单.xlsx', sub:'文件 · 我的知识库 · 38 KB', href:'file-preview.html' },
   /* 题目 */
-  { type:'qbank', label:'题目', icon:'file-stack', kb:'math-group', main:'二次函数分层练习题组', sub:'题库 · 初中数学教研组 · 38 道 · A/B/C 三难度', href:'ai-qbank.html' },
-  { type:'qbank', label:'题目', icon:'file-stack', kb:'math-group', main:'相似三角形综合训练', sub:'题库 · 初中数学教研组 · 24 道', href:'ai-qbank.html' },
+  { type:'qbank', label:'题目', icon:'file-stack', kb:'school', main:'二次函数分层练习题组', sub:'题库 · 学校知识库 · 38 道 · A/B/C 三难度', href:'ai-qbank.html' },
+  { type:'qbank', label:'题目', icon:'file-stack', kb:'school', main:'相似三角形综合训练', sub:'题库 · 学校知识库 · 24 道', href:'ai-qbank.html' },
   /* 对话 · 归 personal */
   { type:'chat', label:'对话', icon:'message-square', kb:'personal', main:'围绕「二次函数」出 5 道分层练习', sub:'对话 · 昨天 · 12 条消息', href:'chat-history.html' },
   { type:'chat', label:'对话', icon:'message-square', kb:'personal', main:'勾股定理课件 12 页大纲', sub:'对话 · 3 天前 · 8 条消息', href:'chat-history.html' }
@@ -147,12 +143,8 @@ function renderScopeDropdownItems(){
    * 用 group 字段做分隔标签，让"我的"和"团队"视觉分开
    */
   let html = '';
-  let lastGroup = null;
   TOP_SEARCH_SCOPES.forEach(s => {
-    /* 分隔标签：mine 段前不加（紧跟"全部"），team 段前加 */
-    if(s.group === 'team' && lastGroup !== 'team'){
-      html += `<div class="top-search-scope-divider">团队知识库</div>`;
-    }
+    /* 校园版只剩 全部 / 我的 / 学校 三项，扁平展示，不再加分组分隔 */
     const selected = s.id === _topSearchScope;
     html += `
       <button class="top-search-scope-option${selected ? ' is-selected' : ''}"
@@ -164,7 +156,6 @@ function renderScopeDropdownItems(){
         <span>${escapeHtml(s.label)}</span>
       </button>
     `;
-    lastGroup = s.group || null;
   });
   return html;
 }

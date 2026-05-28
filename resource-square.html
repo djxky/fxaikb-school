@@ -7,6 +7,7 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/page-header.css" />
+<link rel="stylesheet" href="assets/ai-create-dock.css" />
 <style>
   :root {
     --bg: #faf9f6;
@@ -47,19 +48,34 @@
     overflow-y: auto;
   }
 
-  /* ===== 顶部 Header ===== */
-  .page-head {
-    background: var(--surface);
-    border-bottom: 1px solid var(--line);
-    padding: 24px 40px 0;
-    position: sticky; top: 0; z-index: 10;
+  /* ===== page-header 在资源广场页不吸顶 · 标题区随滚动消失 =====
+     浏览资源时关心的是"我在哪个学科"，不是"页面叫什么" */
+  .page-header[data-page-header="resource-square"] {
+    position: static;
   }
-  /* 学科 Tab 栏 · 紧跟 page-header，不再 sticky */
+
+  /* ===== 学科 Tab 栏 · 吸顶（带搜索 + 发布资源） ===== */
   .page-head-tabs {
     background: var(--surface);
     border-bottom: 1px solid var(--line);
-    padding: 14px 40px 0;
-    position: static;
+    padding: 0 40px;
+    position: sticky; top: 0; z-index: 10;
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
+    background: rgba(255, 255, 255, 0.92);
+  }
+  .tabs-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 10px 0;
+  }
+  .tabs-row .subject-tabs {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding-bottom: 0;
+  }
+  .tabs-row .head-actions {
+    display: flex; align-items: center; gap: 10px;
+    flex-shrink: 0;
   }
   .head-row {
     display: flex; align-items: center; justify-content: space-between;
@@ -227,26 +243,19 @@
   <aside id="feixiang-sidebar"></aside>
 
   <main class="main">
-    <!-- 统一页面顶栏 · page-header -->
+    <!-- 统一页面顶栏 · page-header（在本页不吸顶，随滚动消失） -->
     <header class="page-header" data-page-header="resource-square" data-scroll-target=".main">
       <div class="ph-left">
         <i class="ph-icon" data-lucide="layout-grid"></i>
         <h1 class="ph-title">资源广场</h1>
         <span class="ph-subtitle">飞象老师与全校共建的优质资源 · 课件、动画、题单、范文，一站获取</span>
       </div>
-      <div class="ph-right">
-        <label class="ph-search">
-          <i data-lucide="search"></i>
-          <input type="text" placeholder="搜索资源、作者…">
-        </label>
-        <button class="ph-action is-primary" onclick="alert('（演示）发布资源')">
-          <i data-lucide="upload"></i><span>发布资源</span>
-        </button>
-      </div>
     </header>
 
-    <div class="page-head page-head-tabs">
-      <div class="subject-tabs" id="subject-tabs">
+    <!-- 学科 Tab 栏 · 吸顶 · 内含搜索 + 发布资源 -->
+    <div class="page-head-tabs">
+      <div class="tabs-row">
+        <div class="subject-tabs" id="subject-tabs">
         <button class="subject-tab active" data-subject="all">推荐</button>
         <button class="subject-tab" data-subject="chinese">语文</button>
         <button class="subject-tab" data-subject="math">数学<span class="new-badge">NEW</span></button>
@@ -259,6 +268,16 @@
         <button class="subject-tab" data-subject="politics">政治</button>
         <button class="subject-tab" data-subject="it">信息技术</button>
         <button class="subject-tab" data-subject="art">艺术体育</button>
+        </div>
+        <div class="head-actions">
+          <label class="ph-search">
+            <i data-lucide="search"></i>
+            <input type="text" placeholder="搜索资源、作者…">
+          </label>
+          <button class="ph-action is-primary" onclick="alert('（演示）发布资源')">
+            <i data-lucide="upload"></i><span>发布资源</span>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -267,12 +286,38 @@
         <!-- 16 张卡片由下方 JS 渲染 -->
       </div>
     </div>
+
+    <!-- 给 dock 让出底部空间 -->
+    <div class="ai-dock-spacer"></div>
   </main>
+
+  <!-- AI 创造入口 · 浏览-创造闭环 -->
+  <aside class="ai-dock"
+         data-kind="资源"
+         data-placeholders="描述你想要的资源,例如:给八(3)班做一份二次函数互动动画|出 5 道分层练习,一元二次方程,A/B/C 三难度|把这周月考错题做成 10 分钟讲评 PPT|做一个文言虚词配对小游戏,初三用|整理一份《荷塘月色》画面捕捉法的课堂活动">
+    <span class="ai-dock-tag" title="把你想要的资源说出来,AI 帮你生成">
+      <i data-lucide="sparkles"></i>
+      <span>AI 资源生成</span>
+    </span>
+    <div class="ai-dock-input-wrap">
+      <textarea class="ai-dock-input" rows="1" autocomplete="off"
+                placeholder="描述你想要的资源…"></textarea>
+    </div>
+    <div class="ai-dock-actions">
+      <button class="ai-dock-btn" type="button" title="语音输入" onclick="alert('（演示）语音输入')">
+        <i data-lucide="mic"></i>
+      </button>
+      <button class="ai-dock-btn ai-dock-send" type="button" title="发送(Enter)">
+        <i data-lucide="arrow-up"></i>
+      </button>
+    </div>
+  </aside>
 </div>
 
 <script src="assets/feixiang-shell.js"></script>
 <script>renderFeixiangSidebar('resources');</script>
 <script src="assets/page-header.js"></script>
+<script src="assets/ai-create-dock.js"></script>
 
 <script>
   // ====== mock 资源数据 ======

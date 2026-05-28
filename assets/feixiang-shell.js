@@ -67,7 +67,7 @@
       ${navItem({ key: 'school-wiki', icon: ICONS.school, label: '学校知识库', href: 'school-wiki.html', count: 348, dot: true, activeKey })}
 
       <div class="fx-nav-title">常用</div>
-      ${navItem({ key: 'apps', icon: ICONS.apps, label: '应用广场', href: '#', activeKey })}
+      ${navItem({ key: 'apps', icon: ICONS.apps, label: '应用广场', href: 'app-square.html', activeKey })}
       ${navItem({ key: 'resources', icon: ICONS.resources, label: '资源广场', href: 'resource-square.html', activeKey })}
       ${navItem({ key: 'class', icon: ICONS.classes, label: '我的班级', href: '#', activeKey })}
 
