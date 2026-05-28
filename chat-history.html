@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
   <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
   <link rel="stylesheet" href="assets/feixiang-shell.css" />
+  <link rel="stylesheet" href="assets/page-header.css" />
   <style>
     .ch-page{ padding: 18px 22px 56px; }
     .ch-container{
@@ -147,7 +148,7 @@
       display:flex;
       align-items:center;
       gap:2px;
-      opacity:0;
+      opacity:0.3; /* 默认微弱可见，避免幽灵按钮 */
       transition:opacity .12s;
       flex-shrink:0;
     }
@@ -176,24 +177,26 @@
   <aside class="sidebar-left" id="feixiang-sidebar"></aside>
 
   <main class="workspace">
-    <header class="topbar" id="v28-topbar"></header>
+    <!-- 统一页面顶栏 · page-header -->
+    <header class="page-header" data-page-header="chat-history">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="message-square"></i>
+        <h1 class="ph-title">历史对话</h1>
+        <span class="ph-subtitle">你和飞象的所有对话记录，可继续、可批量管理</span>
+      </div>
+      <div class="ph-right">
+        <button class="ph-action" onclick="showToast('（演示）批量选择')">
+          <i data-lucide="check-square"></i><span>批量选择</span>
+        </button>
+        <button class="ph-action is-primary" onclick="openChat('new')">
+          <i data-lucide="message-square-plus"></i><span>新对话</span>
+        </button>
+      </div>
+    </header>
 
     <div class="workspace-scroll">
       <section class="ch-page">
         <div class="ch-container">
-          <div class="ch-head">
-            <h1 class="ch-title">历史对话</h1>
-            <div class="ch-head-actions">
-              <button class="ch-head-btn ghost" onclick="showToast('（演示）批量选择')">
-                <i data-lucide="check-square"></i>
-                <span>批量选择</span>
-              </button>
-              <button class="ch-head-btn primary" onclick="openChat('new')">
-                <i data-lucide="message-square-plus"></i>
-                <span>新对话</span>
-              </button>
-            </div>
-          </div>
 
           <div class="ch-search">
             <i data-lucide="search"></i>
@@ -287,6 +290,7 @@
 <script>renderFeixiangSidebar('chat-history');</script>
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
+<script src="assets/page-header.js"></script>
 
 <!-- pin-comments: 多人评论 -->
 <script>

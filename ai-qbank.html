@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
   <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260522a" />
+<link rel="stylesheet" href="assets/page-header.css" />
 <style>
   .qbk-page{
     max-width:1200px;
@@ -20,17 +21,17 @@
     gap:14px;
     margin-bottom:14px;
     padding-bottom:14px;
-    border-bottom:1px solid #ECE9E2;
+    border-bottom:1px solid var(--border);
   }
   .qbk-h1{
     font-size:26px;
-    font-weight:700;
-    color:#1A1A1A;
+    font-weight:600;
+    color:var(--text-1);
     letter-spacing:-.012em;
   }
   .qbk-h1-meta{
     font-size:13px;
-    color:#9A968F;
+    color:var(--text-3);
     font-weight:400;
     margin-left:6px;
   }
@@ -39,21 +40,21 @@
     display:flex;
     align-items:center;
     gap:5px;
-    background:#FFFFFF;
-    border:1px solid #D8D3C9;
-    border-radius:6px;
-    padding:0 10px;
-    height:26px;
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:0 12px;
+    height:30px;
     min-width:200px;
     max-width:240px;
     margin-left:auto;
     transition:border-color .12s, box-shadow .12s;
   }
   .qbk-fsearch:focus-within{
-    border-color:#A87E2C;
-    box-shadow:0 0 0 3px rgba(168,126,44,.12);
+    border-color:var(--gold);
+    box-shadow:0 0 0 3px rgba(168,126,44,.08);
   }
-  .qbk-fsearch [data-lucide]{ width:12px;height:12px;color:#9A968F;flex-shrink:0; }
+  .qbk-fsearch [data-lucide]{ width:13px;height:13px;color:var(--text-3);flex-shrink:0; }
   /* 顶部右侧维护入口 · 「📋 录题任务·N」（单按钮）
    * 05 是"消费场所"（找题/选题/组题），不是"生产场所"（录题/校对），故合并双按钮、视觉弱化
    * 点击跳 09-ai-record-jobs.html → 09 hero 区主按钮承接「+ AI 录题」创建动作
@@ -67,7 +68,7 @@
     gap:5px;
     height:30px;
     padding:0 12px;
-    border-radius:6px;
+    border-radius:8px;
     border:1px solid var(--border);
     background:transparent;
     color:var(--text-3);
@@ -77,13 +78,13 @@
     font-family:inherit;
     transition:background .12s, border-color .12s, color .12s;
   }
-  .qbk-jobs-btn:hover{ background:var(--surface-2); border-color:#D8D3C9; color:var(--text); }
+  .qbk-jobs-btn:hover{ background:var(--surface-2); border-color:var(--border-2); color:var(--text); }
   .qbk-jobs-btn [data-lucide]{ width:13px;height:13px; }
   /* 有未处理任务时按钮微微提亮(让管理员意识到有事做) */
   .qbk-jobs-btn[data-has-pending="true"]{
-    color:#7A5615;
-    border-color:#ECE3CC;
-    background:#FBF7EE;
+    color:var(--gold-deep);
+    border-color:var(--gold-light);
+    background:var(--gold-soft);
   }
   .qbk-jobs-badge{
     display:inline-flex;
@@ -93,7 +94,7 @@
     height:16px;
     padding:0 5px;
     border-radius:8px;
-    background:#A87E2C;
+    background:var(--gold);
     color:#FFFFFF;
     font-size:10.5px;
     font-weight:700;
@@ -398,19 +399,24 @@
   <aside class="sidebar-left" id="feixiang-sidebar"></aside>
 
   <main class="workspace">
-    <header class="topbar" id="v28-topbar"></header>
+    <!-- 统一页面顶栏 · page-header -->
+    <header class="page-header" data-page-header="ai-qbank">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="help-circle"></i>
+        <h1 class="ph-title">AI 题库</h1>
+        <span class="ph-subtitle">学校知识库自动解析的题目，按知识点 / 难度筛选</span>
+      </div>
+      <div class="ph-right">
+        <button class="ph-action is-meta" id="qbk-jobs-btn" data-doc="ai-record-jobs" title="查看 AI 录题任务进度">
+          <i data-lucide="sparkles"></i><span>AI 录题</span>
+          <b class="qbk-jobs-badge" id="qbk-jobs-badge" hidden>0</b>
+          <span class="qbk-jobs-spinner" aria-hidden="true"></span>
+        </button>
+      </div>
+    </header>
 
     <div class="workspace-scroll">
       <section class="qbk-page">
-        <div class="qbk-head">
-          <h1 class="qbk-h1">AI 题库</h1>
-          <button class="qbk-jobs-btn" id="qbk-jobs-btn" data-doc="ai-record-jobs" title="查看 AI 录题任务进度（管理员可在此触发新任务）">
-            <i data-lucide="sparkles"></i>
-            <span>AI 录题</span>
-            <b class="qbk-jobs-badge" id="qbk-jobs-badge" hidden>0</b>
-            <span class="qbk-jobs-spinner" aria-hidden="true"></span>
-          </button>
-        </div>
 
         <div class="qbk-filter">
           <div class="qbk-filter-item">
@@ -550,6 +556,7 @@
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
 <script src="assets/shared/v28-modals.js?v=20260522a"></script>
+<script src="assets/page-header.js"></script>
 <script>
   (function(){
     let selectedCount = 0;

@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
   <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260522a" />
+<link rel="stylesheet" href="assets/page-header.css" />
 <style>
   .rv-page{
     max-width:920px;
@@ -292,15 +293,20 @@
   <aside class="sidebar-left" id="feixiang-sidebar"></aside>
 
   <main class="workspace">
-    <header class="topbar" id="v28-topbar"></header>
+    <!-- 统一页面顶栏 · page-header（带面包屑） -->
+    <header class="page-header" data-page-header="ai-review">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="check-square"></i>
+        <nav class="ph-crumb" aria-label="面包屑">
+          <a class="ph-crumb-item" href="ai-qbank.html"><span>AI 题库</span></a>
+          <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+          <span class="ph-crumb-current"><span>AI 录题校对</span></span>
+        </nav>
+      </div>
+    </header>
 
     <div class="workspace-scroll">
       <section class="rv-page" id="rv-page">
-        <nav class="rv-bcbar" data-doc="ai-review-bcbar">
-          <a href="ai-qbank.html"><i data-lucide="arrow-left"></i>AI 题库</a>
-          <i data-lucide="chevron-right"></i>
-          <span class="rv-bcbar-current">AI 录题校对</span>
-        </nav>
 
         <div class="rv-fileinfo" data-doc="ai-review-fileinfo">
           <div class="rv-fileinfo-icon is-pdf" id="rv-file-icon"><i data-lucide="file-text"></i></div>
@@ -417,6 +423,7 @@
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
 <script src="assets/shared/v28-modals.js?v=20260522a"></script>
+<script src="assets/page-header.js"></script>
 <script>
   (function(){
     /* URL ?jobId=rec-xxx → 从 V28RecordJobs 读取真实任务数据

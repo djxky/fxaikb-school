@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
+<link rel="stylesheet" href="assets/page-header.css" />
 <style>
   .mem-btn{
     height:26px;
@@ -186,34 +187,34 @@
   <!-- ════════════ 中栏 · 工作区 ════════════ -->
   <main class="workspace">
 
-    <!-- 顶栏 · 公共壳由 v28-shell.js 渲染 -->
-    <header class="topbar" id="v28-topbar"></header>
-
-    <!-- Wiki 顶部条 · 当前位置 + 当前页操作 -->
-    <div class="entry-bcbar entry-bcbar-home">
-      <nav class="entry-breadcrumb" aria-label="面包屑">
-        <span class="ebc-current">
-          <i data-lucide="bookmark"></i>
-          <span>我的知识库</span>
-        </span>
-        <span class="ebc-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
-        <span class="ebc-current">
-          <i data-lucide="book-open"></i>
-          <span>Wiki 首页</span>
-        </span>
-      </nav>
-
-      <div class="ebc-spacer"></div>
-
-      <button class="ebc-action" data-doc="download-btn-personal-home" onclick="V28DownloadDialog.open({ context:'personal-home' })" title="下载">
-        <i data-lucide="download"></i>
-        <span>下载</span>
-      </button>
-      <button class="ebc-action" data-doc="share-btn-personal-home" onclick="V28ShareDialog.open({ context:'personal-home', kbName:'张老师的知识库' })" title="分享">
-        <i data-lucide="share-2"></i>
-        <span>分享</span>
-      </button>
-    </div>
+    <!-- 统一页面顶栏 · page-header -->
+    <header class="page-header" data-page-header="my-wiki">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="bookmark"></i>
+        <nav class="ph-crumb" aria-label="面包屑">
+          <span class="ph-crumb-current"><span>我的知识库</span></span>
+          <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+          <span class="ph-crumb-current"><span>Wiki 首页</span></span>
+        </nav>
+      </div>
+      <div class="ph-right">
+        <div class="ph-view-switcher" role="tablist" aria-label="视图切换">
+          <button class="ph-vs-btn vs-btn active" data-view="wiki" onclick="switchView('wiki')" role="tab" aria-selected="true"><i data-lucide="book-open"></i><span>Wiki</span></button>
+          <button class="ph-vs-btn vs-btn" data-view="graph" onclick="switchView('graph')" role="tab" aria-selected="false"><i data-lucide="git-branch"></i><span>知识图谱</span></button>
+          <button class="ph-vs-btn vs-btn" data-view="folder" onclick="switchView('folder')" role="tab" aria-selected="false"><i data-lucide="folder"></i><span>文件夹</span></button>
+        </div>
+        <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索 Wiki、文件" aria-expanded="false">
+          <i data-lucide="search"></i>
+        </button>
+        <span class="ph-action-sep" aria-hidden="true"></span>
+        <button class="ph-action" data-doc="download-btn-personal-home" onclick="V28DownloadDialog.open({ context:'personal-home' })" title="下载">
+          <i data-lucide="download"></i><span>下载</span>
+        </button>
+        <button class="ph-action" data-doc="share-btn-personal-home" onclick="V28ShareDialog.open({ context:'personal-home', kbName:'张老师的知识库' })" title="分享">
+          <i data-lucide="share-2"></i><span>分享</span>
+        </button>
+      </div>
+    </header>
 
     <!-- 主滚动区 -->
     <div class="workspace-scroll">
@@ -901,6 +902,7 @@
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
 <script src="assets/shared/v28-modals.js?v=20260521g"></script>
+<script src="assets/page-header.js"></script>
 <script>
   function switchLearnedTab(tab){
     document.querySelectorAll('[data-learned-tab]').forEach(btn => {

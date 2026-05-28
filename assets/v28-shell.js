@@ -614,7 +614,7 @@
       width:22px; height:22px; border-radius:6px;
       color:var(--text-4); cursor:pointer; flex-shrink:0;
       display:grid; place-items:center;
-      opacity:0; transition:opacity .15s, background .15s, color .15s;
+      opacity:0.3; transition:opacity .15s, background .15s, color .15s;
     }
     .sb-kb-more [data-lucide]{ width:13px; height:13px; }
     .sb-kb-row:hover .sb-kb-more,
@@ -1590,48 +1590,11 @@
     const activeView = getActiveView(pageId);
     const kb = getTopbarKb(pageId);
 
-    if(pageId === 'ai-qbank'){
-      topbar.innerHTML = `
-        <div class="tb-spacer"></div>
-        <button class="tb-search" onclick="toggleTopSearch(event)" aria-expanded="false">
-          <i data-lucide="search"></i>
-          <span>搜索题目、文件…</span>
-        </button>
-        <button class="tb-btn" data-notify-toggle onclick="toggleNotifyPanel(event)" aria-haspopup="true" aria-expanded="false" title="通知 · 今日 3 条">
-          <i data-lucide="bell"></i>
-          <span class="notify-dot" aria-hidden="true"></span>
-        </button>
-      `;
-      return;
-    }
-
-    if(pageId === 'chat-history'){
-      topbar.innerHTML = `
-        <div class="tb-spacer"></div>
-        <button class="tb-search" onclick="toggleTopSearch(event)" aria-expanded="false">
-          <i data-lucide="search"></i>
-          <span>搜索对话、文件…</span>
-        </button>
-        <button class="tb-btn" data-notify-toggle onclick="toggleNotifyPanel(event)" aria-haspopup="true" aria-expanded="false" title="通知 · 今日 3 条">
-          <i data-lucide="bell"></i>
-          <span class="notify-dot" aria-hidden="true"></span>
-        </button>
-      `;
-      return;
-    }
-
-    if(pageId === 'upload-onboarding'){
-      topbar.innerHTML = `
-        <div class="tb-spacer"></div>
-        <button class="tb-search" onclick="toggleTopSearch(event)" aria-expanded="false">
-          <i data-lucide="search"></i>
-          <span>搜索 Wiki、文件…</span>
-        </button>
-        <button class="tb-btn" data-notify-toggle onclick="toggleNotifyPanel(event)" aria-haspopup="true" aria-expanded="false" title="通知 · 今日 3 条">
-          <i data-lucide="bell"></i>
-          <span class="notify-dot" aria-hidden="true"></span>
-        </button>
-      `;
+    /* 飞象老师校园版：轻量页面（题库/历史对话/上传）不渲染 topbar
+       搜索由各页面自己提供；通知已迁移到 sidebar */
+    if(pageId === 'ai-qbank' || pageId === 'chat-history' || pageId === 'upload-onboarding'){
+      topbar.innerHTML = '';
+      topbar.style.display = 'none';
       return;
     }
 
@@ -1673,10 +1636,7 @@
         <i data-lucide="search"></i>
         <span>搜索 Wiki、文件…</span>
       </button>
-      <button class="tb-btn" data-notify-toggle onclick="toggleNotifyPanel(event)" aria-haspopup="true" aria-expanded="false" title="通知 · 今日 3 条">
-        <i data-lucide="bell"></i>
-        <span class="notify-dot" aria-hidden="true"></span>
-      </button>
+      <!-- 通知铃铛已迁移到侧边栏底部，topbar 不再展示 -->
     `;
   }
 

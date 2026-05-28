@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
   <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260522a" />
+<link rel="stylesheet" href="assets/page-header.css" />
 <style>
   /* AI 录题进度页 · 视觉对齐飞象「AI 智能录题」截图，但不要上传区/不要 tab/加 KB 分组 */
   .recp-page{
@@ -357,30 +358,29 @@
   <aside class="sidebar-left" id="feixiang-sidebar"></aside>
 
   <main class="workspace">
-    <header class="topbar" id="v28-topbar"></header>
+    <!-- 统一页面顶栏 · page-header（带面包屑） -->
+    <header class="page-header" data-page-header="ai-record-jobs">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="sparkles"></i>
+        <nav class="ph-crumb" aria-label="面包屑">
+          <a class="ph-crumb-item" href="ai-qbank.html"><span>AI 题库</span></a>
+          <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+          <span class="ph-crumb-current"><span>AI 录题进度</span></span>
+        </nav>
+      </div>
+      <div class="ph-right">
+        <button class="ph-action is-primary" id="recp-record-btn" data-doc="ai-record-entry">
+          <i data-lucide="sparkles"></i><span>+ AI 录题</span>
+        </button>
+      </div>
+    </header>
 
     <div class="workspace-scroll">
       <section class="recp-page">
-        <nav class="recp-bcbar" data-doc="ai-record-jobs-bcbar">
-          <a onclick="window.location.href='school-wiki.html'">
-            <i data-lucide="home"></i>首页
-          </a>
-          <i data-lucide="chevron-right"></i>
-          <a onclick="window.location.href='ai-qbank.html'">AI 题库</a>
-          <i data-lucide="chevron-right"></i>
-          <span class="recp-bcbar-current">AI 录题进度</span>
-        </nav>
-
         <div class="recp-hero">
           <div class="recp-hero-text">
             <h1 class="recp-hero-title"><span class="recp-brand">Ai</span>录题</h1>
-            <p class="recp-hero-sub">从知识库的 PDF / Word 自动解析为题目，AI 识别题面 / 答案 / 知识点 / 难度，老师校对后入题库。<br/>团队知识库由管理员触发，个人知识库老师自行触发。</p>
-          </div>
-          <div class="recp-hero-actions">
-            <button class="recp-record-btn" id="recp-record-btn" data-doc="ai-record-entry">
-              <i data-lucide="sparkles"></i>
-              <span>+ AI 录题</span>
-            </button>
+            <p class="recp-hero-sub">从知识库的 PDF / Word 自动解析为题目，AI 识别题面 / 答案 / 知识点 / 难度，老师校对后入题库。<br/>学校知识库由管理员触发，个人知识库老师自行触发。</p>
           </div>
         </div>
 
@@ -420,6 +420,7 @@
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
 <script src="assets/shared/v28-modals.js?v=20260522a"></script>
+<script src="assets/page-header.js"></script>
 <script>
   (function(){
     const root = document.getElementById('recp-list-root');

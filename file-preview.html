@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
+<link rel="stylesheet" href="assets/page-header.css" />
 <!-- 兜底·内联样式（不走 v28.css 缓存） -->
 <!-- 默认 collapsed=56px icon-only；点 sb-collapse-btn → 切到展开态 240px -->
 <style>
@@ -335,48 +336,42 @@
   <!-- ════════════ 中栏 · 工作区 ════════════ -->
   <main class="workspace">
 
-    <!-- 顶栏 · 公共壳由 v28-shell.js 渲染 -->
-    <header class="topbar" id="v28-topbar"></header>
-
-    <!-- 面包屑 + 当前页 actions（下沉一行，跟 03 同款 entry-bcbar） -->
-    <div class="entry-bcbar">
-      <nav class="entry-breadcrumb" aria-label="面包屑">
-        <a class="ebc-item" href="school-wiki.html" title="回到 学校知识库 知识库">
-          <i data-lucide="library"></i>
-          <span>学校知识库</span>
-        </a>
-        <span class="ebc-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
-        <a class="ebc-item" href="school-wiki.html#grade-9" title="九年级">
-          <span>数学 · 九年级</span>
-        </a>
-        <span class="ebc-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
-        <a class="ebc-item" href="wiki-entry.html" title="回到 二次函数图像与性质 Wiki">
-          <i data-lucide="folder"></i>
-          <span>二次函数图像与性质 · 文件夹</span>
-        </a>
-        <span class="ebc-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
-        <span class="ebc-current">
-          <i data-lucide="file-text"></i>
-          <span>导入课件.pptx</span>
-        </span>
-      </nav>
-
-      <div class="ebc-spacer"></div>
-
-      <button class="ebc-action ebc-action-meta" id="btn-toggle-right" onclick="toggleRight()" title="查看飞象对这份原文件的 AI 解读">
-        <i data-lucide="panel-right-open"></i>
-        <span>AI 解读</span>
-      </button>
-      <span class="ebc-action-sep" aria-hidden="true"></span>
-      <button class="ebc-action" data-doc="download-btn-file-preview" onclick="V28DownloadDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="下载">
-        <i data-lucide="download"></i>
-        <span>下载</span>
-      </button>
-      <button class="ebc-action" data-doc="share-btn-file-preview" onclick="V28ShareDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="分享">
-        <i data-lucide="share-2"></i>
-        <span>分享</span>
-      </button>
-    </div>
+    <!-- 统一页面顶栏 · page-header（带面包屑） -->
+    <header class="page-header" data-page-header="file-preview">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="library"></i>
+        <nav class="ph-crumb" aria-label="面包屑">
+          <a class="ph-crumb-item" href="school-wiki.html" title="回到学校知识库">
+            <span>学校知识库</span>
+          </a>
+          <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+          <a class="ph-crumb-item" href="school-wiki.html#grade-9" title="九年级">
+            <span>数学 · 九年级</span>
+          </a>
+          <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+          <a class="ph-crumb-item" href="wiki-entry.html" title="回到 二次函数图像与性质">
+            <i data-lucide="folder"></i><span>二次函数图像与性质 · 文件夹</span>
+          </a>
+          <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+          <span class="ph-crumb-current"><i data-lucide="file-text"></i><span>导入课件.pptx</span></span>
+        </nav>
+      </div>
+      <div class="ph-right">
+        <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索 Wiki、文件" aria-expanded="false">
+          <i data-lucide="search"></i>
+        </button>
+        <button class="ph-action is-meta" id="btn-toggle-right" onclick="toggleRight()" title="查看飞象对这份原文件的 AI 解读">
+          <i data-lucide="panel-right-open"></i><span>AI 解读</span>
+        </button>
+        <span class="ph-action-sep" aria-hidden="true"></span>
+        <button class="ph-action" data-doc="download-btn-file-preview" onclick="V28DownloadDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="下载">
+          <i data-lucide="download"></i><span>下载</span>
+        </button>
+        <button class="ph-action" data-doc="share-btn-file-preview" onclick="V28ShareDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="分享">
+          <i data-lucide="share-2"></i><span>分享</span>
+        </button>
+      </div>
+    </header>
 
     <!-- 主滚动区 -->
     <div class="workspace-scroll">
@@ -1334,6 +1329,7 @@
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
 <script src="assets/shared/v28-modals.js?v=20260521g"></script>
+<script src="assets/page-header.js"></script>
 <script>
   /* wiki-entry · 根据 URL ?w= 参数动态切换词条标题（共用模板） */
   (function(){

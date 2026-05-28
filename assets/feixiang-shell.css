@@ -4,18 +4,41 @@
  * ======================================== */
 
 :root {
-  --fx-bg: #faf9f6;
-  --fx-side: #f4f3ef;
-  --fx-surface: #ffffff;
-  --fx-ink: #111110;
-  --fx-muted: #6b6a65;
-  --fx-faint: #a19f99;
-  --fx-line: rgba(0, 0, 0, 0.06);
-  --fx-line-strong: rgba(0, 0, 0, 0.12);
-  --fx-gold: #a87e2c;
-  --fx-gold-soft: #fbf5e6;
-  --fx-radius-sm: 8px;
-  --fx-radius-md: 12px;
+  --bg: #faf9f6;
+  --side: #f4f3ef;
+  --surface: #ffffff;
+  --ink: #111110;
+  --muted: #6b6a65;
+  --faint: #a19f99;
+  --line: rgba(0, 0, 0, 0.06);
+  --line-strong: rgba(0, 0, 0, 0.12);
+  --gold: #a87e2c;
+  --gold-soft: #fbf5e6;
+  --green: #4a755b;
+  --green-soft: #eaf3ed;
+  --blue: #53759e;
+  --blue-soft: #edf3f8;
+  --purple: #81628f;
+  --purple-soft: #f4eff5;
+  --rose: #a8626c;
+  --rose-soft: #f8eff0;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  
+  /* 兼容旧的 --fx- 前缀 */
+  --fx-bg: var(--bg);
+  --fx-side: var(--side);
+  --fx-surface: var(--surface);
+  --fx-ink: var(--ink);
+  --fx-muted: var(--muted);
+  --fx-faint: var(--faint);
+  --fx-line: var(--line);
+  --fx-line-strong: var(--line-strong);
+  --fx-gold: var(--gold);
+  --fx-gold-soft: var(--gold-soft);
+  --fx-radius-sm: var(--radius-sm);
+  --fx-radius-md: var(--radius-md);
 }
 
 .fx-sidebar {

@@ -102,8 +102,9 @@ function ensureTopSearchPanel(){
   let panel = document.getElementById('top-search-panel');
   if(panel) return panel;
   const workspace = document.querySelector('.workspace');
-  const topbar = document.querySelector('.topbar');
-  if(!workspace || !topbar) return null;
+  /* 飞象老师校园版：原 v28 .topbar 已被 .page-header 取代，作为锚点 fallback */
+  const anchor = document.querySelector('.topbar') || document.querySelector('.page-header');
+  if(!workspace || !anchor) return null;
 
   panel = document.createElement('div');
   panel.className = 'top-search-panel';
@@ -131,7 +132,7 @@ function ensureTopSearchPanel(){
     </div>
     <div class="top-search-results" id="top-search-results"></div>
   `;
-  topbar.insertAdjacentElement('afterend', panel);
+  anchor.insertAdjacentElement('afterend', panel);
   renderTopSearchResults('');
   return panel;
 }
@@ -2537,7 +2538,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.addEventListener('click', e => {
     if(!e.target.closest('.sb-account')) closeAccountMenus();
-    if(!e.target.closest('.top-search-panel') && !e.target.closest('.tb-search')) closeTopSearch();
+    if(!e.target.closest('.top-search-panel') && !e.target.closest('.tb-search') && !e.target.closest('.ph-search')) closeTopSearch();
   });
 
   /* C-1 / D-2 / D-4：注入反馈样式 + 给 03 段落加工具栏（不在 03 也安全无副作用） */

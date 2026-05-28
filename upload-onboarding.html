@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
   <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
   <link rel="stylesheet" href="assets/feixiang-shell.css" />
+  <link rel="stylesheet" href="assets/page-header.css" />
   <style>
     .onb-page{
       width:min(980px, 100%);
@@ -126,13 +127,21 @@
   <aside class="sidebar-left" id="feixiang-sidebar"></aside>
 
   <main class="workspace">
-    <header class="topbar" id="v28-topbar"></header>
+    <!-- 统一页面顶栏 · page-header -->
+    <header class="page-header" data-page-header="upload-onboarding">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="upload-cloud"></i>
+        <h1 class="ph-title">上传文件</h1>
+        <span class="ph-subtitle">保留原结构导入知识库，完成后回到工作台继续使用</span>
+      </div>
+      <div class="ph-right">
+        <button class="ph-action" onclick="goBack()">
+          <i data-lucide="x"></i><span>取消</span>
+        </button>
+      </div>
+    </header>
     <div class="workspace-scroll">
       <section class="onb-page">
-        <div class="onb-head">
-          <h1 class="onb-title">上传文件</h1>
-          <p class="onb-sub">保留原结构导入知识库。完成后可直接回到工作台继续使用飞象 AI。</p>
-        </div>
 
         <div class="onb-card">
           <div class="onb-state active" id="state-scan">
@@ -195,6 +204,7 @@
 <script>renderFeixiangSidebar('');</script>
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
+<script src="assets/page-header.js"></script>
 <script>
   const _from = new URLSearchParams(location.search).get('from') || 'team';
   let _timer = null;
