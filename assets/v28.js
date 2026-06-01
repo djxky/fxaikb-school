@@ -807,6 +807,65 @@ function refreshBarSend(){
 const GRAPH_SRC = 'https://mapi.feixiangxingqiu.biz/fedebug/agora/feat/wiki-knowledge-graph/index.html#/knowledge-graph?kbId=3';
 let _prevLeftBeforeFolder = null;
 
+function getKnowledgeHeaderRoot(){
+  const crumb = document.querySelector('.knowledge-header-crumb');
+  return {
+    el: crumb,
+    name: crumb?.dataset.rootName || (CURRENT_KB_SCOPE === 'personal' ? '我的知识库' : '学校知识库'),
+    icon: crumb?.dataset.rootIcon || (CURRENT_KB_SCOPE === 'personal' ? 'bookmark' : 'library')
+  };
+}
+
+function renderKnowledgeHeaderWiki(){
+  const { el, name, icon } = getKnowledgeHeaderRoot();
+  if(!el) return;
+  el.innerHTML = `
+    <span class="ph-crumb-current"><i data-lucide="${icon}"></i><span>${escHtml(name)}</span></span>
+    <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+    <span class="ph-crumb-current"><span>Wiki 首页</span></span>
+  `;
+  if(app) delete app.dataset.folderDepth;
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderKnowledgeHeaderFolder(rootName, rootIcon, trail){
+  const { el } = getKnowledgeHeaderRoot();
+  if(!el) return;
+  const parts = Array.isArray(trail) ? trail : [];
+  const visibleParts = parts.length > 2
+    ? [{ name:'…', id:null, isEllipsis:true }, ...parts.slice(-2)]
+    : parts;
+  const crumbParts = visibleParts.length
+    ? visibleParts.map((folder, idx) => {
+        const isLast = idx === visibleParts.length - 1;
+        if(folder.isEllipsis){
+          const hidden = parts.slice(0, -2).map(item => item.name).join(' / ');
+          return `
+            <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+            <span class="ph-crumb-item ph-crumb-ellipsis" title="${escHtml(hidden)}">…</span>
+          `;
+        }
+        return `
+          <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+          ${isLast
+            ? `<span class="ph-crumb-current"><span>${escHtml(folder.name)}</span></span>`
+            : `<button class="ph-crumb-item ph-crumb-btn" onclick="personalEnterFolder('${escHtml(folder.id)}')" title="跳到「${escHtml(folder.name)}」">${escHtml(folder.name)}</button>`}
+        `;
+      }).join('')
+    : `
+      <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
+      <span class="ph-crumb-current"><i data-lucide="folder-open"></i><span>根目录</span></span>
+    `;
+  el.innerHTML = `
+    <button class="ph-crumb-item ph-crumb-btn" onclick="personalBackToRoot()" title="返回 ${escHtml(rootName)} 根目录">
+      <i data-lucide="${escHtml(rootIcon)}"></i><span>${escHtml(rootName)}</span>
+    </button>
+    ${crumbParts}
+  `;
+  if(app) app.dataset.folderDepth = parts.length ? 'nested' : 'root';
+  if(window.lucide) lucide.createIcons();
+}
+
 function switchView(v, entryName){
   /* 图谱 = 研发独立 SPA，直接新窗口打开。不动当前视图，保持上下文 */
   if(v === 'graph'){
@@ -816,16 +875,27 @@ function switchView(v, entryName){
   }
 
   if(v === 'folder' && document.body.dataset.page !== 'wiki-entry'){
-    window.location.href = 'wiki-entry.html?view=folder';
-    return;
+    const hasLocalFolderView = !!document.getElementById('view-folder');
+    if(!hasLocalFolderView){
+      window.location.href = 'wiki-entry.html?view=folder';
+      return;
+    }
+    if(document.body.dataset.page === 'wiki-home' && typeof setCurrentKbScope === 'function'){
+      setCurrentKbScope('school');
+    }
   }
 
   document.querySelectorAll('.vs-btn').forEach(b=>{
-    b.classList.toggle('active', b.dataset.view === v);
+    const isActive = b.dataset.view === v;
+    b.classList.toggle('active', isActive);
+    b.setAttribute('aria-selected', isActive ? 'true' : 'false');
   });
 
   const prevView = app.dataset.view;
   app.dataset.view = v;
+  if(v === 'wiki'){
+    renderKnowledgeHeaderWiki();
+  }
 
   /* 进入文件夹视图：记住左栏状态后自动折叠到 dock，给文件树腾空间 */
   if(v === 'folder' && prevView !== 'folder'){
@@ -852,6 +922,9 @@ function switchView(v, entryName){
       : '（演示）文件夹视图 — 即将上线，先看 Wiki';
     showToast(msg);
     setTimeout(()=>switchView('wiki'), 1200);
+  }
+  if(v === 'folder' && typeof renderPersonalFolderView === 'function'){
+    renderPersonalFolderView();
   }
 }
 
@@ -1184,23 +1257,77 @@ const TEAM_MATH_KB_DEFAULT = {
   wikiByFolder: {},
 };
 
-/* 团队 KB · 学校公共库 / 备课组 — demo 数据极简，主要演示"非管理员视图" */
+/* 学校知识库 · 与 school-wiki.html 首页口径一致：年级 / 学科 / 专题结构 */
 const TEAM_SCHOOL_DEFAULT = {
   folders: [
-    { id:'sch-policy', parentId:null, name:'学校制度', count:0 },
-    { id:'sch-curriculum', parentId:null, name:'课程方案', count:0 },
+    { id:'sch-grade-7', parentId:null, name:'七年级', count:0 },
+    { id:'sch-grade-8', parentId:null, name:'八年级', count:0 },
+    { id:'sch-grade-9', parentId:null, name:'九年级', count:0 },
+    { id:'sch-zhongkao', parentId:null, name:'中考专题', count:0 },
+    { id:'sch-shared', parentId:null, name:'全校共建', count:0 },
+    { id:'sch-grade-9-math', parentId:'sch-grade-9', name:'数学', count:0 },
+    { id:'sch-grade-9-open', parentId:'sch-grade-9', name:'公开课 / 板书', count:0 },
+    { id:'sch-quad', parentId:'sch-grade-9-math', name:'二次函数', count:0 },
+    { id:'sch-quadratic-eq', parentId:'sch-grade-9-math', name:'一元二次方程', count:0 },
+    { id:'sch-similar', parentId:'sch-grade-9-math', name:'相似三角形', count:0 },
+    { id:'sch-circle', parentId:'sch-grade-9-math', name:'圆', count:0 },
+    { id:'sch-trig', parentId:'sch-grade-9-math', name:'锐角三角函数', count:0 },
   ],
   files: {
-    'sch-policy': [
+    'sch-quad': [
+      { name:'二次函数·导入课件.pptx', icon:'presentation', source:'张老师', time:'5 天前', size:'4.2 MB', wiki:'二次函数图像与性质' },
+      { name:'二次函数公开课教案.docx', icon:'file-text', source:'王老师', time:'5 天前', size:'1.8 MB', wiki:'二次函数图像与性质' },
+      { name:'海淀区 2026 一模卷·数学.pdf', icon:'file', source:'李素芬', time:'1 周前', size:'1.2 MB', wiki:'二次函数图像与性质' },
+      { name:'王建华·公开课板书（4 张）', icon:'image', source:'王建华', time:'2 周前', size:'3.6 MB', wiki:'二次函数图像与性质' },
+      { name:'赵明杰·错题剖析.docx', icon:'file-text', source:'赵明杰', time:'2 周前', size:'220 KB', wiki:'二次函数图像与性质' },
+      { name:'八(3)班·错题精选.xlsx', icon:'sheet', source:'张老师', time:'3 周前', size:'180 KB', wiki:'二次函数图像与性质' },
+      { name:'二次函数·配套习题汇编.pdf', icon:'file', source:'教研组', time:'3 周前', size:'2.9 MB', wiki:'二次函数图像与性质' },
+      { name:'抛物线图像专题.pptx', icon:'presentation', source:'李素芬', time:'1 个月前', size:'3.1 MB', wiki:'二次函数图像与性质' },
+    ],
+    'sch-quadratic-eq': [
+      { name:'一元二次方程·配方法教学设计.docx', icon:'file-text', source:'陈老师', time:'12-09', size:'860 KB', wiki:'一元二次方程根的判别式' },
+      { name:'根的判别式分层练习.docx', icon:'file-text', source:'张老师', time:'12-07', size:'780 KB', wiki:'一元二次方程根的判别式' },
+      { name:'一元二次方程单元测评.pdf', icon:'file', source:'九年级备课组', time:'12-02', size:'1.6 MB', wiki:'一元二次方程根的判别式' },
+    ],
+    'sch-similar': [
+      { name:'相似三角形·公开课设计.docx', icon:'file-text', source:'张老师', time:'昨天 16:08', size:'1.4 MB', wiki:'相似三角形判定与应用' },
+      { name:'相似三角形·实际应用例题.pptx', icon:'presentation', source:'王建华', time:'1 周前', size:'5.6 MB', wiki:'相似三角形判定与应用' },
+      { name:'相似三角形·错题精选.docx', icon:'file-text', source:'李素芬', time:'2 周前', size:'520 KB', wiki:'相似三角形判定与应用' },
+      { name:'相似三角形板书照片.jpg', icon:'image', source:'李老师', time:'2 周前', size:'2.1 MB', wiki:'相似三角形判定与应用' },
+    ],
+    'sch-circle': [
+      { name:'圆的切线性质·教学动画.mp4', icon:'video', source:'王建华', time:'12-05', size:'34 MB', wiki:'圆与三角形综合' },
+      { name:'圆·中考真题汇编 2020-2025.pdf', icon:'file', source:'教研组', time:'12-04', size:'5.6 MB', wiki:'圆与三角形综合' },
+      { name:'圆的辅助线·常用套路.docx', icon:'file-text', source:'张老师', time:'11-18', size:'620 KB', wiki:'圆与三角形综合' },
+    ],
+    'sch-trig': [
+      { name:'锐角三角函数·基础概念课件.pptx', icon:'presentation', source:'备课组', time:'11-26', size:'4.8 MB', wiki:'锐角三角函数' },
+      { name:'解直角三角形·应用题精选.pdf', icon:'file', source:'李素芬', time:'11-20', size:'2.2 MB', wiki:'锐角三角函数' },
+    ],
+    'sch-grade-9-open': [
+      { name:'王老师·公开课听课记录.docx', icon:'file-text', source:'张老师', time:'12-11', size:'160 KB', wiki:null },
+      { name:'公开课课件优先选图像导入风格.md', icon:'file-text', source:'飞象自动沉淀', time:'4/15', size:'42 KB', wiki:'教研组共识' },
+    ],
+    'sch-zhongkao': [
+      { name:'函数综合·中考压轴专题.pptx', icon:'presentation', source:'张老师', time:'11-22', size:'9.8 MB', wiki:'中考压轴·函数综合' },
+      { name:'北京中考真题 2021-2025（5 份）', icon:'folder-archive', source:'学校公共库', time:'3 周前', size:'12 MB', wiki:'中考压轴·函数综合' },
+      { name:'命题趋势·近 5 年中考分析.docx', icon:'file-text', source:'教研组', time:'10-30', size:'520 KB', wiki:'中考压轴·函数综合' },
+    ],
+    'sch-shared': [
       { name:'课程标准·初中数学.pdf', icon:'file', source:'学校', time:'09-01', size:'1.8 MB', wiki:null },
       { name:'安全教育材料.pdf', icon:'file', source:'学校', time:'08-30', size:'420 KB', wiki:null },
-    ],
-    'sch-curriculum': [
       { name:'教学计划·本学期数学.docx', icon:'file-text', source:'王教务', time:'09-08', size:'180 KB', wiki:null },
     ],
     __root__: [],
   },
-  wikiByFolder: {},
+  wikiByFolder: {
+    'sch-quad': ['二次函数图像与性质'],
+    'sch-quadratic-eq': ['一元二次方程根的判别式'],
+    'sch-similar': ['相似三角形判定与应用'],
+    'sch-circle': ['圆与三角形综合'],
+    'sch-trig': ['锐角三角函数'],
+    'sch-zhongkao': ['中考压轴·函数综合'],
+  },
 };
 const TEAM_GRADE2_DEFAULT = {
   folders: [
@@ -1326,9 +1453,19 @@ function savePersonalKbState(){
 
 /* 重新计算每个文件夹真实文件数（CRUD 后保持 hero 数字一致） */
 function recountPersonalFolders(){
+  const childMap = new Map();
   PERSONAL_KB_DATA.folders.forEach(folder => {
-    const list = PERSONAL_KB_DATA.files[folder.id] || [];
-    folder.count = list.length;
+    const parentKey = folder.parentId ?? ROOT_FOLDER_ID;
+    if(!childMap.has(parentKey)) childMap.set(parentKey, []);
+    childMap.get(parentKey).push(folder.id);
+  });
+  const countFilesDeep = (folderId) => {
+    const own = (PERSONAL_KB_DATA.files[folderId] || []).length;
+    const children = childMap.get(folderId) || [];
+    return children.reduce((sum, childId) => sum + countFilesDeep(childId), own);
+  };
+  PERSONAL_KB_DATA.folders.forEach(folder => {
+    folder.count = countFilesDeep(folder.id);
   });
 }
 
@@ -1699,8 +1836,8 @@ function renderPersonalFolderView(){
   const root = document.getElementById('view-folder');
   if(!root) return;
   const pageId = document.body.dataset.page;
-  /* 仅在两类页面渲染：02-personal-home（个人 KB），03-wiki-entry?view=folder（团队 KB） */
-  if(pageId !== 'personal-home' && pageId !== 'wiki-entry') return;
+  /* 校园版：个人页和学校页都在本页三视图切换；词条页仍兼容 ?view=folder */
+  if(pageId !== 'personal-home' && pageId !== 'wiki-home' && pageId !== 'wiki-entry') return;
 
   /* 团队 KB 文件夹视图只在 view=folder 时活跃 */
   if(pageId === 'wiki-entry'){
@@ -1715,6 +1852,8 @@ function renderPersonalFolderView(){
   /* 根 KB 名（面包屑首段） */
   const rootName = CURRENT_KB_SCOPE === 'personal'
     ? '我的知识库'
+    : CURRENT_KB_SCOPE === 'school'
+      ? '学校知识库'
     : (getCurrentTeamKbName() || '团队知识库');
   const rootIcon = CURRENT_KB_SCOPE === 'personal' ? 'bookmark' : 'library';
 
@@ -1731,8 +1870,7 @@ function renderPersonalFolderView(){
 
   /* 当前层的子文件夹（按名称） */
   const childFolders = getPersonalChildFolders(currentId)
-    .slice()
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .slice();
 
   /* 当前层的文件（根目录散文件 / 子文件夹直接文件） */
   const currentFiles = getPersonalFiles(currentId);
@@ -1811,6 +1949,9 @@ function renderPersonalFolderView(){
 
   /* 面包屑：根目录单层；子层级沿 parentId 回溯 */
   const trail = inFolder ? getPersonalBreadcrumb(currentId) : [];
+  if(app?.dataset.view === 'folder'){
+    renderKnowledgeHeaderFolder(rootName, rootIcon, trail);
+  }
   const breadcrumbInner = inFolder ? `
     <a class="fv-bc-item" onclick="personalBackToRoot()" title="返回 ${escHtml(rootName)} 根目录">
       <i data-lucide="${rootIcon}"></i>
@@ -1826,9 +1967,9 @@ function renderPersonalFolderView(){
       `;
     }).join('')}
   ` : `
-    <span class="fv-bc-current">
-      <i data-lucide="${rootIcon}"></i>
-      ${escHtml(rootName)}
+    <span class="fv-bc-current fv-bc-root">
+      <i data-lucide="folder-open"></i>
+      根目录
     </span>
   `;
 
@@ -1861,7 +2002,7 @@ function renderPersonalFolderView(){
 
   root.innerHTML = `
     <div class="fv-list personal-folder-view">
-      <div class="fv-list-head">
+      <div class="fv-list-head ${inFolder ? 'is-nested' : 'is-root'}">
         ${backBtn}
         <nav class="fv-breadcrumb" aria-label="路径">
           ${breadcrumbInner}
@@ -2457,6 +2598,7 @@ window.closeFvPop = closeFvPop;
    ────────────────────────────────────────────── */
 document.addEventListener('DOMContentLoaded', () => {
   if(window.lucide) lucide.createIcons();
+  const params = new URLSearchParams(window.location.search);
 
   const ta = document.getElementById('ai-textarea');
   if(ta){
@@ -2480,6 +2622,18 @@ document.addEventListener('DOMContentLoaded', () => {
     syncPersonalHeroCounts();
   }
 
+  /* 学校知识库主页：scope=school，三视图中的文件夹视图在本页渲染 */
+  if(document.body.dataset.page === 'wiki-home'){
+    setCurrentKbScope('school');
+    renderPersonalFolderView();
+  }
+
+  const initialView = params.get('view');
+  if((document.body.dataset.page === 'personal-home' || document.body.dataset.page === 'wiki-home') &&
+    ['wiki', 'graph', 'folder'].includes(initialView)){
+    switchView(initialView);
+  }
+
   /* 飞象老师校园版：sidebar 240px 永远 expanded，不再永久 collapsed */
   /* Wiki 条目页原本默认折叠让出空间，现保持展开
   if(document.body.dataset.page === 'wiki-entry' && app){
@@ -2487,7 +2641,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   */
 
-  const params = new URLSearchParams(window.location.search);
   if(params.get('imported') === '1'){
     showToast('（演示）导入完成，资料已更新到当前知识库', 2600);
     params.delete('imported');
@@ -3147,4 +3300,3 @@ function injectChatExtrasStyle(){
   `;
   document.head.appendChild(style);
 }
-

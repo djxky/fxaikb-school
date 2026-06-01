@@ -117,6 +117,44 @@
       .fx-pop-meta { font-size: 11px; color: #a19f99; font-weight: 400; margin-top: 1px; }
       .fx-pop-row-body { flex: 1; min-width: 0; }
       .fx-pop-row-title { font-size: 13px; line-height: 1.3; }
+      .fx-notif-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 10px 8px;
+        border-bottom: 1px solid rgba(0,0,0,0.06);
+      }
+      .fx-notif-head-title {
+        font-size: 13.5px;
+        font-weight: 700;
+        color: #111110;
+      }
+      .fx-pop .fx-notif-clear {
+        width: auto;
+        padding: 2px 6px;
+        border-radius: 6px;
+        color: #8a8880;
+        font-size: 11.5px;
+        font-weight: 500;
+      }
+      .fx-pop .fx-notif-clear:hover {
+        color: #6b6a65;
+        background: #f4f3ef;
+      }
+      .fx-notif-list {
+        max-height: min(420px, calc(100vh - 180px));
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        padding: 6px 0 2px;
+        scrollbar-width: thin;
+        scrollbar-color: rgba(0,0,0,0.18) transparent;
+      }
+      .fx-notif-list::-webkit-scrollbar { width: 6px; }
+      .fx-notif-list::-webkit-scrollbar-thumb {
+        background: rgba(0,0,0,0.16);
+        border-radius: 999px;
+      }
+      .fx-notif-list::-webkit-scrollbar-track { background: transparent; }
       .fx-notif-item {
         padding: 12px; border-radius: 10px;
         display: flex; gap: 10px; cursor: pointer;
@@ -145,6 +183,23 @@
     document.getElementById('fx-ws-pop')?.remove();
     document.getElementById('fx-notif-pop')?.remove();
     document.querySelector('.fx-user-btn')?.classList.remove('open');
+  }
+
+  const FX_NOTIF_READ_KEY = 'fx-school-demo-notifications-read';
+
+  function hasUnreadFxNotifs() {
+    try {
+      return localStorage.getItem(FX_NOTIF_READ_KEY) !== '1';
+    } catch {
+      return true;
+    }
+  }
+
+  function markFxNotifsRead() {
+    try {
+      localStorage.setItem(FX_NOTIF_READ_KEY, '1');
+    } catch {}
+    document.querySelectorAll('[data-fx-nav-key="notifications"] .fx-nav-right').forEach((el) => el.remove());
   }
 
   /* ---- 用户区下拉 · 账号 + 工作空间切换（取代原 workspace 下拉） ---- */
@@ -216,6 +271,7 @@
     e.stopPropagation();
     if (document.getElementById('fx-notif-pop')) { closeAllPops(); return; }
     closeAllPops();
+    markFxNotifsRead();
     const btn = e.currentTarget;
     const rect = btn.getBoundingClientRect();
     const pop = document.createElement('div');
@@ -226,32 +282,66 @@
     pop.style.width = '320px';
     pop.style.padding = '8px';
     pop.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px 6px">
-        <div style="font-size:13px;font-weight:700">通知 · 3 条未读</div>
-        <button style="font-size:11.5px;color:#6b6a65;padding:2px 6px;border-radius:6px" onclick="event.stopPropagation();showToast('（演示）全部已读');closeFxAll()">全部已读</button>
+      <div class="fx-notif-head">
+        <div class="fx-notif-head-title">通知</div>
+        <button class="fx-notif-clear" onclick="event.stopPropagation();showToast('（演示）全部已读');closeFxAll()">全部已读</button>
       </div>
-      <div class="fx-notif-item" onclick="closeFxAll();window.location.href='ai-record-jobs.html'">
-        <span class="fx-notif-dot"></span>
-        <div class="fx-notif-body">
-          <div class="fx-notif-title">高一(3)班期中模拟卷 · 已扫描完成</div>
-          <div class="fx-notif-desc">38 份扫描已上传，AI 已完成客观题预批，等待你审核</div>
-          <div class="fx-notif-time">5 分钟前</div>
+      <div class="fx-notif-list">
+        <div class="fx-notif-item" onclick="closeFxAll();window.location.href='ai-record-jobs.html'">
+          <span class="fx-notif-dot read"></span>
+          <div class="fx-notif-body">
+            <div class="fx-notif-title">错因报告已生成</div>
+            <div class="fx-notif-desc">高一(3)班期中模拟卷已整理出 6 类共性错因</div>
+            <div class="fx-notif-time">5 分钟前</div>
+          </div>
         </div>
-      </div>
-      <div class="fx-notif-item" onclick="closeFxAll();window.location.href='school-wiki.html'">
-        <span class="fx-notif-dot"></span>
-        <div class="fx-notif-body">
-          <div class="fx-notif-title">王老师分享了「《荷塘月色》画面捕捉法」</div>
-          <div class="fx-notif-desc">已加入「高一语文·共建库」，可在备课对话中引用</div>
-          <div class="fx-notif-time">2 小时前</div>
+        <div class="fx-notif-item" onclick="closeFxAll();window.location.href='ai-qbank.html'">
+          <span class="fx-notif-dot read"></span>
+          <div class="fx-notif-body">
+            <div class="fx-notif-title">AI 题库处理完成</div>
+            <div class="fx-notif-desc">《函数单调性》资料已生成 24 道分层练习题</div>
+            <div class="fx-notif-time">2 小时前</div>
+          </div>
         </div>
-      </div>
-      <div class="fx-notif-item" onclick="closeFxAll();window.location.href='app-detail.html?app=leave'">
-        <span class="fx-notif-dot"></span>
-        <div class="fx-notif-body">
-          <div class="fx-notif-title">3 条请假审批待处理</div>
-          <div class="fx-notif-desc">高一(5)班 · 张同学 / 李同学 / 王同学 · 病假</div>
-          <div class="fx-notif-time">今天 09:12</div>
+        <div class="fx-notif-item" onclick="closeFxAll();window.location.href='compose-sheet.html'">
+          <span class="fx-notif-dot read"></span>
+          <div class="fx-notif-body">
+            <div class="fx-notif-title">作文个册已生成</div>
+            <div class="fx-notif-desc">高一(5)班 42 份作文已生成学生个人反馈册</div>
+            <div class="fx-notif-time">今天 09:12</div>
+          </div>
+        </div>
+        <div class="fx-notif-item" style="opacity:.72" onclick="closeFxAll();window.location.href='ai-qbank.html'">
+          <span class="fx-notif-dot read"></span>
+          <div class="fx-notif-body">
+            <div class="fx-notif-title">AI 录入已完成</div>
+            <div class="fx-notif-desc">12 页手写题目已结构化录入到题库草稿</div>
+            <div class="fx-notif-time">昨天 16:30</div>
+          </div>
+        </div>
+        <div class="fx-notif-item" style="opacity:.72" onclick="closeFxAll();window.location.href='compose-sheet.html'">
+          <span class="fx-notif-dot read"></span>
+          <div class="fx-notif-body">
+            <div class="fx-notif-title">作文讲评报告已生成</div>
+            <div class="fx-notif-desc">已整理本次作文共性问题、优秀片段和讲评建议</div>
+            <div class="fx-notif-time">周一 10:08</div>
+          </div>
+        </div>
+        <div class="fx-notif-item" style="opacity:.72" onclick="closeFxAll();window.location.href='ai-record-jobs.html'">
+          <span class="fx-notif-dot read"></span>
+          <div class="fx-notif-body">
+            <div class="fx-notif-title">知识点归因完成</div>
+            <div class="fx-notif-desc">八年级物理周测已匹配 9 个薄弱知识点</div>
+            <div class="fx-notif-time">上周五 18:42</div>
+          </div>
+        </div>
+        <div class="fx-notif-item" style="opacity:.72" onclick="closeFxAll();window.location.href='ai-qbank.html'">
+          <span class="fx-notif-dot read"></span>
+          <div class="fx-notif-body">
+            <div class="fx-notif-title">个性化练习已生成</div>
+            <div class="fx-notif-desc">AI 已按基础、提高、挑战整理成 3 组练习</div>
+            <div class="fx-notif-time">上周三 09:20</div>
+          </div>
         </div>
       </div>
     `;
@@ -297,9 +387,9 @@
       : '';
     const content = `${icon}<span class="fx-nav-label">${label}</span>${right}`;
     if (onclick) {
-      return `<a class="${cls}" onclick="${onclick}" style="cursor:pointer" title="${label}">${content}</a>`;
+      return `<a class="${cls}" data-fx-nav-key="${key}" onclick="${onclick}" style="cursor:pointer" title="${label}">${content}</a>`;
     }
-    return `<a class="${cls}" href="${href}" title="${label}">${content}</a>`;
+    return `<a class="${cls}" data-fx-nav-key="${key}" href="${href}" title="${label}">${content}</a>`;
   }
 
   function getShellApp(container) {
@@ -343,12 +433,21 @@
 
     const container = document.getElementById('feixiang-sidebar');
     if (!container) return;
+    if (container.dataset.fxRenderedActive === activeKey && container.childElementCount) {
+      applySidebarState(container, container.dataset.fxSidebar || 'open');
+      return;
+    }
+
+    const hasUnreadNotifs = hasUnreadFxNotifs();
+    const currentPage = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
+    const isHomePage = currentPage === 'index.html' || currentPage === '';
 
     container.classList.add('fx-sidebar');
     getShellApp(container);
+    container.dataset.fxRenderedActive = activeKey;
     container.innerHTML = `
       <div class="fx-sidebar-head">
-        <a class="fx-workspace" href="index.html" title="回到首页">
+        <a class="fx-workspace" href="${isHomePage ? '#' : 'index.html'}" ${isHomePage ? 'onclick="event.preventDefault()"' : ''} title="回到首页">
           <div class="fx-ws-main">
             <div class="fx-school-logo">实</div>
             <div class="fx-school-name">北京市实验中学</div>
@@ -360,7 +459,7 @@
             </div>
           </div>
         </a>
-        <button class="fx-sidebar-toggle" onclick="toggleFeixiangSidebar()" title="收起侧栏">
+        <button type="button" class="fx-sidebar-toggle" onclick="toggleFeixiangSidebar()" title="收起侧栏">
           ${ICONS.panel}
         </button>
       </div>
@@ -384,9 +483,9 @@
 
       <div class="fx-spacer"></div>
 
-      ${navItem({ key: 'notifications', icon: ICONS.bell, label: '通知', onclick: 'toggleFxNotif(event)', count: 3, dot: true, activeKey })}
+      ${navItem({ key: 'notifications', icon: ICONS.bell, label: '通知', onclick: 'toggleFxNotif(event)', count: hasUnreadNotifs ? 3 : 0, dot: hasUnreadNotifs, activeKey })}
 
-      <button class="fx-user fx-user-btn" onclick="toggleFxUserMenu(event)" title="账号 / 切换工作空间">
+      <button type="button" class="fx-user fx-user-btn" onclick="toggleFxUserMenu(event)" title="账号 / 切换工作空间">
         <div class="fx-avatar">张</div>
         <div style="flex:1;min-width:0;text-align:left">
           <div class="fx-user-name">张老师</div>

@@ -496,20 +496,103 @@
   .work-tag { background: var(--bg); padding: 2px 8px; border-radius: 6px; color: var(--ink); font-weight: 500; }
 
   /* 3B. 常用应用 (改造为 2x3 紧凑网格) */
-  .tool-list { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 12px; }
+  .tool-list { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, minmax(0, 1fr)); gap: 12px; }
   .tool-row {
+    position: relative;
     background: var(--surface); border: 1px solid var(--line);
     border-radius: var(--radius-md); padding: 12px 14px;
     display: flex; flex-direction: row; align-items: center; gap: 12px;
-    text-align: left; height: 100%;
+    text-align: left; height: 100%; min-height: 72px;
+    cursor: pointer;
   }
   .tool-row:hover { border-color: var(--line-strong); box-shadow: 0 4px 12px rgba(0,0,0,0.02); transform: translateY(-1px); }
+  .tool-list.is-editing .tool-row { padding-left: 34px; cursor: grab; }
+  .tool-list.is-editing .tool-row:active { cursor: grabbing; }
+  .tool-list.is-editing .tool-row:hover { transform: none; }
+  .tool-row.is-dragging { opacity: .45; box-shadow: 0 10px 24px rgba(0,0,0,.08); }
+  .tool-row.is-drag-over { border-color: rgba(168,126,44,.55); background: var(--gold-soft); }
+  .tool-list.is-editing .tool-add-row { cursor: pointer; }
+  .tool-drag {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    width: 14px; height: 20px; display: none; color: var(--faint);
+  }
+  .tool-list.is-editing .tool-drag { display: grid; place-items: center; }
+  .tool-remove {
+    position: absolute; right: 8px; top: 8px;
+    width: 20px; height: 20px; border-radius: 50%;
+    display: none; place-items: center;
+    background: var(--bg); color: var(--muted);
+    padding: 0; border: 0;
+  }
+  .tool-list.is-editing .tool-remove { display: grid; }
+  .tool-remove:hover { background: var(--rose-soft); color: var(--rose); }
+  .tool-add-row {
+    border: 1px dashed var(--line-strong);
+    color: var(--muted);
+    justify-content: center;
+    background: rgba(255,255,255,.45);
+  }
+  .tool-add-row:hover { color: var(--gold); border-color: rgba(168,126,44,.35); background: var(--gold-soft); }
+  .tool-empty-row {
+    border: 1px dashed rgba(0,0,0,.05);
+    background: rgba(255,255,255,.24);
+    pointer-events: none;
+  }
   .tool-icon { width: 32px; height: 32px; border-radius: 8px; display: grid; place-items: center; flex-shrink: 0; }
   .tool-info { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
   .tool-name-wrap { display: flex; align-items: center; gap: 6px; width: 100%; }
   .tool-row .tool-name { font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .badge-official { font-size: 10px; font-weight: 600; color: var(--gold); background: var(--gold-soft); padding: 1px 4px; border-radius: 4px; flex-shrink: 0; line-height: 1.2; }
   .tool-row .tool-desc { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .app-pick-backdrop {
+    position: fixed; inset: 0; z-index: 190;
+    background: rgba(17,17,16,.12);
+  }
+  .app-pick-pop {
+    position: fixed;
+    left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: min(560px, calc(100vw - 48px));
+    max-height: min(70vh, 640px);
+    padding: 18px;
+    display: flex; flex-direction: column;
+  }
+  .app-pick-head {
+    display:flex; align-items:center; justify-content:space-between;
+    min-height: 32px; padding: 0 0 12px;
+  }
+  .app-pick-title { font-size: 16px; font-weight: 700; color: var(--ink); white-space: nowrap; }
+  .pop .app-pick-close {
+    width: 26px; height: 26px; min-width: 26px; padding: 0;
+    border-radius: 7px; display: grid; place-items: center;
+    color: var(--muted); flex: 0 0 26px; gap: 0;
+  }
+  .app-pick-close:hover { background: var(--side); color: var(--ink); }
+  .app-pick-tabs {
+    display: inline-flex; align-self: flex-start; gap: 4px;
+    padding: 3px; margin-bottom: 12px;
+    background: var(--side); border-radius: 9px;
+  }
+  .pop .app-pick-tab {
+    width: auto; padding: 6px 12px; border-radius: 7px;
+    font-size: 12.5px; color: var(--muted); gap: 0;
+  }
+  .pop .app-pick-tab.active { background: #fff; color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,.04); }
+  .app-pick-list {
+    display: flex; flex-direction: column; gap: 4px;
+    overflow-y: auto; padding-right: 2px;
+  }
+  .app-pick-item {
+    width: 100%; display: flex; align-items: center; gap: 10px;
+    padding: 10px 8px; border-radius: 8px; text-align: left;
+  }
+  .app-pick-item:hover { background: var(--side); }
+  .app-pick-item[disabled] { opacity: .48; cursor: not-allowed; }
+  .app-pick-item[disabled]:hover { background: transparent; }
+  .app-pick-main { flex: 1; min-width: 0; }
+  .app-pick-name { display: block; font-size: 13px; font-weight: 600; color: var(--ink); }
+  .app-pick-desc { display: block; font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .app-pick-action { font-size: 12px; color: var(--gold); font-weight: 600; flex-shrink: 0; }
+  .app-pick-action.is-added { color: var(--muted); }
 
   /* 4. 推荐区 (干净的卡片) */
   .content-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
@@ -613,7 +696,7 @@
           </div>
           <div class="composer-actions">
             <button class="pill-icon" title="语音输入" onclick="showToast('（演示）按住说话，自动转文字')">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
             </button>
             <button class="pill-icon pill-send" title="发送" onclick="submitHome()">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -640,10 +723,7 @@
         <!-- 左：最近任务 -->
         <div class="zone">
           <div class="block-head">
-            <div class="block-title">工作动态</div>
-            <button class="block-more">
-              全部 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
-            </button>
+            <div class="block-title">最近任务</div>
           </div>
           <div class="work-list">
             <button class="work-card" onclick="window.location.href='ai-record-jobs.html'">
@@ -674,64 +754,12 @@
         <div class="zone">
           <div class="block-head">
             <div class="block-title">常用应用</div>
-            <button class="block-more">
+            <button type="button" class="block-more" id="common-app-edit-btn" onclick="toggleCommonAppEdit(event)">
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 
               编辑
             </button>
           </div>
-          <div class="tool-list">
-            <button class="tool-row" onclick="window.location.href='ai-qbank.html'">
-              <div class="icon-box gold tool-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div>
-              <div class="tool-info">
-                <div class="tool-name-wrap">
-                  <div class="tool-name">飞象题库</div>
-                  <div class="badge-official">官方</div>
-                </div>
-                <div class="tool-desc">智能检索与组卷</div>
-              </div>
-            </button>
-            <button class="tool-row" onclick="window.location.href='ai-record-jobs.html'">
-              <div class="icon-box rose tool-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 14l2 2 4-4"/></svg></div>
-              <div class="tool-info">
-                <div class="tool-name-wrap">
-                  <div class="tool-name">飞象作业</div>
-                  <div class="badge-official">官方</div>
-                </div>
-                <div class="tool-desc">布置与批改</div>
-              </div>
-            </button>
-            <button class="tool-row" onclick="window.location.href='ai-review.html'">
-              <div class="icon-box green tool-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4z"/></svg></div>
-              <div class="tool-info">
-                <div class="tool-name-wrap">
-                  <div class="tool-name">飞象作文</div>
-                  <div class="badge-official">官方</div>
-                </div>
-                <div class="tool-desc">范文解析评点</div>
-              </div>
-            </button>
-            <button class="tool-row" onclick="window.location.href='app-detail.html?app=notify'">
-              <div class="icon-box blue tool-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></div>
-              <div class="tool-info">
-                <div class="tool-name">班级通知</div>
-                <div class="tool-desc">一键发送家长</div>
-              </div>
-            </button>
-            <button class="tool-row" onclick="window.location.href='app-detail.html?app=schedule'">
-              <div class="icon-box purple tool-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-              <div class="tool-info">
-                <div class="tool-name">智能排课</div>
-                <div class="tool-desc">查看本周课表</div>
-              </div>
-            </button>
-            <button class="tool-row" onclick="window.location.href='app-detail.html?app=leave'">
-              <div class="icon-box green tool-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/></svg></div>
-              <div class="tool-info">
-                <div class="tool-name">请假审批</div>
-                <div class="tool-desc">学生请假处理</div>
-              </div>
-            </button>
-          </div>
+          <div class="tool-list" id="common-app-list"></div>
         </div>
 
       </section>
@@ -815,6 +843,226 @@ function showToast(msg) {
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+/* 常用应用编辑 */
+const COMMON_APP_LIMIT = 6;
+const COMMON_APPS = [
+  { id: 'qbank', name: '飞象题库', desc: '智能检索与组卷', source: 'mine', url: 'ai-qbank.html', color: 'gold', official: true, svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
+  { id: 'homework', name: '飞象作业', desc: '布置与批改', source: 'mine', url: 'ai-record-jobs.html', color: 'rose', official: true, svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M9 14l2 2 4-4"/>' },
+  { id: 'essay', name: '飞象作文', desc: '范文解析评点', source: 'mine', url: 'ai-review.html', color: 'green', official: true, svg: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4z"/>' },
+  { id: 'notify', name: '班级通知', desc: '一键发送家长', source: 'mine', url: 'app-detail.html?app=notify', color: 'blue', svg: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>' },
+  { id: 'schedule', name: '智能排课', desc: '查看本周课表', source: 'mine', url: 'app-detail.html?app=schedule', color: 'purple', svg: '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>' },
+  { id: 'leave', name: '请假审批', desc: '学生请假处理', source: 'mine', url: 'app-detail.html?app=leave', color: 'green', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/>' },
+  { id: 'score', name: '成绩分析', desc: '班级成绩趋势', source: 'mine', url: 'app-detail.html?app=score', color: 'blue', svg: '<path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/>' },
+  { id: 'attendance', name: '课堂考勤', desc: '签到与缺勤记录', source: 'mine', url: 'app-detail.html?app=attendance', color: 'gold', svg: '<path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>' },
+  { id: 'parent', name: '家校沟通', desc: '常用通知与反馈', source: 'favorite', url: 'app-detail.html?app=parent', color: 'rose', svg: '<path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>' },
+  { id: 'vote', name: '课堂投票', desc: '实时收集学生反馈', source: 'favorite', url: 'app-detail.html?app=vote', color: 'blue', svg: '<path d="M3 3h18v14H3z"/><path d="M8 21h8"/><path d="M12 17v4"/><path d="m8 9 3 3 5-5"/>' },
+  { id: 'essay-guide', name: '作文讲评助手', desc: '生成讲评与佳句摘录', source: 'favorite', url: 'app-detail.html?app=essay-guide', color: 'green', svg: '<path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>' },
+];
+let commonAppEditing = false;
+let commonAppIds = ['qbank', 'homework', 'essay', 'notify', 'schedule'];
+let draggedCommonAppId = null;
+let commonAppPickerTab = 'favorite';
+
+function appIcon(app, size = 18) {
+  return `<div class="icon-box ${app.color} tool-icon"><svg width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${app.svg}</svg></div>`;
+}
+
+function renderCommonApps() {
+  const list = document.getElementById('common-app-list');
+  if (!list) return;
+  const apps = commonAppIds.map(id => COMMON_APPS.find(app => app.id === id)).filter(Boolean);
+  const emptySlots = Math.max(0, COMMON_APP_LIMIT - apps.length);
+  list.classList.toggle('is-editing', commonAppEditing);
+  const appHtml = apps.map(app => `
+    <div
+      role="button"
+      tabindex="0"
+      class="tool-row"
+      draggable="${commonAppEditing ? 'true' : 'false'}"
+      data-app-id="${app.id}"
+      onclick="openCommonApp('${app.id}')"
+      onkeydown="onCommonAppKey(event, '${app.id}')"
+      ondragstart="startCommonAppDrag(event, '${app.id}')"
+      ondragover="overCommonAppDrag(event, '${app.id}')"
+      ondragleave="leaveCommonAppDrag(event)"
+      ondrop="dropCommonApp(event, '${app.id}')"
+      ondragend="endCommonAppDrag(event)"
+    >
+      <span class="tool-drag" title="拖拽排序">
+        <svg width="12" height="18" viewBox="0 0 12 18" fill="currentColor"><circle cx="4" cy="3" r="1.2"/><circle cx="8" cy="3" r="1.2"/><circle cx="4" cy="9" r="1.2"/><circle cx="8" cy="9" r="1.2"/><circle cx="4" cy="15" r="1.2"/><circle cx="8" cy="15" r="1.2"/></svg>
+      </span>
+      ${appIcon(app)}
+      <div class="tool-info">
+        <div class="tool-name-wrap">
+          <div class="tool-name">${app.name}</div>
+          ${app.official ? '<div class="badge-official">官方</div>' : ''}
+        </div>
+        <div class="tool-desc">${app.desc}</div>
+      </div>
+      <button type="button" class="tool-remove" title="移除" draggable="false" onpointerdown="event.stopPropagation()" onclick="event.stopPropagation();removeCommonApp('${app.id}')">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+  `).join('');
+  const emptyHtml = commonAppEditing ? Array.from({ length: emptySlots }).map(() => `
+    <button type="button" class="tool-row tool-add-row" onclick="openCommonAppPicker(event)">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      添加应用
+    </button>
+  `).join('') : '';
+  list.innerHTML = appHtml + emptyHtml;
+}
+
+function toggleCommonAppEdit(e) {
+  e?.preventDefault();
+  e?.stopPropagation();
+  commonAppEditing = !commonAppEditing;
+  closeAllPops();
+  syncCommonAppEditButton();
+  renderCommonApps();
+}
+
+function syncCommonAppEditButton() {
+  const btn = document.getElementById('common-app-edit-btn');
+  if (btn) {
+    btn.innerHTML = commonAppEditing
+      ? '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg> 完成'
+      : '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg> 编辑';
+  }
+}
+
+function openCommonApp(id) {
+  const app = COMMON_APPS.find(item => item.id === id);
+  if (!app) return;
+  if (commonAppEditing) return;
+  window.location.href = app.url;
+}
+
+function onCommonAppKey(e, id) {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  e.preventDefault();
+  openCommonApp(id);
+}
+
+function startCommonAppDrag(e, id) {
+  if (!commonAppEditing) {
+    e.preventDefault();
+    return;
+  }
+  draggedCommonAppId = id;
+  e.currentTarget.classList.add('is-dragging');
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/plain', id);
+}
+
+function overCommonAppDrag(e, targetId) {
+  if (!commonAppEditing || !draggedCommonAppId || draggedCommonAppId === targetId) return;
+  e.preventDefault();
+  e.dataTransfer.dropEffect = 'move';
+  e.currentTarget.classList.add('is-drag-over');
+}
+
+function leaveCommonAppDrag(e) {
+  e.currentTarget.classList.remove('is-drag-over');
+}
+
+function dropCommonApp(e, targetId) {
+  e.preventDefault();
+  document.querySelectorAll('.tool-row.is-drag-over').forEach(el => el.classList.remove('is-drag-over'));
+  if (!commonAppEditing || !draggedCommonAppId || draggedCommonAppId === targetId) return;
+  const fromIndex = commonAppIds.indexOf(draggedCommonAppId);
+  const toIndex = commonAppIds.indexOf(targetId);
+  if (fromIndex < 0 || toIndex < 0) return;
+  const [movedId] = commonAppIds.splice(fromIndex, 1);
+  commonAppIds.splice(toIndex, 0, movedId);
+  renderCommonApps();
+}
+
+function endCommonAppDrag(e) {
+  e.currentTarget.classList.remove('is-dragging');
+  document.querySelectorAll('.tool-row.is-drag-over').forEach(el => el.classList.remove('is-drag-over'));
+  draggedCommonAppId = null;
+}
+
+function removeCommonApp(id) {
+  commonAppIds = commonAppIds.filter(appId => appId !== id);
+  renderCommonApps();
+  showToast('已从首页移除');
+}
+
+function addCommonApp(id) {
+  if (commonAppIds.includes(id)) return;
+  if (commonAppIds.length >= COMMON_APP_LIMIT) {
+    showToast(`首页最多展示 ${COMMON_APP_LIMIT} 个常用应用`);
+    return;
+  }
+  commonAppIds.push(id);
+  renderCommonApps();
+  renderCommonAppPicker();
+  showToast('已添加到常用应用');
+}
+
+function openCommonAppPicker(e) {
+  e.stopPropagation();
+  closeAllPops();
+  commonAppPickerTab = 'favorite';
+  const backdrop = document.createElement('div');
+  backdrop.className = 'app-pick-backdrop';
+  backdrop.id = 'app-pick-backdrop';
+  backdrop.onclick = closeAllPops;
+  const pop = document.createElement('div');
+  pop.className = 'pop app-pick-pop';
+  pop.id = 'app-pick-pop';
+  pop.onclick = ev => ev.stopPropagation();
+  document.body.appendChild(backdrop);
+  document.body.appendChild(pop);
+  renderCommonAppPicker();
+}
+
+function renderCommonAppPicker() {
+  const pop = document.getElementById('app-pick-pop');
+  if (!pop) return;
+  const tabs = [
+    { id: 'favorite', label: '我的收藏' },
+    { id: 'mine', label: '我的应用' },
+  ];
+  const candidates = COMMON_APPS.filter(app => app.source === commonAppPickerTab);
+  const isFull = commonAppIds.length >= COMMON_APP_LIMIT;
+  pop.innerHTML = `
+    <div class="app-pick-head">
+      <div class="app-pick-title">添加常用应用</div>
+      <button type="button" class="app-pick-close" onclick="event.stopPropagation();closeAllPops()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="app-pick-tabs">
+      ${tabs.map(tab => `
+        <button type="button" class="app-pick-tab ${commonAppPickerTab === tab.id ? 'active' : ''}" onclick="event.stopPropagation();switchCommonAppPickerTab('${tab.id}')">${tab.label}</button>
+      `).join('')}
+    </div>
+    <div class="app-pick-list">
+      ${candidates.length ? candidates.map(app => {
+        const added = commonAppIds.includes(app.id);
+        return `
+          <button type="button" class="app-pick-item" ${isFull || added ? 'disabled' : ''} onclick="event.stopPropagation();addCommonApp('${app.id}')">
+            ${appIcon(app, 16)}
+            <span class="app-pick-main">
+              <span class="app-pick-name">${app.name}</span>
+              <span class="app-pick-desc">${app.desc}</span>
+            </span>
+            <span class="app-pick-action ${added ? 'is-added' : ''}">${added ? '已添加' : (isFull ? '已满' : '添加')}</span>
+          </button>
+        `;
+      }).join('') : `<div class="empty-desc" style="padding:18px 10px">${commonAppPickerTab === 'favorite' ? '我的收藏' : '我的应用'}里暂无应用</div>`}
+    </div>
+  `;
+}
+
+function switchCommonAppPickerTab(tab) {
+  commonAppPickerTab = tab;
+  renderCommonAppPicker();
 }
 
 /* 输入框 / 发送 / chip */
@@ -1271,6 +1519,8 @@ function closeAllPops() {
   document.getElementById('notif-pop')?.remove();
   document.getElementById('plus-pop')?.remove();
   document.getElementById('kb-submenu')?.remove();
+  document.getElementById('app-pick-backdrop')?.remove();
+  document.getElementById('app-pick-pop')?.remove();
   document.getElementById('user-btn')?.classList.remove('open');
 }
 
@@ -1281,6 +1531,7 @@ function toggleSidebar() {
 }
 
 /* 时间问候 */
+renderCommonApps();
 (function syncGreet() {
   const h = new Date().getHours();
   const greet = h < 11 ? '早上好' : h < 14 ? '中午好' : h < 18 ? '下午好' : '晚上好';

@@ -190,9 +190,8 @@
     <!-- 统一页面顶栏 · page-header -->
     <header class="page-header" data-page-header="my-wiki">
       <div class="ph-left">
-        <i class="ph-icon" data-lucide="bookmark"></i>
-        <nav class="ph-crumb" aria-label="面包屑">
-          <span class="ph-crumb-current"><span>我的知识库</span></span>
+        <nav class="ph-crumb knowledge-header-crumb" aria-label="面包屑" data-root-name="我的知识库" data-root-icon="bookmark">
+          <span class="ph-crumb-current"><i data-lucide="bookmark"></i><span>我的知识库</span></span>
           <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
           <span class="ph-crumb-current"><span>Wiki 首页</span></span>
         </nav>
@@ -203,16 +202,33 @@
           <button class="ph-vs-btn vs-btn" data-view="graph" onclick="switchView('graph')" role="tab" aria-selected="false"><i data-lucide="git-branch"></i><span>知识图谱</span></button>
           <button class="ph-vs-btn vs-btn" data-view="folder" onclick="switchView('folder')" role="tab" aria-selected="false"><i data-lucide="folder"></i><span>文件夹</span></button>
         </div>
-        <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索 Wiki、文件" aria-expanded="false">
-          <i data-lucide="search"></i>
-        </button>
-        <span class="ph-action-sep" aria-hidden="true"></span>
-        <button class="ph-action" data-doc="download-btn-personal-home" onclick="V28DownloadDialog.open({ context:'personal-home' })" title="下载">
-          <i data-lucide="download"></i><span>下载</span>
-        </button>
-        <button class="ph-action" data-doc="share-btn-personal-home" onclick="V28ShareDialog.open({ context:'personal-home', kbName:'张老师的知识库' })" title="分享">
-          <i data-lucide="share-2"></i><span>分享</span>
-        </button>
+        <div class="knowledge-header-actions wiki-header-actions">
+          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索 Wiki、文件" aria-expanded="false">
+            <i data-lucide="search"></i>
+          </button>
+          <span class="ph-action-sep" aria-hidden="true"></span>
+          <button class="ph-action" data-doc="download-btn-personal-home" onclick="V28DownloadDialog.open({ context:'personal-home' })" title="下载">
+            <i data-lucide="download"></i><span>下载</span>
+          </button>
+          <button class="ph-action" data-doc="share-btn-personal-home" onclick="V28ShareDialog.open({ context:'personal-home', kbName:'张老师的知识库' })" title="分享">
+            <i data-lucide="share-2"></i><span>分享</span>
+          </button>
+        </div>
+        <div class="knowledge-header-actions folder-header-actions">
+          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索文件" aria-expanded="false">
+            <i data-lucide="search"></i>
+          </button>
+          <span class="ph-action-sep" aria-hidden="true"></span>
+          <button class="ph-action" onclick="openCreateFolderPop(event)" title="新建文件夹">
+            <i data-lucide="folder-plus"></i><span>新建文件夹</span>
+          </button>
+          <button class="ph-action folder-sort-action" onclick="showToast('（演示）按上传时间 / 名称 / 大小排序')" title="排序">
+            <i data-lucide="arrow-up-down"></i><span>排序</span>
+          </button>
+          <button class="ph-action is-meta" onclick="personalUploadToCurrentFolder()" title="上传资料">
+            <i data-lucide="upload"></i><span>上传资料</span>
+          </button>
+        </div>
       </div>
     </header>
 
@@ -552,7 +568,7 @@
                 <i data-lucide="paperclip"></i>
               </button>
               <button class="ce-icon-btn" title="语音输入" onclick="showToast('（演示）语音输入')">
-                <i data-lucide="mic"></i>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
               </button>
               <span class="ce-divider"></span>
               <button class="ce-kb-attach" data-kb-picker-trigger onclick="openKbPicker(this)" title="选择飞象基于哪些知识库回答">

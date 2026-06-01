@@ -653,12 +653,17 @@
     transition: background 0.15s;
   }
   .cv-save-btn:hover { background: #000; }
+  .cv-save-btn.saved {
+    background: var(--green-soft);
+    color: var(--green);
+  }
+  .cv-save-btn.saved:hover { background: #dfece4; }
   .cv-save-btn svg { width: 13px; height: 13px; }
 
   /* 保存到知识库 · popover */
   .save-pop {
     position: fixed;
-    width: 320px;
+    width: 520px;
     background: #fff;
     border: 1px solid var(--line-strong);
     border-radius: 14px;
@@ -681,38 +686,97 @@
     padding: 1px 7px; border-radius: 4px;
     font-size: 11px; font-weight: 600;
   }
-  .save-pop-body {
-    max-height: 280px; overflow-y: auto;
+  .save-pop-body { padding: 12px 14px 10px; }
+  .save-pop-field { margin-bottom: 12px; }
+  .save-pop-label {
+    font-size: 11.5px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .save-name-input,
+  .save-folder-search {
+    width: 100%;
+    height: 34px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    padding: 0 10px;
+    background: #fff;
+    font-size: 12.5px;
+  }
+  .save-name-input:focus,
+  .save-folder-search:focus {
+    border-color: rgba(168,126,44,0.42);
+    box-shadow: 0 0 0 3px rgba(168,126,44,0.10);
+  }
+  .save-tree-panel {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: #fbfaf8;
+    overflow: hidden;
+  }
+  .save-tree-head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--line);
+    background: #fff;
+  }
+  .save-tree-head svg { width: 14px; height: 14px; color: var(--gold); }
+  .save-tree-title {
+    font-size: 12.5px;
+    font-weight: 650;
+    color: var(--ink);
+  }
+  .save-tree {
+    max-height: 300px;
+    overflow-y: auto;
     padding: 6px;
   }
-  .save-pop-section-title {
-    font-size: 11px; color: var(--muted); font-weight: 600;
-    padding: 8px 10px 4px;
+  .save-tree-empty {
+    padding: 28px 12px;
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
   }
-  .save-folder {
+  .save-folder-row {
     display: flex; align-items: center; gap: 10px;
-    padding: 9px 10px;
+    min-height: 32px;
+    padding: 6px 10px;
     border-radius: 8px;
     cursor: pointer;
     border: 0; background: transparent;
     width: 100%; text-align: left;
     font-family: inherit;
   }
-  .save-folder:hover { background: var(--side); }
-  .save-folder.active { background: var(--gold-bg, #fbf5e6); }
-  .save-folder svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--gold, #a87e2c); }
+  .save-folder-row:hover { background: #fff; }
+  .save-folder-row.active { background: var(--gold-soft); }
+  .save-folder-toggle {
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    color: var(--muted);
+  }
+  .save-folder-toggle:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
+  .save-folder-toggle svg { width: 12px; height: 12px; transition: transform 0.16s; }
+  .save-folder-toggle.expanded svg { transform: rotate(90deg); }
+  .save-folder-spacer { width: 18px; flex-shrink: 0; }
+  .save-folder-icon { width: 15px; height: 15px; flex-shrink: 0; color: var(--gold); }
   .save-folder-body { flex: 1; min-width: 0; }
   .save-folder-name {
     font-size: 13px; color: var(--ink); line-height: 1.3;
-  }
-  .save-folder-meta {
-    font-size: 11px; color: var(--muted); margin-top: 1px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .save-folder-check {
     width: 14px; height: 14px; opacity: 0;
     color: var(--gold-deep, #a87e2c);
+    flex-shrink: 0;
   }
-  .save-folder.active .save-folder-check { opacity: 1; }
+  .save-folder-row.active .save-folder-check { opacity: 1; }
   .save-pop-foot {
     border-top: 1px solid var(--line);
     padding: 10px 12px;
@@ -731,6 +795,7 @@
     padding: 6px 14px; border-radius: 7px;
     font-size: 12.5px; font-weight: 600;
     cursor: pointer; border: 0;
+    min-width: 108px;
   }
   .save-pop-submit:hover { background: #000; }
   .save-pop-submit:disabled {
@@ -1120,7 +1185,7 @@
           </div>
           <div class="composer-actions">
             <button class="pill-icon" title="语音输入" onclick="showToast('（演示）语音转文字')">
-              <svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+              <svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
             </button>
             <button class="pill-icon pill-send idle" id="pill-send" onclick="sendInChat()" title="发送">
               <svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
@@ -1151,7 +1216,7 @@
       </div>
       <button class="cv-save-btn" id="cv-save-btn" onclick="toggleSavePop(event)" title="把这份成果存进我的知识库，下次复用">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        <span>保存到知识库</span>
+        <span>保存到我的知识库</span>
       </button>
       <button class="cv-action" onclick="showToast('（演示）下载到本地')" title="下载">
         <svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -1680,6 +1745,21 @@ function toggleCcChip(kind) {
 /* ==================== Canvas tab 切换 ==================== */
 let canvasTabs = []; // { id, label, icon, render }
 let activeCv = null;
+const savedCanvasTabs = new Set();
+function refreshSaveButtonState() {
+  const btn = document.getElementById('cv-save-btn');
+  if (!btn) return;
+  const saved = !!activeCv && savedCanvasTabs.has(activeCv);
+  btn.classList.toggle('saved', saved);
+  btn.title = saved ? '已保存到我的知识库，点击可修改保存位置' : '把这份成果存进我的知识库，下次复用';
+  btn.innerHTML = saved ? `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6 9 17l-5-5"/></svg>
+    <span>已保存</span>
+  ` : `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    <span>保存到我的知识库</span>
+  `;
+}
 function renderCvTabs() {
   const wrap = $('#cv-tabs');
   wrap.innerHTML = canvasTabs.map(t => `
@@ -1695,17 +1775,30 @@ function switchCv(id) {
   if (!tab) return;
   renderCvTabs();
   $('#cv-body').innerHTML = tab.render();
+  refreshSaveButtonState();
 }
 
 /* ==================== 保存到知识库 · popover ==================== */
 const KB_FOLDERS = [
-  { id: 'sanwen',  name: '高一上 / 散文专题',  count: 12, recent: true,  recommend: ['slides', 'quiz'] },
-  { id: 'reading', name: '高一上 / 现代文阅读', count: 8,  recent: true },
-  { id: 'gushi',   name: '古诗鉴赏',           count: 24 },
-  { id: 'jiaoan',  name: '备课教案',           count: 18, recommend: ['slides'] },
-  { id: 'kejian',  name: '课件库',             count: 6,  recommend: ['slides'] },
-  { id: 'tiku',    name: '题集库',             count: 32, recommend: ['quiz'] },
-  { id: 'xueqing', name: '学情归档',           count: 5,  recommend: ['insight'] },
+  {
+    id: 'root', name: '我的知识库', count: 18, children: [
+      {
+        id: 'gaoyi-yuwen', name: '高一语文', count: 9, children: [
+          {
+            id: 'bixiu-shang', name: '必修上', count: 5, children: [
+              { id: 'sanwen', name: '散文专题', count: 12 },
+              { id: 'gushiwen', name: '古诗文', count: 8 },
+            ]
+          },
+          { id: 'xiandaiwen', name: '现代文阅读', count: 8 },
+          { id: 'beike', name: '备课资料', count: 18 },
+        ]
+      },
+      { id: 'kejian', name: '课件库', count: 6 },
+      { id: 'tiku', name: '题集库', count: 32 },
+      { id: 'fansi', name: '教学反思', count: 5 },
+    ]
+  },
 ];
 
 const TAB_LABELS = {
@@ -1714,10 +1807,64 @@ const TAB_LABELS = {
   insight: { name: '本节预设难点分析 · 学情参考',  type: '学情报告' },
 };
 
-let selectedFolder = null;
+let selectedFolder = 'root';
+let saveFolderSearch = '';
+let expandedSaveFolders = new Set(['root', 'gaoyi-yuwen', 'bixiu-shang']);
 function closeSavePop() {
   document.getElementById('save-pop')?.remove();
-  selectedFolder = null;
+  selectedFolder = 'root';
+  saveFolderSearch = '';
+}
+function flattenSaveFolders(nodes, path = []) {
+  return nodes.flatMap(node => {
+    const currentPath = [...path, node.name];
+    return [
+      { ...node, path: currentPath },
+      ...flattenSaveFolders(node.children || [], currentPath)
+    ];
+  });
+}
+function getSaveFolder(id) {
+  return flattenSaveFolders(KB_FOLDERS).find(f => f.id === id);
+}
+function shouldShowFolder(node, query) {
+  if (!query) return true;
+  return node.name.toLowerCase().includes(query) || (node.children || []).some(child => shouldShowFolder(child, query));
+}
+function renderSaveFolderTree(nodes, level = 0, forceVisible = false) {
+  const query = saveFolderSearch.trim().toLowerCase();
+  const visibleNodes = forceVisible ? nodes : nodes.filter(node => shouldShowFolder(node, query));
+  if (!visibleNodes.length && level === 0) {
+    return '<div class="save-tree-empty">没有找到匹配的文件夹</div>';
+  }
+  return visibleNodes.map(node => {
+    const children = node.children || [];
+    const hasChildren = children.length > 0;
+    const nodeMatches = !!query && node.name.toLowerCase().includes(query);
+    const expanded = hasChildren && (expandedSaveFolders.has(node.id) || !!query);
+    const active = selectedFolder === node.id;
+    return `
+      <button class="save-folder-row ${active ? 'active' : ''}" data-folder="${node.id}" onclick="pickSaveFolder('${node.id}', event)" style="padding-left:${10 + level * 18}px">
+        ${hasChildren ? `
+          <span class="save-folder-toggle ${expanded ? 'expanded' : ''}" onclick="toggleSaveFolderExpand('${node.id}', event)" title="${expanded ? '收起' : '展开'}">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 18 6-6-6-6"/></svg>
+          </span>
+        ` : '<span class="save-folder-spacer"></span>'}
+        <svg class="save-folder-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+        <div class="save-folder-body">
+          <div class="save-folder-name">${node.name}</div>
+        </div>
+        <svg class="save-folder-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
+      </button>
+      ${expanded ? renderSaveFolderTree(children, level + 1, forceVisible || nodeMatches) : ''}
+    `;
+  }).join('');
+}
+function refreshSaveTree() {
+  const tree = document.getElementById('save-tree');
+  if (tree) tree.innerHTML = renderSaveFolderTree(KB_FOLDERS);
+  const submit = document.getElementById('save-submit');
+  if (submit) submit.disabled = !selectedFolder;
 }
 function toggleSavePop(e) {
   e.stopPropagation();
@@ -1728,24 +1875,10 @@ function toggleSavePop(e) {
   const rect = btn.getBoundingClientRect();
   const meta = TAB_LABELS[activeCv] || { name: '当前生成内容', type: '内容' };
 
-  const recommended = KB_FOLDERS.filter(f => f.recommend?.includes(activeCv));
-  const others = KB_FOLDERS.filter(f => !f.recommend?.includes(activeCv));
-
-  const renderFolder = (f, isRecommend) => `
-    <button class="save-folder" data-folder="${f.id}" onclick="pickSaveFolder('${f.id}', event)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
-      <div class="save-folder-body">
-        <div class="save-folder-name">${f.name}</div>
-        <div class="save-folder-meta">${f.count} 份资料${isRecommend ? ' · AI 推荐' : (f.recent ? ' · 最近使用' : '')}</div>
-      </div>
-      <svg class="save-folder-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg>
-    </button>
-  `;
-
   const pop = document.createElement('div');
   pop.className = 'save-pop';
   pop.id = 'save-pop';
-  const popWidth = 320;
+  const popWidth = 520;
   const left = Math.min(rect.right - popWidth, window.innerWidth - popWidth - 16);
   pop.style.left = Math.max(16, left) + 'px';
   pop.style.top = (rect.bottom + 8) + 'px';
@@ -1758,29 +1891,31 @@ function toggleSavePop(e) {
       </div>
     </div>
     <div class="save-pop-body">
-      ${recommended.length ? `
-        <div class="save-pop-section-title">AI 推荐目录</div>
-        ${recommended.map(f => renderFolder(f, true)).join('')}
-      ` : ''}
-      <div class="save-pop-section-title">${recommended.length ? '其他目录' : '我的目录'}</div>
-      ${others.map(f => renderFolder(f, false)).join('')}
+      <div class="save-pop-field">
+        <div class="save-pop-label">内容名称</div>
+        <input class="save-name-input" id="save-name-input" value="${meta.name}" onclick="event.stopPropagation()">
+      </div>
+      <div class="save-pop-field">
+        <div class="save-pop-label">保存位置</div>
+        <input class="save-folder-search" id="save-folder-search" placeholder="搜索文件夹" oninput="filterSaveFolders(this.value)" onclick="event.stopPropagation()">
+      </div>
+      <div class="save-tree-panel">
+        <div class="save-tree-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+          <span class="save-tree-title">我的知识库</span>
+        </div>
+        <div class="save-tree" id="save-tree">${renderSaveFolderTree(KB_FOLDERS)}</div>
+      </div>
     </div>
     <div class="save-pop-foot">
       <button class="save-pop-new" onclick="event.stopPropagation();showToast('（演示）新建文件夹')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
         新建文件夹
       </button>
-      <button class="save-pop-submit" id="save-submit" disabled onclick="doSave()">保存</button>
+      <button class="save-pop-submit" id="save-submit" onclick="doSave()">保存到所选位置</button>
     </div>
   `;
   document.body.appendChild(pop);
-
-  // 默认选中第一个推荐项
-  if (recommended.length) {
-    selectedFolder = recommended[0].id;
-    pop.querySelector(`[data-folder="${selectedFolder}"]`)?.classList.add('active');
-    document.getElementById('save-submit').disabled = false;
-  }
 
   setTimeout(() => {
     document.addEventListener('click', closeSavePopHandler, { capture: true });
@@ -1797,18 +1932,31 @@ function closeSavePopHandler(e) {
 function pickSaveFolder(id, e) {
   e.stopPropagation();
   selectedFolder = id;
-  document.querySelectorAll('#save-pop .save-folder').forEach(el => {
+  document.querySelectorAll('#save-pop .save-folder-row').forEach(el => {
     el.classList.toggle('active', el.dataset.folder === id);
   });
   document.getElementById('save-submit').disabled = false;
 }
+function toggleSaveFolderExpand(id, e) {
+  e.stopPropagation();
+  if (expandedSaveFolders.has(id)) expandedSaveFolders.delete(id);
+  else expandedSaveFolders.add(id);
+  refreshSaveTree();
+}
+function filterSaveFolders(value) {
+  saveFolderSearch = value || '';
+  refreshSaveTree();
+}
 
 function doSave() {
-  const folder = KB_FOLDERS.find(f => f.id === selectedFolder);
+  const folder = getSaveFolder(selectedFolder);
   const meta = TAB_LABELS[activeCv] || { type: '内容' };
+  const name = document.getElementById('save-name-input')?.value?.trim() || meta.type;
+  if (activeCv) savedCanvasTabs.add(activeCv);
   closeSavePop();
+  refreshSaveButtonState();
   document.removeEventListener('click', closeSavePopHandler, { capture: true });
-  showToast(`已保存「${meta.type}」到「${folder?.name || '我的知识库'}」`);
+  showToast(`已保存「${name}」到「${folder?.path?.join(' › ') || '我的知识库'}」`);
 }
 
 /* ==================== 消息渲染 ==================== */
@@ -2098,6 +2246,7 @@ function runChatDemo(userText) {
       activeCv = script.defaultCv;
       renderCvTabs();
       $('#cv-body').innerHTML = CV_RENDERERS[activeCv].render();
+      refreshSaveButtonState();
     }
 
     scrollToBottom();

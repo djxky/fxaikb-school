@@ -12,7 +12,8 @@
   z-index:50;
   display:flex;align-items:center;
   gap:8px;
-  padding:14px 40px; /* 收紧一点 padding，让两边更平衡 */
+  min-height:56px;
+  padding:8px 40px; /* 一行：当前位置 + 视图 + 操作 */
   background:rgba(255, 255, 255, 0.85); /* 更纯净的玻璃态 */
   backdrop-filter:blur(12px);
   -webkit-backdrop-filter:blur(12px);
@@ -38,6 +39,7 @@
   display:flex;align-items:center;gap:8px;
   min-width:0;
   flex:1 1 auto;
+  max-width:calc(50% - 130px);
   overflow:hidden;
 }
 
@@ -86,6 +88,37 @@
   margin-left:0;
 }
 
+/* ───── 视图上下文栏：路径 + 当前视图动作 ───── */
+.view-context-bar{
+  position:sticky;
+  top:59px;
+  z-index:45;
+  display:flex;
+  align-items:center;
+  gap:16px;
+  min-height:48px;
+  padding:8px 40px;
+  background:rgba(255,255,255,.9);
+  border-bottom:1px solid rgba(0,0,0,.05);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  flex-shrink:0;
+}
+.view-context-actions{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  flex-shrink:0;
+  margin-left:auto;
+}
+.app[data-view="folder"] .wiki-context-bar{
+  display:none;
+}
+.app[data-chat="open"] .view-context-bar,
+.app[data-chat="empty"] .view-context-bar{
+  display:none;
+}
+
 /* 面包屑模式（school-wiki / wiki-entry / file-preview / my-wiki） */
 .ph-crumb{
   display:flex;align-items:center;gap:4px;
@@ -97,10 +130,13 @@
 .ph-crumb-item{
   display:inline-flex;align-items:center;gap:5px;
   padding:4px 8px;border-radius:6px;
+  border:0;
+  background:transparent;
   color:var(--text-3, #a19f99);
   cursor:pointer;
   text-decoration:none;
   white-space:nowrap;
+  font:inherit;
   transition:background .15s, color .15s;
 }
 .ph-crumb-item [data-lucide]{ width:14px;height:14px; }
@@ -127,6 +163,14 @@
   text-overflow:ellipsis;
 }
 .ph-crumb-current [data-lucide]{ width:14px;height:14px;color:var(--gold, #a87e2c);flex-shrink:0; }
+.ph-crumb-ellipsis{
+  cursor:default;
+  color:var(--text-3);
+}
+.ph-crumb-ellipsis:hover{
+  background:transparent;
+  color:var(--text-3);
+}
 
 /* ───── 间距 ───── */
 .ph-spacer{ flex:0 1 24px; min-width:8px; }
@@ -134,7 +178,20 @@
 /* ───── 右：当前页操作 ───── */
 .ph-right{
   display:inline-flex;align-items:center;gap:6px;
+  margin-left:auto;
   flex-shrink:0;
+}
+.knowledge-header-actions{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+}
+.app[data-view="folder"] .wiki-header-actions,
+.app:not([data-view="folder"]) .folder-header-actions{
+  display:none;
+}
+.app:not([data-folder-depth="nested"]) .folder-sort-action{
+  display:none;
 }
 
 .ph-action{
@@ -276,15 +333,17 @@ body[data-page="wiki-entry"] .app[data-view="folder"] .page-header{
 
 /* ───── 小屏适配 ───── */
 @media (max-width:1280px){
-  .page-header{ padding:14px 32px; }
+  .page-header{ padding:8px 32px; }
   .page-header[data-compact="true"]{ padding:8px 32px; }
+  .view-context-bar{ padding-left:32px; padding-right:32px; }
 }
 @media (max-width:1180px){
   .ph-subtitle{ display:none; }
 }
 @media (max-width:1080px){
-  .page-header{ padding:14px 20px; gap:6px; }
+  .page-header{ padding:8px 20px; gap:6px; }
   .page-header[data-compact="true"]{ padding:8px 20px; }
+  .view-context-bar{ padding-left:20px; padding-right:20px; }
   .ph-action{ padding:6px 8px; }
 }
 @media (max-width:960px){
@@ -293,6 +352,7 @@ body[data-page="wiki-entry"] .app[data-view="folder"] .page-header{
 @media (max-width:760px){
   .page-header{ padding:12px 16px; gap:6px; }
   .page-header[data-compact="true"]{ padding:6px 16px; }
+  .view-context-bar{ padding-left:16px; padding-right:16px; gap:8px; }
   .ph-action span{ display:none; }
   .ph-vs-btn span{ display:none; }
 }
