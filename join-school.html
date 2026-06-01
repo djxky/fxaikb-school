@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>飞象老师校园版 · 加入学校</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+<style>
+  html, body { min-height: 100%; margin: 0; }
+  body {
+    background: #f7f5ef;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button, input, select { font: inherit; }
+  .join-page {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+  .join-topbar {
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    border-bottom: 1px solid rgba(17,17,16,.08);
+    background: rgba(255,255,255,.72);
+    backdrop-filter: blur(14px);
+  }
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text);
+    font-weight: 750;
+  }
+  .brand-mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: #111110;
+    color: #fff;
+  }
+  .brand-mark [data-lucide] { width: 17px; height: 17px; }
+  .topbar-note {
+    color: var(--text-3);
+    font-size: 12.5px;
+  }
+  .join-main {
+    width: min(1040px, calc(100% - 48px));
+    margin: 0 auto;
+    padding: 56px 0 72px;
+    display: grid;
+    grid-template-columns: minmax(0, .92fr) minmax(380px, 1fr);
+    gap: 44px;
+    align-items: start;
+  }
+  .school-brief {
+    padding-top: 12px;
+  }
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: 999px;
+    border: 1px solid #d3e5d5;
+    background: #eef6f0;
+    color: #2a7f42;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .status-pill [data-lucide] { width: 14px; height: 14px; }
+  h1 {
+    margin: 22px 0 12px;
+    font-size: 34px;
+    line-height: 1.16;
+    letter-spacing: 0;
+  }
+  .brief-copy {
+    max-width: 460px;
+    color: var(--text-2);
+    font-size: 15px;
+  }
+  .school-card {
+    margin-top: 30px;
+    width: min(430px, 100%);
+    border: 1px solid rgba(17,17,16,.08);
+    border-radius: 10px;
+    background: rgba(255,255,255,.72);
+    overflow: hidden;
+  }
+  .school-cover {
+    height: 118px;
+    background:
+      linear-gradient(135deg, rgba(74,117,91,.9), rgba(83,117,158,.72)),
+      radial-gradient(circle at 18% 22%, rgba(255,255,255,.4), transparent 28%);
+    display: flex;
+    align-items: flex-end;
+    padding: 18px;
+  }
+  .school-badge {
+    width: 54px;
+    height: 54px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    background: rgba(255,255,255,.92);
+    color: #4a755b;
+    box-shadow: 0 12px 24px rgba(0,0,0,.12);
+  }
+  .school-badge [data-lucide] { width: 26px; height: 26px; }
+  .school-meta {
+    padding: 18px;
+  }
+  .school-name {
+    font-size: 17px;
+    font-weight: 750;
+  }
+  .school-detail {
+    margin-top: 8px;
+    display: grid;
+    gap: 8px;
+    color: var(--text-3);
+    font-size: 12.5px;
+  }
+  .meta-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .meta-row [data-lucide] {
+    width: 14px;
+    height: 14px;
+    color: var(--gold);
+  }
+  .join-card {
+    border: 1px solid var(--border-2);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 24px 70px rgba(36,32,23,.12);
+    overflow: hidden;
+  }
+  .join-card-head {
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid var(--border);
+  }
+  .stepper {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    color: var(--text-3);
+    font-size: 12px;
+    font-weight: 650;
+  }
+  .step-dot {
+    width: 22px;
+    height: 22px;
+    border-radius: 999px;
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    color: var(--text-3);
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+  .step.active { color: var(--text); }
+  .step.active .step-dot {
+    background: #111110;
+    color: #fff;
+  }
+  .step.done .step-dot {
+    background: var(--gold-bg);
+    color: var(--gold-deep);
+  }
+  .card-title {
+    font-size: 19px;
+    font-weight: 750;
+  }
+  .card-subtitle {
+    margin-top: 6px;
+    color: var(--text-3);
+    font-size: 12.5px;
+  }
+  .join-card-body {
+    padding: 22px 24px 24px;
+  }
+  .flow-panel { display: none; }
+  .flow-panel.active { display: block; }
+  .field-grid {
+    display: grid;
+    gap: 14px;
+  }
+  .field {
+    display: grid;
+    gap: 7px;
+  }
+  .field label {
+    color: var(--text-2);
+    font-size: 12.5px;
+    font-weight: 650;
+  }
+  .field input,
+  .field select {
+    width: 100%;
+    height: 40px;
+    box-sizing: border-box;
+    border: 1px solid #d8d3c9;
+    border-radius: 8px;
+    padding: 0 11px;
+    background: #fff;
+    color: var(--text);
+    outline: 0;
+  }
+  .field input:focus,
+  .field select:focus {
+    border-color: rgba(168,126,44,.72);
+    box-shadow: 0 0 0 3px rgba(168,126,44,.12);
+  }
+  .code-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 8px;
+  }
+  .btn {
+    height: 38px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid #d8d3c9;
+    background: #fff;
+    color: var(--text-2);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: all .15s ease;
+    white-space: nowrap;
+  }
+  .btn [data-lucide] { width: 15px; height: 15px; }
+  .btn:hover {
+    border-color: rgba(168,126,44,.42);
+    color: var(--gold-deep);
+    background: var(--gold-bg);
+  }
+  .btn.primary {
+    width: 100%;
+    border-color: #111110;
+    background: #111110;
+    color: #fff;
+  }
+  .btn.primary:hover {
+    background: #000;
+    border-color: #000;
+    color: #fff;
+  }
+  .form-actions {
+    display: grid;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .fine-print {
+    color: var(--text-3);
+    font-size: 11.5px;
+    text-align: center;
+  }
+  .confirm-box {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: #fbfaf7;
+    padding: 14px;
+    margin-bottom: 16px;
+  }
+  .confirm-title {
+    font-size: 13px;
+    font-weight: 750;
+    margin-bottom: 8px;
+  }
+  .confirm-list {
+    display: grid;
+    gap: 8px;
+    color: var(--text-2);
+    font-size: 12.5px;
+  }
+  .confirm-list span {
+    color: var(--text-3);
+    margin-right: 8px;
+  }
+  .success-state {
+    text-align: center;
+    padding: 14px 0 2px;
+  }
+  .success-icon {
+    width: 58px;
+    height: 58px;
+    margin: 0 auto 16px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: #eef6f0;
+    color: #2a7f42;
+  }
+  .success-icon [data-lucide] { width: 28px; height: 28px; }
+  .success-title {
+    font-size: 19px;
+    font-weight: 750;
+  }
+  .success-copy {
+    margin: 8px auto 20px;
+    max-width: 320px;
+    color: var(--text-3);
+    font-size: 12.5px;
+  }
+  .state-tabs {
+    margin-top: 18px;
+    display: inline-flex;
+    padding: 3px;
+    border: 1px solid rgba(17,17,16,.08);
+    border-radius: 9px;
+    background: rgba(255,255,255,.58);
+  }
+  .state-tabs button {
+    height: 28px;
+    border: 0;
+    border-radius: 7px;
+    padding: 0 10px;
+    background: transparent;
+    color: var(--text-3);
+    font-size: 12px;
+    font-weight: 650;
+    cursor: pointer;
+  }
+  .state-tabs button.active {
+    background: #fff;
+    color: var(--text);
+    box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  }
+  .link-warning {
+    display: none;
+    margin-top: 16px;
+    border: 1px solid #f0c7bd;
+    background: #fff1ee;
+    color: #9d3d2d;
+    border-radius: 10px;
+    padding: 12px;
+    font-size: 12.5px;
+  }
+  .link-warning.visible { display: block; }
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 24px;
+    transform: translateX(-50%);
+    background: rgba(17,17,16,.92);
+    color: #fff;
+    padding: 10px 18px;
+    border-radius: 22px;
+    font-size: 12.5px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s;
+    z-index: 9999;
+    backdrop-filter: blur(6px);
+  }
+  @media (max-width: 860px) {
+    .join-topbar { padding: 0 18px; }
+    .topbar-note { display: none; }
+    .join-main {
+      width: calc(100% - 32px);
+      padding: 30px 0 48px;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+    .school-brief { padding-top: 0; }
+    h1 { font-size: 28px; }
+    .school-card { width: 100%; }
+  }
+  @media (max-width: 520px) {
+    .join-card-head,
+    .join-card-body { padding-left: 18px; padding-right: 18px; }
+    .stepper { grid-template-columns: 1fr; }
+    .code-row { grid-template-columns: 1fr; }
+    .btn { width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="join-page">
+  <header class="join-topbar">
+    <div class="brand">
+      <div class="brand-mark"><i data-lucide="sparkles"></i></div>
+      <span>飞象老师校园版</span>
+    </div>
+    <div class="topbar-note">老师加入学校</div>
+  </header>
+
+  <main class="join-main">
+    <section class="school-brief">
+      <div class="status-pill" id="linkStatus"><i data-lucide="shield-check"></i><span>邀请链接有效</span></div>
+      <h1>加入北京市实验中学</h1>
+      <div class="brief-copy">张老师邀请你加入本校空间。加入后，你可以访问学校知识库、应用广场和学校共享资源。</div>
+      <div class="school-card">
+        <div class="school-cover">
+          <div class="school-badge"><i data-lucide="school"></i></div>
+        </div>
+        <div class="school-meta">
+          <div class="school-name">北京市实验中学</div>
+          <div class="school-detail">
+            <div class="meta-row"><i data-lucide="user-round-check"></i><span>邀请人：张老师 · 管理员</span></div>
+            <div class="meta-row"><i data-lucide="clock-3"></i><span id="expireText">有效期至：2026-06-08 10:18</span></div>
+            <div class="meta-row"><i data-lucide="users"></i><span>已有 42 位老师在本校空间</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="state-tabs" aria-label="演示状态">
+        <button class="active" onclick="setLinkState('valid', this)">有效</button>
+        <button onclick="setLinkState('expired', this)">过期</button>
+        <button onclick="setLinkState('joined', this)">已加入</button>
+      </div>
+      <div class="link-warning" id="linkWarning">这个邀请链接已失效。请联系学校管理员重新发送邀请链接。</div>
+    </section>
+
+    <section class="join-card" id="joinCard">
+      <div class="join-card-head">
+        <div class="stepper">
+          <div class="step active" data-step="1"><span class="step-dot">1</span><span>手机号验证</span></div>
+          <div class="step" data-step="2"><span class="step-dot">2</span><span>确认身份</span></div>
+          <div class="step" data-step="3"><span class="step-dot">3</span><span>进入学校</span></div>
+        </div>
+        <div class="card-title" id="cardTitle">先验证手机号</div>
+        <div class="card-subtitle" id="cardSubtitle">使用你平时登录飞象老师的手机号。</div>
+      </div>
+      <div class="join-card-body">
+        <div class="flow-panel active" id="phonePanel">
+          <div class="field-grid">
+            <div class="field">
+              <label>手机号</label>
+              <input id="phoneInput" inputmode="numeric" value="13800138012" />
+            </div>
+            <div class="field">
+              <label>验证码</label>
+              <div class="code-row">
+                <input id="codeInput" inputmode="numeric" placeholder="输入 6 位验证码" />
+                <button class="btn" onclick="sendCode()"><i data-lucide="message-circle"></i>获取验证码</button>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" onclick="goStep(2)">继续</button>
+            <div class="fine-print">手机号仅用于确认老师账号，不会展示给学生。</div>
+          </div>
+        </div>
+
+        <div class="flow-panel" id="profilePanel">
+          <div class="confirm-box">
+            <div class="confirm-title">即将加入</div>
+            <div class="confirm-list">
+              <div><span>学校</span>北京市实验中学</div>
+              <div><span>角色</span>学科老师</div>
+              <div><span>手机号</span><strong id="confirmPhone">138 0013 8012</strong></div>
+            </div>
+          </div>
+          <div class="field-grid">
+            <div class="field">
+              <label>姓名</label>
+              <input id="nameInput" value="张明" />
+            </div>
+            <div class="field">
+              <label>任教学科</label>
+              <select id="subjectInput">
+                <option>语文</option>
+                <option>数学</option>
+                <option>英语</option>
+                <option>物理</option>
+                <option>化学</option>
+                <option>生物</option>
+                <option>历史</option>
+                <option>地理</option>
+                <option>政治</option>
+                <option>信息技术</option>
+                <option>体育</option>
+                <option>美术</option>
+                <option>音乐</option>
+                <option>其他</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button class="btn primary" onclick="goStep(3)">确认加入</button>
+            <button class="btn" onclick="goStep(1)">返回修改手机号</button>
+          </div>
+        </div>
+
+        <div class="flow-panel" id="successPanel">
+          <div class="success-state">
+            <div class="success-icon"><i data-lucide="check"></i></div>
+            <div class="success-title">已加入北京市实验中学</div>
+            <div class="success-copy">你现在可以进入学校空间，访问学校知识库、应用广场和共享资源。</div>
+            <button class="btn primary" onclick="enterSchool()"><i data-lucide="arrow-right"></i>进入学校空间</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+  let toastTimer = null;
+  function showToast(message) {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.style.opacity = '0', 2200);
+  }
+
+  function setSteps(step) {
+    document.querySelectorAll('.step').forEach((item) => {
+      const value = Number(item.dataset.step);
+      item.classList.toggle('active', value === step);
+      item.classList.toggle('done', value < step);
+    });
+  }
+
+  function goStep(step) {
+    if (document.body.dataset.linkState === 'expired') {
+      showToast('邀请链接已过期');
+      return;
+    }
+    document.querySelectorAll('.flow-panel').forEach((panel) => panel.classList.remove('active'));
+    setSteps(step);
+    if (step === 1) {
+      document.getElementById('phonePanel').classList.add('active');
+      document.getElementById('cardTitle').textContent = '先验证手机号';
+      document.getElementById('cardSubtitle').textContent = '使用你平时登录飞象老师的手机号。';
+    }
+    if (step === 2) {
+      const rawPhone = document.getElementById('phoneInput').value.replace(/\s/g, '');
+      document.getElementById('confirmPhone').textContent = formatPhone(rawPhone);
+      document.getElementById('profilePanel').classList.add('active');
+      document.getElementById('cardTitle').textContent = '确认你的老师身份';
+      document.getElementById('cardSubtitle').textContent = '姓名和学科会显示在学校老师列表中。';
+    }
+    if (step === 3) {
+      document.getElementById('successPanel').classList.add('active');
+      document.getElementById('cardTitle').textContent = '加入成功';
+      document.getElementById('cardSubtitle').textContent = '欢迎来到北京市实验中学。';
+    }
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function formatPhone(phone) {
+    const normalized = phone || '13800138012';
+    return normalized.replace(/(\d{3})(\d{4})(\d{4})/, '$1 $2 $3');
+  }
+
+  function sendCode() {
+    showToast('验证码已发送');
+  }
+
+  function enterSchool() {
+    window.location.href = 'index.html';
+  }
+
+  function setLinkState(state, button) {
+    document.body.dataset.linkState = state;
+    document.querySelectorAll('.state-tabs button').forEach((item) => item.classList.remove('active'));
+    if (button) button.classList.add('active');
+    const status = document.getElementById('linkStatus');
+    const warning = document.getElementById('linkWarning');
+    const card = document.getElementById('joinCard');
+    warning.classList.toggle('visible', state === 'expired');
+    card.style.opacity = state === 'expired' ? '.48' : '1';
+    card.style.pointerEvents = state === 'expired' ? 'none' : 'auto';
+    if (state === 'valid') {
+      status.innerHTML = '<i data-lucide="shield-check"></i><span>邀请链接有效</span>';
+      goStep(1);
+    }
+    if (state === 'expired') {
+      status.innerHTML = '<i data-lucide="circle-alert"></i><span>邀请链接已过期</span>';
+    }
+    if (state === 'joined') {
+      status.innerHTML = '<i data-lucide="badge-check"></i><span>你已加入本校</span>';
+      goStep(3);
+    }
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function applyInviteFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const state = params.get('state') || 'valid';
+    const invite = params.get('invite');
+    if (invite) {
+      const expireText = document.getElementById('expireText');
+      expireText.textContent = state === 'expired' ? '链接已失效：' + invite : '有效期至：2026-06-08 10:18';
+    }
+    const targetButton = Array.from(document.querySelectorAll('.state-tabs button')).find((button) => {
+      if (state === 'expired') return button.textContent.trim() === '过期';
+      if (state === 'joined') return button.textContent.trim() === '已加入';
+      return button.textContent.trim() === '有效';
+    });
+    setLinkState(state, targetButton);
+  }
+
+  document.body.dataset.linkState = 'valid';
+  applyInviteFromUrl();
+  if (window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

@@ -101,7 +101,6 @@
   .user.open { background: rgba(0,0,0,0.04); }
   .avatar { width: 32px; height: 32px; border-radius: 50%; background: #e3dec9; display: grid; place-items: center; font-weight: 600; }
   .user-name { font-size: 13px; font-weight: 600; }
-  .user-role { font-size: 11px; color: var(--muted); }
 
   /* ============= 中间对话区 ============= */
   .center {
@@ -322,8 +321,8 @@
   #cc-plus-btn { grid-area: plus; }
   .input-wrap { grid-area: input; display: flex; align-items: center; gap: 8px; width: 100%; min-height: 34px; }
   .input-wrap textarea {
-    flex: 1; font-size: 14.5px; color: var(--ink); min-width: 0;
-    resize: none; line-height: 1.45; padding: 6px 0; max-height: 120px;
+    flex: 1; font-size: 15px; color: var(--ink); min-width: 0;
+    resize: none; line-height: 1.45; padding: 6px 0; max-height: 160px;
     background: transparent; border: none; outline: none; font-family: inherit;
     align-self: center;
   }
@@ -368,6 +367,7 @@
   }
   .pill-send:hover { background: #000; }
   .pill-send.idle { background: var(--line-strong); cursor: not-allowed; color: #fff; }
+  .center[data-empty="1"] .pill-send.idle { background: var(--ink); cursor: pointer; }
   .pill-send.idle:hover { background: var(--line-strong); }
   .pill-send [data-icon] { width: 15px; height: 15px; }
   .pill-plus { color: var(--ink); }
@@ -555,8 +555,18 @@
   }
 
   .intent-chips {
-    display: flex; gap: 10px; justify-content: center;
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
     margin-top: 14px;
+    max-width: 760px;
+    transition: opacity .25s, transform .25s, height .25s, margin .25s;
+  }
+  .intent-chips.hidden-chips {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+    height: 0;
+    overflow: hidden;
+    margin-top: -10px;
   }
   .intent-chip {
     display: inline-flex; align-items: center; gap: 6px;
@@ -579,6 +589,17 @@
     color: var(--gold);
     box-shadow: 0 2px 8px rgba(168,126,44,0.10);
     font-weight: 600;
+  }
+  .intent-chip .chip-beta {
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--green);
+    background: var(--green-soft);
+    border-radius: 999px;
+    padding: 2px 4px;
+    margin-left: -2px;
+    transform: translateY(-1px);
   }
 
   /* ============= 右 Canvas ============= */
@@ -947,6 +968,37 @@
   .pop button.active { background: var(--gold-soft); color: var(--gold); font-weight: 600; }
   .pop button svg { width: 14px; height: 14px; flex-shrink: 0; color: var(--faint); }
   .pop button.active svg { color: var(--gold); }
+  .pop-submenu { position: relative; }
+  .pop-submenu > button::after {
+    content: '';
+    width: 6px; height: 6px;
+    border-top: 1.5px solid currentColor;
+    border-right: 1.5px solid currentColor;
+    transform: rotate(45deg);
+    margin-left: auto;
+    opacity: .55;
+  }
+  .pop-flyout {
+    position: absolute;
+    left: calc(100% - 1px);
+    bottom: -6px;
+    width: 252px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    padding: 6px;
+    box-shadow: 0 18px 48px rgba(0,0,0,0.10);
+    opacity: 0;
+    transform: translateX(-4px);
+    pointer-events: none;
+    transition: opacity .12s ease, transform .12s ease;
+  }
+  .pop-submenu:hover .pop-flyout,
+  .pop-submenu:focus-within .pop-flyout {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
   .pop-divider { height: 1px; background: var(--line); margin: 4px 8px; }
   .pop-meta { font-size: 11px; color: var(--faint); font-weight: 400; margin-top: 1px; }
   .pop-row-body { flex: 1; min-width: 0; }
@@ -1073,7 +1125,6 @@
       <div class="avatar">张</div>
       <div style="flex:1;min-width:0;text-align:left">
         <div class="user-name">张老师</div>
-        <div class="user-role">高一语文 · 实验中学</div>
       </div>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--faint);flex-shrink:0"><path d="M6 9l6 6 6-6"/></svg>
     </button>
@@ -1204,12 +1255,12 @@ function showToast(msg) {
 
 function autosize(el) {
   el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  el.style.height = Math.min(el.scrollHeight, 160) + 'px';
 }
 function refreshSend() {
   const ta = $('#cc-input');
   const btn = $('#pill-send');
-  btn.classList.toggle('idle', !ta.value.trim());
+  btn.classList.toggle('idle', !isEmptyState() && !ta.value.trim());
 }
 function onComposerKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
@@ -1250,28 +1301,32 @@ function toggleUserMenu(e) {
   pop.innerHTML = `
     <div style="padding:10px 12px 6px;border-bottom:1px solid var(--line);margin-bottom:4px">
       <div style="font-size:13.5px;font-weight:700;color:var(--ink)">张老师</div>
-      <div style="font-size:11.5px;color:var(--muted);margin-top:2px">zhang.teacher@实验中学.edu.cn</div>
+      <div style="font-size:11.5px;color:var(--muted);margin-top:2px">13800138000</div>
     </div>
-    <div class="pop-section-title">校园版（工作空间）</div>
-    <button class="active" onclick="event.stopPropagation();closeAllPops();showToast('当前 · 北京市实验中学')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      <div class="pop-row-body"><div class="pop-row-title">北京市实验中学</div><div class="pop-meta">高一语文 · 张老师</div></div>
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--gold)"><path d="M5 13l4 4L19 7"/></svg>
-    </button>
-    <button onclick="event.stopPropagation();closeAllPops();showToast('（演示）切换到 · 人大附中')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-      <div class="pop-row-body"><div class="pop-row-title">人大附中</div><div class="pop-meta">教研协同</div></div>
-    </button>
-    <div class="pop-section-title">个人版</div>
-    <button onclick="event.stopPropagation();closeAllPops();showToast('（演示）切换到 · 飞象个人版')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
-      <div class="pop-row-body"><div class="pop-row-title">张老师 · 飞象个人版</div><div class="pop-meta">个人云端 · 跨学校</div></div>
-    </button>
+    <div class="pop-submenu">
+      <button onclick="event.stopPropagation()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+        <div class="pop-row-body"><div class="pop-row-title">切换空间</div></div>
+      </button>
+      <div class="pop-flyout">
+        <div class="pop-section-title">校园版</div>
+        <button class="active" onclick="event.stopPropagation();closeAllPops();showToast('当前 · 北京市实验中学')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <div class="pop-row-body"><div class="pop-row-title">北京市实验中学</div></div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--gold)"><path d="M5 13l4 4L19 7"/></svg>
+        </button>
+        <button onclick="event.stopPropagation();closeAllPops();showToast('（演示）切换到 · 人大附中')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+          <div class="pop-row-body"><div class="pop-row-title">人大附中</div></div>
+        </button>
+        <div class="pop-section-title">个人版</div>
+        <button onclick="event.stopPropagation();closeAllPops();showToast('（演示）切换到 · 飞象个人版')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+          <div class="pop-row-body"><div class="pop-row-title">张老师 · 飞象个人版</div></div>
+        </button>
+      </div>
+    </div>
     <div class="pop-divider"></div>
-    <button onclick="event.stopPropagation();closeAllPops();showToast('（演示）扫码加入新的学校')">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-      <div class="pop-row-body"><div class="pop-row-title">加入新的学校</div></div>
-    </button>
     <button onclick="event.stopPropagation();closeAllPops();showToast('（演示）账号设置')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       <div class="pop-row-body"><div class="pop-row-title">账号设置</div></div>
@@ -1340,7 +1395,7 @@ function toggleNotifMenu(e) {
 /* 命名 KB_REF_FOLDERS 是因为下方另有 KB_FOLDERS 用于"保存到知识库" popover（结构不同） */
 const KB_REF_FOLDERS = [
   { id: 'mine',   name: '我的知识库',   count: 18 },
-  { id: 'school', name: '学校共建库',   count: 348 },
+  { id: 'school', name: '学校知识库',   count: 348 },
 ];
 let selectedKbIds = [];
 
@@ -1384,6 +1439,7 @@ function removeKb(id) {
   const idx = selectedKbIds.indexOf(id);
   if (idx >= 0) selectedKbIds.splice(idx, 1);
   applyKbState();
+  if (ccMode === 'search') renderCcIntentChips();
   const sub = document.getElementById('kb-submenu');
   if (sub) renderKbSubmenu(sub);
   const main = document.getElementById('plus-pop');
@@ -1398,10 +1454,13 @@ function togglePlusMenu(e, opts) {
   const autoOpenKb = opts && opts.openKb === true;
   const btn = document.getElementById('cc-plus-btn');
   const rect = btn.getBoundingClientRect();
+  const opensDown = isEmptyState();
   const pop = document.createElement('div');
   pop.className = 'plus-pop';
   pop.id = 'plus-pop';
-  pop.style.cssText = `position:fixed;left:${rect.left}px;bottom:${window.innerHeight - rect.top + 8}px`;
+  pop.style.cssText = opensDown
+    ? `position:fixed;left:${rect.left}px;top:${rect.bottom + 8}px`
+    : `position:fixed;left:${rect.left}px;bottom:${window.innerHeight - rect.top + 8}px`;
   pop.addEventListener('click', ev => ev.stopPropagation());
   renderPlusMenu(pop);
   document.body.appendChild(pop);
@@ -1459,10 +1518,10 @@ function openKbSubmenu(e) {
   const subWidth = 280;
   let leftPos = rect.right + 8;
   if (leftPos + subWidth > window.innerWidth - 16) leftPos = rect.left - subWidth - 8;
-  /* 让二级菜单底部与主菜单底部对齐（输入框在底部，整体往上弹） */
   const subMaxH = 380;
-  let topPos = rect.bottom - subMaxH;
+  let topPos = isEmptyState() ? rect.top : rect.bottom - subMaxH;
   if (topPos < 16) topPos = 16;
+  if (topPos + subMaxH > window.innerHeight - 16) topPos = window.innerHeight - subMaxH - 16;
   sub.style.left = leftPos + 'px';
   sub.style.top = topPos + 'px';
   sub.addEventListener('click', ev => ev.stopPropagation());
@@ -1494,6 +1553,7 @@ function toggleKbItem(id) {
   if (idx >= 0) selectedKbIds.splice(idx, 1);
   else selectedKbIds.push(id);
   applyKbState();
+  if (ccMode === 'search') renderCcIntentChips();
   const sub = document.getElementById('kb-submenu');
   if (sub) renderKbSubmenu(sub);
   const main = document.getElementById('plus-pop');
@@ -1503,6 +1563,7 @@ function toggleKbItem(id) {
 function clearAllKb() {
   selectedKbIds = [];
   applyKbState();
+  if (ccMode === 'search') renderCcIntentChips();
   const sub = document.getElementById('kb-submenu');
   if (sub) renderKbSubmenu(sub);
   const main = document.getElementById('plus-pop');
@@ -1512,20 +1573,29 @@ function clearAllKb() {
 
 /* ==================== composer mode chip（前置 GPT 风格） ==================== */
 const CC_CHIP_META = {
-  ai:     { label: 'AI 生成',  svg: '<path d="M12 2L9 9l-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/>' },
-  search: { label: '知识库搜索', svg: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
-  create: { label: '创建应用', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>' },
+  ai:     { label: 'AI 生成', placeholder: '想做什么？比如：备《荷塘月色》课件、出 5 道分层练习……', svg: '<path d="M12 2L9 9l-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/>' },
+  search: { label: '知识库搜索', placeholder: '想找点什么？比如：朱自清散文鉴赏方法、月色描写手法', svg: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
+  create: { label: '创建应用', placeholder: '描述你想要的应用，比如：班级请假审批小工具', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>' },
 };
+const CC_AI_CAPABILITIES = [
+  { id: 'courseware', label: '课件生成', placeholder: '描述你要备的课，比如：《荷塘月色》第二课时，生成 12 页课件和课堂提问。', svg: '<path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/>' },
+  { id: 'qbank', label: 'AI 组题', placeholder: '说清楚学科、知识点、难度和题量，比如：高一语文现代文阅读，5 道分层练习。', svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
+  { id: 'interactive', label: '互动课件', placeholder: '描述课堂互动形式，比如：把《西游记》取经路线做成闯关互动课件。', svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/>' },
+  { id: 'game', label: '教学游戏', placeholder: '描述知识点和玩法，比如：文言虚词配对小游戏，适合高一课堂 8 分钟。', svg: '<line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/>' },
+  { id: 'diagnosis', label: '错因诊断', placeholder: '上传错题图片，或描述这次作业的错误情况，我来归因并生成讲评建议。', svg: '<circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/>' },
+  { id: 'layout', label: '精美排版', placeholder: '粘贴内容或上传资料，我来整理成讲义、课件页或课堂活动单。', svg: '<path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h16"/><path d="M16 10l2 2 4-4"/>' },
+  { id: 'data', label: '数据回收', placeholder: '描述你要收集的数据，比如：班会签到、课堂投票、学生自评和统计表。', svg: '<path d="M3 3v18h18"/><path d="M7 15v2"/><path d="M12 9v8"/><path d="M17 12v5"/>' },
+  { id: 'edu-app', label: '教育应用', beta: true, placeholder: '描述你想做的教学应用，比如：古诗词背诵 Agent，能记录学生练习情况。', svg: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>' },
+];
 const CC_DEFAULT_PLACEHOLDER = '继续对话…';
 const CC_EMPTY_PLACEHOLDER = '问点什么……';
-const CC_PLACEHOLDER_BY_MODE = {
-  ai: '想做什么？比如：备《荷塘月色》课件、出 5 道分层练习……',
-  search: '想找点什么？比如：朱自清散文鉴赏方法、月色描写手法',
-  create: '描述你想要的应用，比如：班级请假审批小工具',
-};
 
 function getCcPlaceholder() {
-  if (ccMode && CC_PLACEHOLDER_BY_MODE[ccMode]) return CC_PLACEHOLDER_BY_MODE[ccMode];
+  const aiCap = ccMode === 'ai' && ccAiCapability
+    ? CC_AI_CAPABILITIES.find(cap => cap.id === ccAiCapability)
+    : null;
+  if (aiCap) return aiCap.placeholder;
+  if (ccMode && CC_CHIP_META[ccMode]) return CC_CHIP_META[ccMode].placeholder;
   const center = document.getElementById('ch-center');
   if (center && center.dataset.empty === '1') return CC_EMPTY_PLACEHOLDER;
   return CC_DEFAULT_PLACEHOLDER;
@@ -1537,17 +1607,29 @@ function syncCcPlaceholder() {
 }
 
 let ccMode = null;
+let ccAiCapability = null;
 function setCcMode(kind) {
   ccMode = kind;
+  ccAiCapability = null;
   // 创建应用 → 强制清空 KB；知识库搜索 0 KB = 默认搜全部（隐式约定）
   if (kind === 'create') selectedKbIds = [];
+  renderCcIntentChips();
+  refreshCcModeChip();
+  syncCcPlaceholder();
+  applyKbState();
+}
+function refreshCcModeChip() {
   const el = $('#cc-mode');
   if (el) {
-    if (kind && CC_CHIP_META[kind]) {
-      const m = CC_CHIP_META[kind];
+    if (ccMode && CC_CHIP_META[ccMode]) {
+      const m = CC_CHIP_META[ccMode];
+      const aiCap = ccMode === 'ai' && ccAiCapability
+        ? CC_AI_CAPABILITIES.find(cap => cap.id === ccAiCapability)
+        : null;
+      const label = aiCap ? `${m.label} · ${aiCap.label}` : m.label;
       el.innerHTML = `
         <svg class="mode-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${m.svg}</svg>
-        ${m.label}
+        ${label}
         <span class="mode-x" onclick="event.stopPropagation();clearCcMode()" title="取消">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
         </span>
@@ -1558,11 +1640,80 @@ function setCcMode(kind) {
       el.innerHTML = '';
     }
   }
-  syncCcPlaceholder();
-  applyKbState();
-  refreshEmptyChips();
+  refreshComposerLayout();
 }
 function clearCcMode() { setCcMode(null); }
+function selectCcAiCapability(id) {
+  ccMode = 'ai';
+  ccAiCapability = id;
+  renderCcIntentChips();
+  refreshCcModeChip();
+  syncCcPlaceholder();
+  applyKbState();
+  $('#cc-input')?.focus();
+}
+function renderCcMainIntentChips() {
+  const panel = $('#ch-empty-chips');
+  if (!panel) return;
+  panel.innerHTML = `
+    <button class="intent-chip ${ccMode === 'ai' ? 'active' : ''}" data-chip="ai" onclick="toggleCcChip('ai')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_CHIP_META.ai.svg}</svg> AI 生成
+    </button>
+    <button class="intent-chip ${ccMode === 'search' ? 'active' : ''}" data-chip="search" onclick="toggleCcChip('search')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_CHIP_META.search.svg}</svg> 知识库搜索
+    </button>
+    <button class="intent-chip ${ccMode === 'create' ? 'active' : ''}" data-chip="create" onclick="toggleCcChip('create')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_CHIP_META.create.svg}</svg> 创建应用
+    </button>
+  `;
+}
+function renderCcAiCapabilityChips() {
+  const panel = $('#ch-empty-chips');
+  if (!panel) return;
+  panel.innerHTML = CC_AI_CAPABILITIES.map(cap => `
+    <button class="intent-chip ${ccAiCapability === cap.id ? 'active' : ''}" data-capability="${cap.id}" onclick="selectCcAiCapability('${cap.id}')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${cap.svg}</svg>
+      ${cap.label}
+      ${cap.beta ? '<span class="chip-beta">BETA</span>' : ''}
+    </button>
+  `).join('');
+}
+function renderCcKbScopeChips() {
+  const panel = $('#ch-empty-chips');
+  if (!panel) return;
+  panel.innerHTML = `
+    <button class="intent-chip ${selectedKbIds.length === 0 ? 'active' : ''}" onclick="selectCcKbScope('all')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+      全部知识库
+    </button>
+    ${KB_REF_FOLDERS.map(f => `
+      <button class="intent-chip ${selectedKbIds.includes(f.id) ? 'active' : ''}" onclick="selectCcKbScope('${f.id}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        ${f.name}
+      </button>
+    `).join('')}
+  `;
+}
+function selectCcKbScope(id) {
+  if (ccMode !== 'search') ccMode = 'search';
+  if (id === 'all') selectedKbIds = [];
+  else {
+    const idx = selectedKbIds.indexOf(id);
+    if (idx >= 0) selectedKbIds.splice(idx, 1);
+    else selectedKbIds.push(id);
+  }
+  applyKbState();
+  renderCcIntentChips();
+  $('#cc-input')?.focus();
+}
+function renderCcIntentChips() {
+  const panel = $('#ch-empty-chips');
+  if (!panel) return;
+  panel.classList.toggle('hidden-chips', !!ccMode && ccMode !== 'ai' && ccMode !== 'search');
+  if (ccMode === 'ai') renderCcAiCapabilityChips();
+  else if (ccMode === 'search') renderCcKbScopeChips();
+  else renderCcMainIntentChips();
+}
 
 /* ==================== 新对话空状态 ==================== */
 function setEmpty(isEmpty) {
@@ -1574,15 +1725,14 @@ function setEmpty(isEmpty) {
   if (app) app.dataset.empty = v;
   syncCcPlaceholder();
   refreshEmptyChips();
+  refreshSend();
 }
 function isEmptyState() {
   const center = document.getElementById('ch-center');
   return center && center.dataset.empty === '1';
 }
 function refreshEmptyChips() {
-  document.querySelectorAll('#ch-empty-chips .intent-chip').forEach(b => {
-    b.classList.toggle('active', b.dataset.chip === ccMode);
-  });
+  renderCcIntentChips();
 }
 function toggleCcChip(kind) {
   setCcMode(ccMode === kind ? null : kind);
@@ -2023,7 +2173,10 @@ function sendInChat() {
   let text = ta.value.trim();
   if (!text) { showToast('先输入点什么'); return; }
   if (ccMode && CC_CHIP_META[ccMode]) {
-    text = '[' + CC_CHIP_META[ccMode].label + '] ' + text;
+    const aiCap = ccMode === 'ai' && ccAiCapability
+      ? CC_AI_CAPABILITIES.find(cap => cap.id === ccAiCapability)
+      : null;
+    text = '[' + CC_CHIP_META[ccMode].label + (aiCap ? ' · ' + aiCap.label : '') + '] ' + text;
     clearCcMode();
   }
   ta.value = '';
@@ -2075,6 +2228,7 @@ function init() {
   const q = getParam('q');
   const resume = getParam('resume');
   const intent = getParam('intent');
+  const capability = getParam('capability');
   const kb = getParam('kb');
   const folders = getParam('folders');
   // 知识库初始状态：URL 透传 folders 时按透传选；否则默认空（0 KB = 搜全部，隐式约定，跟首页一致）
@@ -2085,6 +2239,9 @@ function init() {
     selectedKbIds = [];
   }
   if (intent) setCcMode(intent);
+  if (intent === 'ai' && capability && CC_AI_CAPABILITIES.find(cap => cap.id === capability)) {
+    selectCcAiCapability(capability);
+  }
   applyKbState();
 
   if (q) {

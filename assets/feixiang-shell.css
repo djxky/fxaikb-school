@@ -53,24 +53,109 @@
   overflow-y: auto;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
   font-size: 14px;
+  transition: width .22s ease, padding .22s ease;
 }
 
 .fx-sidebar * { box-sizing: border-box; }
 .fx-sidebar button { font: inherit; border: 0; background: none; outline: 0; cursor: pointer; transition: all 0.2s ease; }
 .fx-sidebar a { text-decoration: none; color: inherit; }
 
+.fx-shell-app {
+  --fx-sidebar-open: 240px;
+  --fx-sidebar-collapsed: 56px;
+}
+.fx-shell-app[data-fx-sidebar="collapsed"] {
+  grid-template-columns: var(--fx-sidebar-collapsed) minmax(0, 1fr) !important;
+}
+.fx-shell-app[data-fx-sidebar="collapsed"][data-chat="open"],
+.fx-shell-app[data-fx-sidebar="collapsed"][data-right="expanded"] {
+  grid-template-columns: var(--fx-sidebar-collapsed) minmax(0, 1fr) minmax(0, 1fr) !important;
+}
+.fx-shell-app[data-fx-sidebar="collapsed"][data-chat="empty"] {
+  grid-template-columns: var(--fx-sidebar-collapsed) minmax(0, 1fr) 0 !important;
+}
+.fx-sidebar.is-collapsed {
+  width: 56px;
+  padding: 14px 8px;
+  overflow-x: hidden;
+}
+.fx-sidebar-head {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+.fx-sidebar-toggle {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  color: var(--fx-muted);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+.fx-sidebar-toggle:hover { background: rgba(0, 0, 0, 0.05); color: var(--fx-ink); }
+.fx-sidebar-toggle svg { transition: transform .18s ease; }
+.fx-sidebar-toggle svg { width: 15px; height: 15px; }
+.fx-sidebar.is-collapsed .fx-sidebar-head {
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+.fx-sidebar.is-collapsed .fx-sidebar-toggle {
+  order: -1;
+  margin: 0;
+}
+.fx-sidebar.is-collapsed .fx-sidebar-toggle svg { transform: rotate(180deg); }
+.fx-sidebar.is-collapsed .fx-school-name,
+.fx-sidebar.is-collapsed .fx-ws-footer,
+.fx-sidebar.is-collapsed .fx-nav-title,
+.fx-sidebar.is-collapsed .fx-nav-label,
+.fx-sidebar.is-collapsed .fx-nav-right,
+.fx-sidebar.is-collapsed .fx-user-name,
+.fx-sidebar.is-collapsed .fx-user svg {
+  display: none;
+}
+.fx-sidebar.is-collapsed .fx-workspace {
+  padding: 6px 3px;
+  margin: 0;
+  align-items: center;
+}
+.fx-sidebar.is-collapsed .fx-ws-main,
+.fx-sidebar.is-collapsed .fx-nav-btn,
+.fx-sidebar.is-collapsed .fx-user {
+  justify-content: center;
+}
+.fx-sidebar.is-collapsed .fx-nav-btn {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 0 auto 4px;
+}
+.fx-sidebar.is-collapsed .fx-nav-btn.primary { margin-bottom: 18px; }
+.fx-sidebar.is-collapsed .fx-nav-btn svg { width: 17px; height: 17px; }
+.fx-sidebar.is-collapsed .fx-user {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  margin: 12px auto 0;
+  border-top: 0;
+}
+
 /* ===== 学校工作区卡片（金色 VIP 风格） ===== */
 .fx-workspace {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  margin-bottom: 24px;
+  flex: 1;
   padding: 6px;
   border-radius: 10px;
   cursor: pointer;
   transition: all 0.2s;
   margin-left: -6px;
-  margin-right: -6px;
+  margin-right: 0;
 }
 .fx-workspace:hover { background: rgba(0, 0, 0, 0.04); }
 
@@ -195,7 +280,6 @@
   flex-shrink: 0;
 }
 .fx-user-name { font-size: 13px; font-weight: 600; }
-.fx-user-role { font-size: 11px; color: var(--fx-muted); }
 
 /* ===== 隐藏滚动条美化 ===== */
 .fx-sidebar::-webkit-scrollbar { width: 6px; }

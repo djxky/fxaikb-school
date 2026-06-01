@@ -366,7 +366,7 @@
     }
 
     grid.innerHTML = list.map(r => `
-      <button class="card" onclick="alert('（演示）资源详情页待开发')">
+      <a class="card" href="resource-detail.html?resource=${encodeURIComponent(r.title)}">
         <div class="card-cover ${r.cover}">
           <span class="card-tag ${r.tagClass}">${r.tag}</span>
           <div class="card-cover-icon">${ICON_SVG[r.icon] || ''}</div>
@@ -386,7 +386,7 @@
             </span>
           </div>
         </div>
-      </button>
+      </a>
     `).join('');
   }
 

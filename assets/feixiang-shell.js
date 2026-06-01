@@ -25,9 +25,12 @@
     resources: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 12 12 17 22 12"/><polyline points="2 17 12 22 22 17"/></svg>',
     classes: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
     bell: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
+    dashboard: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>',
+    shield: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13c0 5-3.5 7.5-8 9-4.5-1.5-8-4-8-9V5l8-3 8 3v8z"/><path d="m9 12 2 2 4-4"/></svg>',
     sparkle: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>',
     chevron: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>',
     home: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>',
+    panel: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/><path d="m15 9-3 3 3 3"/></svg>',
   };
 
   /* ---- toast 兜底：如果页面没有 showToast，提供一个 ---- */
@@ -79,6 +82,37 @@
       .fx-pop button.active { background: #fbf5e6; color: #a87e2c; font-weight: 600; }
       .fx-pop button svg { width: 14px; height: 14px; flex-shrink: 0; color: #a19f99; }
       .fx-pop button.active svg { color: #a87e2c; }
+      .fx-pop-submenu { position: relative; }
+      .fx-pop-submenu > button::after {
+        content: '';
+        width: 6px; height: 6px;
+        border-top: 1.5px solid currentColor;
+        border-right: 1.5px solid currentColor;
+        transform: rotate(45deg);
+        margin-left: auto;
+        opacity: .55;
+      }
+      .fx-pop-flyout {
+        position: absolute;
+        left: calc(100% - 1px);
+        bottom: -6px;
+        width: 252px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.12);
+        border-radius: 14px;
+        padding: 6px;
+        box-shadow: 0 18px 48px rgba(0,0,0,0.10);
+        opacity: 0;
+        transform: translateX(-4px);
+        pointer-events: none;
+        transition: opacity .12s ease, transform .12s ease;
+      }
+      .fx-pop-submenu:hover .fx-pop-flyout,
+      .fx-pop-submenu:focus-within .fx-pop-flyout {
+        opacity: 1;
+        transform: translateX(0);
+        pointer-events: auto;
+      }
       .fx-pop-divider { height: 1px; background: rgba(0,0,0,0.06); margin: 4px 8px; }
       .fx-pop-meta { font-size: 11px; color: #a19f99; font-weight: 400; margin-top: 1px; }
       .fx-pop-row-body { flex: 1; min-width: 0; }
@@ -132,28 +166,32 @@
     pop.innerHTML = `
       <div style="padding:10px 12px 6px;border-bottom:1px solid rgba(0,0,0,0.06);margin-bottom:4px">
         <div style="font-size:13.5px;font-weight:700;color:#111110">张老师</div>
-        <div style="font-size:11.5px;color:#6b6a65;margin-top:2px">zhang.teacher@实验中学.edu.cn</div>
+        <div style="font-size:11.5px;color:#6b6a65;margin-top:2px">13800138000</div>
       </div>
-      <div class="fx-pop-section-title">校园版（工作空间）</div>
-      <button class="active" onclick="event.stopPropagation();closeFxAll();showToast('当前 · 北京市实验中学')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        <div class="fx-pop-row-body"><div class="fx-pop-row-title">北京市实验中学</div><div class="fx-pop-meta">高一语文 · 张老师</div></div>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#a87e2c"><path d="M5 13l4 4L19 7"/></svg>
-      </button>
-      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）切换到 · 人大附中')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        <div class="fx-pop-row-body"><div class="fx-pop-row-title">人大附中</div><div class="fx-pop-meta">教研协同</div></div>
-      </button>
-      <div class="fx-pop-section-title">个人版</div>
-      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）切换到 · 飞象个人版')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
-        <div class="fx-pop-row-body"><div class="fx-pop-row-title">张老师 · 飞象个人版</div><div class="fx-pop-meta">个人云端 · 跨学校</div></div>
-      </button>
+      <div class="fx-pop-submenu">
+        <button onclick="event.stopPropagation()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+          <div class="fx-pop-row-body"><div class="fx-pop-row-title">切换空间</div></div>
+        </button>
+        <div class="fx-pop-flyout">
+          <div class="fx-pop-section-title">校园版</div>
+          <button class="active" onclick="event.stopPropagation();closeFxAll();showToast('当前 · 北京市实验中学')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <div class="fx-pop-row-body"><div class="fx-pop-row-title">北京市实验中学</div></div>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#a87e2c"><path d="M5 13l4 4L19 7"/></svg>
+          </button>
+          <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）切换到 · 人大附中')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+            <div class="fx-pop-row-body"><div class="fx-pop-row-title">人大附中</div></div>
+          </button>
+          <div class="fx-pop-section-title">个人版</div>
+          <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）切换到 · 飞象个人版')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+            <div class="fx-pop-row-body"><div class="fx-pop-row-title">张老师 · 飞象个人版</div></div>
+          </button>
+        </div>
+      </div>
       <div class="fx-pop-divider"></div>
-      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）扫码加入新的学校')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
-        <div class="fx-pop-row-body"><div class="fx-pop-row-title">加入新的学校</div></div>
-      </button>
       <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）账号设置')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
         <div class="fx-pop-row-body"><div class="fx-pop-row-title">账号设置</div></div>
@@ -257,11 +295,47 @@
     const right = (count || dot)
       ? `<div class="fx-nav-right">${dot ? '<span class="fx-nav-dot"></span>' : ''}${count ? `<span class="fx-nav-count">${count}</span>` : ''}</div>`
       : '';
+    const content = `${icon}<span class="fx-nav-label">${label}</span>${right}`;
     if (onclick) {
-      return `<a class="${cls}" onclick="${onclick}" style="cursor:pointer">${icon}${label}${right}</a>`;
+      return `<a class="${cls}" onclick="${onclick}" style="cursor:pointer" title="${label}">${content}</a>`;
     }
-    return `<a class="${cls}" href="${href}">${icon}${label}${right}</a>`;
+    return `<a class="${cls}" href="${href}" title="${label}">${content}</a>`;
   }
+
+  function getShellApp(container) {
+    const app = container.closest('.app');
+    if (!app) return null;
+    app.classList.add('fx-shell-app');
+    return app;
+  }
+
+  function applySidebarState(container, state) {
+    const app = getShellApp(container);
+    const collapsed = state === 'collapsed';
+    container.classList.toggle('is-collapsed', collapsed);
+    container.dataset.fxSidebar = collapsed ? 'collapsed' : 'open';
+    if (app) {
+      app.dataset.fxSidebar = collapsed ? 'collapsed' : 'open';
+      if (container.classList.contains('sidebar-left')) {
+        if (collapsed) {
+          app.dataset.left = 'collapsed';
+          app.dataset.fxManagedLeft = '1';
+        } else if (app.dataset.fxManagedLeft === '1') {
+          delete app.dataset.left;
+          delete app.dataset.fxManagedLeft;
+        }
+      }
+    }
+    const toggle = container.querySelector('.fx-sidebar-toggle');
+    if (toggle) toggle.title = collapsed ? '展开侧栏' : '收起侧栏';
+  }
+
+  window.toggleFeixiangSidebar = function () {
+    const container = document.getElementById('feixiang-sidebar');
+    if (!container) return;
+    const next = container.dataset.fxSidebar === 'collapsed' ? 'open' : 'collapsed';
+    applySidebarState(container, next);
+  };
 
   window.renderFeixiangSidebar = function (activeKey) {
     ensureToastFallback();
@@ -271,19 +345,25 @@
     if (!container) return;
 
     container.classList.add('fx-sidebar');
+    getShellApp(container);
     container.innerHTML = `
-      <a class="fx-workspace" href="index.html" title="回到首页">
-        <div class="fx-ws-main">
-          <div class="fx-school-logo">实</div>
-          <div class="fx-school-name">北京市实验中学</div>
-        </div>
-        <div class="fx-ws-footer">
-          <div class="fx-power-by">
-            ${ICONS.sparkle}
-            飞象老师校园版
+      <div class="fx-sidebar-head">
+        <a class="fx-workspace" href="index.html" title="回到首页">
+          <div class="fx-ws-main">
+            <div class="fx-school-logo">实</div>
+            <div class="fx-school-name">北京市实验中学</div>
           </div>
-        </div>
-      </a>
+          <div class="fx-ws-footer">
+            <div class="fx-power-by">
+              ${ICONS.sparkle}
+              飞象老师校园版
+            </div>
+          </div>
+        </a>
+        <button class="fx-sidebar-toggle" onclick="toggleFeixiangSidebar()" title="收起侧栏">
+          ${ICONS.panel}
+        </button>
+      </div>
 
       ${navItem({ key: 'chat', icon: ICONS.plus, label: '新对话', href: 'chat.html', primary: true, activeKey })}
       ${navItem({ key: 'chat-history', icon: ICONS.history, label: '历史对话', href: 'chat-history.html', count: 86, activeKey })}
@@ -298,6 +378,10 @@
       ${navItem({ key: 'apps', icon: ICONS.apps, label: '应用广场', href: 'app-square.html', activeKey })}
       ${navItem({ key: 'resources', icon: ICONS.resources, label: '资源广场', href: 'resource-square.html', activeKey })}
 
+      <div class="fx-nav-title">管理</div>
+      ${navItem({ key: 'school-dashboard', icon: ICONS.dashboard, label: '学校看板', onclick: "showToast('（演示）学校看板')", activeKey })}
+      ${navItem({ key: 'admin-teachers', icon: ICONS.shield, label: '学校管理', href: 'admin-teachers.html', activeKey })}
+
       <div class="fx-spacer"></div>
 
       ${navItem({ key: 'notifications', icon: ICONS.bell, label: '通知', onclick: 'toggleFxNotif(event)', count: 3, dot: true, activeKey })}
@@ -306,10 +390,10 @@
         <div class="fx-avatar">张</div>
         <div style="flex:1;min-width:0;text-align:left">
           <div class="fx-user-name">张老师</div>
-          <div class="fx-user-role">高一语文 · 实验中学</div>
         </div>
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#a19f99;flex-shrink:0"><path d="M6 9l6 6 6-6"/></svg>
       </button>
     `;
+    applySidebarState(container, container.dataset.fxSidebar || 'open');
   };
 })();
