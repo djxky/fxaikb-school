@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>应用详情 · 飞象老师</title>
+<style>
+  :root {
+    --bg: #faf9f6;
+    --side: #f4f3ef;
+    --surface: #ffffff;
+    --ink: #111110;
+    --muted: #6b6a65;
+    --faint: #a19f99;
+    --line: rgba(0, 0, 0, 0.06);
+    --line-strong: rgba(0, 0, 0, 0.12);
+    --gold: #a87e2c;
+    --gold-soft: #fbf5e6;
+    --green: #4a755b;
+    --green-soft: #eaf3ed;
+    --blue: #53759e;
+    --blue-soft: #edf3f8;
+    --purple: #81628f;
+    --purple-soft: #f4eff5;
+    --rose: #a8626c;
+    --rose-soft: #f8eff0;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body {
+    background: var(--bg); color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Helvetica Neue", sans-serif;
+    font-size: 14px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  button { cursor: pointer; border: 0; background: none; font: inherit; color: inherit; transition: all .18s; }
+  a { color: inherit; text-decoration: none; }
+
+  /* 顶栏 */
+  .topbar {
+    height: 56px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+    padding: 0 28px;
+    display: flex; align-items: center; gap: 14px;
+    position: sticky; top: 0; z-index: 10;
+  }
+  .brand {
+    display: inline-flex; align-items: center; gap: 10px;
+    font-size: 15px; font-weight: 700;
+    color: var(--ink);
+  }
+  .brand-logo {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    background: var(--ink);
+    color: #fff;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .brand-logo svg { width: 16px; height: 16px; color: var(--gold); }
+  .brand-text {
+    display: inline-flex; align-items: baseline; gap: 2px;
+  }
+  .brand .star {
+    color: var(--gold);
+    margin-left: 1px;
+    font-size: 10px;
+    transform: translateY(-4px);
+  }
+  .brand-domain {
+    color: var(--faint);
+    font-size: 12px;
+    font-weight: 500;
+    margin-left: 8px;
+    letter-spacing: 0.2px;
+  }
+
+  /* 主区 */
+  .app-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 0;
+    min-height: calc(100vh - 56px);
+    padding-bottom: 68px; /* 给吸底 actions 让位 */
+  }
+
+  /* 左：交互演示区 */
+  .stage {
+    padding: 32px 28px;
+    display: flex; flex-direction: column;
+    background: var(--bg);
+  }
+  .stage-top {
+    display: flex; justify-content: flex-end; margin-bottom: 16px;
+  }
+  .stage-fullscreen {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 7px;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    font-size: 12.5px; color: var(--muted);
+  }
+  .stage-fullscreen:hover { color: var(--ink); }
+
+  .stage-frame {
+    flex: 1;
+    background: var(--surface);
+    border-radius: 16px;
+    border: 1px solid var(--line);
+    padding: 28px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    min-height: 460px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  }
+
+  /* 右：应用详情面板 */
+  .panel {
+    background: var(--side);
+    border-left: 1px solid var(--line);
+    padding: 32px 28px;
+    overflow-y: auto;
+  }
+  .p-section { margin-bottom: 28px; }
+  .p-title {
+    font-size: 12.5px; font-weight: 700;
+    color: var(--ink); margin-bottom: 12px;
+    letter-spacing: 0.3px;
+  }
+  .app-head {
+    display: flex; gap: 14px; align-items: flex-start;
+    margin-bottom: 14px;
+  }
+  .app-icon {
+    width: 56px; height: 56px;
+    border-radius: 14px;
+    display: grid; place-items: center;
+    flex-shrink: 0;
+  }
+  .app-icon svg { width: 28px; height: 28px; }
+  .app-name {
+    font-size: 18px; font-weight: 700; color: var(--ink);
+    line-height: 1.3; margin-bottom: 4px;
+  }
+  .app-when {
+    font-size: 11.5px; color: var(--muted);
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .app-intro {
+    font-size: 13px; line-height: 1.75; color: #3a3633;
+    margin-bottom: 10px;
+  }
+
+  /* 数据卡 */
+  .stat-row {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-bottom: 8px;
+  }
+  .stat-cell {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 10px 12px;
+  }
+  .stat-num {
+    font-size: 18px; font-weight: 700; color: var(--ink);
+    line-height: 1.1;
+  }
+  .stat-num .unit { font-size: 11px; color: var(--faint); font-weight: 500; margin-left: 2px; }
+  .stat-lbl {
+    font-size: 11px; color: var(--muted);
+    margin-top: 4px;
+  }
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+  .chart-card-title {
+    font-size: 12px; color: var(--muted);
+    margin-bottom: 8px;
+    display: flex; justify-content: space-between;
+  }
+  .chart-card-title b { color: var(--green); font-weight: 700; }
+
+  /* sparkline */
+  .spark { display: block; width: 100%; height: 64px; }
+
+  /* 作者 */
+  .author-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+  }
+  .author-ava {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--green); color: #fff;
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .author-name {
+    font-size: 13px; font-weight: 600; color: var(--ink);
+  }
+  .author-meta {
+    font-size: 11px; color: var(--muted);
+    margin-top: 2px; line-height: 1.4;
+  }
+
+  /* 底部 CTA · 吸底 */
+  .actions {
+    display: flex; gap: 8px;
+    padding: 12px 28px;
+    border-top: 1px solid var(--line);
+    background: var(--surface);
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 50;
+    box-shadow: 0 -4px 16px rgba(0,0,0,0.04);
+  }
+  .actions .pmeta {
+    flex: 1; display: flex; align-items: center; gap: 12px;
+    font-size: 12px; color: var(--muted);
+  }
+  .actions .pmeta b { color: var(--ink); font-weight: 600; }
+  .btn {
+    padding: 9px 16px;
+    border-radius: 8px;
+    font-size: 13px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .btn.ghost {
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    color: var(--ink);
+  }
+  .btn.ghost:hover { background: var(--bg); }
+  .btn.primary {
+    background: var(--ink); color: #fff;
+  }
+  .btn.primary:hover { background: #000; }
+
+  /* 应用专属 stage 内容 */
+  .stage-empty {
+    text-align: center;
+    color: var(--muted);
+  }
+  .stage-empty-icon {
+    width: 72px; height: 72px; border-radius: 18px;
+    margin: 0 auto 16px;
+    display: grid; place-items: center;
+  }
+  .stage-empty-title {
+    font-size: 18px; font-weight: 700; color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .stage-empty-desc {
+    font-size: 13.5px; max-width: 380px; margin: 0 auto;
+    line-height: 1.7;
+  }
+
+  /* 通知应用 stage */
+  .notify-preview {
+    width: 100%; max-width: 440px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 22px 24px;
+  }
+  .notify-preview-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 16px; padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .notify-preview-ico {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--blue-soft); color: var(--blue);
+    display: grid; place-items: center;
+  }
+  .notify-preview h3 { margin: 0; font-size: 14px; font-weight: 700; }
+  .notify-preview-meta { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .notify-field { margin-bottom: 14px; }
+  .notify-field-lbl {
+    font-size: 11.5px; color: var(--muted);
+    font-weight: 600; margin-bottom: 6px;
+  }
+  .notify-field-val {
+    font-size: 13px; color: var(--ink);
+    padding: 8px 12px;
+    background: var(--bg); border-radius: 8px;
+    border: 1px solid var(--line);
+  }
+  .notify-field-val.tall {
+    min-height: 80px; line-height: 1.6;
+  }
+  .notify-receivers {
+    display: flex; gap: 4px; flex-wrap: wrap;
+  }
+  .notify-receivers span {
+    background: var(--blue-soft); color: var(--blue);
+    padding: 3px 9px; border-radius: 6px;
+    font-size: 11.5px; font-weight: 500;
+  }
+  .notify-actions { display: flex; gap: 8px; margin-top: 8px; }
+
+  /* 排课应用 stage */
+  .schedule-grid {
+    width: 100%; max-width: 560px;
+    background: var(--surface);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid var(--line);
+  }
+  .schedule-head {
+    font-size: 14px; font-weight: 700;
+    margin-bottom: 14px;
+    display: flex; justify-content: space-between;
+    align-items: center;
+  }
+  .schedule-head .week { color: var(--muted); font-size: 11.5px; font-weight: 500; }
+  .schedule-table {
+    display: grid;
+    grid-template-columns: 40px repeat(5, 1fr);
+    gap: 4px;
+    font-size: 11px;
+  }
+  .schedule-table .h {
+    text-align: center;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 4px 0;
+  }
+  .schedule-cell {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 5px;
+    min-height: 36px;
+    font-size: 10.5px;
+    line-height: 1.3;
+  }
+  .schedule-cell.gold { background: var(--gold-soft); border-color: rgba(168, 126, 44, 0.2); color: var(--gold); font-weight: 600; }
+  .schedule-cell.green { background: var(--green-soft); border-color: rgba(74, 117, 91, 0.2); color: var(--green); font-weight: 600; }
+  .schedule-cell.blue { background: var(--blue-soft); border-color: rgba(83, 117, 158, 0.2); color: var(--blue); font-weight: 600; }
+  .schedule-cell.empty { background: transparent; border-style: dashed; }
+
+  /* 请假应用 stage */
+  .leave-list {
+    width: 100%; max-width: 440px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .leave-item {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 14px 16px;
+    display: flex; gap: 12px; align-items: center;
+  }
+  .leave-ava {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--purple); color: #fff;
+    display: grid; place-items: center;
+    font-weight: 600; font-size: 14px;
+    flex-shrink: 0;
+  }
+  .leave-name {
+    font-size: 13px; font-weight: 600;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .leave-tag {
+    font-size: 10.5px; padding: 1px 6px;
+    border-radius: 4px;
+    background: var(--rose-soft); color: var(--rose);
+    font-weight: 600;
+  }
+  .leave-desc {
+    font-size: 11.5px; color: var(--muted);
+    margin-top: 3px;
+  }
+  .leave-btns {
+    margin-left: auto;
+    display: flex; gap: 6px;
+  }
+  .leave-btn {
+    padding: 5px 10px; border-radius: 6px;
+    font-size: 11.5px; font-weight: 500;
+  }
+  .leave-btn.approve {
+    background: var(--green); color: #fff;
+  }
+  .leave-btn.reject {
+    background: transparent; color: var(--muted);
+    border: 1px solid var(--line-strong);
+  }
+  .leave-btn:hover { opacity: .85; }
+
+  /* Toast */
+  #toast {
+    position: fixed; left: 50%; bottom: 24px;
+    transform: translateX(-50%);
+    background: rgba(17,17,16,0.92); color: #fff;
+    padding: 10px 18px; border-radius: 22px;
+    font-size: 12.5px;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s; z-index: 9999;
+    backdrop-filter: blur(6px);
+  }
+  #toast.show { opacity: 1; }
+
+  @media (max-width: 1080px) {
+    .app-wrap { grid-template-columns: 1fr; }
+    .panel { border-left: 0; border-top: 1px solid var(--line); }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="index.html" title="回到首页">
+    <span class="brand-logo">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+    </span>
+    <span class="brand-text">飞象老师<span class="star">®</span></span>
+    <span class="brand-domain">feixianglaoshi.com</span>
+  </a>
+</header>
+
+<div class="app-wrap">
+  <!-- 左：交互演示区 -->
+  <section class="stage">
+    <div class="stage-top">
+      <button class="stage-fullscreen" onclick="showToast('（演示）全屏预览')">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
+        全屏
+      </button>
+    </div>
+    <div class="stage-frame" id="stage-frame">
+      <!-- 由 JS 按应用类型渲染 -->
+    </div>
+  </section>
+
+  <!-- 右：应用详情面板 -->
+  <aside class="panel">
+    <div class="p-section">
+      <div class="p-title">应用详情</div>
+      <div class="app-head">
+        <div class="app-icon" id="app-icon"></div>
+        <div style="flex:1;min-width:0">
+          <div class="app-name" id="app-name">—</div>
+          <div class="app-when">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            创建时间：<span id="app-created">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="p-section">
+      <div class="p-title">应用简介</div>
+      <div class="app-intro" id="app-intro">—</div>
+    </div>
+
+    <div class="p-section">
+      <div class="p-title">应用数据</div>
+      <div class="stat-row">
+        <div class="stat-cell">
+          <div class="stat-num" id="stat-uses">—<span class="unit">次</span></div>
+          <div class="stat-lbl">使用次数</div>
+        </div>
+        <div class="stat-cell">
+          <div class="stat-num" id="stat-users">—<span class="unit">人</span></div>
+          <div class="stat-lbl">使用人数</div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">
+          <span>近 7 天使用量</span>
+          <b id="chart-trend">↑ +18%</b>
+        </div>
+        <svg class="spark" id="spark" viewBox="0 0 280 64" preserveAspectRatio="none"></svg>
+      </div>
+    </div>
+
+    <div class="p-section">
+      <div class="p-title">作者</div>
+      <div class="author-row">
+        <div class="author-ava" id="author-ava">王</div>
+        <div style="flex:1;min-width:0">
+          <div class="author-name" id="author-name">—</div>
+          <div class="author-meta" id="author-meta">—</div>
+        </div>
+        <button class="btn ghost" onclick="showToast('（演示）已关注作者')">关注</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<div class="actions">
+  <div class="pmeta">
+    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><b id="pview">3.4w</b> 浏览</span>
+    <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9 12 2"/></svg><b id="pstar">345</b> 收藏</span>
+  </div>
+  <button class="btn ghost" onclick="showToast('（演示）已添加到我的')">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+    添加到我的
+  </button>
+  <button class="btn primary" onclick="showToast('（演示）已生成分享链接')">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+    分享
+  </button>
+</div>
+
+<div id="toast"></div>
+
+<script>
+let toastTimer = null;
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+function getParam(k) {
+  const m = window.location.search.match(new RegExp('[?&]' + k + '=([^&]*)'));
+  return m ? decodeURIComponent(m[1]) : '';
+}
+
+const APPS = {
+  notify: {
+    name: '班级通知小助手',
+    intro: '面向班主任和学科老师的智能通知工具。AI 根据你输入的关键信息自动撰写得体的通知文案，一键群发到家长群、企业微信、短信、电话，并跟踪送达率与已读率。',
+    created: '2026.3.12',
+    icon: { color: 'var(--blue)', bg: 'var(--blue-soft)', svg: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>' },
+    uses: '2.1万', users: '286',
+    trend: '↑ +24%',
+    sparkData: [12, 18, 16, 22, 28, 35, 42],
+    author: { name: '李老师', meta: '实验中学 · 教务处 · 高级教师', avaColor: 'var(--blue)', avaChar: '李' },
+    view: '3.4万', star: '512',
+    stage: 'notify',
+  },
+  schedule: {
+    name: '智能排课',
+    intro: '基于教师课时偏好、教室资源、学生选科组合自动生成最优课表。支持冲突检测、临时调课、跨班代课、家长查询四大功能。已接入实验中学走班选修系统。',
+    created: '2026.2.8',
+    icon: { color: 'var(--purple)', bg: 'var(--purple-soft)', svg: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>' },
+    uses: '8,422', users: '124',
+    trend: '↑ +12%',
+    sparkData: [8, 10, 9, 14, 18, 22, 28],
+    author: { name: '陈老师', meta: '实验中学 · 信息中心 · 副主任', avaColor: 'var(--purple)', avaChar: '陈' },
+    view: '1.8万', star: '267',
+    stage: 'schedule',
+  },
+  leave: {
+    name: '请假审批',
+    intro: '学生家长在线提交请假申请，AI 自动识别请假类型与时长，按学校规则路由到对应班主任或教务处审批。支持电子签字、家校同步、考勤回写。',
+    created: '2025.11.5',
+    icon: { color: 'var(--green)', bg: 'var(--green-soft)', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/>' },
+    uses: '1.5万', users: '348',
+    trend: '↑ +8%',
+    sparkData: [22, 19, 21, 24, 23, 26, 28],
+    author: { name: '王老师', meta: '实验中学 · 学生处 · 副主任', avaColor: 'var(--green)', avaChar: '王' },
+    view: '2.6万', star: '189',
+    stage: 'leave',
+  },
+};
+
+function renderApp() {
+  const key = getParam('app') || 'notify';
+  const app = APPS[key] || APPS.notify;
+
+  document.title = `${app.name} · 飞象老师`;
+  document.getElementById('app-name').textContent = app.name;
+  document.getElementById('app-intro').textContent = app.intro;
+  document.getElementById('app-created').textContent = app.created;
+  document.getElementById('stat-uses').innerHTML = app.uses + '<span class="unit">次</span>';
+  document.getElementById('stat-users').innerHTML = app.users + '<span class="unit">人</span>';
+  document.getElementById('chart-trend').textContent = app.trend;
+  document.getElementById('author-name').textContent = app.author.name;
+  document.getElementById('author-meta').textContent = app.author.meta;
+  document.getElementById('author-ava').textContent = app.author.avaChar;
+  document.getElementById('author-ava').style.background = app.author.avaColor;
+  document.getElementById('pview').textContent = app.view;
+  document.getElementById('pstar').textContent = app.star;
+
+  const ico = document.getElementById('app-icon');
+  ico.style.background = app.icon.bg;
+  ico.style.color = app.icon.color;
+  ico.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${app.icon.svg}</svg>`;
+
+  renderSpark(app.sparkData);
+  renderStage(app.stage);
+}
+
+function renderSpark(data) {
+  const svg = document.getElementById('spark');
+  const W = 280, H = 64, P = 4;
+  const max = Math.max(...data);
+  const step = (W - P * 2) / (data.length - 1);
+  const pts = data.map((v, i) => [P + i * step, H - P - (v / max) * (H - P * 2)]);
+  const d = pts.map((p, i) => (i === 0 ? `M ${p[0]} ${p[1]}` : `L ${p[0]} ${p[1]}`)).join(' ');
+  const dFill = d + ` L ${pts[pts.length - 1][0]} ${H} L ${pts[0][0]} ${H} Z`;
+  svg.innerHTML = `
+    <path d="${dFill}" fill="rgba(74, 117, 91, 0.12)"/>
+    <path d="${d}" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts.map((p, i) => i === pts.length - 1 ? `<circle cx="${p[0]}" cy="${p[1]}" r="3" fill="var(--green)"/>` : '').join('')}
+    ${(() => { const last = pts[pts.length - 1]; return `<text x="${last[0] - 4}" y="${last[1] - 8}" text-anchor="end" font-size="10" fill="var(--green)" font-weight="700">${data[data.length-1]}00次</text>`; })()}
+  `;
+}
+
+function renderStage(kind) {
+  const frame = document.getElementById('stage-frame');
+  if (kind === 'notify') {
+    frame.innerHTML = `
+      <div class="notify-preview">
+        <div class="notify-preview-head">
+          <div class="notify-preview-ico">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+          </div>
+          <div>
+            <h3>新建通知 · 高一(3)班</h3>
+            <div class="notify-preview-meta">AI 已根据「期中考试 + 家长会」自动撰写</div>
+          </div>
+        </div>
+        <div class="notify-field">
+          <div class="notify-field-lbl">主题</div>
+          <div class="notify-field-val">高一(3)班期中考试家长会通知</div>
+        </div>
+        <div class="notify-field">
+          <div class="notify-field-lbl">正文（AI 生成）</div>
+          <div class="notify-field-val tall">各位家长好：本周五（5 月 29 日）下午 16:00 在高一(3)班教室召开期中考试家长会，将分享孩子近期学习情况，并就暑期学习规划做沟通。请提前安排好时间，准时到会。如不便参加请提前告知，谢谢！</div>
+        </div>
+        <div class="notify-field">
+          <div class="notify-field-lbl">接收人</div>
+          <div class="notify-receivers">
+            <span>家长 38 人</span><span>已加群 36 人</span><span>未加群 2 人 · 短信</span>
+          </div>
+        </div>
+        <div class="notify-actions">
+          <button class="btn ghost" onclick="showToast('（演示）让 AI 重写')">让 AI 改写</button>
+          <button class="btn primary" onclick="showToast('（演示）通知已发送 · 36 群消息 + 2 短信')" style="flex:1;justify-content:center">一键发送</button>
+        </div>
+      </div>
+    `;
+  } else if (kind === 'schedule') {
+    frame.innerHTML = `
+      <div class="schedule-grid">
+        <div class="schedule-head">
+          <span>高一(5)班 · 本周课表</span>
+          <span class="week">2026.5.25 - 5.29</span>
+        </div>
+        <div class="schedule-table">
+          <div></div>
+          <div class="h">周一</div><div class="h">周二</div><div class="h">周三</div><div class="h">周四</div><div class="h">周五</div>
+
+          <div class="h">1</div>
+          <div class="schedule-cell gold">语文<br>张</div>
+          <div class="schedule-cell">数学<br>刘</div>
+          <div class="schedule-cell green">英语<br>赵</div>
+          <div class="schedule-cell">物理<br>孙</div>
+          <div class="schedule-cell gold">语文<br>张</div>
+
+          <div class="h">2</div>
+          <div class="schedule-cell">数学<br>刘</div>
+          <div class="schedule-cell gold">语文<br>张</div>
+          <div class="schedule-cell">物理<br>孙</div>
+          <div class="schedule-cell green">英语<br>赵</div>
+          <div class="schedule-cell">数学<br>刘</div>
+
+          <div class="h">3</div>
+          <div class="schedule-cell blue">化学<br>周</div>
+          <div class="schedule-cell">物理<br>孙</div>
+          <div class="schedule-cell">数学<br>刘</div>
+          <div class="schedule-cell blue">化学<br>周</div>
+          <div class="schedule-cell green">英语<br>赵</div>
+
+          <div class="h">4</div>
+          <div class="schedule-cell">体育<br>吴</div>
+          <div class="schedule-cell blue">生物<br>郑</div>
+          <div class="schedule-cell">音乐<br>韩</div>
+          <div class="schedule-cell">美术<br>冯</div>
+          <div class="schedule-cell empty">自习</div>
+        </div>
+      </div>
+    `;
+  } else if (kind === 'leave') {
+    frame.innerHTML = `
+      <div class="leave-list">
+        <div class="leave-item">
+          <div class="leave-ava">张</div>
+          <div style="flex:1;min-width:0">
+            <div class="leave-name">张同学 <span class="leave-tag">病假</span></div>
+            <div class="leave-desc">高一(5)班 · 5 月 29 日全天 · 发烧 38.5℃ · 家长已提交医院证明</div>
+          </div>
+          <div class="leave-btns">
+            <button class="leave-btn reject" onclick="showToast('已退回 · 已通知家长')">退回</button>
+            <button class="leave-btn approve" onclick="showToast('已批准 · 已同步考勤')">批准</button>
+          </div>
+        </div>
+        <div class="leave-item">
+          <div class="leave-ava" style="background:var(--blue)">李</div>
+          <div style="flex:1;min-width:0">
+            <div class="leave-name">李同学 <span class="leave-tag" style="background:var(--blue-soft);color:var(--blue)">事假</span></div>
+            <div class="leave-desc">高一(5)班 · 5 月 30 日上午 · 区科技竞赛获奖颁奖典礼</div>
+          </div>
+          <div class="leave-btns">
+            <button class="leave-btn reject" onclick="showToast('已退回')">退回</button>
+            <button class="leave-btn approve" onclick="showToast('已批准')">批准</button>
+          </div>
+        </div>
+        <div class="leave-item">
+          <div class="leave-ava" style="background:var(--gold)">王</div>
+          <div style="flex:1;min-width:0">
+            <div class="leave-name">王同学 <span class="leave-tag">病假</span></div>
+            <div class="leave-desc">高一(5)班 · 5 月 29 日下午 · 牙科预约 · 家长口头说明</div>
+          </div>
+          <div class="leave-btns">
+            <button class="leave-btn reject" onclick="showToast('已退回')">退回</button>
+            <button class="leave-btn approve" onclick="showToast('已批准')">批准</button>
+          </div>
+        </div>
+      </div>
+    `;
+  } else {
+    frame.innerHTML = `
+      <div class="stage-empty">
+        <div class="stage-empty-icon" style="background:var(--side);color:var(--muted)">
+          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        </div>
+        <div class="stage-empty-title">应用预览</div>
+        <div class="stage-empty-desc">这是该校自建应用的预览区，老板可以直接在这里看到学校自己创造出来的 AI 应用是怎么运行的。</div>
+      </div>
+    `;
+  }
+}
+
+renderApp();
+</script>
+
+</body>
+</html>

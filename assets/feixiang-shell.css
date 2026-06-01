@@ -165,15 +165,26 @@
 
 .fx-spacer { flex: 1; }
 
-/* ===== 用户区 ===== */
+/* ===== 用户区（可点击，弹账号/工作区菜单） ===== */
 .fx-user {
+  width: calc(100% + 12px);
+  margin-left: -6px; margin-right: -6px;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 12px;
+  padding: 10px 8px;
+  border-radius: 0;
   border-top: 1px solid var(--fx-line);
   margin-top: 16px;
+  background: transparent;
+  border-left: 0; border-right: 0; border-bottom: 0;
+  cursor: pointer;
+  text-align: left;
+  transition: background .15s;
+  font-family: inherit;
 }
+.fx-user.fx-user-btn:hover { background: rgba(0,0,0,0.04); }
+.fx-user.fx-user-btn.open { background: rgba(0,0,0,0.04); }
 .fx-avatar {
   width: 32px; height: 32px;
   border-radius: 50%;

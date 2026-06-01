@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞象老师校园版 · 我的应用</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+<link rel="stylesheet" href="assets/feixiang-shell.css" />
+<link rel="stylesheet" href="assets/page-header.css" />
+<link rel="stylesheet" href="assets/ai-create-dock.css" />
+<style>
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg); color: var(--text);
+    font-size: 14px; line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .main {
+    display: flex; flex-direction: column;
+    overflow-y: auto;
+    height: 100vh;
+  }
+
+  /* ===== 分类 Tab 横向 ===== */
+  .page-head-tabs {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 14px 40px 0;
+    position: static;
+  }
+  .subject-tabs {
+    display: flex; gap: 4px;
+    overflow-x: auto;
+    padding-bottom: 12px;
+    scrollbar-width: none;
+  }
+  .subject-tabs::-webkit-scrollbar { display: none; }
+  .subject-tab {
+    padding: 8px 18px;
+    border-radius: 18px;
+    font-size: 13.5px; font-weight: 500;
+    color: var(--text-2);
+    white-space: nowrap;
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 6px;
+    transition: all 0.2s;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+  .subject-tab [data-lucide] { width: 14px; height: 14px; }
+  .subject-tab:hover { color: var(--text-1); background: var(--bg); }
+  .subject-tab.active {
+    color: var(--gold-deep);
+    background: var(--gold-bg);
+    font-weight: 600;
+  }
+  .subject-tab .tab-count {
+    font-size: 11px; font-weight: 600;
+    color: var(--muted);
+    background: var(--line);
+    padding: 1px 6px; border-radius: 8px;
+    margin-left: 2px;
+  }
+  .subject-tab.active .tab-count {
+    background: rgba(168,126,44,0.16);
+    color: var(--gold-deep);
+  }
+
+  /* ===== 卡片网格 ===== */
+  .grid-wrap { padding: 28px 40px 60px; max-width: 1480px; margin: 0 auto; width: 100%; }
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  /* ===== 应用卡片 ===== */
+  .app-card {
+    background: var(--surface); border: 1px solid var(--line);
+    border-radius: var(--radius-lg); overflow: hidden;
+    display: flex; flex-direction: column;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.25s;
+    text-decoration: none; color: inherit;
+    position: relative;
+  }
+  .app-card:hover {
+    border-color: var(--line-strong);
+    box-shadow: 0 12px 28px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+  }
+  .app-card:hover .app-actions { opacity: 1; transform: translateY(0); }
+
+  .app-cover {
+    height: 130px; position: relative;
+    display: grid; place-items: center;
+    color: rgba(255,255,255,0.85);
+  }
+  .bg-grad-1 { background: linear-gradient(135deg, #edf5ee, #c8e0cd); }
+  .bg-grad-2 { background: linear-gradient(135deg, #f5f0f6, #ddc8e3); }
+  .bg-grad-3 { background: linear-gradient(135deg, #eff4f9, #c8d8e8); }
+  .bg-grad-4 { background: linear-gradient(135deg, #fdfaf3, #f0deb3); }
+  .bg-grad-5 { background: linear-gradient(135deg, #fbf0f1, #ecc7ca); }
+  .bg-grad-6 { background: linear-gradient(135deg, #f7f2e8, #e3d4ae); }
+  .bg-grad-7 { background: linear-gradient(135deg, #f1f3f5, #cdd5dd); }
+  .bg-grad-8 { background: linear-gradient(135deg, #fbf3eb, #f0d3b8); }
+  .bg-grad-9 { background: linear-gradient(135deg, #f0f0eb, #d3c8ad); }
+  .bg-grad-10 { background: linear-gradient(135deg, #ecf3f0, #c2d7cd); }
+  .bg-grad-11 { background: linear-gradient(135deg, #f5edf2, #d8b9c8); }
+
+  .app-cover-icon { opacity: 0.45; }
+  .app-cover-icon svg { width: 38px; height: 38px; }
+
+  .app-tag {
+    position: absolute; top: 12px; left: 12px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    padding: 4px 10px; border-radius: 6px;
+    font-size: 11px; font-weight: 600; color: var(--ink);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .app-tag svg { width: 11px; height: 11px; }
+  .app-tag.added { color: #4a755b; }
+  .app-tag.created { color: #a87e2c; }
+  .app-tag.draft { color: #6b6a65; }
+
+  .app-stats {
+    position: absolute; bottom: 12px; right: 12px;
+    background: rgba(0,0,0,0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    padding: 3px 8px; border-radius: 6px;
+    font-size: 10.5px; font-weight: 600;
+    display: flex; align-items: center; gap: 4px;
+  }
+
+  .app-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .app-title {
+    font-size: 14px; font-weight: 600; line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    min-height: 40px;
+  }
+
+  .app-meta {
+    margin-top: auto;
+    font-size: 12px; color: var(--muted);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .app-meta-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--muted); }
+
+  /* hover 时浮出的操作 */
+  .app-actions {
+    position: absolute; right: 10px; top: 10px;
+    display: flex; gap: 6px;
+    opacity: 0; transform: translateY(-4px);
+    transition: all 0.2s;
+  }
+  .app-action-btn {
+    background: rgba(255,255,255,0.95);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 11px; color: var(--text-2);
+    cursor: pointer;
+    display: flex; align-items: center; gap: 3px;
+    backdrop-filter: blur(6px);
+  }
+  .app-action-btn:hover { color: var(--text-1); border-color: var(--line-strong); }
+  .app-action-btn svg { width: 12px; height: 12px; }
+
+  /* 空态 */
+  .empty {
+    grid-column: 1 / -1;
+    padding: 60px 0;
+    text-align: center;
+    color: var(--text-3);
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+  }
+  .empty svg { width: 36px; height: 36px; color: var(--muted); opacity: 0.6; }
+  .empty-title { font-size: 14px; color: var(--text-2); }
+  .empty-cta {
+    margin-top: 8px;
+    padding: 8px 16px;
+    background: var(--ink); color: #fff;
+    border: 0; border-radius: 8px;
+    font-size: 13px; cursor: pointer;
+  }
+
+  /* 响应式 */
+  @media (max-width: 1280px) {
+    .grid-wrap, .page-head-tabs { padding-left: 28px; padding-right: 28px; }
+  }
+</style>
+</head>
+<body data-page="my-apps">
+
+<div class="app">
+  <aside id="feixiang-sidebar"></aside>
+
+  <main class="main">
+    <header class="page-header" data-page-header="my-apps" data-scroll-target=".main">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="layout-grid"></i>
+        <h1 class="ph-title">我的应用</h1>
+        <span class="ph-subtitle">我已添加为常用的官方/学校应用，以及我用 AI 创建的应用</span>
+      </div>
+      <div class="ph-right">
+        <label class="ph-search">
+          <i data-lucide="search"></i>
+          <input type="text" placeholder="在我的应用里搜索…" oninput="onSearch(event)">
+        </label>
+        <button class="ph-action" onclick="window.location.href='app-square.html'">
+          <i data-lucide="blocks"></i><span>去应用广场</span>
+        </button>
+        <button class="ph-action is-primary" onclick="showToast('（演示）AI 应用生成器已就绪，在下方输入需求即可')">
+          <i data-lucide="plus"></i><span>创建应用</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="page-head-tabs">
+      <div class="subject-tabs" id="category-tabs">
+        <button class="subject-tab active" data-cat="all">全部<span class="tab-count" id="count-all">11</span></button>
+        <button class="subject-tab" data-cat="added"><i data-lucide="bookmark-check"></i>已添加为常用<span class="tab-count" id="count-added">8</span></button>
+        <button class="subject-tab" data-cat="created"><i data-lucide="sparkles"></i>我创建的<span class="tab-count" id="count-created">3</span></button>
+      </div>
+    </div>
+
+    <div class="grid-wrap">
+      <div class="content-grid" id="grid"></div>
+    </div>
+
+    <div class="ai-dock-spacer"></div>
+  </main>
+
+  <!-- AI 创造入口 -->
+  <aside class="ai-dock"
+         data-kind="应用"
+         data-placeholders="描述你想要的应用,例如:做个错题本扫描小工具,自动归类知识点|搭一个家长会签到 H5,扫码即可参与|做一个英语听力对练 Agent,陪学生练 5 分钟">
+    <span class="ai-dock-tag" title="把你想要的应用说出来,AI 帮你生成">
+      <i data-lucide="sparkles"></i>
+      <span>AI 应用生成</span>
+    </span>
+    <div class="ai-dock-input-wrap">
+      <textarea class="ai-dock-input" rows="1" autocomplete="off"
+                placeholder="描述你想要的应用…"></textarea>
+    </div>
+    <div class="ai-dock-actions">
+      <button class="ai-dock-btn" type="button" title="语音输入" onclick="showToast('（演示）语音输入')">
+        <i data-lucide="mic"></i>
+      </button>
+      <button class="ai-dock-btn ai-dock-send" type="button" title="发送(Enter)">
+        <i data-lucide="arrow-up"></i>
+      </button>
+    </div>
+  </aside>
+</div>
+
+<script src="assets/feixiang-shell.js"></script>
+<script>renderFeixiangSidebar('my-apps');</script>
+<script src="assets/page-header.js"></script>
+<script src="assets/ai-create-dock.js"></script>
+
+<script>
+  /* ====== 我的应用 mock 数据 ======
+     11 个：8 个"已添加为常用"（首页 8 宫格的全集）+ 3 个"我创建的" */
+  const MY_APPS = [
+    // —— 已添加为常用（8）——
+    { title: 'AI 题库', desc: '生成各类题目、组卷与发布', source: 'added', origin: '飞象官方', icon: 'list-checks', grad: 1, lastUsed: '今天 10:32', href: 'ai-qbank.html' },
+    { title: '智能作业', desc: '录入作业、收作业、AI 学情分析', source: 'added', origin: '飞象官方', icon: 'clipboard-list', grad: 2, lastUsed: '今天 09:18', href: 'ai-record-jobs.html' },
+    { title: '作业讲评', desc: '基于学情自动生成讲评课件', source: 'added', origin: '飞象官方', icon: 'presentation', grad: 3, lastUsed: '昨天 16:45', href: 'ai-review.html' },
+    { title: '家长会通知生成器', desc: '一键生成得体专业的家长会邀请函', source: 'added', origin: '飞象官方', icon: 'mail', grad: 4, lastUsed: '3 天前', href: 'app-detail.html?app=notify' },
+    { title: '智能排课助手', desc: '自动校验冲突，生成课表', source: 'added', origin: '飞象官方', icon: 'calendar-clock', grad: 5, lastUsed: '本周一', href: 'app-detail.html?app=schedule' },
+    { title: '学生请假审批', desc: '请假申请、审批、统计闭环', source: 'added', origin: '本校共建 · 王建华', icon: 'file-check', grad: 6, lastUsed: '今天 08:50', href: 'app-detail.html?app=leave' },
+    { title: '英语口语对练 Agent', desc: '模拟真实对话，纠正语法和发音', source: 'added', origin: '飞象官方', icon: 'mic', grad: 7, lastUsed: '上周三', href: '#' },
+    { title: '化学实验模拟器', desc: 'H5 互动应用，安全模拟反应现象', source: 'added', origin: '本校共建 · 赵明杰', icon: 'flask-conical', grad: 8, lastUsed: '上周二', href: '#' },
+
+    // —— 我创建的（3）——
+    { title: '《荷塘月色》画面捕捉法', desc: '我为高一散文专题做的引导问答 Agent', source: 'created', origin: '我创建 · 2026-05-12', icon: 'feather', grad: 9, lastUsed: '昨天 21:08', status: 'published', uses: 14, href: '#' },
+    { title: '错题归因分析器', desc: '扫描错题图片，AI 自动归类到知识点', source: 'created', origin: '我创建 · 2026-04-28', icon: 'scan-search', grad: 10, lastUsed: '今天 11:02', status: 'published', uses: 36, href: '#' },
+    { title: '高一(3) 班会签到 H5', desc: '草稿 · 还没发布', source: 'created', origin: '我创建 · 今天 上午', icon: 'qr-code', grad: 11, lastUsed: '今天 09:55', status: 'draft', uses: 0, href: '#' },
+  ];
+
+  const ICON_SVG = {
+    'list-checks': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>',
+    'clipboard-list': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M15 2H9a1 1 0 0 0-1 1v2a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1Z"/><path d="M12 11h4"/><path d="M12 16h4"/><path d="M8 11h.01"/><path d="M8 16h.01"/></svg>',
+    'presentation': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>',
+    'mail': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+    'calendar-clock': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 7.5V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h3.5"/><path d="M16 2v4"/><path d="M8 2v4"/><path d="M3 10h5"/><path d="M17.5 17.5 16 16.3V14"/><circle cx="16" cy="16" r="6"/></svg>',
+    'file-check': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="m9 15 2 2 4-4"/></svg>',
+    'mic': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/></svg>',
+    'flask-conical': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>',
+    'feather': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>',
+    'scan-search': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></svg>',
+    'qr-code': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>'
+  };
+
+  function badgeHtml(app) {
+    if (app.source === 'added') {
+      return `<span class="app-tag added">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m5 13 4 4L19 7"/></svg>
+        已添加
+      </span>`;
+    }
+    if (app.status === 'draft') {
+      return `<span class="app-tag draft">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        草稿
+      </span>`;
+    }
+    return `<span class="app-tag created">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>
+      我创建
+    </span>`;
+  }
+
+  function statsHtml(app) {
+    if (app.source === 'created' && typeof app.uses === 'number') {
+      return `<span class="app-stats">
+        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        ${app.uses}
+      </span>`;
+    }
+    return '';
+  }
+
+  function actionsHtml(app) {
+    if (app.source === 'created') {
+      return `<div class="app-actions">
+        <button class="app-action-btn" onclick="event.preventDefault();event.stopPropagation();showToast('（演示）编辑：${app.title}')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>
+          编辑
+        </button>
+        <button class="app-action-btn" onclick="event.preventDefault();event.stopPropagation();showToast('（演示）已从我的应用移除')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="m19 6-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </div>`;
+    }
+    return `<div class="app-actions">
+      <button class="app-action-btn" onclick="event.preventDefault();event.stopPropagation();showToast('（演示）已从我的应用移除（仍可在应用广场重新添加）')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="m19 6-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        移除
+      </button>
+    </div>`;
+  }
+
+  function renderCards(filter = 'all') {
+    const grid = document.getElementById('grid');
+    let list = MY_APPS;
+    if (filter === 'added') list = MY_APPS.filter(a => a.source === 'added');
+    if (filter === 'created') list = MY_APPS.filter(a => a.source === 'created');
+
+    const search = (document.getElementById('app-search-input')?.value || '').trim();
+    if (search) list = list.filter(a => a.title.includes(search) || a.desc.includes(search));
+
+    if (list.length === 0) {
+      grid.innerHTML = `<div class="empty">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+        <div class="empty-title">${filter === 'created' ? '还没有创建的应用' : (filter === 'added' ? '还没有添加常用应用' : '没找到匹配的应用')}</div>
+        ${filter === 'created'
+          ? `<button class="empty-cta" onclick="showToast('（演示）在下方输入需求，AI 帮你生成')">+ 用 AI 创建第一个应用</button>`
+          : `<button class="empty-cta" onclick="window.location.href='app-square.html'">去应用广场逛逛</button>`}
+      </div>`;
+      return;
+    }
+
+    grid.innerHTML = list.map(app => `
+      <a class="app-card" href="${app.href}" onclick="${app.href === '#' ? `event.preventDefault();showToast('（演示）打开应用：${app.title}')` : ''}">
+        <div class="app-cover bg-grad-${app.grad}">
+          ${badgeHtml(app)}
+          <div class="app-cover-icon">${ICON_SVG[app.icon] || ''}</div>
+          ${statsHtml(app)}
+        </div>
+        <div class="app-body">
+          <div class="app-title" title="${app.title}">${app.title}</div>
+          <div class="app-meta">
+            <span>${app.origin}</span>
+            <span class="app-meta-dot"></span>
+            <span>${app.lastUsed}</span>
+          </div>
+        </div>
+        ${actionsHtml(app)}
+      </a>
+    `).join('');
+
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function onSearch(e) {
+    const v = e.target.value;
+    let input = document.getElementById('app-search-input');
+    if (!input) {
+      e.target.id = 'app-search-input';
+      input = e.target;
+    }
+    const active = document.querySelector('.subject-tab.active')?.dataset.cat || 'all';
+    renderCards(active);
+  }
+
+  document.querySelectorAll('.subject-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.subject-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderCards(tab.dataset.cat);
+    });
+  });
+
+  // 初始渲染
+  document.querySelector('.ph-search input')?.setAttribute('id', 'app-search-input');
+  renderCards('all');
+</script>
+
+</body>
+</html>

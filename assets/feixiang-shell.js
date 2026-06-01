@@ -11,8 +11,8 @@
  *      <script>renderFeixiangSidebar('my-wiki');</script>
  *
  *   activeKey 取值（决定哪个菜单项高亮）：
- *     'home' | 'chat-history' | 'my-wiki' | 'school-wiki'
- *     | 'apps' | 'resources' | 'class'
+ *     'home' | 'chat' | 'chat-history' | 'my-wiki' | 'school-wiki'
+ *     | 'apps' | 'resources' | 'class' | 'notifications'
  */
 
 (function () {
@@ -27,29 +27,255 @@
     bell: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>',
     sparkle: '<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/></svg>',
     chevron: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>',
+    home: '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>',
   };
 
-  function navItem({ key, icon, label, href, count, dot, primary, activeKey }) {
+  /* ---- toast 兜底：如果页面没有 showToast，提供一个 ---- */
+  function ensureToastFallback() {
+    if (typeof window.showToast === 'function') return;
+    if (!document.getElementById('toast')) {
+      const t = document.createElement('div');
+      t.id = 'toast';
+      t.style.cssText = 'position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:rgba(17,17,16,0.92);color:#fff;padding:10px 18px;border-radius:22px;font-size:12.5px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:9999;backdrop-filter:blur(6px)';
+      document.body.appendChild(t);
+    }
+    let timer = null;
+    window.showToast = function (msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.opacity = '1';
+      clearTimeout(timer);
+      timer = setTimeout(() => (t.style.opacity = '0'), 2400);
+    };
+  }
+
+  /* ---- 注入下拉 / Popup 所需样式（不重复注入） ---- */
+  function injectPopupStyles() {
+    if (document.getElementById('fx-pop-styles')) return;
+    const css = `
+      .fx-pop {
+        position: fixed;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.12);
+        border-radius: 14px;
+        padding: 6px;
+        box-shadow: 0 18px 48px rgba(0,0,0,0.10);
+        z-index: 99999;
+        min-width: 240px;
+      }
+      .fx-pop-section-title {
+        font-size: 11px; color: #a19f99; font-weight: 600;
+        padding: 8px 12px 4px;
+      }
+      .fx-pop button {
+        width: 100%; text-align: left;
+        padding: 9px 12px; border-radius: 8px;
+        font-size: 13px; cursor: pointer;
+        display: flex; align-items: center; gap: 10px;
+        color: #111110; border: 0; background: transparent;
+        font-family: inherit;
+      }
+      .fx-pop button:hover { background: #f4f3ef; }
+      .fx-pop button.active { background: #fbf5e6; color: #a87e2c; font-weight: 600; }
+      .fx-pop button svg { width: 14px; height: 14px; flex-shrink: 0; color: #a19f99; }
+      .fx-pop button.active svg { color: #a87e2c; }
+      .fx-pop-divider { height: 1px; background: rgba(0,0,0,0.06); margin: 4px 8px; }
+      .fx-pop-meta { font-size: 11px; color: #a19f99; font-weight: 400; margin-top: 1px; }
+      .fx-pop-row-body { flex: 1; min-width: 0; }
+      .fx-pop-row-title { font-size: 13px; line-height: 1.3; }
+      .fx-notif-item {
+        padding: 12px; border-radius: 10px;
+        display: flex; gap: 10px; cursor: pointer;
+      }
+      .fx-notif-item:hover { background: #f4f3ef; }
+      .fx-notif-dot {
+        width: 7px; height: 7px; border-radius: 50%;
+        background: #e65252; margin-top: 6px; flex-shrink: 0;
+      }
+      .fx-notif-dot.read { background: transparent; }
+      .fx-notif-body { flex: 1; min-width: 0; }
+      .fx-notif-title { font-size: 13px; font-weight: 600; color: #111110; margin-bottom: 2px; line-height: 1.4; }
+      .fx-notif-desc { font-size: 12px; color: #6b6a65; line-height: 1.5; }
+      .fx-notif-time { font-size: 11px; color: #a19f99; margin-top: 4px; }
+      .fx-workspace { position: relative; }
+      .fx-ws-arrow { transition: transform .2s; }
+      .fx-workspace.open .fx-ws-arrow { transform: rotate(180deg); }
+    `;
+    const style = document.createElement('style');
+    style.id = 'fx-pop-styles';
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function closeAllPops() {
+    document.getElementById('fx-ws-pop')?.remove();
+    document.getElementById('fx-notif-pop')?.remove();
+    document.querySelector('.fx-user-btn')?.classList.remove('open');
+  }
+
+  /* ---- 用户区下拉 · 账号 + 工作空间切换（取代原 workspace 下拉） ---- */
+  window.toggleFxUserMenu = function (e) {
+    e.stopPropagation();
+    const btn = e.currentTarget;
+    if (btn.classList.contains('open')) { closeAllPops(); return; }
+    closeAllPops();
+    btn.classList.add('open');
+    const rect = btn.getBoundingClientRect();
+    const popWidth = 260;
+    const pop = document.createElement('div');
+    pop.className = 'fx-pop';
+    pop.id = 'fx-ws-pop';
+    pop.style.position = 'fixed';
+    pop.style.left = rect.left + 'px';
+    pop.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+    pop.style.width = popWidth + 'px';
+    pop.innerHTML = `
+      <div style="padding:10px 12px 6px;border-bottom:1px solid rgba(0,0,0,0.06);margin-bottom:4px">
+        <div style="font-size:13.5px;font-weight:700;color:#111110">张老师</div>
+        <div style="font-size:11.5px;color:#6b6a65;margin-top:2px">zhang.teacher@实验中学.edu.cn</div>
+      </div>
+      <div class="fx-pop-section-title">校园版（工作空间）</div>
+      <button class="active" onclick="event.stopPropagation();closeFxAll();showToast('当前 · 北京市实验中学')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <div class="fx-pop-row-body"><div class="fx-pop-row-title">北京市实验中学</div><div class="fx-pop-meta">高一语文 · 张老师</div></div>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#a87e2c"><path d="M5 13l4 4L19 7"/></svg>
+      </button>
+      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）切换到 · 人大附中')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+        <div class="fx-pop-row-body"><div class="fx-pop-row-title">人大附中</div><div class="fx-pop-meta">教研协同</div></div>
+      </button>
+      <div class="fx-pop-section-title">个人版</div>
+      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）切换到 · 飞象个人版')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
+        <div class="fx-pop-row-body"><div class="fx-pop-row-title">张老师 · 飞象个人版</div><div class="fx-pop-meta">个人云端 · 跨学校</div></div>
+      </button>
+      <div class="fx-pop-divider"></div>
+      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）扫码加入新的学校')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+        <div class="fx-pop-row-body"><div class="fx-pop-row-title">加入新的学校</div></div>
+      </button>
+      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）账号设置')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        <div class="fx-pop-row-body"><div class="fx-pop-row-title">账号设置</div></div>
+      </button>
+      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）已退出登录')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        <div class="fx-pop-row-body"><div class="fx-pop-row-title">退出登录</div></div>
+      </button>
+    `;
+    document.body.appendChild(pop);
+    setTimeout(() => document.addEventListener('click', closeAllPops, { once: true }), 50);
+  };
+
+  /* 向后兼容旧代码可能还在调 toggleWsMenu */
+  window.toggleWsMenu = function (e) { 
+    e?.stopPropagation();
+    window.location.href = 'index.html';
+  };
+
+  /* ---- 通知下拉 ---- */
+  window.toggleFxNotif = function (e) {
+    e.stopPropagation();
+    if (document.getElementById('fx-notif-pop')) { closeAllPops(); return; }
+    closeAllPops();
+    const btn = e.currentTarget;
+    const rect = btn.getBoundingClientRect();
+    const pop = document.createElement('div');
+    pop.className = 'fx-pop';
+    pop.id = 'fx-notif-pop';
+    pop.style.bottom = (window.innerHeight - rect.top + 6) + 'px';
+    pop.style.left = (rect.right + 8) + 'px';
+    pop.style.width = '320px';
+    pop.style.padding = '8px';
+    pop.innerHTML = `
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 10px 6px">
+        <div style="font-size:13px;font-weight:700">通知 · 3 条未读</div>
+        <button style="font-size:11.5px;color:#6b6a65;padding:2px 6px;border-radius:6px" onclick="event.stopPropagation();showToast('（演示）全部已读');closeFxAll()">全部已读</button>
+      </div>
+      <div class="fx-notif-item" onclick="closeFxAll();window.location.href='ai-record-jobs.html'">
+        <span class="fx-notif-dot"></span>
+        <div class="fx-notif-body">
+          <div class="fx-notif-title">高一(3)班期中模拟卷 · 已扫描完成</div>
+          <div class="fx-notif-desc">38 份扫描已上传，AI 已完成客观题预批，等待你审核</div>
+          <div class="fx-notif-time">5 分钟前</div>
+        </div>
+      </div>
+      <div class="fx-notif-item" onclick="closeFxAll();window.location.href='school-wiki.html'">
+        <span class="fx-notif-dot"></span>
+        <div class="fx-notif-body">
+          <div class="fx-notif-title">王老师分享了「《荷塘月色》画面捕捉法」</div>
+          <div class="fx-notif-desc">已加入「高一语文·共建库」，可在备课对话中引用</div>
+          <div class="fx-notif-time">2 小时前</div>
+        </div>
+      </div>
+      <div class="fx-notif-item" onclick="closeFxAll();window.location.href='app-detail.html?app=leave'">
+        <span class="fx-notif-dot"></span>
+        <div class="fx-notif-body">
+          <div class="fx-notif-title">3 条请假审批待处理</div>
+          <div class="fx-notif-desc">高一(5)班 · 张同学 / 李同学 / 王同学 · 病假</div>
+          <div class="fx-notif-time">今天 09:12</div>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(pop);
+    setTimeout(() => document.addEventListener('click', closeAllPops, { once: true }), 50);
+  };
+
+  window.closeFxAll = closeAllPops;
+
+  /* ---- 劫持 openChat：所有二级页面统一跳 chat.html，不再走 v28 的 wiki panel ---- */
+  /* 用 DOMContentLoaded 在所有 script 加载后覆盖 v28.js 里的 openChat */
+  function hijackOpenChat() {
+    window.openChat = function (mode, initialText) {
+      if (mode === 'history') {
+        window.location.href = 'chat-history.html';
+        return;
+      }
+      if (mode === 'resume') {
+        window.location.href = 'chat.html?resume=1';
+        return;
+      }
+      if (initialText) {
+        window.location.href = 'chat.html?q=' + encodeURIComponent(initialText);
+        return;
+      }
+      window.location.href = 'chat.html';
+    };
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', hijackOpenChat);
+  } else {
+    hijackOpenChat();
+  }
+  /* 兜底：晚一拍再劫持一次，防止后加载的脚本又覆盖回去 */
+  setTimeout(hijackOpenChat, 300);
+
+  function navItem({ key, icon, label, href, count, dot, primary, activeKey, onclick }) {
     const isActive = key === activeKey;
     const cls = ['fx-nav-btn', primary && 'primary', isActive && 'active']
       .filter(Boolean).join(' ');
     const right = (count || dot)
       ? `<div class="fx-nav-right">${dot ? '<span class="fx-nav-dot"></span>' : ''}${count ? `<span class="fx-nav-count">${count}</span>` : ''}</div>`
       : '';
+    if (onclick) {
+      return `<a class="${cls}" onclick="${onclick}" style="cursor:pointer">${icon}${label}${right}</a>`;
+    }
     return `<a class="${cls}" href="${href}">${icon}${label}${right}</a>`;
   }
 
   window.renderFeixiangSidebar = function (activeKey) {
+    ensureToastFallback();
+    injectPopupStyles();
+
     const container = document.getElementById('feixiang-sidebar');
     if (!container) return;
 
     container.classList.add('fx-sidebar');
     container.innerHTML = `
-      <a class="fx-workspace" href="index.html" title="返回首页">
+      <a class="fx-workspace" href="index.html" title="回到首页">
         <div class="fx-ws-main">
           <div class="fx-school-logo">实</div>
           <div class="fx-school-name">北京市实验中学</div>
-          <svg class="fx-ws-arrow" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
         </div>
         <div class="fx-ws-footer">
           <div class="fx-power-by">
@@ -59,29 +285,31 @@
         </div>
       </a>
 
-      ${navItem({ key: 'home', icon: ICONS.plus, label: '新对话', href: 'index.html', primary: true, activeKey })}
+      ${navItem({ key: 'chat', icon: ICONS.plus, label: '新对话', href: 'chat.html', primary: true, activeKey })}
       ${navItem({ key: 'chat-history', icon: ICONS.history, label: '历史对话', href: 'chat-history.html', count: 86, activeKey })}
 
-      <div class="fx-nav-title">知识库</div>
-      ${navItem({ key: 'my-wiki', icon: ICONS.person, label: '我的知识库', href: 'my-wiki.html', count: 12, activeKey })}
-      ${navItem({ key: 'school-wiki', icon: ICONS.school, label: '学校知识库', href: 'school-wiki.html', count: 348, dot: true, activeKey })}
+      <div class="fx-nav-title">我的</div>
+      ${navItem({ key: 'my-wiki', icon: ICONS.person, label: '我的知识库', href: 'my-wiki.html', count: 18, activeKey })}
+      ${navItem({ key: 'my-apps', icon: ICONS.apps, label: '我的应用', href: 'my-apps.html', count: 11, activeKey })}
+      ${navItem({ key: 'class', icon: ICONS.classes, label: '我的班级', onclick: "showToast('（演示）我的班级 · 高一(3) 高一(5) 高二(2)')", activeKey })}
 
-      <div class="fx-nav-title">常用</div>
+      <div class="fx-nav-title">学校</div>
+      ${navItem({ key: 'school-wiki', icon: ICONS.school, label: '学校知识库', href: 'school-wiki.html', count: 348, dot: true, activeKey })}
       ${navItem({ key: 'apps', icon: ICONS.apps, label: '应用广场', href: 'app-square.html', activeKey })}
       ${navItem({ key: 'resources', icon: ICONS.resources, label: '资源广场', href: 'resource-square.html', activeKey })}
-      ${navItem({ key: 'class', icon: ICONS.classes, label: '我的班级', href: '#', activeKey })}
 
       <div class="fx-spacer"></div>
 
-      ${navItem({ key: 'notifications', icon: ICONS.bell, label: '通知', href: '#', count: 3, dot: true, activeKey })}
+      ${navItem({ key: 'notifications', icon: ICONS.bell, label: '通知', onclick: 'toggleFxNotif(event)', count: 3, dot: true, activeKey })}
 
-      <div class="fx-user">
+      <button class="fx-user fx-user-btn" onclick="toggleFxUserMenu(event)" title="账号 / 切换工作空间">
         <div class="fx-avatar">张</div>
-        <div>
+        <div style="flex:1;min-width:0;text-align:left">
           <div class="fx-user-name">张老师</div>
           <div class="fx-user-role">高一语文 · 实验中学</div>
         </div>
-      </div>
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:#a19f99;flex-shrink:0"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
     `;
   };
 })();
