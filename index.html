@@ -288,8 +288,9 @@
   }
 
   .intent-chips {
-    display: flex; gap: 10px; justify-content: center;
+    display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
     transition: opacity 0.25s, transform 0.25s, height 0.25s;
+    max-width: 760px;
   }
   .intent-chips.hidden-chips {
     opacity: 0;
@@ -311,6 +312,17 @@
     color: var(--gold);
     box-shadow: 0 2px 8px rgba(168,126,44,0.1);
     font-weight: 600;
+  }
+  .intent-chip .chip-beta {
+    font-size: 9px;
+    font-weight: 700;
+    line-height: 1;
+    color: var(--green);
+    background: var(--green-soft);
+    border-radius: 999px;
+    padding: 2px 4px;
+    margin-left: -2px;
+    transform: translateY(-1px);
   }
 
   /* Toast */
@@ -552,8 +564,7 @@
     </a>
     <a class="nav-btn" href="my-apps.html">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-      我的应用
-      <div class="nav-right"><span class="nav-count">11</span></div>
+      我的空间
     </a>
     <a class="nav-btn" onclick="showToast('（演示）我的班级 · 高一(3)班 高一(5)班 高二(2)班')">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -631,7 +642,7 @@
           </div>
         </div>
         
-        <div class="intent-chips">
+        <div class="intent-chips" id="intent-chip-panel">
           <button class="intent-chip" data-chip="ai" onclick="toggleChip('ai')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 9l-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/></svg> AI 生成
           </button>
@@ -831,12 +842,24 @@ const CHIP_META = {
   search: { label: '知识库搜索', placeholder: '想找点什么？比如：朱自清散文鉴赏方法、月色描写手法', svg: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
   create: { label: '创建应用', placeholder: '描述你想要的应用，比如：班级请假审批小工具',          svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>' },
 };
+const AI_CAPABILITIES = [
+  { id: 'courseware', label: '课件生成', placeholder: '描述你要备的课，比如：《荷塘月色》第二课时，生成 12 页课件和课堂提问。', svg: '<path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/>' },
+  { id: 'qbank', label: 'AI 组题', placeholder: '说清楚学科、知识点、难度和题量，比如：高一语文现代文阅读，5 道分层练习。', svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
+  { id: 'interactive', label: '互动课件', placeholder: '描述课堂互动形式，比如：把《西游记》取经路线做成闯关互动课件。', svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/>' },
+  { id: 'game', label: '教学游戏', placeholder: '描述知识点和玩法，比如：文言虚词配对小游戏，适合高一课堂 8 分钟。', svg: '<line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/>' },
+  { id: 'diagnosis', label: '错因诊断', placeholder: '上传错题图片，或描述这次作业的错误情况，我来归因并生成讲评建议。', svg: '<circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/>' },
+  { id: 'layout', label: '精美排版', placeholder: '粘贴内容或上传资料，我来整理成讲义、课件页或课堂活动单。', svg: '<path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h16"/><path d="M16 10l2 2 4-4"/>' },
+  { id: 'data', label: '数据回收', placeholder: '描述你要收集的数据，比如：班会签到、课堂投票、学生自评和统计表。', svg: '<path d="M3 3v18h18"/><path d="M7 15v2"/><path d="M12 9v8"/><path d="M17 12v5"/>' },
+  { id: 'edu-app', label: '教育应用', beta: true, placeholder: '描述你想做的教学应用，比如：古诗词背诵 Agent，能记录学生练习情况。', svg: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>' },
+];
 const HOME_DEFAULT = '问点什么……';
 let activeChip = null;
+let activeAiCapability = null;
 
 function toggleChip(kind) {
   const next = activeChip === kind ? null : kind;
   activeChip = next;
+  activeAiCapability = null;
   // 创建应用 → 强制清空 KB；知识库搜索 0 KB = 默认搜全部知识库（隐式）
   if (next === 'create') selectedKbIds = [];
   refreshChips();
@@ -844,29 +867,66 @@ function toggleChip(kind) {
 }
 function clearChip() {
   activeChip = null;
+  activeAiCapability = null;
   refreshChips();
   applyKbState();
 }
+function selectAiCapability(id) {
+  activeChip = 'ai';
+  activeAiCapability = id;
+  refreshChips();
+  applyKbState();
+}
+function renderMainIntentChips() {
+  const panel = document.getElementById('intent-chip-panel');
+  if (!panel) return;
+  panel.innerHTML = `
+    <button class="intent-chip ${activeChip === 'ai' ? 'active' : ''}" data-chip="ai" onclick="toggleChip('ai')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CHIP_META.ai.svg}</svg> AI 生成
+    </button>
+    <button class="intent-chip ${activeChip === 'search' ? 'active' : ''}" data-chip="search" onclick="toggleChip('search')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CHIP_META.search.svg}</svg> 知识库搜索
+    </button>
+    <button class="intent-chip ${activeChip === 'create' ? 'active' : ''}" data-chip="create" onclick="toggleChip('create')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CHIP_META.create.svg}</svg> 创建应用
+    </button>
+  `;
+}
+function renderAiCapabilityChips() {
+  const panel = document.getElementById('intent-chip-panel');
+  if (!panel) return;
+  panel.innerHTML = `
+    ${AI_CAPABILITIES.map(cap => `
+      <button class="intent-chip ${activeAiCapability === cap.id ? 'active' : ''}" data-capability="${cap.id}" onclick="selectAiCapability('${cap.id}')">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${cap.svg}</svg>
+        ${cap.label}
+        ${cap.beta ? '<span class="chip-beta">BETA</span>' : ''}
+      </button>
+    `).join('')}
+  `;
+}
 function refreshChips() {
-  document.querySelectorAll('.intent-chip').forEach(b => {
-    b.classList.toggle('active', b.dataset.chip === activeChip);
-  });
-  // 选中 chip 后，底部整组淡出隐藏；取消时回来
   const chipsRow = document.querySelector('.intent-chips');
-  if (chipsRow) chipsRow.classList.toggle('hidden-chips', !!activeChip);
+  if (chipsRow) chipsRow.classList.toggle('hidden-chips', !!activeChip && activeChip !== 'ai');
+  if (activeChip === 'ai') renderAiCapabilityChips();
+  else renderMainIntentChips();
   const ipt = document.getElementById('home-input');
   const modeEl = document.getElementById('home-mode');
   if (activeChip && CHIP_META[activeChip]) {
     const meta = CHIP_META[activeChip];
+    const aiCap = activeChip === 'ai' && activeAiCapability
+      ? AI_CAPABILITIES.find(cap => cap.id === activeAiCapability)
+      : null;
+    const modeLabel = aiCap ? `${meta.label} · ${aiCap.label}` : meta.label;
     modeEl.innerHTML = `
       <svg class="mode-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${meta.svg}</svg>
-      ${meta.label}
+      ${modeLabel}
       <span class="mode-x" onclick="event.stopPropagation();clearChip()" title="取消">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </span>
     `;
     modeEl.style.display = 'inline-flex';
-    ipt.placeholder = meta.placeholder;
+    ipt.placeholder = aiCap ? aiCap.placeholder : meta.placeholder;
   } else {
     modeEl.style.display = 'none';
     modeEl.innerHTML = '';
@@ -889,6 +949,7 @@ function buildChatUrl(qText) {
   const params = [];
   if (qText) params.push('q=' + encodeURIComponent(qText));
   if (activeChip) params.push('intent=' + activeChip);
+  if (activeChip === 'ai' && activeAiCapability) params.push('capability=' + encodeURIComponent(activeAiCapability));
   if (selectedKbIds.length) params.push('kb=1&folders=' + encodeURIComponent(selectedKbIds.join(',')));
   return 'chat.html' + (params.length ? '?' + params.join('&') : '');
 }
@@ -902,7 +963,12 @@ function submitHome() {
     return;
   }
   let q = text;
-  if (activeChip && CHIP_META[activeChip]) q = '[' + CHIP_META[activeChip].label + '] ' + q;
+  if (activeChip && CHIP_META[activeChip]) {
+    const aiCap = activeChip === 'ai' && activeAiCapability
+      ? AI_CAPABILITIES.find(cap => cap.id === activeAiCapability)
+      : null;
+    q = '[' + CHIP_META[activeChip].label + (aiCap ? ' · ' + aiCap.label : '') + '] ' + q;
+  }
   window.location.href = buildChatUrl(q);
 }
 

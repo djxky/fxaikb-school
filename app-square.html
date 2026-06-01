@@ -23,12 +23,22 @@
     height: 100vh;
   }
 
+  .page-header[data-page-header="app-square"] {
+    position: static;
+  }
+
   /* ===== 分类 Tab 横向 ===== */
   .page-head-tabs {
-    background: var(--surface);
+    background: rgba(255,255,255,0.92);
     border-bottom: 1px solid var(--border);
     padding: 14px 40px 0;
-    position: static;
+    position: sticky; top: 0; z-index: 45;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    backdrop-filter: blur(14px) saturate(1.4);
+    -webkit-backdrop-filter: blur(14px) saturate(1.4);
   }
   
   .subject-tabs {
@@ -36,6 +46,13 @@
     overflow-x: auto;
     padding-bottom: 12px;
     scrollbar-width: none;
+  }
+  .head-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+    padding-bottom: 12px;
   }
   .subject-tabs::-webkit-scrollbar { display: none; }
   .subject-tab {
@@ -51,7 +68,6 @@
     background: transparent;
     cursor: pointer;
   }
-  .subject-tab [data-lucide] { width: 14px; height: 14px; }
   .subject-tab:hover { color: var(--text-1); background: var(--bg); }
   .subject-tab.active {
     color: var(--gold-deep);
@@ -151,6 +167,13 @@
   @media (max-width: 1280px) {
     .grid-wrap, .page-head-tabs { padding-left: 28px; padding-right: 28px; }
   }
+  @media (max-width: 760px) {
+    .page-head-tabs {
+      align-items: stretch;
+      flex-direction: column;
+      gap: 8px;
+    }
+  }
 </style>
 </head>
 <body data-page="app-square">
@@ -164,9 +187,19 @@
       <div class="ph-left">
         <i class="ph-icon" data-lucide="blocks"></i>
         <h1 class="ph-title">应用广场</h1>
-        <span class="ph-subtitle">发现并使用官方与老师们共建的 AI 智能体与 HTML 应用</span>
       </div>
-      <div class="ph-right">
+    </header>
+
+    <div class="page-head-tabs">
+      <div class="subject-tabs" id="category-tabs">
+        <button class="subject-tab active" data-cat="all">全部</button>
+        <button class="subject-tab" data-cat="official">官方精选</button>
+        <button class="subject-tab" data-cat="school">本校共建</button>
+        <button class="subject-tab" data-cat="global">全域热门</button>
+        <button class="subject-tab" data-cat="tool">效率工具</button>
+        <button class="subject-tab" data-cat="subject">学科专属</button>
+      </div>
+      <div class="head-actions">
         <label class="ph-search">
           <i data-lucide="search"></i>
           <input type="text" placeholder="搜索应用、智能体…">
@@ -174,17 +207,6 @@
         <button class="ph-action is-primary" onclick="alert('（演示）创建应用')">
           <i data-lucide="plus"></i><span>创建应用</span>
         </button>
-      </div>
-    </header>
-
-    <div class="page-head-tabs">
-      <div class="subject-tabs" id="category-tabs">
-        <button class="subject-tab active" data-cat="all">全部</button>
-        <button class="subject-tab" data-cat="official"><i data-lucide="award"></i>官方精选</button>
-        <button class="subject-tab" data-cat="school"><i data-lucide="school"></i>本校共建</button>
-        <button class="subject-tab" data-cat="global"><i data-lucide="globe"></i>全域热门</button>
-        <button class="subject-tab" data-cat="tool"><i data-lucide="wrench"></i>效率工具</button>
-        <button class="subject-tab" data-cat="subject"><i data-lucide="book-open"></i>学科专属</button>
       </div>
     </div>
 

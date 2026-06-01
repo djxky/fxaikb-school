@@ -290,7 +290,7 @@
 
       <div class="fx-nav-title">我的</div>
       ${navItem({ key: 'my-wiki', icon: ICONS.person, label: '我的知识库', href: 'my-wiki.html', count: 18, activeKey })}
-      ${navItem({ key: 'my-apps', icon: ICONS.apps, label: '我的应用', href: 'my-apps.html', count: 11, activeKey })}
+      ${navItem({ key: 'my-apps', icon: ICONS.apps, label: '我的空间', href: 'my-apps.html', activeKey })}
       ${navItem({ key: 'class', icon: ICONS.classes, label: '我的班级', onclick: "showToast('（演示）我的班级 · 高一(3) 高一(5) 高二(2)')", activeKey })}
 
       <div class="fx-nav-title">学校</div>
