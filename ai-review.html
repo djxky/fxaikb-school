@@ -298,7 +298,7 @@
       <div class="ph-left">
         <i class="ph-icon" data-lucide="check-square"></i>
         <nav class="ph-crumb" aria-label="面包屑">
-          <a class="ph-crumb-item" href="ai-qbank.html"><span>题库</span></a>
+          <a class="ph-crumb-item" href="ai-qbank.html"><span>AI 题库</span></a>
           <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
           <span class="ph-crumb-current"><span>AI 录题校对</span></span>
         </nav>
@@ -402,7 +402,7 @@
         <div class="rv-actions" data-doc="ai-review-actions">
           <button class="rv-btn ghost" id="rv-back-btn">
             <i data-lucide="arrow-left"></i>
-            <span>返回题库</span>
+            <span>返回 AI 题库</span>
           </button>
           <button class="rv-btn primary" id="rv-commit-btn" data-doc="ai-review-commit">
             <i data-lucide="check-circle-2"></i>
@@ -486,7 +486,7 @@
       if(elCommitBtn.disabled) return;
       if(job && window.V28RecordJobs){
         V28RecordJobs.markCommitted(job.id);
-        showToast(`${job.questionCount} 题已入题库 · 返回题库查看`);
+        showToast(`${job.questionCount} 题已入题库 · 返回 AI 题库查看`);
       } else {
         showToast('已入题库（演示）');
       }

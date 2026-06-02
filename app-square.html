@@ -84,7 +84,7 @@
     width:100%;
     max-width:1480px;
     margin:0 auto;
-    padding:28px 40px 92px;
+    padding:28px 40px 132px;
   }
   .content-grid{
     display:grid;
@@ -95,7 +95,7 @@
     display:flex;
     flex-direction:column;
     overflow:hidden;
-    min-height:238px;
+    min-height:226px;
     border:1px solid var(--line);
     border-radius:var(--radius);
     background:var(--surface);
@@ -110,7 +110,7 @@
   }
   .app-cover{
     position:relative;
-    height:136px;
+    height:126px;
     display:grid;
     place-items:center;
     color:rgba(255,255,255,.84);
@@ -156,27 +156,18 @@
   .app-body{
     display:flex;
     flex-direction:column;
-    gap:10px;
+    gap:8px;
     flex:1;
-    padding:14px 16px 15px;
+    padding:16px 16px 15px;
   }
   .app-title{
     color:var(--ink);
-    font-size:15px;
+    font-size:15.5px;
+    line-height:1.35;
     font-weight:700;
     overflow:hidden;
     text-overflow:ellipsis;
     white-space:nowrap;
-  }
-  .app-subtitle{
-    min-height:38px;
-    color:var(--muted);
-    font-size:12.5px;
-    line-height:1.55;
-    display:-webkit-box;
-    -webkit-line-clamp:2;
-    -webkit-box-orient:vertical;
-    overflow:hidden;
   }
   .app-author{
     display:flex;
@@ -204,6 +195,23 @@
     text-overflow:ellipsis;
     white-space:nowrap;
   }
+  .app-favorite{
+    display:inline-flex;
+    align-items:center;
+    gap:4px;
+    height:26px;
+    padding:0 8px;
+    border-radius:7px;
+    color:var(--faint);
+    font-size:12px;
+    font-weight:600;
+    flex-shrink:0;
+    transition:background .12s,color .12s;
+  }
+  .app-favorite:hover{background:#f3f1ed;color:#8a6720}
+  .app-favorite.is-on{color:#8a6720;background:#fbf5e6}
+  .app-favorite svg{width:13px;height:13px}
+  .app-favorite.is-on svg{fill:currentColor}
   .empty{
     grid-column:1/-1;
     padding:64px 0;
@@ -291,16 +299,16 @@
 
 <script>
   const APPS = [
-    { id:'ai-qbank', title:'题库', desc:'统一检索校本题库、飞象官方题库和个人题目，支持筛题、组题与收藏。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'18.6w', icon:'file-stack', grad:4, cat:['official','subject'], url:'ai-qbank.html' },
-    { id:'ai-record', title:'AI 录题', desc:'上传本地 PDF / Word 自动解析题目，老师校对后入题库。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'6.4w', icon:'scan-search', grad:6, cat:['official','tool'], url:'ai-record-jobs.html' },
-    { id:'exam', title:'AI 试卷分析专家', desc:'上传试卷图片，自动批改并生成班级得分率、易错题分析报告。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'12.5w', icon:'bar-chart-2', grad:1, cat:['official','tool'] },
-    { id:'classic-game', title:'文言文情景闯关 (H5)', desc:'将枯燥的文言文背诵转化为互动文字游戏，学生扫码即可在手机上游玩。', author:'李素芬', avatar:'李', avatarColor:'#81628f', badge:'本校', usage:'842', icon:'gamepad-2', grad:2, cat:['school','subject'] },
-    { id:'notify', title:'家长会通知生成器', desc:'输入开会时间和重点，自动生成得体、专业的家长会邀请函及群通知。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'3.2w', icon:'mail', grad:3, cat:['global','tool'] },
-    { id:'lesson-plan', title:'智能教案排版', desc:'输入教学目标和知识点，一键生成符合学校标准格式的 Word 教案。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'8.9w', icon:'file-text', grad:4, cat:['official','tool'] },
-    { id:'finance', title:'班费记账本 (Web App)', desc:'轻量级班费管理工具，支持扫码记账、自动生成月度收支图表。', author:'王建华', avatar:'王', avatarColor:'#4a755b', badge:'本校', usage:'156', icon:'pie-chart', grad:5, cat:['school','tool'] },
-    { id:'speaking', title:'英语口语对练 Agent', desc:'模拟真实对话场景，支持语音输入，自动纠正语法和发音错误。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'21.3w', icon:'mic', grad:6, cat:['official','subject'] },
-    { id:'sports-signup', title:'运动会报名收集', desc:'快速生成报名表单，自动校验每人限报项目数，一键导出 Excel。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'1.1w', icon:'clipboard-list', grad:7, cat:['global','tool'] },
-    { id:'chemistry-lab', title:'化学实验模拟器', desc:'H5 互动小应用，拖拽烧杯和试剂，安全模拟危险化学反应现象。', author:'赵明杰', avatar:'赵', avatarColor:'#a8626c', badge:'本校', usage:'420', icon:'flask-conical', grad:8, cat:['school','subject'] }
+    { id:'ai-qbank', title:'AI 题库', desc:'统一检索校本题库、飞象官方题库和个人题目，支持筛题、组题与收藏。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'18.6w', favorites:942, icon:'file-stack', grad:4, cat:['official','subject'], url:'ai-qbank.html' },
+    { id:'ai-record', title:'AI 录题', desc:'上传本地 PDF / Word 自动解析题目，老师校对后入题库。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'6.4w', favorites:420, icon:'scan-search', grad:6, cat:['official','tool'], url:'ai-record-jobs.html' },
+    { id:'exam', title:'AI 试卷分析专家', desc:'上传试卷图片，自动批改并生成班级得分率、易错题分析报告。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'12.5w', favorites:860, icon:'bar-chart-2', grad:1, cat:['official','tool'] },
+    { id:'classic-game', title:'文言文情景闯关 (H5)', desc:'将枯燥的文言文背诵转化为互动文字游戏，学生扫码即可在手机上游玩。', author:'李素芬', avatar:'李', avatarColor:'#81628f', badge:'本校', usage:'842', favorites:189, icon:'gamepad-2', grad:2, cat:['school','subject'] },
+    { id:'notify', title:'家长会通知生成器', desc:'输入开会时间和重点，自动生成得体、专业的家长会邀请函及群通知。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'3.2w', favorites:276, icon:'mail', grad:3, cat:['global','tool'] },
+    { id:'lesson-plan', title:'智能教案排版', desc:'输入教学目标和知识点，一键生成符合学校标准格式的 Word 教案。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'8.9w', favorites:345, icon:'file-text', grad:4, cat:['official','tool'] },
+    { id:'finance', title:'班费记账本 (Web App)', desc:'轻量级班费管理工具，支持扫码记账、自动生成月度收支图表。', author:'王建华', avatar:'王', avatarColor:'#4a755b', badge:'本校', usage:'156', favorites:31, icon:'pie-chart', grad:5, cat:['school','tool'] },
+    { id:'speaking', title:'英语口语对练 Agent', desc:'模拟真实对话场景，支持语音输入，自动纠正语法和发音错误。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'21.3w', favorites:1120, icon:'mic', grad:6, cat:['official','subject'] },
+    { id:'sports-signup', title:'运动会报名收集', desc:'快速生成报名表单，自动校验每人限报项目数，一键导出 Excel。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'1.1w', favorites:203, icon:'clipboard-list', grad:7, cat:['global','tool'] },
+    { id:'chemistry-lab', title:'化学实验模拟器', desc:'H5 互动小应用，拖拽烧杯和试剂，安全模拟危险化学反应现象。', author:'赵明杰', avatar:'赵', avatarColor:'#a8626c', badge:'本校', usage:'420', favorites:88, icon:'flask-conical', grad:8, cat:['school','subject'] }
   ];
 
   const ICON_SVG = {
@@ -349,14 +357,30 @@
         </div>
         <div class="app-body">
           <div class="app-title" title="${escHtml(app.title)}">${escHtml(app.title)}</div>
-          <div class="app-subtitle" title="${escHtml(app.desc)}">${escHtml(app.desc)}</div>
           <div class="app-author">
             <div class="author-avatar" style="background:${escHtml(app.avatarColor)}">${escHtml(app.avatar)}</div>
             <span class="app-author-name">${escHtml(app.author)}</span>
+            <span class="app-favorite" role="button" tabindex="0" data-favorite data-count="${Number(app.favorites) || 0}" title="收藏">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9 12 2"/></svg>
+              <span>${Number(app.favorites) || 0}</span>
+            </span>
           </div>
         </div>
       </a>
     `).join('');
+    bindFavoriteButtons(grid);
+  }
+
+  function bindFavoriteButtons(scope){
+    scope.querySelectorAll('[data-favorite]').forEach(btn => {
+      btn.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const on = btn.classList.toggle('is-on');
+        const base = Number(btn.dataset.count) || 0;
+        btn.querySelector('span').textContent = String(base + (on ? 1 : 0));
+      });
+    });
   }
 
   document.querySelectorAll('.subject-tab').forEach(tab => {

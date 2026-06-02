@@ -222,11 +222,23 @@
   }
   .card-author-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .card-fav {
-    display: flex; align-items: center; gap: 3px;
+    display: inline-flex; align-items: center; gap: 3px;
+    height: 24px;
+    padding: 0 7px;
+    border-radius: 7px;
+    border: 0;
+    background: transparent;
     color: var(--faint);
+    font-size: 12px;
+    font-weight: 600;
     flex-shrink: 0;
+    cursor: pointer;
+    transition: background .12s, color .12s;
   }
+  .card-fav:hover { background: var(--bg); color: var(--gold); }
+  .card-fav.is-on { background: var(--gold-soft); color: var(--gold); }
   .card-fav svg { width: 12px; height: 12px; }
+  .card-fav.is-on svg { fill: currentColor; }
 
   /* ===== 响应式 ===== */
   @media (max-width: 1280px) {
@@ -381,14 +393,27 @@
           <div class="card-author">
             <div class="author-avatar" style="background: ${r.avatarColor}">${r.avatar}</div>
             <span class="card-author-name">${r.author}</span>
-            <span class="card-fav">
+            <span class="card-fav" role="button" tabindex="0" data-favorite data-count="${r.fav}" title="收藏">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15 9 22 10 17 15 18 22 12 18 6 22 7 15 2 10 9 9 12 2"/></svg>
-              ${r.fav}
+              <span>${r.fav}</span>
             </span>
           </div>
         </div>
       </a>
     `).join('');
+    bindFavoriteButtons(grid);
+  }
+
+  function bindFavoriteButtons(scope){
+    scope.querySelectorAll('[data-favorite]').forEach(btn => {
+      btn.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        const on = btn.classList.toggle('is-on');
+        const base = Number(btn.dataset.count) || 0;
+        btn.querySelector('span').textContent = String(base + (on ? 1 : 0));
+      });
+    });
   }
 
   document.querySelectorAll('.subject-tab').forEach(tab => {

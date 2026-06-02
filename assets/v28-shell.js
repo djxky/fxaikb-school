@@ -369,7 +369,7 @@
     { id:'grade-3', name:'初三数学备课组', count:'531', icon:'book-marked', scope:'team' },
     { type:'create-kb', label:'+ 新建知识库' },
     { type:'divider', className:'sb-nav-divider' },
-    { id:'ai-qbank', name:'题库', icon:'file-stack', className:'sb-ai-qbank', tip:'题库', onclick:"navTo('qbank')" },
+    { id:'ai-qbank', name:'AI 题库', icon:'file-stack', className:'sb-ai-qbank', tip:'AI 题库', onclick:"navTo('qbank')" },
   ];
   const KB_ITEMS_STORAGE_KEY = 'v28_kb_items_state';
   let KB_ITEMS = loadKbItems();

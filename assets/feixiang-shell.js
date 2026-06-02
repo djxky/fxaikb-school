@@ -298,7 +298,7 @@
         <div class="fx-notif-item" onclick="closeFxAll();window.location.href='ai-qbank.html'">
           <span class="fx-notif-dot read"></span>
           <div class="fx-notif-body">
-            <div class="fx-notif-title">题库处理完成</div>
+            <div class="fx-notif-title">AI 题库处理完成</div>
             <div class="fx-notif-desc">《函数单调性》资料已生成 24 道分层练习题</div>
             <div class="fx-notif-time">2 小时前</div>
           </div>
