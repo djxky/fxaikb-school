@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260522a" />
 <link rel="stylesheet" href="assets/page-header.css" />
 <style>
-  /* AI 录题进度页 · 视觉对齐飞象「AI 智能录题」截图，但不要上传区/不要 tab/加 KB 分组 */
+  /* AI 录题进度页 · 老师主动上传文件，AI 解析后进入校对任务 */
   .recp-page{
     max-width:1080px;
     margin:0 auto;
@@ -91,6 +91,123 @@
   .recp-record-btn:hover{ filter:brightness(1.05); box-shadow:0 4px 12px rgba(168,126,44,.34); }
   .recp-record-btn:active{ transform:translateY(1px); }
   .recp-record-btn [data-lucide]{ width:15px; height:15px; }
+
+  .record-upload-zone{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    min-height:220px;
+    padding:22px 24px;
+    margin-bottom:12px;
+    border:1.5px dashed #D6BF87;
+    border-radius:14px;
+    background:linear-gradient(180deg,#FFFDF8 0%,#FBF7EF 100%);
+    cursor:pointer;
+    text-align:center;
+    transition:background .14s,border-color .14s,box-shadow .14s,transform .12s;
+  }
+  .record-upload-zone:hover,
+  .record-upload-zone.is-dragover{
+    background:#FFF9EC;
+    border-color:#A87E2C;
+    box-shadow:0 0 0 4px rgba(168,126,44,.10), inset 0 0 0 1px rgba(168,126,44,.10);
+  }
+  .record-upload-zone.is-dragover{
+    transform:translateY(-1px);
+  }
+  .record-upload-icon{
+    width:54px;
+    height:54px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    color:#A87E2C;
+    background:rgba(168,126,44,.10);
+    flex-shrink:0;
+  }
+  .record-upload-icon [data-lucide]{width:26px;height:26px}
+  .record-upload-main{
+    min-width:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+  }
+  .record-upload-title{font-size:15px;font-weight:700;color:var(--text)}
+  .record-upload-sub{
+    max-width:420px;
+    font-size:12.5px;
+    line-height:1.7;
+    color:var(--text-3);
+  }
+  .record-upload-action{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    height:34px;
+    padding:0 18px;
+    border-radius:9px;
+    border:1px solid #E4D6B5;
+    background:#fff;
+    color:#7A5D20;
+    font-size:13px;
+    font-weight:650;
+    flex-shrink:0;
+    box-shadow:0 1px 2px rgba(30,24,14,.04);
+  }
+  .record-local-list{
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    margin:-3px 0 10px;
+    max-height:84px;
+    overflow:auto;
+  }
+  .record-local-item{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    padding:7px 9px;
+    border:1px solid #ECE3CC;
+    border-radius:9px;
+    background:#FFFDF9;
+    font-size:12.5px;
+  }
+  .record-local-item [data-lucide]{width:14px;height:14px;color:#A87E2C;flex-shrink:0}
+  .record-local-name{
+    min-width:0;
+    flex:1;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+    color:var(--text);
+    font-weight:500;
+  }
+  .record-local-size{font-size:11px;color:var(--text-4);flex-shrink:0}
+  .record-local-remove{
+    width:22px;
+    height:22px;
+    display:grid;
+    place-items:center;
+    border:0;
+    border-radius:6px;
+    background:transparent;
+    color:var(--text-3);
+    cursor:pointer;
+  }
+  .record-local-remove:hover{background:var(--surface-3);color:var(--text)}
+  .v28m[data-doc="ai-record-dialog"]{
+    width:min(620px, calc(100vw - 36px));
+    max-height:min(720px, calc(100vh - 64px));
+  }
+  .v28m[data-doc="ai-record-dialog"] .v28m-body{
+    padding:12px 18px 8px;
+  }
+  .v28m[data-doc="ai-record-dialog"] .v28m-foot{
+    padding:12px 18px;
+  }
 
   /* 列表区头部 */
   .recp-list-head{
@@ -363,15 +480,10 @@
       <div class="ph-left">
         <i class="ph-icon" data-lucide="sparkles"></i>
         <nav class="ph-crumb" aria-label="面包屑">
-          <a class="ph-crumb-item" href="ai-qbank.html"><span>AI 题库</span></a>
+          <a class="ph-crumb-item" href="ai-qbank.html"><span>题库</span></a>
           <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
           <span class="ph-crumb-current"><span>AI 录题进度</span></span>
         </nav>
-      </div>
-      <div class="ph-right">
-        <button class="ph-action is-primary" id="recp-record-btn" data-doc="ai-record-entry">
-          <i data-lucide="sparkles"></i><span>+ AI 录题</span>
-        </button>
       </div>
     </header>
 
@@ -380,17 +492,20 @@
         <div class="recp-hero">
           <div class="recp-hero-text">
             <h1 class="recp-hero-title"><span class="recp-brand">Ai</span>录题</h1>
-            <p class="recp-hero-sub">从知识库的 PDF / Word 自动解析为题目，AI 识别题面 / 答案 / 知识点 / 难度，老师校对后入题库。<br/>学校知识库由管理员触发，个人知识库老师自行触发。</p>
+            <p class="recp-hero-sub">上传本地 PDF / Word，AI 自动解析题面 / 答案 / 知识点 / 难度。老师校对后入题库。<br/>知识库文件会自动识别入题库，无需在这里手动选择或审核。</p>
+          </div>
+          <div class="recp-hero-actions">
+            <button class="recp-record-btn" id="recp-record-btn" data-doc="ai-record-entry">
+              <i data-lucide="sparkles"></i>
+              <span>+ AI 录题</span>
+            </button>
           </div>
         </div>
 
         <div class="recp-list-head">
-          <span class="recp-list-title">AI 处理进度</span>
+          <span class="recp-list-title">任务列表</span>
           <span class="recp-list-meta" id="recp-list-meta"></span>
           <div class="recp-toolbar">
-            <select class="recp-tool-select" id="recp-filter-kb">
-              <option value="">全部知识库</option>
-            </select>
             <select class="recp-tool-select" id="recp-filter-state">
               <option value="">全部状态</option>
               <option value="review-pending">待校对</option>
@@ -416,24 +531,95 @@
 <div id="toast"></div>
 
 <script src="assets/feixiang-shell.js"></script>
-<script>renderFeixiangSidebar('');</script>
+<script>renderFeixiangSidebar('apps');</script>
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
 <script src="assets/shared/v28-modals.js?v=20260522a"></script>
 <script src="assets/page-header.js"></script>
 <script>
   (function(){
+    const RECORD_STORAGE_KEY = 'v28-ai-record-jobs';
     const root = document.getElementById('recp-list-root');
     const metaEl = document.getElementById('recp-list-meta');
-    const kbSel = document.getElementById('recp-filter-kb');
     const stateSel = document.getElementById('recp-filter-state');
     const searchInp = document.getElementById('recp-search-input');
     const recordBtn = document.getElementById('recp-record-btn');
 
     /* —— 视图状态 —— */
-    let filterKb = '';
     let filterState = '';
     let keyword = '';
+
+    function localJobs(){
+      try{
+        const raw = localStorage.getItem(RECORD_STORAGE_KEY);
+        const parsed = raw ? JSON.parse(raw) : [];
+        return Array.isArray(parsed) ? parsed : [];
+      }catch(_){
+        return [];
+      }
+    }
+    function saveLocalJobs(jobs){
+      try{ localStorage.setItem(RECORD_STORAGE_KEY, JSON.stringify(jobs)); }catch(_){}
+    }
+    function stableQuestionCount(name){
+      let h = 5381;
+      String(name || '').split('').forEach(ch => { h = ((h * 33) ^ ch.charCodeAt(0)) >>> 0; });
+      return 6 + (Math.abs(h) % 19);
+    }
+    function createLocalJobs(files){
+      const jobs = localJobs();
+      const now = Date.now();
+      const created = files.map((file, index) => ({
+        id: 'rec-' + Math.random().toString(36).slice(2, 10),
+        fileId: file.id,
+        fileName: file.name,
+        fileType: file.type,
+        fileSize: file.size,
+        kbLabel: file.kbLabel,
+        state: 'parsing',
+        createdAt: now + index,
+        parseDoneAt: null,
+        committedAt: null,
+        questionCount: stableQuestionCount(file.name),
+        _parseMs: 8000 + index * 900
+      }));
+      saveLocalJobs(jobs.concat(created));
+      scheduleLocalFinish(created);
+      return created;
+    }
+    function scheduleLocalFinish(jobs){
+      jobs.forEach(job => {
+        const elapsed = Date.now() - job.createdAt;
+        const left = Math.max(400, (job._parseMs || 8000) - elapsed);
+        window.setTimeout(() => {
+          const all = localJobs();
+          const target = all.find(item => item.id === job.id);
+          if(!target || target.state !== 'parsing') return;
+          target.state = 'review-pending';
+          target.parseDoneAt = Date.now();
+          saveLocalJobs(all);
+          renderList();
+          if(window.V28RecordJobs && V28RecordJobs.syncTriggerBadge) V28RecordJobs.syncTriggerBadge();
+          showToast(`AI 已解析完《${target.fileName}》· ${target.questionCount} 题待校对`);
+        }, left);
+      });
+    }
+    function ensureLocalParsingTimers(){
+      const all = localJobs();
+      let dirty = false;
+      all.forEach(job => {
+        if(job.state !== 'parsing') return;
+        const elapsed = Date.now() - job.createdAt;
+        if(elapsed >= (job._parseMs || 8000)){
+          job.state = 'review-pending';
+          job.parseDoneAt = Date.now();
+          dirty = true;
+        } else {
+          scheduleLocalFinish([job]);
+        }
+      });
+      if(dirty) saveLocalJobs(all);
+    }
 
     /* —— 状态元数据 ——
      * 不再分组,统一按 createdAt 倒序扁平展示,避免任务在 parsing → review-pending 状态跳变时
@@ -468,32 +654,15 @@
       return Math.max(2, Math.round(ratio * 100));
     }
 
-    /* —— KB 筛选下拉 · 从任务池 + 当前任务里聚合 —— */
-    function rebuildKbFilter(){
-      if(!window.V28RecordJobs || !kbSel) return;
-      const set = new Set();
-      V28RecordJobs.list().forEach(j => { if(j.kbLabel) set.add(j.kbLabel); });
-      /* 也把池里的 KB 名字带上，便于切换 */
-      try{
-        (V28RecordJobs._pool() || []).forEach(f => { if(f.kbLabel) set.add(f.kbLabel); });
-      }catch(e){}
-      const current = filterKb;
-      const opts = ['<option value="">全部知识库</option>']
-        .concat([...set].map(k => `<option value="${escHtml(k)}">${escHtml(k)}</option>`));
-      kbSel.innerHTML = opts.join('');
-      if(current && set.has(current)) kbSel.value = current;
-    }
-
     /* —— 列表过滤 ——
      * 排序统一按 createdAt 倒序（V28RecordJobs.list() 已经是新→旧）
      * 不再做状态分组,避免任务状态切换时跳位
      */
     function buildView(){
-      const all = window.V28RecordJobs ? V28RecordJobs.list() : [];
+      const all = window.V28RecordJobs ? V28RecordJobs.list() : localJobs().sort((a, b) => b.createdAt - a.createdAt);
 
       const kw = keyword.trim().toLowerCase();
       const filtered = all.filter(j => {
-        if(filterKb && j.kbLabel !== filterKb) return false;
         if(filterState && j.state !== filterState) return false;
         if(kw && !j.fileName.toLowerCase().includes(kw)) return false;
         return true;
@@ -526,11 +695,7 @@
         root.innerHTML = `
           <div class="recp-empty">
             <div class="recp-empty-icon"><i data-lucide="inbox"></i></div>
-            <div class="recp-empty-title">还没有 AI 录题任务</div>
-            <div class="recp-empty-sub">点 [+ AI 录题] 从知识库选 PDF / Word 文件，AI 自动解析为题目，老师校对后入题库。</div>
-            <button class="recp-record-btn" data-action="open-record">
-              <i data-lucide="sparkles"></i><span>+ AI 录题</span>
-            </button>
+            <div class="recp-empty-title">暂无任务</div>
           </div>
         `;
         if(window.lucide) lucide.createIcons();
@@ -640,9 +805,11 @@
     function bindRowActions(){
       /* 重新录题（已入库 → 二次确认 → 再开 RecordDialog 默认勾选这个文件） */
       root.querySelectorAll('[data-action="re-record"]').forEach(el => {
-        el.addEventListener('click', () => {
+        el.addEventListener('click', event => {
+          event.preventDefault();
+          event.stopPropagation();
           const id = el.getAttribute('data-jobid');
-          const j = window.V28RecordJobs && V28RecordJobs.get(id);
+          const j = (window.V28RecordJobs && V28RecordJobs.get(id)) || localJobs().find(job => job.id === id);
           if(!j) return;
           if(!confirm(`《${j.fileName}》已入库 ${j.questionCount} 题。\n再次录题会与已有题目合并，可能产生重复题。\n\n确认重新录题？`)) return;
           openRecordDialog({ preselectFileIds:[j.fileId] });
@@ -654,15 +821,168 @@
           showToast('（演示）失败重试由后台重新排队解析');
         });
       });
-      /* 空态再次触发 */
-      const openBtn = root.querySelector('[data-action="open-record"]');
-      if(openBtn) openBtn.addEventListener('click', () => openRecordDialog());
+    }
+
+    function openRecordFallback(opts){
+      opts = opts || {};
+      const localUploads = [];
+      const selected = new Set();
+
+      const overlay = document.createElement('div');
+      overlay.className = 'v28m-overlay open';
+      const dialog = document.createElement('div');
+      dialog.className = 'v28m size-md open';
+      dialog.dataset.doc = 'ai-record-dialog';
+      dialog.innerHTML = `
+        <div class="v28m-head">
+          <div class="v28m-title">
+            AI 录题 · 上传要解析的文件
+            <div class="v28m-title-sub">仅支持 PDF / Word · 老师主动上传后，AI 解析为题目并进入校对任务</div>
+          </div>
+          <button class="v28m-close" data-close aria-label="关闭"><i data-lucide="x"></i></button>
+        </div>
+        <div class="v28m-body v28-src-body">
+          <label class="record-upload-zone" id="record-upload-zone">
+            <span class="record-upload-icon"><i data-lucide="upload-cloud"></i></span>
+            <span class="record-upload-main">
+              <span class="record-upload-title">拖拽 PDF / Word 到这里，或选择本地文件</span>
+              <span class="record-upload-sub">支持 .pdf / .doc / .docx；上传后生成独立录题任务，需要老师校对后入题库。知识库文件会自动识别，无需在这里选择。</span>
+            </span>
+            <span class="record-upload-action">选择文件</span>
+            <input id="record-upload-input" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple hidden />
+          </label>
+          <div class="record-local-list" id="record-local-list"></div>
+        </div>
+        <div class="v28m-foot">
+          <span class="v28m-foot-meta" id="record-fallback-meta">请上传或拖入要解析的文件</span>
+          <button class="v28m-btn" data-close>取消</button>
+          <button class="v28m-btn primary" id="record-fallback-submit" disabled>
+            <i data-lucide="sparkles"></i><span>开始 AI 录题 (0)</span>
+          </button>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+      document.body.appendChild(dialog);
+
+      let canOverlayClose = false;
+      const close = () => { overlay.remove(); dialog.remove(); };
+      setTimeout(() => { canOverlayClose = true; }, 180);
+      overlay.addEventListener('click', event => {
+        if(!canOverlayClose || event.target !== overlay) return;
+        close();
+      });
+      dialog.addEventListener('click', event => event.stopPropagation());
+      dialog.querySelectorAll('[data-close]').forEach(btn => btn.addEventListener('click', event => {
+        event.stopPropagation();
+        close();
+      }));
+
+      const uploadZone = dialog.querySelector('#record-upload-zone');
+      const uploadInput = dialog.querySelector('#record-upload-input');
+      const localList = dialog.querySelector('#record-local-list');
+      const submit = dialog.querySelector('#record-fallback-submit');
+      const meta = dialog.querySelector('#record-fallback-meta');
+
+      function formatBytes(size){
+        if(!Number.isFinite(size)) return '';
+        if(size >= 1024 * 1024) return (size / 1024 / 1024).toFixed(size >= 10 * 1024 * 1024 ? 0 : 1) + ' MB';
+        if(size >= 1024) return Math.round(size / 1024) + ' KB';
+        return size + ' B';
+      }
+      function normalizeLocalFiles(fileList){
+        const files = Array.from(fileList || []);
+        let skipped = 0;
+        files.forEach(file => {
+          const ext = (file.name.split('.').pop() || '').toLowerCase();
+          if(!['pdf','doc','docx'].includes(ext)){
+            skipped += 1;
+            return;
+          }
+          const dup = localUploads.some(item => item.name === file.name && item.rawSize === file.size);
+          if(dup) return;
+          const item = {
+            id: 'local-' + Date.now().toString(36) + '-' + Math.random().toString(36).slice(2, 7),
+            name: file.name,
+            type: ext === 'pdf' ? 'pdf' : 'docx',
+            size: formatBytes(file.size),
+            rawSize: file.size,
+            kbLabel: '本地上传',
+            group: '本地上传',
+            isLocal: true
+          };
+          localUploads.push(item);
+          selected.add(item.id);
+        });
+        if(skipped) showToast(`已忽略 ${skipped} 个非 PDF / Word 文件`);
+        renderLocalUploads();
+        syncFooter();
+      }
+      function renderLocalUploads(){
+        if(!localUploads.length){
+          localList.innerHTML = '';
+          return;
+        }
+        localList.innerHTML = localUploads.map(file => `
+          <div class="record-local-item" data-local-id="${file.id}">
+            <i data-lucide="${file.type === 'pdf' ? 'file-text' : 'file'}"></i>
+            <span class="record-local-name" title="${escHtml(file.name)}">${escHtml(file.name)}</span>
+            <span class="record-local-size">${escHtml(file.size)}</span>
+            <button class="record-local-remove" type="button" data-remove-local="${file.id}" title="移除">
+              <i data-lucide="x"></i>
+            </button>
+          </div>
+        `).join('');
+        if(window.lucide) lucide.createIcons();
+      }
+      function syncFooter(){
+        const n = selected.size;
+        meta.textContent = n ? `已选 ${n} 个文件 · 提交后每个文件生成 1 个独立任务` : '请上传或拖入要解析的文件';
+        submit.disabled = n === 0;
+        submit.querySelector('span').textContent = `开始 AI 录题 (${n})`;
+      }
+      localList.addEventListener('click', event => {
+        const removeBtn = event.target.closest('[data-remove-local]');
+        if(!removeBtn) return;
+        const id = removeBtn.dataset.removeLocal;
+        const idx = localUploads.findIndex(file => file.id === id);
+        if(idx >= 0) localUploads.splice(idx, 1);
+        selected.delete(id);
+        renderLocalUploads();
+        syncFooter();
+      });
+      uploadZone.addEventListener('dragover', event => {
+        event.preventDefault();
+        uploadZone.classList.add('is-dragover');
+      });
+      uploadZone.addEventListener('dragleave', () => {
+        uploadZone.classList.remove('is-dragover');
+      });
+      uploadZone.addEventListener('drop', event => {
+        event.preventDefault();
+        uploadZone.classList.remove('is-dragover');
+        normalizeLocalFiles(event.dataTransfer && event.dataTransfer.files);
+      });
+      uploadInput.addEventListener('change', () => {
+        normalizeLocalFiles(uploadInput.files);
+        uploadInput.value = '';
+      });
+      submit.addEventListener('click', () => {
+        const files = localUploads.filter(file => selected.has(file.id));
+        if(!files.length) return;
+        const jobs = createLocalJobs(files);
+        close();
+        if(typeof opts.onSubmit === 'function') opts.onSubmit(jobs);
+        renderList();
+      });
+
+      renderLocalUploads();
+      syncFooter();
+      if(window.lucide) lucide.createIcons();
     }
 
     /* —— 主入口：打开 V28RecordDialog —— */
     function openRecordDialog(opts){
-      if(!window.V28RecordDialog){ showToast('AI 录题模块加载失败'); return; }
-      V28RecordDialog.open({
+      const payload = {
         preselectFileIds: opts && opts.preselectFileIds,
         onSubmit: (jobs) => {
           if(jobs && jobs.length){
@@ -674,15 +994,18 @@
             if(first) first.scrollIntoView({ behavior:'smooth', block:'center' });
           });
         }
-      });
+      };
+      /* 校园版使用内置新建流程: + AI 录题 → 选择文件 → 开始解析 → 任务进度 */
+      openRecordFallback(payload);
     }
 
     /* —— 事件绑定 —— */
     if(recordBtn){
-      recordBtn.addEventListener('click', () => openRecordDialog());
-    }
-    if(kbSel){
-      kbSel.addEventListener('change', e => { filterKb = e.target.value; renderList(); });
+      recordBtn.addEventListener('click', event => {
+        event.preventDefault();
+        event.stopPropagation();
+        openRecordDialog();
+      });
     }
     if(stateSel){
       stateSel.addEventListener('change', e => { filterState = e.target.value; renderList(); });
@@ -693,11 +1016,10 @@
 
     /* —— 初始化 + 订阅状态变化 + 周期刷新（更新进度条/相对时间） —— */
     function init(){
-      rebuildKbFilter();
+      ensureLocalParsingTimers();
       renderList();
       if(window.V28RecordJobs && V28RecordJobs.subscribe){
         V28RecordJobs.subscribe(() => {
-          rebuildKbFilter();
           renderList();
         });
       }

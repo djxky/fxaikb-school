@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>飞象 AI · AI 题库</title>
+<title>飞象 AI · 题库</title>
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
   <link rel="stylesheet" href="assets/feixiang-shell.css" />
@@ -271,6 +271,19 @@
   }
   .qitem-src-line [data-lucide]{ width:12px;height:12px;color:#9A968F; }
   .qitem-src-line b{ color:#3A3A3A;font-weight:500; }
+  .qitem-source-badge{
+    display:inline-flex;
+    align-items:center;
+    height:18px;
+    padding:0 6px;
+    border-radius:4px;
+    font-size:10.5px;
+    font-weight:600;
+    line-height:1;
+  }
+  .qitem-source-badge.is-feixiang{ background:#FBF1D7;color:#8A6218; }
+  .qitem-source-badge.is-school{ background:#EEF3EC;color:#3F6B4F; }
+  .qitem-source-badge.is-personal{ background:#EEF2FA;color:#4D6794; }
   .qitem-head{ display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
   .qitem-tag{
     font-size:11px;
@@ -403,8 +416,8 @@
     <header class="page-header" data-page-header="ai-qbank">
       <div class="ph-left">
         <i class="ph-icon" data-lucide="help-circle"></i>
-        <h1 class="ph-title">AI 题库</h1>
-        <span class="ph-subtitle">学校知识库自动解析的题目，按知识点 / 难度筛选</span>
+        <h1 class="ph-title">题库</h1>
+        <span class="ph-subtitle">统一检索飞象题库、校本题库和个人题库，按知识点 / 难度筛选</span>
       </div>
       <div class="ph-right">
         <button class="ph-action is-meta" id="qbk-jobs-btn" data-doc="ai-record-jobs" title="查看 AI 录题任务进度">
@@ -439,12 +452,12 @@
             </select>
           </div>
           <div class="qbk-filter-item">
-            <span class="qbk-flabel">知识库</span>
+            <span class="qbk-flabel">来源</span>
             <select class="qbk-select">
-              <option>初中数学教研组</option>
-              <option>北京 101 中学</option>
-              <option>初二数学备课组</option>
-              <option>初三数学备课组</option>
+              <option>全部</option>
+              <option>飞象题库</option>
+              <option>校本题库</option>
+              <option>个人题库</option>
             </select>
           </div>
           <div class="qbk-fsearch">
@@ -475,7 +488,7 @@
             </div>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i>来自 <b>初中数学教研组 · 2024 杭州中考真题.pdf</b> · 第 17 题 · 引用 2</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-school">校本题库</span><b>知识库自动识别 · 初中数学教研组 · 2024 杭州中考真题.pdf</b> · 第 17 题 · 引用 2</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">选择题</span>
                 <span class="qitem-tag diff-mid">中等</span>
@@ -498,7 +511,7 @@
             </article>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i>来自 <b>初中数学教研组 · 二次函数图像与性质·教案.docx</b> · 第 9 页</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-feixiang">飞象题库</span><b>官方题目 · 中考数学精选题库 · 二次函数专题</b> · 第 9 题</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">解答题</span>
                 <span class="qitem-tag diff-hard">难</span>
@@ -515,7 +528,7 @@
             </article>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i>来自 <b>初中数学教研组 · 二次函数图像与性质·教案.docx</b> · 第 11 页</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-personal">个人题库</span><b>AI 录题入库 · 二次函数图像与性质·教案.docx</b> · 第 11 页</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">应用题</span>
                 <span class="qitem-tag diff-mid">中等</span>
@@ -552,7 +565,7 @@
 <div id="toast"></div>
 
 <script src="assets/feixiang-shell.js"></script>
-<script>renderFeixiangSidebar('');</script>
+<script>renderFeixiangSidebar('apps');</script>
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
 <script src="assets/shared/v28-modals.js?v=20260522a"></script>

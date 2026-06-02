@@ -298,7 +298,7 @@
         <div class="fx-notif-item" onclick="closeFxAll();window.location.href='ai-qbank.html'">
           <span class="fx-notif-dot read"></span>
           <div class="fx-notif-body">
-            <div class="fx-notif-title">AI 题库处理完成</div>
+            <div class="fx-notif-title">题库处理完成</div>
             <div class="fx-notif-desc">《函数单调性》资料已生成 24 道分层练习题</div>
             <div class="fx-notif-time">2 小时前</div>
           </div>
@@ -311,10 +311,10 @@
             <div class="fx-notif-time">今天 09:12</div>
           </div>
         </div>
-        <div class="fx-notif-item" style="opacity:.72" onclick="closeFxAll();window.location.href='ai-qbank.html'">
+        <div class="fx-notif-item" style="opacity:.72" onclick="closeFxAll();window.location.href='ai-record-jobs.html'">
           <span class="fx-notif-dot read"></span>
           <div class="fx-notif-body">
-            <div class="fx-notif-title">AI 录入已完成</div>
+            <div class="fx-notif-title">AI 录题已完成</div>
             <div class="fx-notif-desc">12 页手写题目已结构化录入到题库草稿</div>
             <div class="fx-notif-time">昨天 16:30</div>
           </div>
