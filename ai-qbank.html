@@ -55,64 +55,6 @@
     box-shadow:0 0 0 3px rgba(168,126,44,.08);
   }
   .qbk-fsearch [data-lucide]{ width:13px;height:13px;color:var(--text-3);flex-shrink:0; }
-  /* 顶部右侧维护入口 · 「📋 录题任务·N」（单按钮）
-   * 05 是"消费场所"（找题/选题/组题），不是"生产场所"（录题/校对），故合并双按钮、视觉弱化
-   * 点击跳 09-ai-record-jobs.html → 09 hero 区主按钮承接「+ AI 录题」创建动作
-   * badge 规则:待校对>0 显示数字 · 解析中>0 叠 mini spinner · 都为 0 时按钮保持低存在感
-   * 详见 AGENT-HANDOFF §55 */
-  .qbk-jobs-btn{
-    position:relative;
-    margin-left:auto;
-    display:inline-flex;
-    align-items:center;
-    gap:5px;
-    height:30px;
-    padding:0 12px;
-    border-radius:8px;
-    border:1px solid var(--border);
-    background:transparent;
-    color:var(--text-3);
-    font-size:12px;
-    font-weight:500;
-    cursor:pointer;
-    font-family:inherit;
-    transition:background .12s, border-color .12s, color .12s;
-  }
-  .qbk-jobs-btn:hover{ background:var(--surface-2); border-color:var(--border-2); color:var(--text); }
-  .qbk-jobs-btn [data-lucide]{ width:13px;height:13px; }
-  /* 有未处理任务时按钮微微提亮(让管理员意识到有事做) */
-  .qbk-jobs-btn[data-has-pending="true"]{
-    color:var(--gold-deep);
-    border-color:var(--gold-light);
-    background:var(--gold-soft);
-  }
-  .qbk-jobs-badge{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-width:18px;
-    height:16px;
-    padding:0 5px;
-    border-radius:8px;
-    background:var(--gold);
-    color:#FFFFFF;
-    font-size:10.5px;
-    font-weight:700;
-    font-variant-numeric:tabular-nums;
-    line-height:1;
-    margin-left:2px;
-  }
-  .qbk-jobs-btn[data-has-parsing="true"] .qbk-jobs-spinner{
-    display:inline-block;
-    width:10px;
-    height:10px;
-    border:1.5px solid rgba(168,126,44,.3);
-    border-top-color:#A87E2C;
-    border-radius:50%;
-    animation:qbk-jobs-spin .9s linear infinite;
-    margin-left:2px;
-  }
-  @keyframes qbk-jobs-spin{ to{ transform:rotate(360deg); } }
   .qbk-fsearch input{
     border:none;
     outline:none;
@@ -419,13 +361,6 @@
         <h1 class="ph-title">AI 题库</h1>
         <span class="ph-subtitle">统一检索飞象题库、校本题库和个人题库，AI 自动识别知识点与难度</span>
       </div>
-      <div class="ph-right">
-        <button class="ph-action is-meta" id="qbk-jobs-btn" data-doc="ai-record-jobs" title="查看 AI 录题任务进度">
-          <i data-lucide="sparkles"></i><span>AI 录题</span>
-          <b class="qbk-jobs-badge" id="qbk-jobs-badge" hidden>0</b>
-          <span class="qbk-jobs-spinner" aria-hidden="true"></span>
-        </button>
-      </div>
     </header>
 
     <div class="workspace-scroll">
@@ -599,19 +534,6 @@
       });
     }
 
-    /* AI 录题入口（详见 AGENT-HANDOFF §55）
-     * 05 不再放「+ AI 录题」主按钮（消费场所淡化生产入口）
-     * 单按钮「📋 录题任务·N」→ 跳 09-ai-record-jobs.html
-     * 09 hero 区有「+ AI 录题」承接创建动作
-     */
-    const jobsBtn = document.getElementById('qbk-jobs-btn');
-    if(jobsBtn){
-      jobsBtn.addEventListener('click', () => {
-        window.location.href = 'ai-record-jobs.html';
-      });
-    }
-    /* 进入页面立即同步 badge（跨页持久化的任务可能有未完成状态） */
-    if(window.V28RecordJobs) V28RecordJobs.syncTriggerBadge();
   })();
 </script>
 
