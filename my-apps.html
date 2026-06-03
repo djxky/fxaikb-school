@@ -445,6 +445,7 @@
     .app-meta-grid { grid-template-columns: 1fr; }
   }
 </style>
+<link rel="stylesheet" href="assets/review.css" />
 </head>
 <body data-page="my-apps">
 
@@ -931,5 +932,203 @@
   renderCards('all');
 </script>
 
+<template id="review-template">
+{
+  "title": "我的作品 · 老师自己的应用和资源",
+  "summary": "个人工作空间入口，重点看收藏、创建和最近使用的管理。",
+  "sections": [
+    {
+      "id": "my-apps-tabs",
+      "title": "1. 分类切换",
+      "body": "分类切换帮助老师在应用、资源等个人内容之间快速定位。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "分类切换帮助老师在应用、资源等个人内容之间快速定位。",
+            "老师管理自己创建、收藏或正在使用的应用和资源入口。",
+            "产品验收重点是老师是否知道“当前看到什么、下一步点哪里、点完以后发生什么”。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "路径 1",
+              "text": "触发：点击分类 tab；动作：按 type/source 过滤本地 mock 数据；反馈：内容网格刷新。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "分类切换只承担当前页面定义的列表展示职责，不额外扩展到完整后台管理或真实后端能力。",
+            "当前 demo 中未接真实服务的动作必须给出 toast、弹窗或跳转反馈，不能静默失败。"
+          ]
+        },
+        {
+          "title": "数据说明",
+          "items": [
+            "作品列表当前为静态 mock；正式版本按老师账号聚合。"
+          ]
+        },
+        {
+          "title": "异常场景",
+          "type": "table",
+          "columns": [
+            "场景",
+            "处理方式"
+          ],
+          "rows": [
+            {
+              "场景": "数据为空或 mock 未命中",
+              "处理方式": "列表为空时展示创建或去广场发现入口。"
+            },
+            {
+              "场景": "老师点击未接入真实后端的动作",
+              "处理方式": "保留当前页面状态，并用 toast 或演示弹窗说明动作已触发。"
+            },
+            {
+              "场景": "从其它页面带参数进入但参数缺失或非法",
+              "处理方式": "使用默认示例数据兜底，同时保证页面主操作仍可演示。"
+            }
+          ]
+        },
+        {
+          "title": "关联模块",
+          "type": "table",
+          "columns": [
+            "关联对象",
+            "说明"
+          ],
+          "rows": [
+            {
+              "关联对象": "全局校园版壳层",
+              "说明": "本节需与左侧导航、右下过稿切换、toast / 弹窗等共享能力保持一致。"
+            }
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "进入 my-apps.html 后，过稿模式中应能看到“分类切换”这一节，且展开后文字不为空。",
+            "按“交互流程”点击本节主要入口时，应出现对应跳转、弹窗、toast 或状态变化。",
+            "本节的空状态、禁用态或只读态应按“异常场景”处理，不应出现无反馈点击。",
+            "页面刷新后，静态 mock 或 localStorage 演示数据应能恢复到可继续演示的状态。"
+          ]
+        },
+        {
+          "type": "callout",
+          "text": "研发对齐点：分类切换的验收不只看页面是否显示，还要看触发条件、执行动作、结果反馈、数据兜底和跨页入口是否完整。"
+        }
+      ]
+    },
+    {
+      "id": "my-apps-grid",
+      "title": "2. 内容卡片",
+      "body": "卡片展示标题、来源、使用时间、浏览和收藏数据。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "卡片展示标题、来源、使用时间、浏览和收藏数据。",
+            "老师管理自己创建、收藏或正在使用的应用和资源入口。",
+            "产品验收重点是老师是否知道“当前看到什么、下一步点哪里、点完以后发生什么”。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "路径 1",
+              "text": "触发：点击卡片；动作：跳转应用或资源详情。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "内容卡片只承担当前页面定义的操作闭环职责，不额外扩展到完整后台管理或真实后端能力。",
+            "当前 demo 中未接真实服务的动作必须给出 toast、弹窗或跳转反馈，不能静默失败。"
+          ]
+        },
+        {
+          "title": "数据说明",
+          "items": [
+            "views/favorites 为演示数据，不作为真实统计。"
+          ]
+        },
+        {
+          "title": "异常场景",
+          "type": "table",
+          "columns": [
+            "场景",
+            "处理方式"
+          ],
+          "rows": [
+            {
+              "场景": "数据为空或 mock 未命中",
+              "处理方式": "列表为空时展示创建或去广场发现入口。"
+            },
+            {
+              "场景": "老师点击未接入真实后端的动作",
+              "处理方式": "保留当前页面状态，并用 toast 或演示弹窗说明动作已触发。"
+            },
+            {
+              "场景": "从其它页面带参数进入但参数缺失或非法",
+              "处理方式": "使用默认示例数据兜底，同时保证页面主操作仍可演示。"
+            }
+          ]
+        },
+        {
+          "title": "关联模块",
+          "type": "table",
+          "columns": [
+            "关联对象",
+            "说明"
+          ],
+          "rows": [
+            {
+              "关联对象": "全局校园版壳层",
+              "说明": "本节需与左侧导航、右下过稿切换、toast / 弹窗等共享能力保持一致。"
+            }
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "进入 my-apps.html 后，过稿模式中应能看到“内容卡片”这一节，且展开后文字不为空。",
+            "按“交互流程”点击本节主要入口时，应出现对应跳转、弹窗、toast 或状态变化。",
+            "本节的空状态、禁用态或只读态应按“异常场景”处理，不应出现无反馈点击。",
+            "页面刷新后，静态 mock 或 localStorage 演示数据应能恢复到可继续演示的状态。",
+            "涉及跨页跳转时，目标页面应存在且可打开，不能只停留在 toast 占位。"
+          ]
+        },
+        {
+          "type": "callout",
+          "text": "研发对齐点：内容卡片的验收不只看页面是否显示，还要看触发条件、执行动作、结果反馈、数据兜底和跨页入口是否完整。"
+        }
+      ]
+    }
+  ]
+}
+</template>
+<aside class="review-panel" id="review-panel" aria-label="产品稿"></aside>
+<script src="assets/review-content.js"></script>
+<script src="assets/review.js"></script>
+
+<!-- pin-comments: 多人评论 -->
+<script>
+  window.PIN_COMMENTS = {
+    url: 'https://dfiuujabnxacqqfclntz.supabase.co',
+    anonKey: 'sb_publishable_GoSMz1ffqZxAOOPtA6KQHA_Vj7gmUMJ',
+    projectKey: 'fxaikb',
+    pageKey: 'my-apps.html'
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./assets/shared/pin-comments.js"></script>
 </body>
 </html>

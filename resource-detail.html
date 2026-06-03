@@ -264,6 +264,7 @@
     .panel { border-left: 0; border-top: 1px solid var(--line); }
   }
 </style>
+<link rel="stylesheet" href="assets/review.css" />
 </head>
 <body>
 
@@ -422,5 +423,202 @@ function renderResource() {
 }
 renderResource();
 </script>
+<template id="review-template">
+{
+  "title": "资源详情 · 收藏、复制和基于资源对话",
+  "summary": "资源详情页，重点看收藏、复制改造和带入 AI 对话。",
+  "sections": [
+    {
+      "id": "resource-detail-main",
+      "title": "1. 资源说明",
+      "body": "展示资源标题、标签、作者、介绍和适用场景。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "展示资源标题、标签、作者、介绍和适用场景。",
+            "老师查看单个教学资源详情，并收藏、复制、下载或基于资源发起对话。",
+            "产品验收重点是老师是否知道“当前看到什么、下一步点哪里、点完以后发生什么”。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "路径 1",
+              "text": "触发：从资源广场点击资源卡片；动作：按资源 id 渲染详情 mock。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "资源说明只承担当前页面定义的列表展示职责，不额外扩展到完整后台管理或真实后端能力。",
+            "当前 demo 中未接真实服务的动作必须给出 toast、弹窗或跳转反馈，不能静默失败。"
+          ]
+        },
+        {
+          "title": "数据说明",
+          "items": [
+            "资源详情由 URL 参数和静态 mock 映射。"
+          ]
+        },
+        {
+          "title": "异常场景",
+          "type": "table",
+          "columns": [
+            "场景",
+            "处理方式"
+          ],
+          "rows": [
+            {
+              "场景": "数据为空或 mock 未命中",
+              "处理方式": "未知资源参数时使用默认资源详情。"
+            },
+            {
+              "场景": "老师点击未接入真实后端的动作",
+              "处理方式": "保留当前页面状态，并用 toast 或演示弹窗说明动作已触发。"
+            },
+            {
+              "场景": "从其它页面带参数进入但参数缺失或非法",
+              "处理方式": "使用默认示例数据兜底，同时保证页面主操作仍可演示。"
+            }
+          ]
+        },
+        {
+          "title": "关联模块",
+          "type": "table",
+          "columns": [
+            "关联对象",
+            "说明"
+          ],
+          "rows": [
+            {
+              "关联对象": "全局校园版壳层",
+              "说明": "本节需与左侧导航、右下过稿切换、toast / 弹窗等共享能力保持一致。"
+            }
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "进入 resource-detail.html 后，过稿模式中应能看到“资源说明”这一节，且展开后文字不为空。",
+            "按“交互流程”点击本节主要入口时，应出现对应跳转、弹窗、toast 或状态变化。",
+            "本节的空状态、禁用态或只读态应按“异常场景”处理，不应出现无反馈点击。",
+            "页面刷新后，静态 mock 或 localStorage 演示数据应能恢复到可继续演示的状态。"
+          ]
+        },
+        {
+          "type": "callout",
+          "text": "研发对齐点：资源说明的验收不只看页面是否显示，还要看触发条件、执行动作、结果反馈、数据兜底和跨页入口是否完整。"
+        }
+      ]
+    },
+    {
+      "id": "resource-detail-actions",
+      "title": "2. 收藏 / 复制改造 / 基于资源对话",
+      "body": "三个动作分别对应保存、二创和带入 AI 上下文。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "三个动作分别对应保存、二创和带入 AI 上下文。",
+            "老师查看单个教学资源详情，并收藏、复制、下载或基于资源发起对话。",
+            "产品验收重点是老师是否知道“当前看到什么、下一步点哪里、点完以后发生什么”。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "路径 1",
+              "text": "触发：点击底部或侧边动作按钮；动作：演示态 toast；真实上线分别写收藏、复制一份、跳 chat.html 并带 resource 参数；反馈：老师看到明确完成提示。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "收藏 / 复制改造 / 基于资源对话只承担当前页面定义的列表展示职责，不额外扩展到完整后台管理或真实后端能力。",
+            "当前 demo 中未接真实服务的动作必须给出 toast、弹窗或跳转反馈，不能静默失败。"
+          ]
+        },
+        {
+          "title": "数据说明",
+          "items": [
+            "资源详情由 URL 参数和静态 mock 映射。"
+          ]
+        },
+        {
+          "title": "异常场景",
+          "type": "table",
+          "columns": [
+            "场景",
+            "处理方式"
+          ],
+          "rows": [
+            {
+              "场景": "数据为空或 mock 未命中",
+              "处理方式": "未知资源参数时使用默认资源详情。"
+            },
+            {
+              "场景": "老师点击未接入真实后端的动作",
+              "处理方式": "保留当前页面状态，并用 toast 或演示弹窗说明动作已触发。"
+            },
+            {
+              "场景": "从其它页面带参数进入但参数缺失或非法",
+              "处理方式": "使用默认示例数据兜底，同时保证页面主操作仍可演示。"
+            }
+          ]
+        },
+        {
+          "title": "关联模块",
+          "type": "table",
+          "columns": [
+            "关联对象",
+            "说明"
+          ],
+          "rows": [
+            {
+              "关联对象": "chat.html",
+              "说明": "本节交互中会进入或依赖该页面，过稿时需一起检查入口是否通。"
+            }
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "进入 resource-detail.html 后，过稿模式中应能看到“收藏 / 复制改造 / 基于资源对话”这一节，且展开后文字不为空。",
+            "按“交互流程”点击本节主要入口时，应出现对应跳转、弹窗、toast 或状态变化。",
+            "本节的空状态、禁用态或只读态应按“异常场景”处理，不应出现无反馈点击。",
+            "页面刷新后，静态 mock 或 localStorage 演示数据应能恢复到可继续演示的状态。"
+          ]
+        },
+        {
+          "type": "callout",
+          "text": "研发对齐点：收藏 / 复制改造 / 基于资源对话的验收不只看页面是否显示，还要看触发条件、执行动作、结果反馈、数据兜底和跨页入口是否完整。"
+        }
+      ]
+    }
+  ]
+}
+</template>
+<aside class="review-panel" id="review-panel" aria-label="产品稿"></aside>
+<script src="assets/review-content.js"></script>
+<script src="assets/review.js"></script>
+
+<!-- pin-comments: 多人评论 -->
+<script>
+  window.PIN_COMMENTS = {
+    url: 'https://dfiuujabnxacqqfclntz.supabase.co',
+    anonKey: 'sb_publishable_GoSMz1ffqZxAOOPtA6KQHA_Vj7gmUMJ',
+    projectKey: 'fxaikb',
+    pageKey: 'resource-detail.html'
+  };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./assets/shared/pin-comments.js"></script>
 </body>
 </html>

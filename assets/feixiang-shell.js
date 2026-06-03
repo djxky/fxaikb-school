@@ -378,21 +378,52 @@
   /* 兜底：晚一拍再劫持一次，防止后加载的脚本又覆盖回去 */
   setTimeout(hijackOpenChat, 300);
 
+  /* ---- 自定义 Tooltip (仅在折叠态生效) ---- */
+  window.showFxTooltip = function(e) {
+    const container = document.getElementById('feixiang-sidebar');
+    if (!container || container.dataset.fxSidebar !== 'collapsed') return;
+    const target = e.currentTarget;
+    const text = target.dataset.tooltip;
+    if (!text) return;
+
+    let tip = document.getElementById('fx-tooltip');
+    if (!tip) {
+      tip = document.createElement('div');
+      tip.id = 'fx-tooltip';
+      tip.style.cssText = 'position:fixed;background:rgba(17,17,16,0.85);color:#fff;padding:6px 12px;border-radius:6px;font-size:12.5px;font-weight:500;pointer-events:none;z-index:100000;opacity:0;transition:opacity 0.15s, transform 0.15s;transform:translateX(4px);box-shadow:0 4px 12px rgba(0,0,0,0.1);white-space:nowrap;';
+      document.body.appendChild(tip);
+    }
+    const rect = target.getBoundingClientRect();
+    tip.textContent = text;
+    tip.style.top = (rect.top + rect.height / 2 - 14) + 'px';
+    tip.style.left = (rect.right + 12) + 'px';
+    tip.style.opacity = '1';
+    tip.style.transform = 'translateX(0)';
+  };
+  window.hideFxTooltip = function() {
+    const tip = document.getElementById('fx-tooltip');
+    if (tip) {
+      tip.style.opacity = '0';
+      tip.style.transform = 'translateX(4px)';
+    }
+  };
+
   function navItem({ key, icon, label, href, count, dot, primary, activeKey, onclick, parent, sub, parentActive, staticItem }) {
     const isActive = key === activeKey || parentActive;
-    const cls = ['fx-nav-btn', primary && 'primary', parent && 'parent', sub && 'sub', isActive && 'active']
-      .filter(Boolean).join(' ');
+    const cls = ['fx-nav-btn', primary && 'primary', parent && 'parent', sub && 'sub', isActive && 'active'].filter(Boolean).join(' ');
     const right = (count || dot)
       ? `<div class="fx-nav-right">${dot ? '<span class="fx-nav-dot"></span>' : ''}${count ? `<span class="fx-nav-count">${count}</span>` : ''}</div>`
       : '';
     const content = `${icon}<span class="fx-nav-label">${label}</span>${right}`;
+    const tipAttrs = `data-tooltip="${label}" onmouseenter="window.showFxTooltip && window.showFxTooltip(event)" onmouseleave="window.hideFxTooltip && window.hideFxTooltip()"`;
+    
     if (onclick) {
-      return `<a class="${cls}" data-fx-nav-key="${key}" onclick="${onclick}" style="cursor:pointer" title="${label}">${content}</a>`;
+      return `<a class="${cls}" data-fx-nav-key="${key}" onclick="${onclick}" style="cursor:pointer" ${tipAttrs}>${content}</a>`;
     }
     if (staticItem) {
-      return `<div class="${cls}" data-fx-nav-key="${key}" aria-current="${isActive ? 'true' : 'false'}">${content}</div>`;
+      return `<div class="${cls}" data-fx-nav-key="${key}" aria-current="${isActive ? 'true' : 'false'}" ${tipAttrs}>${content}</div>`;
     }
-    return `<a class="${cls}" data-fx-nav-key="${key}" href="${href}" title="${label}">${content}</a>`;
+    return `<a class="${cls}" data-fx-nav-key="${key}" href="${href}" ${tipAttrs}>${content}</a>`;
   }
 
   function getShellApp(container) {
@@ -462,7 +493,7 @@
             </div>
           </div>
         </a>
-        <button type="button" class="fx-sidebar-toggle" onclick="toggleFeixiangSidebar()" title="收起侧栏">
+        <button type="button" class="fx-sidebar-toggle" onclick="toggleFeixiangSidebar()" data-tooltip="展开/收起" onmouseenter="window.showFxTooltip(event)" onmouseleave="window.hideFxTooltip()">
           ${ICONS.panel}
         </button>
       </div>
@@ -493,7 +524,7 @@
 
       ${navItem({ key: 'notifications', icon: ICONS.bell, label: '通知', onclick: 'toggleFxNotif(event)', count: hasUnreadNotifs ? 3 : 0, dot: hasUnreadNotifs, activeKey })}
 
-      <button type="button" class="fx-user fx-user-btn" onclick="toggleFxUserMenu(event)" title="账号 / 切换工作空间">
+      <button type="button" class="fx-user fx-user-btn" onclick="toggleFxUserMenu(event)" data-tooltip="账号设置" onmouseenter="window.showFxTooltip(event)" onmouseleave="window.hideFxTooltip()">
         <div class="fx-avatar">张</div>
         <div style="flex:1;min-width:0;text-align:left">
           <div class="fx-user-name">张老师</div>

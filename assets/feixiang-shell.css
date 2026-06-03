@@ -114,6 +114,7 @@
 .fx-sidebar.is-collapsed .fx-nav-divider,
 .fx-sidebar.is-collapsed .fx-nav-label,
 .fx-sidebar.is-collapsed .fx-nav-right,
+.fx-sidebar.is-collapsed .fx-nav-section,
 .fx-sidebar.is-collapsed .fx-nav-sublist,
 .fx-sidebar.is-collapsed .fx-user-name,
 .fx-sidebar.is-collapsed .fx-user svg {
@@ -208,13 +209,31 @@
   font-weight: 500;
   margin-bottom: 4px;
   text-align: left;
+  transition: all 0.2s ease;
 }
 .fx-nav-btn:hover { background: rgba(0, 0, 0, 0.04); }
+.fx-nav-btn svg {
+  flex-shrink: 0;
+  transition: all 0.2s ease;
+}
 .fx-nav-btn.active {
   background: #fff;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   color: var(--fx-gold);
 }
+.fx-nav-btn.active svg {
+  stroke-width: 2.5;
+}
+
+/* 分组标题 */
+.fx-nav-section {
+  padding: 14px 12px 6px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--fx-faint);
+  letter-spacing: 0.5px;
+}
+
 .fx-nav-group {
   margin-bottom: 2px;
 }
@@ -268,12 +287,19 @@
 .fx-nav-btn.sub:hover {
   background: rgba(0, 0, 0, 0.04);
 }
+
+/* 主按钮质感升级 */
 .fx-nav-btn.primary {
-  background: var(--fx-ink);
+  background: linear-gradient(180deg, #32353a 0%, #1a1c1e 100%);
   color: #fff;
   margin-bottom: 24px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.08);
+  border: 1px solid #111;
 }
-.fx-nav-btn.primary:hover { background: #000; }
+.fx-nav-btn.primary:hover { 
+  background: linear-gradient(180deg, #3f4248 0%, #222427 100%);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+}
 
 .fx-nav-divider {
   height: 1px;
