@@ -11,8 +11,8 @@
  *      <script>renderFeixiangSidebar('my-wiki');</script>
  *
  *   activeKey 取值（决定哪个菜单项高亮）：
- *     'home' | 'chat' | 'chat-history' | 'my-wiki' | 'school-wiki'
- *     | 'apps' | 'resources' | 'class' | 'notifications'
+ *     'home' | 'chat' | 'chat-history' | 'my-apps' | 'my-wiki'
+ *     | 'school-wiki' | 'apps' | 'resources' | 'class' | 'notifications'
  */
 
 (function () {
@@ -378,9 +378,9 @@
   /* 兜底：晚一拍再劫持一次，防止后加载的脚本又覆盖回去 */
   setTimeout(hijackOpenChat, 300);
 
-  function navItem({ key, icon, label, href, count, dot, primary, activeKey, onclick }) {
-    const isActive = key === activeKey;
-    const cls = ['fx-nav-btn', primary && 'primary', isActive && 'active']
+  function navItem({ key, icon, label, href, count, dot, primary, activeKey, onclick, parent, sub, parentActive, staticItem }) {
+    const isActive = key === activeKey || parentActive;
+    const cls = ['fx-nav-btn', primary && 'primary', parent && 'parent', sub && 'sub', isActive && 'active']
       .filter(Boolean).join(' ');
     const right = (count || dot)
       ? `<div class="fx-nav-right">${dot ? '<span class="fx-nav-dot"></span>' : ''}${count ? `<span class="fx-nav-count">${count}</span>` : ''}</div>`
@@ -388,6 +388,9 @@
     const content = `${icon}<span class="fx-nav-label">${label}</span>${right}`;
     if (onclick) {
       return `<a class="${cls}" data-fx-nav-key="${key}" onclick="${onclick}" style="cursor:pointer" title="${label}">${content}</a>`;
+    }
+    if (staticItem) {
+      return `<div class="${cls}" data-fx-nav-key="${key}" aria-current="${isActive ? 'true' : 'false'}">${content}</div>`;
     }
     return `<a class="${cls}" data-fx-nav-key="${key}" href="${href}" title="${label}">${content}</a>`;
   }
@@ -467,17 +470,22 @@
       ${navItem({ key: 'chat', icon: ICONS.plus, label: '新对话', href: 'chat.html', primary: true, activeKey })}
       ${navItem({ key: 'chat-history', icon: ICONS.history, label: '历史对话', href: 'chat-history.html', count: 86, activeKey })}
 
-      <div class="fx-nav-title">我的</div>
-      ${navItem({ key: 'my-wiki', icon: ICONS.person, label: '我的知识库', href: 'my-wiki.html', count: 18, activeKey })}
-      ${navItem({ key: 'my-apps', icon: ICONS.apps, label: '我的空间', href: 'my-apps.html', activeKey })}
+      <div class="fx-nav-divider" aria-hidden="true"></div>
+      <div class="fx-nav-group ${activeKey === 'my-apps' || activeKey === 'my-wiki' ? 'active' : ''}">
+        ${navItem({ key: 'my-space', icon: ICONS.apps, label: '我的空间', activeKey, parent: true, parentActive: activeKey === 'my-apps' || activeKey === 'my-wiki', staticItem: true })}
+        <div class="fx-nav-sublist">
+          ${navItem({ key: 'my-apps', icon: ICONS.apps, label: '我的作品', href: 'my-apps.html', activeKey, sub: true })}
+          ${navItem({ key: 'my-wiki', icon: ICONS.person, label: '我的知识库', href: 'my-wiki.html', activeKey, sub: true })}
+        </div>
+      </div>
       ${navItem({ key: 'class', icon: ICONS.classes, label: '我的班级', onclick: "showToast('（演示）我的班级 · 高一(3) 高一(5) 高二(2)')", activeKey })}
 
-      <div class="fx-nav-title">学校</div>
+      <div class="fx-nav-divider" aria-hidden="true"></div>
       ${navItem({ key: 'school-wiki', icon: ICONS.school, label: '学校知识库', href: 'school-wiki.html', count: 348, dot: true, activeKey })}
       ${navItem({ key: 'apps', icon: ICONS.apps, label: '应用广场', href: 'app-square.html', activeKey })}
       ${navItem({ key: 'resources', icon: ICONS.resources, label: '资源广场', href: 'resource-square.html', activeKey })}
 
-      <div class="fx-nav-title">管理</div>
+      <div class="fx-nav-divider" aria-hidden="true"></div>
       ${navItem({ key: 'school-dashboard', icon: ICONS.dashboard, label: '学校看板', onclick: "showToast('（演示）学校看板')", activeKey })}
       ${navItem({ key: 'admin-teachers', icon: ICONS.shield, label: '学校管理', href: 'admin-teachers.html', activeKey })}
 

@@ -570,6 +570,7 @@
         const defaultByTitle = new Map(DEFAULT_APPS.map(app => [app.title, app]));
         const validTypes = new Set(['courseware', 'apps']);
         const validSources = new Set(['created', 'added', 'favorite']);
+        let shouldPersist = false;
         const apps = JSON.parse(stored)
           .filter(app => validTypes.has(app.type))
           .map(app => {
@@ -577,9 +578,14 @@
               ? { ...defaultByTitle.get(app.title), ...app }
               : app;
             if (defaultByTitle.get(app.title)?.source === 'favorite' && normalized.source === 'added') {
+              shouldPersist = true;
               return { ...normalized, source: 'favorite' };
             }
-            return validSources.has(normalized.source) ? normalized : { ...normalized, source: 'added' };
+            if (!validSources.has(normalized.source)) {
+              shouldPersist = true;
+              return { ...normalized, source: 'added' };
+            }
+            return normalized;
           });
         const existingTitles = new Set(apps.map(app => app.title));
         const missingDefaults = DEFAULT_APPS.filter(app => !existingTitles.has(app.title));
@@ -588,7 +594,9 @@
           localStorage.setItem('FEIXIANG_MY_SPACE', JSON.stringify(mergedApps));
           return mergedApps;
         }
-        localStorage.setItem('FEIXIANG_MY_SPACE', JSON.stringify(apps));
+        if (shouldPersist) {
+          localStorage.setItem('FEIXIANG_MY_SPACE', JSON.stringify(apps));
+        }
         return apps;
       } catch (e) {
         console.error('Failed to parse FEIXIANG_MY_SPACE', e);
@@ -654,6 +662,8 @@
     if (!isOpen) wrap.classList.add('open');
   }
 
+  let lastCardsRenderKey = '';
+
   function renderCards(filter = 'all') {
     const grid = document.getElementById('grid');
     const allApps = getStoredApps();
@@ -665,6 +675,14 @@
 
     const search = (document.getElementById('app-search-input')?.value || '').trim();
     if (search) list = list.filter(a => a.title.includes(search) || a.desc.includes(search));
+
+    const renderKey = JSON.stringify({
+      filter,
+      search,
+      items: list.map(app => [app.title, app.type, app.source, app.status, app.views, app.favorites])
+    });
+    if (renderKey === lastCardsRenderKey) return;
+    lastCardsRenderKey = renderKey;
 
     if (list.length === 0) {
       grid.innerHTML = `<div class="empty">
