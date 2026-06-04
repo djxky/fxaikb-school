@@ -302,12 +302,15 @@
   const APPS = [
     { id:'ai-qbank', title:'AI 题库', desc:'把知识库里的题目结构化展示，方便老师查看、筛选、组题与收藏。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'18.6w', favorites:942, icon:'file-stack', grad:4, cat:['official','subject'], url:'ai-qbank.html' },
     { id:'ai-record', title:'AI 录题', desc:'上传本地 PDF / Word 自动解析题目，老师校对后入题库。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'6.4w', favorites:420, icon:'scan-search', grad:6, cat:['official','tool'], url:'ai-record-jobs.html' },
-    { id:'exam', title:'AI 试卷分析专家', desc:'上传试卷图片，自动批改并生成班级得分率、易错题分析报告。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'12.5w', favorites:860, icon:'bar-chart-2', grad:1, cat:['official','tool'] },
+    { id:'ai-essay-star', title:'飞象 AI 作文星', desc:'作文批改、讲评和成长档案，沉淀学生写作过程。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'12.5w', favorites:860, icon:'file-text', grad:1, cat:['official','subject'], url:'app-detail.html?app=ai-essay-star' },
+    { id:'smart-homework', title:'飞象智慧作业', desc:'布置、批改和分析作业，生成班级掌握情况。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'9.7w', favorites:618, icon:'clipboard-list', grad:4, cat:['official','tool'], url:'app-detail.html?app=smart-homework' },
+    { id:'ai-compose', title:'AI 组题', desc:'按知识点、难度和题量生成题单，支持从题篮继续编辑。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'8.9w', favorites:345, icon:'file-stack', grad:6, cat:['official','subject'], url:'compose-sheet.html' },
+    { id:'mistake-diagnosis', title:'飞象错因诊断', desc:'归因学生错题和班级薄弱点，生成讲评建议。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'7.2w', favorites:512, icon:'bar-chart-2', grad:1, cat:['official','tool'], url:'app-detail.html?app=mistake-diagnosis' },
     { id:'classic-game', title:'文言文情景闯关 (H5)', desc:'将枯燥的文言文背诵转化为互动文字游戏，学生扫码即可在手机上游玩。', author:'李素芬', avatar:'李', avatarColor:'#81628f', badge:'本校', usage:'842', favorites:189, icon:'gamepad-2', grad:2, cat:['school','subject'] },
     { id:'notify', title:'家长会通知生成器', desc:'输入开会时间和重点，自动生成得体、专业的家长会邀请函及群通知。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'3.2w', favorites:276, icon:'mail', grad:3, cat:['global','tool'] },
-    { id:'lesson-plan', title:'智能教案排版', desc:'输入教学目标和知识点，一键生成符合学校标准格式的 Word 教案。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'8.9w', favorites:345, icon:'file-text', grad:4, cat:['official','tool'] },
+    { id:'lesson-plan', title:'智能教案排版', desc:'输入教学目标和知识点，一键生成符合学校标准格式的 Word 教案。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'8.9w', favorites:345, icon:'file-text', grad:4, cat:['global','tool'] },
     { id:'finance', title:'班费记账本 (Web App)', desc:'轻量级班费管理工具，支持扫码记账、自动生成月度收支图表。', author:'王建华', avatar:'王', avatarColor:'#4a755b', badge:'本校', usage:'156', favorites:31, icon:'pie-chart', grad:5, cat:['school','tool'] },
-    { id:'speaking', title:'英语口语对练 Agent', desc:'模拟真实对话场景，支持语音输入，自动纠正语法和发音错误。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'21.3w', favorites:1120, icon:'mic', grad:6, cat:['official','subject'] },
+    { id:'speaking', title:'英语口语对练 Agent', desc:'模拟真实对话场景，支持语音输入，自动纠正语法和发音错误。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'21.3w', favorites:1120, icon:'mic', grad:6, cat:['global','subject'] },
     { id:'sports-signup', title:'运动会报名收集', desc:'快速生成报名表单，自动校验每人限报项目数，一键导出 Excel。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'1.1w', favorites:203, icon:'clipboard-list', grad:7, cat:['global','tool'] },
     { id:'chemistry-lab', title:'化学实验模拟器', desc:'H5 互动小应用，拖拽烧杯和试剂，安全模拟危险化学反应现象。', author:'赵明杰', avatar:'赵', avatarColor:'#a8626c', badge:'本校', usage:'420', favorites:88, icon:'flask-conical', grad:8, cat:['school','subject'] }
   ];
@@ -435,7 +438,7 @@
         {
           "title": "业务规则",
           "items": [
-            "AI 题库、AI 录题等官方应用必须真实跳转，不能只 toast。"
+            "飞象官方应用固定为 AI 题库、AI 录题、飞象 AI 作文星、飞象智慧作业、AI 组题、飞象错因诊断；已接入真实页面的应用必须真实跳转，未接入页面的应用进入详情页承接。"
           ]
         },
         {

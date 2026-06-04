@@ -1203,6 +1203,13 @@
           <button class="intent-chip" data-chip="create" onclick="toggleCcChip('create')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> 创建应用
           </button>
+          <button class="intent-chip" data-capability="diagnosis" onclick="selectCcAiCapability('diagnosis')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/></svg> 错因诊断
+          </button>
+          <button class="intent-chip" data-capability="edu-app" onclick="selectCcAiCapability('edu-app')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> 教育应用
+            <span class="chip-beta">BETA</span>
+          </button>
         </div>
         <div class="composer-hint">飞象会基于你选的知识库回答，所有引用可点开查看原文</div>
       </div>
@@ -1667,6 +1674,13 @@ function renderCcMainIntentChips() {
     </button>
     <button class="intent-chip ${ccMode === 'create' ? 'active' : ''}" data-chip="create" onclick="toggleCcChip('create')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_CHIP_META.create.svg}</svg> 创建应用
+    </button>
+    <button class="intent-chip ${ccAiCapability === 'diagnosis' ? 'active' : ''}" data-capability="diagnosis" onclick="selectCcAiCapability('diagnosis')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_AI_CAPABILITIES.find(cap => cap.id === 'diagnosis').svg}</svg> 错因诊断
+    </button>
+    <button class="intent-chip ${ccAiCapability === 'edu-app' ? 'active' : ''}" data-capability="edu-app" onclick="selectCcAiCapability('edu-app')">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_AI_CAPABILITIES.find(cap => cap.id === 'edu-app').svg}</svg> 教育应用
+      <span class="chip-beta">BETA</span>
     </button>
   `;
 }

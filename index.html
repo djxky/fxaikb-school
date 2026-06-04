@@ -923,7 +923,7 @@ const COMMON_APP_LIMIT = 6;
 const COMMON_APPS = [
   { id: 'qbank', name: 'AI 题库', desc: '搜题、筛题、组题', source: 'mine', url: 'ai-qbank.html', color: 'gold', official: true, svg: '<path d="M16 2H8a2 2 0 0 0-2 2v12"/><path d="M18 6H10a2 2 0 0 0-2 2v12"/><path d="M12 10h8v12h-8z"/><path d="M15 14h2"/><path d="M15 18h2"/>' },
   { id: 'record', name: 'AI 录题', desc: '上传解析入库', source: 'mine', url: 'ai-record-jobs.html', color: 'rose', official: true, svg: '<path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11" cy="11" r="3"/><path d="m16 16-2.2-2.2"/>' },
-  { id: 'essay', name: '飞象作文', desc: '范文解析评点', source: 'mine', url: 'ai-review.html', color: 'green', official: true, svg: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4z"/>' },
+  { id: 'essay', name: '飞象 AI 作文星', desc: '作文批改讲评', source: 'mine', url: 'ai-review.html', color: 'green', official: true, svg: '<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4z"/>' },
   { id: 'notify', name: '班级通知', desc: '一键发送家长', source: 'mine', url: 'app-detail.html?app=notify', color: 'blue', svg: '<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>' },
   { id: 'schedule', name: '智能排课', desc: '查看本周课表', source: 'mine', url: 'app-detail.html?app=schedule', color: 'purple', svg: '<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>' },
   { id: 'leave', name: '请假审批', desc: '学生请假处理', source: 'mine', url: 'app-detail.html?app=leave', color: 'green', svg: '<path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M9 15l2 2 4-4"/>' },
@@ -1148,8 +1148,10 @@ const AI_CAPABILITIES = [
   { id: 'qbank', label: 'AI 组题', placeholder: '说清楚学科、知识点、难度和题量，比如：高一语文现代文阅读，5 道分层练习。', svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
   { id: 'interactive', label: '互动课件', placeholder: '描述课堂互动形式，比如：把《西游记》取经路线做成闯关互动课件。', svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/>' },
   { id: 'game', label: '教学游戏', placeholder: '描述知识点和玩法，比如：文言虚词配对小游戏，适合高一课堂 8 分钟。', svg: '<line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/>' },
+  { id: 'diagnosis', label: '错因诊断', placeholder: '上传错题图片，或描述这次作业的错误情况，我来归因并生成讲评建议。', svg: '<circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/>' },
   { id: 'layout', label: '精美排版', placeholder: '粘贴内容或上传资料，我来整理成讲义、课件页或课堂活动单。', svg: '<path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h16"/><path d="M16 10l2 2 4-4"/>' },
   { id: 'data', label: '数据回收', placeholder: '描述你要收集的数据，比如：班会签到、课堂投票、学生自评和统计表。', svg: '<path d="M3 3v18h18"/><path d="M7 15v2"/><path d="M12 9v8"/><path d="M17 12v5"/>' },
+  { id: 'edu-app', label: '教育应用', beta: true, placeholder: '描述你想做的教学应用，比如：古诗词背诵 Agent，能记录学生练习情况。', svg: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>' },
 ];
 const HOME_DEFAULT = '问点什么……';
 let activeChip = null;
@@ -1782,7 +1784,7 @@ renderCommonApps();
           "items": [
             {
               "label": "进入应用",
-              "text": "非编辑态点击应用，进入对应应用页面。AI 题库、AI 录题、飞象作文等官方应用必须真实进入对应页面；未接入真实页面的应用才允许 demo toast。"
+              "text": "非编辑态点击应用，进入对应应用页面。AI 题库、AI 录题、飞象 AI 作文星等官方应用必须真实进入对应页面；未接入真实页面的应用才允许 demo toast。"
             },
             {
               "label": "编辑模式",
