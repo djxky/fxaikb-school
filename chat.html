@@ -1203,13 +1203,6 @@
           <button class="intent-chip" data-chip="create" onclick="toggleCcChip('create')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> 创建应用
           </button>
-          <button class="intent-chip" data-capability="diagnosis" onclick="selectCcAiCapability('diagnosis')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/></svg> 错因诊断
-          </button>
-          <button class="intent-chip" data-capability="edu-app" onclick="selectCcAiCapability('edu-app')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg> 教育应用
-            <span class="chip-beta">BETA</span>
-          </button>
         </div>
         <div class="composer-hint">飞象会基于你选的知识库回答，所有引用可点开查看原文</div>
       </div>
@@ -1412,11 +1405,6 @@ let selectedKbIds = [];
 function applyKbState() {
   const row = document.getElementById('cc-kb-row');
   if (!row) return;
-  if (ccMode === 'create') {
-    row.innerHTML = '';
-    refreshComposerLayout();
-    return;
-  }
   const list = KB_REF_FOLDERS.filter(f => selectedKbIds.includes(f.id));
   if (list.length === 0) {
     row.innerHTML = '';
@@ -1490,12 +1478,11 @@ function closePlusPopHandler(e) {
 }
 
 function renderPlusMenu(pop) {
-  const kbDisabled = ccMode === 'create';
   const count = selectedKbIds.length;
-  const kbActiveClass = !kbDisabled && count > 0 ? 'is-active' : '';
-  const kbMetaContent = kbDisabled
-    ? '<span style="color:var(--muted);font-size:11px">不可用</span>'
-    : (count > 0 ? `<span>${count} 个已选</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>` : '');
+  const kbActiveClass = count > 0 ? 'is-active' : '';
+  const kbMetaContent = count > 0
+    ? `<span>${count} 个已选</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>`
+    : '';
   pop.innerHTML = `
     <button class="plus-row" onclick="event.stopPropagation();closePlusPop();showToast('（演示）打开文件选择器')">
       <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
@@ -1506,7 +1493,7 @@ function renderPlusMenu(pop) {
       <span class="row-label">拍照 / 扫描</span>
     </button>
     <div class="plus-divider"></div>
-    <button class="plus-row ${kbActiveClass}" ${kbDisabled ? 'disabled style="opacity:0.4;cursor:not-allowed"' : ''} onclick="event.stopPropagation();openKbSubmenu(event)">
+    <button class="plus-row ${kbActiveClass}" onclick="event.stopPropagation();openKbSubmenu(event)">
       <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       <span class="row-label">添加知识库</span>
       <span class="row-meta">${kbMetaContent}</span>
@@ -1517,7 +1504,6 @@ function renderPlusMenu(pop) {
 
 function openKbSubmenu(e) {
   e.stopPropagation();
-  if (ccMode === 'create') return;
   const main = document.getElementById('plus-pop');
   if (!main) return;
   document.getElementById('kb-submenu')?.remove();
@@ -1592,10 +1578,7 @@ const CC_AI_CAPABILITIES = [
   { id: 'qbank', label: 'AI 组题', placeholder: '说清楚学科、知识点、难度和题量，比如：高一语文现代文阅读，5 道分层练习。', svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
   { id: 'interactive', label: '互动课件', placeholder: '描述课堂互动形式，比如：把《西游记》取经路线做成闯关互动课件。', svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/>' },
   { id: 'game', label: '教学游戏', placeholder: '描述知识点和玩法，比如：文言虚词配对小游戏，适合高一课堂 8 分钟。', svg: '<line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/>' },
-  { id: 'diagnosis', label: '错因诊断', placeholder: '上传错题图片，或描述这次作业的错误情况，我来归因并生成讲评建议。', svg: '<circle cx="12" cy="12" r="3"/><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/>' },
-  { id: 'layout', label: '精美排版', placeholder: '粘贴内容或上传资料，我来整理成讲义、课件页或课堂活动单。', svg: '<path d="M4 6h16"/><path d="M4 12h10"/><path d="M4 18h16"/><path d="M16 10l2 2 4-4"/>' },
   { id: 'data', label: '数据回收', placeholder: '描述你要收集的数据，比如：班会签到、课堂投票、学生自评和统计表。', svg: '<path d="M3 3v18h18"/><path d="M7 15v2"/><path d="M12 9v8"/><path d="M17 12v5"/>' },
-  { id: 'edu-app', label: '教育应用', beta: true, placeholder: '描述你想做的教学应用，比如：古诗词背诵 Agent，能记录学生练习情况。', svg: '<rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/>' },
 ];
 const CC_DEFAULT_PLACEHOLDER = '继续对话…';
 const CC_EMPTY_PLACEHOLDER = '问点什么……';
@@ -1621,8 +1604,7 @@ let ccAiCapability = null;
 function setCcMode(kind) {
   ccMode = kind;
   ccAiCapability = null;
-  // 创建应用 → 强制清空 KB；知识库搜索 0 KB = 默认搜全部（隐式约定）
-  if (kind === 'create') selectedKbIds = [];
+  // 知识库搜索 0 KB = 默认搜全部；其他模式可继续携带已选知识库。
   renderCcIntentChips();
   refreshCcModeChip();
   syncCcPlaceholder();
@@ -1674,13 +1656,6 @@ function renderCcMainIntentChips() {
     </button>
     <button class="intent-chip ${ccMode === 'create' ? 'active' : ''}" data-chip="create" onclick="toggleCcChip('create')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_CHIP_META.create.svg}</svg> 创建应用
-    </button>
-    <button class="intent-chip ${ccAiCapability === 'diagnosis' ? 'active' : ''}" data-capability="diagnosis" onclick="selectCcAiCapability('diagnosis')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_AI_CAPABILITIES.find(cap => cap.id === 'diagnosis').svg}</svg> 错因诊断
-    </button>
-    <button class="intent-chip ${ccAiCapability === 'edu-app' ? 'active' : ''}" data-capability="edu-app" onclick="selectCcAiCapability('edu-app')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CC_AI_CAPABILITIES.find(cap => cap.id === 'edu-app').svg}</svg> 教育应用
-      <span class="chip-beta">BETA</span>
     </button>
   `;
 }
@@ -2272,7 +2247,7 @@ let lastUserText = '';
 function sendInChat() {
   const ta = $('#cc-input');
   let text = ta.value.trim();
-  if (!text) { showToast('先输入点什么'); return; }
+  if (!text) { showToast('请输入内容'); return; }
   if (ccMode && CC_CHIP_META[ccMode]) {
     const aiCap = ccMode === 'ai' && ccAiCapability
       ? CC_AI_CAPABILITIES.find(cap => cap.id === ccAiCapability)
@@ -2390,7 +2365,9 @@ init();
         {
           "title": "业务规则",
           "items": [
-            "创建应用模式不绑定知识库；搜索模式必须保留直接范围选择；未输入内容时发送按钮不可触发。",
+            "创建应用模式可以携带已选择的知识库；所选知识库作为应用创建时的参考资料，与创建应用模式同时生效。",
+            "知识库搜索模式必须保留直接范围选择；0 个知识库代表搜索全部知识库，不是未选择或异常状态。",
+            "输入框为空时，无论是否已选择 AI 生成、知识库搜索或创建应用模式，点击发送均不进入对话，统一 toast 提示“请输入内容”，已选模式和已选知识库保持不变。",
             "这里是最容易和首页漂移的地方，改动前后都要对照 index.html。"
           ]
         },
