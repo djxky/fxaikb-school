@@ -223,7 +223,6 @@
     font-weight:600;
     line-height:1;
   }
-  .qitem-source-badge.is-feixiang{ background:#FBF1D7;color:#8A6218; }
   .qitem-source-badge.is-school{ background:#EEF3EC;color:#3F6B4F; }
   .qitem-source-badge.is-personal{ background:#EEF2FA;color:#4D6794; }
   .qitem-head{ display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
@@ -360,7 +359,7 @@
       <div class="ph-left">
         <i class="ph-icon" data-lucide="help-circle"></i>
         <h1 class="ph-title">AI 题库</h1>
-        <span class="ph-subtitle">统一检索飞象题库、校本题库和个人题库，AI 自动识别知识点与难度</span>
+        <span class="ph-subtitle">将知识库里的题目结构化展示，方便老师查看、筛选、组题与收藏</span>
       </div>
     </header>
 
@@ -388,17 +387,16 @@
             </select>
           </div>
           <div class="qbk-filter-item">
-            <span class="qbk-flabel">来源</span>
+            <span class="qbk-flabel">题库</span>
             <select class="qbk-select">
               <option>全部</option>
-              <option>飞象题库</option>
-              <option>校本题库</option>
-              <option>个人题库</option>
+              <option>学校知识库</option>
+              <option>我的知识库</option>
             </select>
           </div>
           <div class="qbk-fsearch">
             <i data-lucide="search"></i>
-            <input type="text" placeholder="搜题干 / 知识点 / 来源…" />
+            <input type="text" placeholder="搜题干 / 知识点 / 文件…" />
           </div>
         </div>
 
@@ -424,7 +422,7 @@
             </div>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-school">校本题库</span><b>知识库自动识别 · 初中数学教研组 · 2024 杭州中考真题.pdf</b> · 第 17 题 · 引用 2</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-school">学校知识库</span><b>AI 自动识别 · 初中数学教研组 · 2024 杭州中考真题.pdf</b> · 第 17 题 · 引用 2</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">选择题</span>
                 <span class="qitem-tag diff-mid">中等</span>
@@ -447,7 +445,7 @@
             </article>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-feixiang">飞象题库</span><b>官方题目 · 中考数学精选题库 · 二次函数专题</b> · 第 9 题</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-school">学校知识库</span><b>AI 自动识别 · 初中数学教研组 · 二次函数图像与性质·教案.docx</b> · 第 9 页</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">解答题</span>
                 <span class="qitem-tag diff-hard">难</span>
@@ -464,7 +462,7 @@
             </article>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-personal">个人题库</span><b>AI 录题入库 · 二次函数图像与性质·教案.docx</b> · 第 11 页</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-personal">我的知识库</span><b>AI 录题入库 · 二次函数图像与性质·教案.docx</b> · 第 11 页</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">应用题</span>
                 <span class="qitem-tag diff-mid">中等</span>
@@ -552,18 +550,18 @@
 <template id="review-template">
 {
   "title": "AI 题库 · 搜题、筛题、组题",
-  "summary": "题库消费页，重点看筛题、选题、题目篮和组题链路。",
+  "summary": "知识库题目结构化展示页，重点看筛题、选题、题目篮和组题链路。",
   "sections": [
     {
       "id": "qbank-filter",
       "title": "1. 筛选区",
-      "body": "筛选区通过题型、难度、知识库和搜索条件限定题目列表。",
+      "body": "筛选区通过题型、难度、题库范围和搜索条件限定题目列表。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "筛选区通过题型、难度、知识库和搜索条件限定题目列表。",
-            "老师查找题目、筛选题目、加入题目篮，并进入组题编辑。",
+            "筛选区通过题型、难度、题库范围和搜索条件限定题目列表。",
+            "老师查看知识库中被 AI 结构化出来的题目，筛选题目、加入题目篮，并进入组题编辑。",
             "产品验收重点是老师是否知道“当前看到什么、下一步点哪里、点完以后发生什么”。"
           ]
         },
@@ -586,7 +584,7 @@
         {
           "title": "数据说明",
           "items": [
-            "题库来源包含飞象题库、校本题库、个人题库。"
+            "老师前台只浏览学校知识库和我的知识库中已结构化的题目；外部官方题源不在本页开放浏览。"
           ]
         },
         {
