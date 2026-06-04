@@ -65,6 +65,19 @@
       font-weight: 700;
     }
 
+    .brand-copy {
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      line-height: 1.25;
+    }
+
+    .brand-title {
+      display: block;
+      font-size: 15px;
+      line-height: 1.25;
+    }
+
     .logo {
       width: 34px;
       height: 34px;
@@ -83,6 +96,15 @@
       font-size: 12px;
       font-weight: 600;
       line-height: 1.2;
+    }
+
+    .ai-note {
+      display: block;
+      margin-top: 3px;
+      color: var(--faint);
+      font-size: 11px;
+      font-weight: 500;
+      line-height: 1.25;
     }
 
     .nav {
@@ -483,7 +505,10 @@
 
     @media (max-width: 620px) {
       .topbar { padding-inline: 16px; }
-      .brand span { max-width: 220px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .brand-copy { max-width: 240px; }
+      .brand-title,
+      .brand small,
+      .ai-note { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
       .hero-actions { flex-direction: column; align-items: stretch; }
       .button { width: 100%; }
       .system-map {
@@ -510,7 +535,11 @@
     <header class="topbar">
       <a class="brand" href="index.html" aria-label="返回飞象老师校园版首页">
         <span class="logo">飞</span>
-        <span>飞象老师校园版<small>让学校的 AI 能力进入每位老师的日常工作</small></span>
+        <span class="brand-copy">
+          <span class="brand-title">飞象老师校园版</span>
+          <small>让学校的 AI 能力进入每位老师的日常工作</small>
+          <span class="ai-note">本页面内容由 AI 总结理解后生成，供大家参考</span>
+        </span>
       </a>
       <nav class="nav" aria-label="页面导航">
         <a href="#why">为什么做</a>
@@ -526,7 +555,7 @@
           <div class="eyebrow">Feixiang Teacher School Edition</div>
           <h1 id="hero-title">把飞象老师带进学校，成为每位老师身边的 AI 工作台。</h1>
           <p class="hero-copy">
-            过去一年，飞象老师在教师群体中形成了真实影响力。很多老师、学校和局端，也正是通过飞象老师认识了飞象。飞象不只是一款工具，而是一家长期深耕教育 AI 的教育科技与教育 Agent 公司。飞象老师校园版，是我们把过往的 AI 教育能力、学校资源沉淀和教师日常工作连接起来的一次系统升级。
+            过去一年，飞象老师在教师群体中形成了真实影响力。很多老师、学校和局端，也正是通过飞象老师认识了飞象。飞象不只是一款工具，而是一家长期深耕教育 AI 的教育科技与教育 Agent 公司。飞象老师校园版，是我们把过往的 AI 教育能力、学校资源沉淀、教师日常工作和学校数字资产连接起来的一次系统升级。
           </p>
           <div class="hero-actions">
             <a class="button primary" href="#modules">了解校园版能力</a>
@@ -538,7 +567,7 @@
           <div class="orbit"></div>
           <div class="core">
             <h2 class="core-title">学校 AI 工作系统</h2>
-            <p>以对话为入口，以学校知识库为上下文，以应用和资源为执行与流转载体，让老师的每次工作都能被 AI 理解、复用和沉淀。</p>
+            <p>飞象老师校园版是学校 AI 操作系统：以对话为入口，以学校知识库为上下文，以官方应用和校本应用为执行载体，把老师和学校的工作持续沉淀下来。</p>
           </div>
           <div class="node"><b>AI 工作台</b><span>对话生成、资料搜索、内容创作的统一入口</span></div>
           <div class="node"><b>学校知识库</b><span>把网盘、U 盘和资料库整理成可检索的 AI Wiki</span></div>
@@ -567,7 +596,7 @@
             <article class="story-item">
               <div class="num">03</div>
               <h3>AI 需要学校上下文</h3>
-              <p>当 AI 能理解学校资料、老师使用习惯和真实教学任务，它才会从通用助手变成学校自己的教育 Agent。</p>
+              <p>当 AI 能理解本地文件、平台生成内容、应用数据、学校资料和真实教学任务，它才会从通用助手变成学校自己的教育 Agent。</p>
             </article>
           </div>
         </div>
@@ -636,7 +665,7 @@
         <div class="section-inner">
           <div class="section-head">
             <h2>校园版的关键，是让数据和内容形成正循环。</h2>
-            <p>老师上传的资料、生成的内容、使用的应用和二次加工的资源，最终都会成为 AI 理解老师和学校的上下文。</p>
+            <p>老师在平台生成的内容、在应用中产生的数据、上传或整理的本地文件、二次加工的资源，最终都会成为学校的数字资产，并提供给 AI 作为理解老师和学校的上下文。</p>
           </div>
 
           <div class="principles">
@@ -646,17 +675,17 @@
                 <p>参考 LLM Wiki 的思路，校园版希望把学校知识整理成可读、可查、可引用、可追溯、可持续更新的结构。AI 不只回答问题，还帮助学校把散落的经验组织起来。</p>
               </div>
               <div class="loop" aria-label="数据飞轮">
-                <div><b>上传</b>课件、教案、题库、教研资料进入知识库</div>
-                <div><b>理解</b>AI 自动整理主题、词条、来源和关系</div>
-                <div><b>使用</b>老师在工作台、应用和资源中调用它</div>
-                <div><b>沉淀</b>新内容和使用反馈继续反哺 AI</div>
+                <div><b>汇聚</b>本地文件、课件、教案、题库和教研资料进入知识库</div>
+                <div><b>理解</b>AI 自动整理主题、词条、来源、关系和可复用内容</div>
+                <div><b>使用</b>老师在工作台、应用和资源中调用并产生新数据</div>
+                <div><b>沉淀</b>内容、数据和反馈成为学校数字资产，继续反哺 AI</div>
               </div>
             </article>
 
             <article class="principle">
               <h3>校园版真正改变的是老师的日常工作密度。</h3>
               <p>过去，老师需要先找资料、改格式、拼内容、反复调整。校园版希望让这些工作被 AI 串起来：资料自动被找到，内容基于学校上下文生成，优秀产物可以继续复用，新的需求也能被快速做成应用。</p>
-              <p style="margin-top: 16px;">当老师每一次工作都能留下结构化沉淀，AI 就会越来越懂这所学校、这个学科、这个年级和这位老师。</p>
+              <p style="margin-top: 16px;">当老师每一次工作都能留下结构化沉淀，平台中的内容、应用数据和本地文件就会逐步形成学校自己的数字资产。AI 也会越来越懂这所学校、这个学科、这个年级和这位老师。</p>
             </article>
           </div>
         </div>
@@ -667,7 +696,7 @@
           <div class="closing-panel">
             <div>
               <h2>飞象老师校园版，是学校进入 AI 时代的教师工作入口。</h2>
-              <p>它从老师已经熟悉的飞象老师出发，把对话生成、知识库、应用和资源连接成一个完整系统。目标不是让老师多学一个平台，而是让老师原本每天都要做的工作，更快、更准、更可沉淀。</p>
+              <p>它从老师已经熟悉的飞象老师出发，把对话生成、知识库、应用、资源和学校数字资产连接成一个完整系统。目标不是让老师多学一个平台，而是让老师原本每天都要做的工作，更快、更准、更可沉淀，并持续为 AI 提供更懂学校的上下文。</p>
             </div>
             <div class="tag-cloud" aria-label="校园版关键词">
               <span>AI 工作台</span>
@@ -676,6 +705,7 @@
               <span>应用广场</span>
               <span>资源广场</span>
               <span>校本沉淀</span>
+              <span>数字资产</span>
               <span>教师 Agent</span>
               <span>数据飞轮</span>
             </div>
