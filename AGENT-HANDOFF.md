@@ -46,6 +46,7 @@
 - 【2026-06-03】过稿 panel 拖拽必须用 Pointer Events + `setPointerCapture`，不要只绑定 `mousedown/mousemove`；否则部分浏览器、触控板或触屏环境会出现“不能拖动”。
 - 【2026-06-03】产品稿文字要服务研发过稿，核心写交互和逻辑，不写成啰嗦 PRD，也不能把多步交互压成一条大 bullet。`review.js` 兼容两种结构：旧版 `flow/states/dataRules`；新版 `blocks`，可按“功能说明 / 交互流程 / 业务规则 / 数据说明 / 异常场景 / 关联模块”写清楚，支持列表、表格和 callout。首页已按新版 `blocks` 重写，作为后续逐页补稿标准。
 - 【2026-06-03】19 个最终 HTML 页面已按首页标准补齐结构化产品稿：每个 section 都写入 `blocks`，至少包含“功能说明 / 交互流程 / 业务规则 / 数据说明 / 异常场景 / 关联模块 / QA 检查点”。`assets/review-content.js` 与各页面内联 `review-template` 已同步，避免兜底数据和页面画板不一致。
+- 【2026-06-05】过稿 panel 的产品稿 section 默认全部折叠，不再自动展开 CORE 或第一部分内容；只有模板显式写 `expanded: true` 时才默认展开。
 
 ## 3. 反模式清单（不要走回头路）
 

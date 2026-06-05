@@ -107,6 +107,7 @@
   .center {
     display: flex; flex-direction: column;
     min-width: 0;
+    min-height: 0;
     background: var(--bg);
   }
 
@@ -154,8 +155,9 @@
   /* 消息流 */
   .messages {
     flex: 1;
+    min-height: 0;
     overflow-y: auto;
-    padding: 36px 28px 24px;
+    padding: 36px 28px 96px;
   }
   .msg-wrap { max-width: 760px; margin: 0 auto; display: flex; flex-direction: column; gap: 28px; }
 
@@ -259,6 +261,190 @@
   .msg-action.primary:hover { background: #000; }
   .msg-action [data-icon] { width: 13px; height: 13px; }
 
+  .result-card {
+    margin-top: 14px;
+    width: min(100%, 620px);
+    min-height: 116px;
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    background: var(--surface);
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1fr 172px;
+  }
+  .result-card-main {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .result-card-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 650;
+    color: var(--ink);
+  }
+  .result-card-title svg { width: 18px; height: 18px; color: var(--green); flex-shrink: 0; }
+  .result-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .result-card-chip {
+    height: 26px;
+    padding: 0 10px;
+    border-radius: 999px;
+    background: var(--green-soft);
+    color: var(--green);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-weight: 600;
+  }
+  .result-card-visual {
+    min-height: 116px;
+    background: linear-gradient(135deg, #f4f8ef 0%, #d9efd0 100%);
+    border-left: 1px solid var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .result-card-visual::before {
+    content: "";
+    position: absolute;
+    left: 22px;
+    top: 28px;
+    width: 128px;
+    height: 76px;
+    border-radius: 8px 8px 0 0;
+    background: #fff;
+    box-shadow: 0 10px 28px rgba(74,117,91,.16);
+  }
+  .result-card-visual::after {
+    content: "";
+    position: absolute;
+    left: 42px;
+    top: 54px;
+    width: 88px;
+    height: 38px;
+    border-radius: 3px;
+    background: linear-gradient(135deg, rgba(74,117,91,.18), rgba(168,216,143,.55));
+  }
+
+  .ai-search-panel {
+    margin-top: 14px;
+    width: min(100%, 660px);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: rgba(255,255,255,.78);
+    overflow: hidden;
+  }
+  .ai-search-head {
+    padding: 14px 16px 12px;
+    border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, #ffffff, #fbfaf7);
+  }
+  .ai-search-kicker {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 6px;
+  }
+  .ai-search-kicker svg { width: 14px; height: 14px; }
+  .ai-search-summary {
+    font-size: 13.5px;
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .ai-result-list {
+    padding: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .ai-result-item {
+    width: 100%;
+    text-align: left;
+    border: 1px solid transparent;
+    background: transparent;
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 12px;
+    cursor: pointer;
+  }
+  .ai-result-item:hover {
+    background: var(--surface);
+    border-color: var(--line);
+  }
+  .ai-result-item.is-video:hover { background: #fbfaf7; border-color: rgba(168,126,44,.18); }
+  .ai-result-item.is-image:hover { background: #f8fafc; border-color: rgba(83,117,158,.18); }
+  .ai-result-type-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    background: var(--side);
+    margin-top: 1px;
+  }
+  .ai-result-type-icon svg { width: 15px; height: 15px; }
+  .ai-result-type-icon.is-video { background: var(--gold-soft); color: var(--gold); }
+  .ai-result-type-icon.is-image { background: var(--blue-soft); color: var(--blue); }
+  .ai-result-title {
+    font-size: 13.5px;
+    line-height: 1.35;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 5px;
+  }
+  .ai-result-meta {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    font-size: 11.5px;
+    color: var(--faint);
+    margin-bottom: 5px;
+  }
+  .ai-result-source {
+    color: var(--green);
+    font-weight: 650;
+  }
+  .ai-result-snippet {
+    font-size: 12.5px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+  .ai-result-open {
+    align-self: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    background: var(--side);
+  }
+  .ai-result-item:hover .ai-result-open {
+    background: var(--green-soft);
+    color: var(--green);
+  }
+  .ai-search-foot {
+    padding: 9px 16px 12px;
+    font-size: 11.5px;
+    color: var(--faint);
+    border-top: 1px solid var(--line);
+  }
+
   /* 反馈条 */
   .msg-fb {
     display: flex; align-items: center; gap: 4px;
@@ -316,6 +502,12 @@
     row-gap: 8px;
     border-radius: 20px;
     align-items: end;
+  }
+  .composer-pill.ai-mode .input-wrap { align-items: flex-start; min-height: 48px; }
+  .composer-pill.ai-mode .input-wrap textarea {
+    min-height: 44px;
+    line-height: 22px;
+    font-size: 14px;
   }
   .composer-pill:focus-within { border-color: var(--gold); box-shadow: 0 8px 32px rgba(168,126,44,0.08); }
   
@@ -508,13 +700,6 @@
   .pill-mode .mode-x:hover { opacity: 1; background: rgba(255,255,255,.18); }
   .pill-mode .mode-x svg { width: 10px; height: 10px; }
 
-  .composer-hint {
-    text-align: center;
-    margin-top: 8px;
-    color: var(--faint);
-    font-size: 11px;
-  }
-
   /* ============= 新对话空状态（empty）· GPT 风格居中 ============= */
   /* 非空状态：empty hero / chips 隐藏（用 :not 提高特异性，覆盖 .intent-chips 的 display:flex） */
   .center:not([data-empty="1"]) .empty-hero,
@@ -539,8 +724,6 @@
   .center[data-empty="1"] .empty-chips { display: flex; }
   .center[data-empty="1"] .ctop-title,
   .center[data-empty="1"] .ctop-actions { display: none; }
-  .center[data-empty="1"] .composer-hint { margin-top: 14px; opacity: .8; }
-
   .empty-hero {
     flex-direction: column;
     align-items: center;
@@ -612,12 +795,25 @@
     min-width: 0;
   }
   .cv-top {
-    display: flex; align-items: center; gap: 6px;
-    padding: 10px 16px;
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 18px;
     border-bottom: 1px solid var(--line);
     background: var(--side);
   }
-  .cv-tabs { display: flex; gap: 2px; flex: 1; min-width: 0; }
+  .cv-title {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .cv-title svg { width: 20px; height: 20px; color: var(--green); flex-shrink: 0; }
+  .cv-title span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .cv-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+  .cv-tabs { display: flex; gap: 8px; margin-bottom: 12px; min-width: 0; }
   .cv-tab {
     padding: 6px 12px;
     border-radius: 8px;
@@ -635,8 +831,15 @@
   }
   .cv-tab [data-icon] { width: 13px; height: 13px; }
   .cv-action {
-    width: 28px; height: 28px; border-radius: 7px;
-    display: grid; place-items: center; color: var(--muted);
+    height: 30px;
+    padding: 0 10px;
+    border-radius: 7px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
     flex-shrink: 0;
   }
   .cv-action:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
@@ -805,7 +1008,7 @@
   .cv-body {
     flex: 1;
     overflow-y: auto;
-    padding: 16px;
+    padding: 16px 20px 20px;
   }
   .cv-pane { display: none; }
   .cv-pane.active { display: block; }
@@ -826,6 +1029,202 @@
   }
   .cv-empty-title { font-size: 13.5px; font-weight: 600; color: var(--ink); }
   .cv-empty-desc { font-size: 12.5px; max-width: 240px; line-height: 1.6; }
+
+  .doc-preview {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    min-height: calc(100vh - 116px);
+    padding: 44px 54px;
+    box-shadow: 0 14px 36px rgba(0,0,0,0.04);
+  }
+  .doc-preview h2 {
+    text-align: center;
+    margin: 0 0 24px;
+    font-size: 20px;
+    line-height: 1.35;
+  }
+  .doc-section-title {
+    font-weight: 700;
+    font-size: 15px;
+    margin: 18px 0 12px;
+  }
+  .doc-question {
+    margin: 12px 0 18px;
+    font-size: 14px;
+    line-height: 1.8;
+  }
+  .doc-source {
+    display: inline-block;
+    background: #fff3d9;
+    color: #9a681c;
+    border-radius: 6px;
+    padding: 3px 9px;
+    font-size: 12px;
+    font-weight: 650;
+    margin-bottom: 6px;
+  }
+  .doc-options {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 6px;
+  }
+  .doc-answer-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: #fbfaf8;
+    margin-bottom: 12px;
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  .html-preview-shell {
+    display: grid;
+    grid-template-columns: 132px 1fr;
+    gap: 20px;
+    height: calc(100vh - 108px);
+    min-height: 560px;
+  }
+  .html-thumbs {
+    overflow-y: auto;
+    padding-right: 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .html-thumb {
+    aspect-ratio: 16 / 10;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--surface);
+    padding: 9px;
+    position: relative;
+    cursor: pointer;
+  }
+  .html-thumb.active { border-color: var(--green); box-shadow: 0 0 0 2px rgba(74,117,91,.16); }
+  .html-thumb-title {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0f5f93;
+    line-height: 1.25;
+  }
+  .html-thumb-line {
+    height: 5px;
+    background: #d9eef8;
+    border-radius: 999px;
+    margin-top: 7px;
+  }
+  .html-thumb-badge {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    width: 18px;
+    height: 18px;
+    border-radius: 5px;
+    background: rgba(17,17,16,.58);
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .html-stage {
+    background: #f7faf8;
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 24px;
+    overflow: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .html-slide {
+    width: min(100%, 860px);
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    background: linear-gradient(150deg, #bfeeff, #e8f7ff 58%, #d8f1ff);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 44px rgba(83,117,158,.16);
+    padding: 64px 72px;
+  }
+  .html-slide h2 {
+    margin: 0;
+    text-align: center;
+    font-size: 38px;
+    color: #0f6598;
+    letter-spacing: 0;
+  }
+  .html-slide-sub {
+    margin: 26px auto 0;
+    width: fit-content;
+    padding: 10px 28px;
+    border-radius: 999px;
+    background: rgba(255,255,255,.72);
+    color: #1673ae;
+    font-weight: 650;
+  }
+  .cube-row {
+    display: flex;
+    justify-content: center;
+    gap: 116px;
+    margin-top: 78px;
+  }
+  .cube-card {
+    width: 96px;
+    height: 72px;
+    border: 2px solid rgba(255,255,255,.82);
+    background: rgba(72,181,229,.35);
+    transform: skewY(-10deg);
+    box-shadow: 28px -18px 0 rgba(72,181,229,.22);
+  }
+  .cube-card.rose {
+    background: rgba(231,123,142,.35);
+    box-shadow: 28px -18px 0 rgba(231,123,142,.22);
+  }
+  .play-demo {
+    position: absolute;
+    right: 28px;
+    bottom: 26px;
+    height: 40px;
+    padding: 0 18px;
+    border-radius: 10px;
+    background: #cdebcf;
+    color: #0f5132;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .app-preview .html-slide {
+    background: linear-gradient(145deg, #e8f5ec, #f7fbf7);
+  }
+  .app-preview .app-board {
+    margin-top: 48px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+  .app-preview .app-panel {
+    background: rgba(255,255,255,.78);
+    border: 1px solid rgba(74,117,91,.18);
+    border-radius: 12px;
+    padding: 18px;
+  }
+  .app-preview .app-panel-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--green);
+    margin-bottom: 12px;
+  }
+  .app-preview .app-line {
+    height: 11px;
+    border-radius: 999px;
+    background: #dfece4;
+    margin-top: 10px;
+  }
 
   /* ---- Canvas: 课件预览 ---- */
   .slides-stage {
@@ -1114,7 +1513,7 @@
   }
 
   @media (max-width: 1280px) {
-    .app { grid-template-columns: 220px minmax(0,1fr) 340px; }
+    .app { grid-template-columns: 220px minmax(0,1fr) minmax(0,1fr); }
   }
   @media (max-width: 1080px) {
     .app { grid-template-columns: 56px minmax(0,1fr) 0; }
@@ -1171,7 +1570,7 @@
     <div class="composer-zone">
       <div class="composer-wrap">
         <div class="empty-hero" id="ch-empty-hero">
-          <div class="hero-title">老师好，今天想做点什么？</div>
+          <div class="hero-title">下午好，张老师</div>
         </div>
         <div class="composer-pill" id="cc-composer">
           <button class="pill-icon pill-plus" id="cc-plus-btn" type="button" title="添加附件 / 添加知识库" onclick="togglePlusMenu(event)">
@@ -1204,7 +1603,6 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> 创建应用
           </button>
         </div>
-        <div class="composer-hint">飞象会基于你选的知识库回答，所有引用可点开查看原文</div>
       </div>
     </div>
   </section>
@@ -1212,19 +1610,15 @@
   <!-- ====== 右 Canvas ====== -->
   <aside class="canvas" id="canvas">
     <div class="cv-top">
-      <div class="cv-tabs" id="cv-tabs">
-        <!-- tabs 由 JS 按场景动态生成 -->
+      <div class="cv-title" id="cv-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+        <span>成果预览</span>
       </div>
-      <button class="cv-save-btn" id="cv-save-btn" onclick="toggleSavePop(event)" title="把这份成果存进我的知识库，下次复用">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
-        <span>保存到我的知识库</span>
-      </button>
-      <button class="cv-action" onclick="showToast('（演示）下载到本地')" title="下载">
-        <svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-      </button>
-      <button class="cv-action" onclick="showToast('（演示）全屏预览')" title="全屏">
-        <svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>
-      </button>
+      <div class="cv-actions" id="cv-actions">
+        <button class="cv-action" onclick="toggleCanvas()" title="关闭 Canvas">
+          <svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
     </div>
     <div class="cv-body" id="cv-body">
       <div class="cv-empty">
@@ -1431,6 +1825,7 @@ function refreshComposerLayout() {
   const hasMode = mode && mode.style.display !== 'none' && mode.innerHTML.trim() !== '';
   const hasKb = kbRow && kbRow.children.length > 0;
   composer.classList.toggle('has-chips', !!(hasMode || hasKb));
+  composer.classList.toggle('ai-mode', ccMode === 'ai');
 }
 
 function removeKb(id) {
@@ -1569,25 +1964,30 @@ function clearAllKb() {
 
 /* ==================== composer mode chip（前置 GPT 风格） ==================== */
 const CC_CHIP_META = {
-  ai:     { label: 'AI 生成', placeholder: '想做什么？比如：备《荷塘月色》课件、出 5 道分层练习……', svg: '<path d="M12 2L9 9l-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/>' },
-  search: { label: '知识库搜索', placeholder: '想找点什么？比如：朱自清散文鉴赏方法、月色描写手法', svg: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
+  ai:     { label: 'AI 生成', placeholder: '', svg: '<path d="M12 2L9 9l-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/>' },
+  search: { label: '知识库搜索', placeholder: '输入搜索内容', svg: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
   create: { label: '创建应用', placeholder: '描述你想要的应用，比如：班级请假审批小工具', svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>' },
 };
+const CC_AI_PLACEHOLDER_EXAMPLES = [
+  '互动课件｜帮我生成初英人教七下U1 Grammar Focus的互动课件，通过精简而高效的语言活动，帮助学生掌握并巩固与动物相关的词汇、句型及原因状语从句引导词because的用法。',
+  '教学游戏｜以《西游记》取经之路为故事线，生成六年级课内古诗词闯关游戏，让学生在游戏化体验中变“被动背诵”为“主动探究”。',
+  '教学动画｜设计初中数学勾股定理互动教学活动，引导学生主动探究，培养几何直观、逻辑推理能力。',
+  'AI 组题｜帮我生成一份北京朝阳区七年级上册数学期末考试模拟题',
+];
 const CC_AI_CAPABILITIES = [
-  { id: 'courseware', label: '课件生成', placeholder: '描述你要备的课，比如：《荷塘月色》第二课时，生成 12 页课件和课堂提问。', svg: '<path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/>' },
-  { id: 'qbank', label: 'AI 组题', placeholder: '说清楚学科、知识点、难度和题量，比如：高一语文现代文阅读，5 道分层练习。', svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
-  { id: 'interactive', label: '互动课件', placeholder: '描述课堂互动形式，比如：把《西游记》取经路线做成闯关互动课件。', svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/>' },
+  { id: 'qbank', label: 'AI 组题', placeholder: CC_AI_PLACEHOLDER_EXAMPLES[3], svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
+  { id: 'animation', label: '教学动画', placeholder: CC_AI_PLACEHOLDER_EXAMPLES[2], svg: '<path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/><path d="m5.6 5.6 2.8 2.8"/><path d="m15.6 15.6 2.8 2.8"/><path d="m18.4 5.6-2.8 2.8"/><path d="m8.4 15.6-2.8 2.8"/><circle cx="12" cy="12" r="3"/>' },
   { id: 'game', label: '教学游戏', placeholder: '描述知识点和玩法，比如：文言虚词配对小游戏，适合高一课堂 8 分钟。', svg: '<line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/>' },
+  { id: 'interactive', label: '互动课件', placeholder: CC_AI_PLACEHOLDER_EXAMPLES[0], svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/>' },
   { id: 'data', label: '数据回收', placeholder: '描述你要收集的数据，比如：班会签到、课堂投票、学生自评和统计表。', svg: '<path d="M3 3v18h18"/><path d="M7 15v2"/><path d="M12 9v8"/><path d="M17 12v5"/>' },
 ];
 const CC_DEFAULT_PLACEHOLDER = '继续对话…';
 const CC_EMPTY_PLACEHOLDER = '问点什么……';
+let ccAiPlaceholderIndex = 0;
+let ccAiPlaceholderTimer = null;
 
 function getCcPlaceholder() {
-  const aiCap = ccMode === 'ai' && ccAiCapability
-    ? CC_AI_CAPABILITIES.find(cap => cap.id === ccAiCapability)
-    : null;
-  if (aiCap) return aiCap.placeholder;
+  if (ccMode === 'ai') return CC_AI_PLACEHOLDER_EXAMPLES[ccAiPlaceholderIndex % CC_AI_PLACEHOLDER_EXAMPLES.length];
   if (ccMode && CC_CHIP_META[ccMode]) return CC_CHIP_META[ccMode].placeholder;
   const center = document.getElementById('ch-center');
   if (center && center.dataset.empty === '1') return CC_EMPTY_PLACEHOLDER;
@@ -1597,6 +1997,23 @@ function getCcPlaceholder() {
 function syncCcPlaceholder() {
   const ipt = $('#cc-input');
   if (ipt) ipt.placeholder = getCcPlaceholder();
+}
+function startCcAiPlaceholderCarousel() {
+  syncCcPlaceholder();
+  if (ccAiPlaceholderTimer) return;
+  ccAiPlaceholderTimer = setInterval(() => {
+    if (ccMode !== 'ai') {
+      stopCcAiPlaceholderCarousel();
+      return;
+    }
+    ccAiPlaceholderIndex = (ccAiPlaceholderIndex + 1) % CC_AI_PLACEHOLDER_EXAMPLES.length;
+    syncCcPlaceholder();
+  }, 3600);
+}
+function stopCcAiPlaceholderCarousel() {
+  if (!ccAiPlaceholderTimer) return;
+  clearInterval(ccAiPlaceholderTimer);
+  ccAiPlaceholderTimer = null;
 }
 
 let ccMode = null;
@@ -1632,6 +2049,8 @@ function refreshCcModeChip() {
       el.innerHTML = '';
     }
   }
+  if (ccMode === 'ai') startCcAiPlaceholderCarousel();
+  else stopCcAiPlaceholderCarousel();
   refreshComposerLayout();
 }
 function clearCcMode() { setCcMode(null); }
@@ -1735,7 +2154,16 @@ function toggleCcChip(kind) {
 /* ==================== Canvas tab 切换 ==================== */
 let canvasTabs = []; // { id, label, icon, render }
 let activeCv = null;
+let currentCanvasMeta = null;
 const savedCanvasTabs = new Set();
+const ICONS = {
+  file: '<svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>',
+  code: '<svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 18 6-6-6-6"/><path d="m8 6-6 6 6 6"/></svg>',
+  edit: '<svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>',
+  download: '<svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="M7 10l5 5 5-5"/><path d="M12 15V3"/></svg>',
+  expand: '<svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3M21 8V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3M16 21h3a2 2 0 0 0 2-2v-3"/></svg>',
+  close: '<svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg>',
+};
 function refreshSaveButtonState() {
   const btn = document.getElementById('cv-save-btn');
   if (!btn) return;
@@ -1750,8 +2178,43 @@ function refreshSaveButtonState() {
     <span>保存到我的知识库</span>
   `;
 }
+function setCanvasOpen(open) {
+  const app = $('#app');
+  if (!app) return;
+  app.dataset.canvas = open ? 'open' : 'closed';
+}
+function renderCvTop() {
+  const title = $('#cv-title');
+  const actions = $('#cv-actions');
+  const meta = currentCanvasMeta || { title: '成果预览', type: 'empty' };
+  if (title) {
+    const icon = meta.kind === 'html' || meta.kind === 'app' ? ICONS.code : ICONS.file;
+    title.innerHTML = `${icon}<span>${meta.title || '成果预览'}</span>`;
+  }
+  if (!actions) return;
+  if (!meta.kind || meta.kind === 'empty') {
+    actions.innerHTML = `
+      <button class="cv-action" onclick="toggleCanvas()" title="关闭 Canvas">${ICONS.close}</button>
+    `;
+    return;
+  }
+  const edit = `<button class="cv-action" onclick="showToast('（演示）打开编辑器')" title="编辑">${ICONS.edit}<span>编辑</span></button>`;
+  const download = `<button class="cv-action" onclick="showToast('（演示）下载到本地')" title="下载">${ICONS.download}<span>下载</span></button>`;
+  const fullscreen = `<button class="cv-action" onclick="showToast('（演示）全屏浏览')" title="全屏浏览">${ICONS.expand}<span>全屏浏览</span></button>`;
+  const link = `<button class="cv-action" onclick="showToast('（演示）打开原文链接')" title="打开原文">${ICONS.expand}<span>打开原文</span></button>`;
+  const save = `<button class="cv-save-btn" id="cv-save-btn" onclick="toggleSavePop(event)" title="把这份成果存进我的知识库，下次复用">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+    <span>保存到知识库</span>
+  </button>`;
+  const close = `<button class="cv-action" onclick="toggleCanvas()" title="关闭 Canvas">${ICONS.close}</button>`;
+  if (meta.kind === 'reference') actions.innerHTML = `${link}${download}${close}`;
+  else if (meta.kind === 'document') actions.innerHTML = `${edit}${download}${save}${close}`;
+  else actions.innerHTML = `${edit}${fullscreen}${download}${close}`;
+  refreshSaveButtonState();
+}
 function renderCvTabs() {
   const wrap = $('#cv-tabs');
+  if (!wrap) return;
   wrap.innerHTML = canvasTabs.map(t => `
     <button class="cv-tab ${t.id === activeCv ? 'active' : ''}" onclick="switchCv('${t.id}')">
       ${t.icon || ''}
@@ -1759,13 +2222,40 @@ function renderCvTabs() {
     </button>
   `).join('');
 }
+function renderActiveCvBody() {
+  const tab = canvasTabs.find(t => t.id === activeCv);
+  if (!tab) return;
+  const tabsMarkup = canvasTabs.length > 1 ? '<div class="cv-tabs" id="cv-tabs"></div>' : '';
+  $('#cv-body').innerHTML = tabsMarkup + `<div class="cv-rendered">${tab.render()}</div>`;
+  renderCvTabs();
+}
 function switchCv(id) {
   activeCv = id;
   const tab = canvasTabs.find(t => t.id === id);
   if (!tab) return;
-  renderCvTabs();
-  $('#cv-body').innerHTML = tab.render();
+  if (currentCanvasMeta && tab.title) currentCanvasMeta.title = tab.title;
+  renderActiveCvBody();
+  renderCvTop();
   refreshSaveButtonState();
+}
+function openCanvasForScript(script) {
+  if (!script.canvas || !script.canvas.length) {
+    canvasTabs = [];
+    activeCv = null;
+    currentCanvasMeta = { title: '成果预览', kind: 'empty' };
+    renderCvTop();
+    setCanvasOpen(false);
+    return;
+  }
+  currentCanvasMeta = {
+    title: script.canvasTitle || script.title || '成果预览',
+    kind: script.canvasKind || 'document',
+  };
+  canvasTabs = script.canvas.map(id => ({ id, ...CV_RENDERERS[id] })).filter(t => t.render);
+  activeCv = script.defaultCv || canvasTabs[0]?.id;
+  setCanvasOpen(true);
+  renderActiveCvBody();
+  renderCvTop();
 }
 
 /* ==================== 保存到知识库 · popover ==================== */
@@ -1995,38 +2485,96 @@ function typeText(el, html, done) {
   };
   step();
 }
+function appendResultCard(content, result) {
+  if (!result) return;
+  const card = document.createElement('div');
+  card.className = 'result-card';
+  card.innerHTML = `
+    <div class="result-card-main">
+      <div class="result-card-title">
+        ${result.type && result.type.includes('HTML') || result.type && result.type.includes('应用') ? ICONS.code : ICONS.file}
+        <span>${result.title}</span>
+      </div>
+      <div class="result-card-meta">
+        <span class="result-card-chip">${result.type}</span>
+        <span>${result.action}</span>
+      </div>
+    </div>
+    <div class="result-card-visual"></div>
+  `;
+  content.appendChild(card);
+}
 
 /* ==================== 演示脚本（按 q / intent 派发） ==================== */
 const SCRIPTS = {
-  hetang: {
-    title: '《荷塘月色》第二课时 · 12 页课件 + 5 道分层练习',
-    body: '好的。我从你校共建库挑了「荷塘月色」相关 <b>8 份资料</b>：'
-      + '<span class="cite-link" data-key="名家课件_朱自清.pptx · P3">朱自清生平与创作背景<sup class="cite-sup">[1]</sup></span>、'
-      + '<span class="cite-link" data-key="散文鉴赏方法.pdf · P12">通感、比喻与月色描写手法<sup class="cite-sup">[2]</sup></span>、'
-      + '<span class="cite-link" data-key="海淀语文模拟卷 · 散文阅读">高考散文阅读真题<sup class="cite-sup">[3]</sup></span>。'
-      + '已经为你生成<b>第二课时的 12 页课件</b>（导入 → 朱自清 → 通感修辞 → 月色画面 → 情感线 → 课堂活动 → 课后小结），'
-      + '并配套 <b>5 道 A/B/C 三档分层练习</b>，结合高一(5)班的散文阅读得分预设了难度——已经展示在右边 Canvas 里。',
+  qbank: {
+    title: 'AI 组题 · 七年级数学期末模拟题',
+    body: '已完成一套 <b>北京朝阳区七年级上册数学期末考试模拟题</b>，并同步生成答案解析和命题说明。右侧是文件型 Canvas，可以直接编辑、下载，或保存到知识库，方便下次复用。',
     cites: [
-      { n: 1, label: '名家课件_朱自清.pptx · P3' },
-      { n: 2, label: '散文鉴赏方法.pdf · P12' },
-      { n: 3, label: '海淀语文模拟卷 · 散文阅读' },
+      { n: 1, label: '七上数学期末复习讲义 · 数与式' },
+      { n: 2, label: '朝阳区近三年期末题型分布' },
+      { n: 3, label: '人教版七上教材 · 重点章节' },
     ],
+    result: { title: '北京朝阳区七年级上册数学期末考试模拟题.docx', type: '文件型成果', action: '编辑 / 下载 / 保存到知识库' },
     actions: [
-      { label: '查看 12 页课件', primary: true, icon: 'slides', onClick: "switchCv('slides')" },
-      { label: '查看 5 道练习', icon: 'quiz', onClick: "switchCv('quiz')" },
-      { label: '看学情联动', icon: 'chart', onClick: "switchCv('insight')" },
-      { label: '让 AI 调一下难度', icon: 'refresh', onClick: "showToast('（演示）AI 重新生成难度更高的 C 档题…')" },
+      { label: '查看试卷', primary: true, icon: 'quiz', onClick: "switchCv('paper')" },
+      { label: '查看答案解析', icon: 'slides', onClick: "switchCv('answer')" },
+      { label: '调高难度', icon: 'refresh', onClick: "showToast('（演示）AI 正在调高综合题比例…')" },
     ],
-    canvas: ['slides', 'quiz', 'insight'],
-    defaultCv: 'slides',
+    canvasKind: 'document',
+    canvasTitle: '北京朝阳区七年级上册数学期末考试模拟题.docx',
+    canvas: ['paper', 'answer', 'brief'],
+    defaultCv: 'paper',
+  },
+  htmlCourseware: {
+    title: '互动课件 · 长方体和正方体的认识',
+    body: '已生成一个 <b>HTML 互动课件</b>：包含封面、结构观察、棱顶点拖拽、高宽认知、课堂练习和小结。右侧是网页型 Canvas，可以编辑、全屏浏览和下载。',
+    cites: [
+      { n: 1, label: '人教版五年级下册数学 · 长方体和正方体' },
+      { n: 2, label: '五年级空间观念课堂活动库' },
+    ],
+    result: { title: '长方体和正方体的认识.html', type: 'HTML 互动内容', action: '编辑 / 全屏浏览 / 下载' },
+    actions: [
+      { label: '全屏浏览', primary: true, icon: 'slides', onClick: "showToast('（演示）全屏打开互动课件')" },
+      { label: '改成更适合导入课', icon: 'refresh', onClick: "showToast('（演示）AI 正在调整导入节奏…')" },
+    ],
+    canvasKind: 'html',
+    canvasTitle: '长方体和正方体的认识.html',
+    canvas: ['courseware'],
+    defaultCv: 'courseware',
+  },
+  appCreate: {
+    title: '创建应用 · 班级请假审批小工具',
+    body: '我已经按你的描述生成了一个 <b>班级请假审批小工具</b>：学生提交请假、班主任审批、自动汇总导出。右侧展示应用预览，当前操作以编辑、全屏浏览、下载为主。',
+    cites: [],
+    result: { title: '班级请假审批小工具.html', type: '应用型成果', action: '编辑 / 全屏浏览 / 下载' },
+    actions: [
+      { label: '预览应用', primary: true, icon: 'slides', onClick: "showToast('（演示）全屏预览应用')" },
+      { label: '增加审批字段', icon: 'refresh', onClick: "showToast('（演示）AI 正在增加年级组长审批字段…')" },
+    ],
+    canvasKind: 'app',
+    canvasTitle: '班级请假审批小工具.html',
+    canvas: ['app'],
+    defaultCv: 'app',
+  },
+  search: {
+    title: '知识库搜索 · 长方体课堂资料',
+    body: '我已在 <b>全部知识库</b> 里搜完，找到 8 个相关结果，包含文件、视频和图片。',
+    searchResults: true,
+    cites: [],
+    actions: [],
+    canvas: [],
+    defaultCv: null,
   },
   default: {
     title: '新对话',
-    body: '好的。基于你们组共建库（925 份资料）已经为你准备好了答案。如果需要进一步出题、备课件或看学情，可以告诉我。',
+    body: '收到。这个问题我可以先用纯对话回答；如果要生成文件、互动课件、教学动画或应用，我会在右侧打开 Canvas。为了演示，你可以直接点下面几种场景切换。',
     cites: [],
     actions: [
-      { label: '出一组练习', icon: 'quiz', onClick: "sendQuick('围绕本话题给八(3)班出 5 道 A/B/C 分层练习')" },
-      { label: '做成课件', icon: 'slides', onClick: "sendQuick('把刚才的内容整理成第二课时课件提纲')" },
+      { label: '演示 AI 组题', primary: true, icon: 'quiz', onClick: "sendQuick('帮我生成一份北京朝阳区七年级上册数学期末考试模拟题')" },
+      { label: '演示互动课件', icon: 'slides', onClick: "sendQuick('生成五年级长方体和正方体认识互动课件')" },
+      { label: '演示知识库搜索', icon: 'chart', onClick: "sendQuick('搜索长方体和正方体课堂资料')" },
+      { label: '演示创建应用', icon: 'refresh', onClick: "sendQuick('创建一个班级请假审批小工具')" },
     ],
     canvas: [],
     defaultCv: null,
@@ -2034,8 +2582,111 @@ const SCRIPTS = {
 };
 
 function pickScript(text) {
-  if (/荷塘月色|朱自清|散文/.test(text)) return 'hetang';
+  if (/知识库搜索|搜索|查找|资料/.test(text)) return 'search';
+  if (/创建应用|小工具|审批|应用/.test(text)) return 'appCreate';
+  if (/互动课件|教学动画|教学游戏|长方体|正方体|html/i.test(text)) return 'htmlCourseware';
+  if (/AI 组题|组题|试卷|模拟题|答案解析|期末/.test(text)) return 'qbank';
   return 'default';
+}
+
+const KB_SEARCH_RESULTS = [
+  {
+    title: '长方体和正方体知识梳理.docx',
+    source: '学校知识库',
+    type: '文件',
+    location: '学校知识库 / 数学组 / 五年级 / 图形与几何',
+    snippet: '长方体和正方体是小学阶段建立空间观念的核心内容，重点理解面、棱、顶点以及长宽高之间的关系。',
+  },
+  {
+    title: '五年级数学备课组 · 立体图形单元设计',
+    source: '学校知识库',
+    type: '文件',
+    location: '学校知识库 / 数学组 / 五年级 / 立体图形单元',
+    snippet: '通过观察长方体的面、棱、顶点，建立空间观念，并用实物纸盒完成结构标注活动。',
+  },
+  {
+    title: '长方体和正方体的认识 · 互动课件',
+    source: '学校知识库',
+    type: '文件',
+    location: '学校知识库 / 资源市场 / 小学数学 / 五年级下册',
+    snippet: '课件包含长方体、正方体特征对比，支持拖拽旋转观察面、棱、顶点之间的关系。',
+  },
+  {
+    title: '课堂活动：用纸盒认识长方体.mp4',
+    source: '我的知识库',
+    type: '视频',
+    location: '我的知识库 / 课堂活动 / 空间观念',
+    snippet: '学生通过摸、数、标记纸盒上的面和棱，先形成直观经验，再抽象出长方体特征。',
+  },
+  {
+    title: '期末易错题 · 棱长总和与表面积',
+    source: '学校知识库',
+    type: '文件',
+    location: '学校知识库 / 数学组 / 五年级 / 期末复习',
+    snippet: '围绕棱长总和、表面积单位换算和展开图判断整理了 12 道高频错题。',
+  },
+  {
+    title: '正方体展开图判断示意图.png',
+    source: '我的知识库',
+    type: '图片',
+    location: '我的知识库 / 图片素材 / 图形与几何',
+    snippet: '用 11 种正方体展开图分类讲解，帮助学生从“看图猜”转向“相对面判断”。',
+  },
+  {
+    title: '空间观念单元导图.jpg',
+    source: '学校知识库',
+    type: '图片',
+    location: '学校知识库 / 教研素材 / 数学核心素养',
+    snippet: '空间观念强调学生对图形位置、形状、大小及其相互关系的理解，是图形与几何学习的重要基础。',
+  },
+  {
+    title: '五下空间观念单元检测讲评',
+    source: '学校知识库',
+    type: '文件',
+    location: '学校知识库 / 数学组 / 单元检测 / 讲评资料',
+    snippet: '讲评重点集中在长宽高对应关系、单位换算、展开图与表面积综合题。',
+  },
+];
+
+function appendSearchResults(content) {
+  const panel = document.createElement('div');
+  panel.className = 'ai-search-panel';
+  const fileIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H7a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7z"/><path d="M14 2v5h5"/></svg>';
+  const videoIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m10 9 5 3-5 3z"/></svg>';
+  const imageIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8" cy="10" r="1.5"/><path d="m21 15-5-5L5 19"/></svg>';
+  const typeIconMap = { '视频': videoIcon, '图片': imageIcon, '文件': fileIcon };
+  const typeClassMap = { '视频': 'is-video', '图片': 'is-image', '文件': 'is-file' };
+  panel.innerHTML = `
+    <div class="ai-search-head">
+      <div class="ai-search-kicker">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+        AI 搜索完成
+      </div>
+      <div class="ai-search-summary">
+        找到 <b>8 个</b>和“长方体和正方体”相关的结果：<b>5 个文件</b>、<b>1 个视频</b>、<b>2 张图片</b>。下面优先展示可直接打开查看的内容。
+      </div>
+    </div>
+    <div class="ai-result-list">
+      ${KB_SEARCH_RESULTS.map((item, idx) => {
+        const typeClass = typeClassMap[item.type] || 'is-file';
+        const typeIcon = typeIconMap[item.type] || fileIcon;
+        return `
+        <button class="ai-result-item ${typeClass}" onclick="openKnowledgeResult(${idx})">
+          <span class="ai-result-type-icon ${typeClass}">${typeIcon}</span>
+          <div>
+            <div class="ai-result-title">${item.title}</div>
+            <div class="ai-result-snippet">${item.type} · ${item.location}</div>
+          </div>
+          <span class="ai-result-open">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M9 18l6-6-6-6"/></svg>
+          </span>
+        </button>
+      `;
+      }).join('')}
+    </div>
+    <div class="ai-search-foot">点击任意结果，在右侧打开资料预览。</div>
+  `;
+  content.appendChild(panel);
 }
 
 const ICON_MAP = {
@@ -2173,10 +2824,175 @@ function renderInsight() {
   `;
 }
 
+function renderPaper() {
+  return `
+    <div class="doc-preview">
+      <h2>北京朝阳区七年级上册数学期末考试模拟题</h2>
+      <div class="doc-section-title">一、选择题（共8题，每题3分，共24分）</div>
+      <div class="doc-question">
+        <span class="doc-source">学习探究诊断｜七年级上册 · 数学</span><br>
+        1.（3分）-7 的绝对值是（　）。<br>
+        <div class="doc-options"><span>A. -7</span><span>B. 7</span><span>C. 1/7</span><span>D. -1/7</span></div>
+      </div>
+      <div class="doc-question">
+        <span class="doc-source">全品学练考｜科学记数法</span><br>
+        2.（3分）384000 用科学记数法表示为（　）。<br>
+        <div class="doc-options"><span>A. 3.84×10⁴</span><span>B. 3.84×10⁵</span><span>C. 3.84×10⁶</span><span>D. 38.4×10⁵</span></div>
+      </div>
+      <div class="doc-question">
+        <span class="doc-source">同步解析与测评｜整式运算</span><br>
+        3.（3分）如果单项式 -1/2 xᵃy² 与 1/3 yᵇx³ 是同类项，那么 a、b 的值分别为（　）。<br>
+        <div class="doc-options"><span>A. 2，2</span><span>B. -3，2</span><span>C. 2，3</span><span>D. 3，2</span></div>
+      </div>
+      <div class="doc-section-title">二、填空题（共6题，每题3分）</div>
+      <div class="doc-question">9. 若 x = -2，则代数式 3x² - 2x + 1 的值为 ______。</div>
+      <div class="doc-question">10. 已知线段 AB = 8cm，点 C 是 AB 的中点，则 AC = ______ cm。</div>
+    </div>
+  `;
+}
+function renderAnswer() {
+  return `
+    <div class="doc-preview">
+      <h2>答案解析</h2>
+      <div class="doc-answer-card"><b>第 1 题：</b>答案 B。负数的绝对值等于它的相反数，所以 -7 的绝对值是 7。</div>
+      <div class="doc-answer-card"><b>第 2 题：</b>答案 B。384000 = 3.84 × 10⁵，注意小数点向左移动 5 位。</div>
+      <div class="doc-answer-card"><b>第 3 题：</b>答案 D。同类项要求相同字母的指数相同，所以 a=3，b=2。</div>
+      <div class="doc-answer-card"><b>易错提醒：</b>科学记数法、同类项判定、线段中点和有理数运算是七上期末的高频失分点，建议讲评时先让学生标注“指数 / 符号 / 单位”。</div>
+    </div>
+  `;
+}
+function renderBrief() {
+  return `
+    <div class="doc-preview">
+      <h2>命题说明书</h2>
+      <div class="doc-answer-card"><b>题型结构：</b>选择题 8 道、填空题 6 道、解答题 5 道，覆盖有理数、整式、方程、几何初步、数据统计。</div>
+      <div class="doc-answer-card"><b>难度分布：</b>基础题 60%，综合题 30%，拓展题 10%。第 15、19 题用于区分学生的建模与推理能力。</div>
+      <div class="doc-answer-card"><b>知识库依据：</b>综合参考教材章节、区级期末题型、学校近两次单元检测错题。</div>
+    </div>
+  `;
+}
+const HTML_THUMBS = ['封面', '结构观察', '棱和顶点', '长宽高', '对比练习', '课堂小结', '作业布置', '拓展挑战', '互动测验', '数据反馈'];
+function renderHtmlCourseware() {
+  const thumbs = HTML_THUMBS.map((name, idx) => `
+    <div class="html-thumb ${idx === 0 ? 'active' : ''}" onclick="showToast('（演示）切换到第 ${idx + 1} 页：${name}')">
+      <div class="html-thumb-title">${name}</div>
+      <div class="html-thumb-line" style="width:${idx % 3 === 0 ? 70 : idx % 3 === 1 ? 92 : 54}%"></div>
+      <div class="html-thumb-line" style="width:${idx % 2 === 0 ? 48 : 76}%"></div>
+      <div class="html-thumb-badge">${idx + 1}</div>
+    </div>
+  `).join('');
+  return `
+    <div class="html-preview-shell">
+      <div class="html-thumbs">${thumbs}</div>
+      <div class="html-stage">
+        <div class="html-slide">
+          <h2>长方体和正方体的认识</h2>
+          <div class="html-slide-sub">小学数学五年级下册 · 互动探究课件</div>
+          <div class="cube-row">
+            <div class="cube-card"></div>
+            <div class="cube-card rose"></div>
+          </div>
+          <button class="play-demo" onclick="showToast('（演示）开始课堂互动')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            演示
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+function renderAppPreview() {
+  return `
+    <div class="html-preview-shell app-preview">
+      <div class="html-thumbs">
+        ${['提交请假', '班主任审批', '待处理列表', '统计导出', '权限设置'].map((name, idx) => `
+          <div class="html-thumb ${idx === 0 ? 'active' : ''}" onclick="showToast('（演示）查看${name}')">
+            <div class="html-thumb-title">${name}</div>
+            <div class="html-thumb-line" style="width:${80 - idx * 7}%"></div>
+            <div class="html-thumb-line" style="width:${52 + idx * 5}%"></div>
+            <div class="html-thumb-badge">${idx + 1}</div>
+          </div>
+        `).join('')}
+      </div>
+      <div class="html-stage">
+        <div class="html-slide">
+          <h2>班级请假审批小工具</h2>
+          <div class="html-slide-sub">学生提交 · 班主任审批 · 自动汇总</div>
+          <div class="app-board">
+            <div class="app-panel">
+              <div class="app-panel-title">请假申请</div>
+              <div class="app-line" style="width:82%"></div>
+              <div class="app-line" style="width:64%"></div>
+              <div class="app-line" style="width:74%"></div>
+            </div>
+            <div class="app-panel">
+              <div class="app-panel-title">今日待审批</div>
+              <div class="app-line" style="width:92%"></div>
+              <div class="app-line" style="width:58%"></div>
+              <div class="app-line" style="width:70%"></div>
+            </div>
+          </div>
+          <button class="play-demo" onclick="showToast('（演示）进入应用预览')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            预览
+          </button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+let activeKnowledgeResult = null;
+function renderKnowledgePreview() {
+  const item = activeKnowledgeResult || KB_SEARCH_RESULTS[0];
+  const isVideo = item.type === '视频';
+  const isImage = item.type === '图片';
+  return `
+    <div class="doc-preview">
+      <h2>${item.title}</h2>
+      <div class="doc-answer-card"><b>来源：</b>${item.source}　<b>类型：</b>${item.type}　<b>位置：</b>${item.location}</div>
+      <div class="doc-section-title">内容片段</div>
+      <div class="doc-answer-card">${item.snippet}</div>
+      <div class="doc-section-title">${isVideo ? '视频预览' : isImage ? '图片预览' : '原文预览'}</div>
+      ${isVideo ? `
+        <div class="doc-answer-card">视频封面：用纸盒认识长方体 · 课堂活动实录</div>
+        <div class="doc-question">时长：06:18　格式：MP4　可用于课堂导入或课后回看。</div>
+      ` : isImage ? `
+        <div class="doc-answer-card">图片预览：图形与几何素材，可用于课件插图或板书辅助。</div>
+        <div class="doc-question">格式：JPG/PNG　建议用途：课堂展示、练习讲评、知识梳理。</div>
+      ` : `
+        <div class="doc-question">
+          本节课建议从学生熟悉的纸盒、粉笔盒、魔方等实物入手，让学生先观察物体的面、棱、顶点，再用数学语言描述长方体和正方体的共同点与不同点。
+        </div>
+        <div class="doc-question">
+          课堂活动可以分为三步：第一步数一数面、棱、顶点；第二步标出长、宽、高；第三步比较长方体和正方体的特征，形成结构化记录。
+        </div>
+        <div class="doc-question">
+          易错提醒：学生容易把“棱长总和”和“表面积”混淆，讲解时应让学生先指出每条棱对应的长、宽、高，再列式计算。
+        </div>
+      `}
+    </div>
+  `;
+}
+function openKnowledgeResult(index) {
+  activeKnowledgeResult = KB_SEARCH_RESULTS[index] || KB_SEARCH_RESULTS[0];
+  currentCanvasMeta = {
+    title: activeKnowledgeResult.title,
+    kind: 'reference',
+  };
+  canvasTabs = [{ id: 'knowledgePreview', label: '资料预览', title: activeKnowledgeResult.title, icon: ICONS.file, render: renderKnowledgePreview }];
+  activeCv = 'knowledgePreview';
+  setCanvasOpen(true);
+  renderActiveCvBody();
+  renderCvTop();
+}
+
 const CV_RENDERERS = {
-  slides: { label: '课件预览', icon: ICON_MAP.slides, render: renderSlides },
-  quiz: { label: '题目集', icon: ICON_MAP.quiz, render: renderQuiz },
-  insight: { label: '学情联动', icon: ICON_MAP.chart, render: renderInsight },
+  paper: { label: '试卷', title: '北京朝阳区七年级上册数学期末考试模拟题.docx', icon: ICON_MAP.quiz, render: renderPaper },
+  answer: { label: '答案解析', title: '答案解析.docx', icon: ICON_MAP.slides, render: renderAnswer },
+  brief: { label: '命题说明', title: '命题说明书.pdf', icon: ICON_MAP.chart, render: renderBrief },
+  courseware: { label: '互动课件', title: '长方体和正方体的认识.html', icon: ICON_MAP.slides, render: renderHtmlCourseware },
+  app: { label: '应用预览', title: '班级请假审批小工具.html', icon: ICON_MAP.slides, render: renderAppPreview },
+  knowledgePreview: { label: '资料预览', title: '资料预览', icon: ICONS.file, render: renderKnowledgePreview },
 };
 
 /* ==================== 主流程 ==================== */
@@ -2187,11 +3003,18 @@ function runChatDemo(userText) {
   const script = SCRIPTS[scriptKey];
   
   $('#ch-title').textContent = script.title;
+  openCanvasForScript(script);
   appendUserMsg(userText);
   appendAiMsg();
   
   typeText(aiTextEl, script.body, () => {
     const content = aiTextEl.parentElement;
+
+    if (script.searchResults) {
+      appendSearchResults(content);
+      scrollToBottom();
+      return;
+    }
     
     if (script.cites.length) {
       const cites = document.createElement('div');
@@ -2200,6 +3023,8 @@ function runChatDemo(userText) {
         + script.cites.map(c => `<span class="msg-cite-chip" onclick="showToast('原文：${c.label}')"><b>[${c.n}]</b> ${c.label}</span>`).join('');
       content.appendChild(cites);
     }
+
+    appendResultCard(content, script.result);
 
     if (script.actions.length) {
       const actions = document.createElement('div');
@@ -2229,15 +3054,6 @@ function runChatDemo(userText) {
       </button>
     `;
     content.appendChild(fb);
-
-    // 同步打开 Canvas
-    if (script.canvas && script.canvas.length) {
-      canvasTabs = script.canvas.map(id => ({ id, ...CV_RENDERERS[id] }));
-      activeCv = script.defaultCv;
-      renderCvTabs();
-      $('#cv-body').innerHTML = CV_RENDERERS[activeCv].render();
-      refreshSaveButtonState();
-    }
 
     scrollToBottom();
   });
@@ -2301,6 +3117,7 @@ function getParam(k) {
   return m ? decodeURIComponent(m[1]) : '';
 }
 function init() {
+  syncChatGreet();
   const q = getParam('q');
   const resume = getParam('resume');
   const intent = getParam('intent');
@@ -2330,13 +3147,19 @@ function init() {
     $('#cc-input').focus();
   }
 }
+function syncChatGreet() {
+  const h = new Date().getHours();
+  const greet = h < 11 ? '早上好' : h < 14 ? '中午好' : h < 18 ? '下午好' : '晚上好';
+  const el = document.querySelector('.empty-hero .hero-title');
+  if (el) el.textContent = `${greet}，张老师`;
+}
 init();
 </script>
 
 <template id="review-template">
 {
   "title": "新对话 · AI 工作流入口",
-  "summary": "新对话页，重点看首页参数承接、输入模式、知识库范围和右侧 Canvas。",
+  "summary": "新对话页承接首页 AI 输入入口，也允许老师直接发起新会话。空状态下的输入框、快捷模式、知识库范围、placeholder 和发送规则必须与首页保持一致；进入对话态后再展示消息流和右侧 Canvas。",
   "sections": [
     {
       "id": "cc-composer",
@@ -2347,9 +3170,9 @@ init();
         {
           "title": "功能说明",
           "body": [
-            "对话输入框是老师表达任务的主入口，支持和首页一致的三种前置模式。",
-            "老师承接首页意图或直接发起新对话，完成 AI 生成、搜索、创作等工作流。",
-            "产品验收重点是老师是否知道“当前看到什么、下一步点哪里、点完以后发生什么”。"
+            "对话输入框是老师表达任务的主入口，支持与首页完全一致的三种前置模式：AI 生成、知识库搜索、创建应用。",
+            "老师可以从首页带着 q/intent/capability/kb/folders 参数进入，也可以在 chat.html 空状态下直接输入新任务。",
+            "新对话页的产品验收重点不是“多一个聊天框”，而是首页和对话页使用同一套输入心智：模式标签、二级 chip、知识库标签、placeholder、空输入拦截和发送后的首轮状态都一致。"
           ]
         },
         {
@@ -2357,19 +3180,42 @@ init();
           "ordered": true,
           "items": [
             {
-              "label": "路径 1",
-              "text": "触发：URL 带 q/intent/capability/kb/folders，或老师在本页手动输入并发送；动作：根据输入内容匹配 SCRIPTS 演示脚本，生成用户消息和 AI 消息；若有 intent 则在文本前拼接意图标签；反馈：空状态切为对话态，AI 消息打字输出；需要复杂结果时打开或更新右侧 Canvas。"
+              "label": "默认文字入口",
+              "text": "触发：老师在空状态输入框直接输入文字；动作：点击发送或按 Enter 后，先校验非空，再把文本作为首轮用户消息写入消息流；反馈：页面从居中空状态切换为对话态，AI 消息打字输出，必要时打开或更新右侧 Canvas。Shift + Enter 保留为换行。"
+            },
+            {
+              "label": "首页参数承接",
+              "text": "触发：首页跳转携带 q/intent/capability/kb/folders；动作：chat.html 读取参数并还原输入模式、AI 生成能力和知识库范围；反馈：有 q 时直接发起首轮对话，没有 q 时停留在新对话空状态，但模式标签、能力标签和知识库标签仍应可见。"
+            },
+            {
+              "label": "AI 生成模式",
+              "text": "触发：点击“AI 生成”或从首页带 intent=ai 进入；动作：输入框进入 AI 生成态，下方 chip 切换为 AI 组题、教学动画、教学游戏、互动课件、数据回收；输入框灰色提示文案按首页同款示例轮播。点击任一能力后，只更新输入框内“AI 生成 · 能力名”标签，placeholder 继续轮播。发送时带入 AI 生成模式、所选能力和本次输入内容。"
+            },
+            {
+              "label": "知识库搜索模式",
+              "text": "触发：点击“知识库搜索”或从首页带 kb/folders 进入；动作：下方 chip 切换为全部知识库、我的知识库、学校知识库；选择“全部知识库”清空具体范围，选择我的/学校知识库则展示对应输入框标签；反馈：发送时把知识库搜索模式、所选范围和本次输入内容一起带入首轮上下文。"
+            },
+            {
+              "label": "创建应用模式",
+              "text": "触发：点击“创建应用”；动作：输入框展示创建应用模式标签，placeholder 切换为应用描述引导文案；已选择的知识库标签保留，可作为创建应用参考资料；反馈：发送时把创建应用模式、本次输入内容和所选知识库范围带入对话。"
+            },
+            {
+              "label": "空输入发送",
+              "text": "触发：输入框为空时点击发送；动作：不创建消息、不切换页面状态、不清空已选模式；反馈：统一 toast 提示“请输入内容”，并保持输入框聚焦。"
             }
           ]
         },
         {
           "title": "业务规则",
           "items": [
+            "新对话页必须与首页共用同一套快捷模式心智：三种主模式、AI 生成 5 个二级能力、知识库 3 个范围选项、空输入 toast、Enter 发送和 Shift + Enter 换行规则保持一致。",
+            "AI 生成模式下，placeholder 使用首页同款轮播示例；选择 AI 生成二级能力后，只更新模式标签，不把 placeholder 固定为该能力文案。",
             "创建应用模式可以携带已选择的知识库；所选知识库作为应用创建时的参考资料，与创建应用模式同时生效。",
             "知识库搜索模式必须保留直接范围选择；0 个知识库代表搜索全部知识库，不是未选择或异常状态。",
             "输入框不提供自动续写 / 自动补全功能；老师输入过程中，系统不主动补句、不推荐下一句，也不自动生成内容。",
             "输入框为空时，无论是否已选择 AI 生成、知识库搜索或创建应用模式，点击发送均不进入对话，统一 toast 提示“请输入内容”，已选模式和已选知识库保持不变。",
-            "这里是最容易和首页漂移的地方，改动前后都要对照 index.html。"
+            "老师从一个模式切换到另一个模式时，保留文本输入内容和已选知识库范围；切换到知识库搜索时清空已选 AI 生成能力；切回默认文字输入时移除模式标签和二级选项，但保留已添加的知识库标签。",
+            "这里是最容易和首页漂移的地方，改动前后都要对照 index.html 的输入框规则。"
           ]
         },
         {
@@ -2418,9 +3264,11 @@ init();
           "title": "QA 检查点",
           "items": [
             "进入 chat.html 后，过稿模式中应能看到“对话输入框”这一节，且展开后文字不为空。",
-            "按“交互流程”点击本节主要入口时，应出现对应跳转、弹窗、toast 或状态变化。",
-            "本节的空状态、禁用态或只读态应按“异常场景”处理，不应出现无反馈点击。",
-            "页面刷新后，静态 mock 或 localStorage 演示数据应能恢复到可继续演示的状态。"
+            "空状态下的三枚主 chip、AI 生成二级能力、知识库范围 chip 与首页的文案、选中态、取消规则一致。",
+            "选择 AI 生成后，输入框进入更高的两行展示状态，placeholder 按示例轮播；再点任一能力时，标签更新为“AI 生成 · 能力名”，placeholder 不应停止轮播。",
+            "选择知识库搜索后，0 个知识库显示“全部知识库”选中；选择我的知识库或学校知识库后，输入框内应同步出现对应标签。",
+            "空输入点击发送只 toast“请输入内容”，不得创建空对话，不得清空已选模式和知识库。",
+            "从首页带 intent/capability/kb/folders 进入时，新对话页应还原对应模式、能力和知识库范围。"
           ]
         },
         {

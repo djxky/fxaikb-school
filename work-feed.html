@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞象老师校园版 · 工作动态</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+<link rel="stylesheet" href="assets/feixiang-shell.css" />
+<link rel="stylesheet" href="assets/page-header.css" />
+<style>
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wf-page {
+    padding: 24px 40px 64px;
+  }
+  .wf-container {
+    width: min(1080px, 100%);
+    margin: 0 auto;
+  }
+  .wf-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+  .wf-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .wf-item {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 42px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 14px;
+    padding: 15px 16px;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    background: #fff;
+    text-align: left;
+    color: inherit;
+    cursor: pointer;
+    transition: border-color .16s, box-shadow .16s, transform .16s;
+  }
+  .wf-item:hover {
+    border-color: var(--line-strong);
+    box-shadow: 0 12px 28px rgba(0,0,0,.05);
+    transform: translateY(-1px);
+  }
+  .wf-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    color: var(--gold);
+    background: var(--gold-bg);
+  }
+  .wf-icon i { width: 19px; height: 19px; }
+  .wf-icon.rose { color: #B85F73; background: #F9EEF1; }
+  .wf-icon.green { color: #4D8B69; background: #EAF5EF; }
+  .wf-icon.blue { color: #53759E; background: #EEF5FB; }
+  .wf-icon.purple { color: #815995; background: #F4EEF7; }
+  .wf-main { min-width: 0; }
+  .wf-title {
+    color: var(--text-1);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.35;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .wf-meta {
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .wf-tag {
+    display: inline-flex;
+    align-items: center;
+    height: 22px;
+    padding: 0 8px;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text-2);
+    font-weight: 700;
+  }
+  .wf-tag.todo { color: #B85F73; background: #F9EEF1; }
+  .wf-tag.unread { color: #A87E2C; background: #FFF6DF; }
+  .wf-tag.done { color: #4D8B69; background: #EAF5EF; }
+  .wf-arrow {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    background: transparent;
+  }
+  .wf-arrow i { width: 15px; height: 15px; }
+  .wf-empty {
+    display: none;
+    padding: 54px 16px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    background: rgba(255,255,255,.72);
+    text-align: center;
+  }
+  .wf-empty-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-1);
+  }
+  .wf-empty-desc {
+    margin-top: 6px;
+    font-size: 12.5px;
+    color: var(--muted);
+  }
+  .wf-list.is-empty { display: none; }
+  .wf-empty.is-show { display: block; }
+
+  @media (max-width: 900px) {
+    .wf-page { padding: 18px 18px 48px; }
+    .wf-item { grid-template-columns: 36px minmax(0, 1fr) auto; padding: 13px; }
+    .wf-icon { width: 36px; height: 36px; }
+  }
+</style>
+<link rel="stylesheet" href="assets/review.css" />
+</head>
+<body data-page="work-feed">
+
+<div class="app" id="app" data-view="wiki" data-chat="closed">
+  <aside class="sidebar-left" id="feixiang-sidebar"></aside>
+
+  <main class="workspace">
+    <header class="page-header" data-page-header="work-feed">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="list-checks"></i>
+        <h1 class="ph-title">工作动态</h1>
+        <span class="ph-subtitle">聚合待处理任务、通知结果和应用动态</span>
+      </div>
+    </header>
+
+    <div class="workspace-scroll">
+      <section class="wf-page">
+        <div class="wf-container">
+          <div class="wf-summary">
+            <span id="wf-count">共 0 条动态</span>
+            <span>按优先级与更新时间排序</span>
+          </div>
+
+          <div class="wf-list" id="wf-list"></div>
+          <div class="wf-empty" id="wf-empty">
+            <div class="wf-empty-title">暂无工作动态</div>
+            <div class="wf-empty-desc">有新的待处理任务或重要通知后会显示在这里</div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <aside class="sidebar-right"></aside>
+</div>
+
+<div id="toast"></div>
+
+<script src="assets/feixiang-shell.js"></script>
+<script>renderFeixiangSidebar('');</script>
+<script src="assets/v28-shell.js?v=20260522b"></script>
+<script src="assets/v28.js?v=20260522e"></script>
+<script src="assets/page-header.js"></script>
+<script>
+  const WORK_FEED_ITEMS = [
+    { id: 'scan-paper', title: '高一(3)班 · 语文期中模拟卷', desc: '38 份待批改 · 包含作文', source: 'record', sourceLabel: 'AI 录题', status: 'todo', statusLabel: '刚刚扫描', time: '2 分钟前', url: 'ai-record-jobs.html', icon: 'book-open', color: 'rose', priority: 1 },
+    { id: 'essay-review', title: '高一(5)班 ·《荷塘月色》课后练习', desc: '42 份待批改 · 客观题已出分', source: 'homework', sourceLabel: '飞象作业', status: 'todo', statusLabel: '待批改', time: '10 分钟前', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 2 },
+    { id: 'review-progress', title: '高二(2)班 · 文言文专项测验', desc: '剩 12 份未批改', source: 'homework', sourceLabel: '飞象作业', status: 'todo', statusLabel: '批改中', time: '32 分钟前', url: 'ai-review.html', icon: 'chart-line', color: 'blue', priority: 3 },
+    { id: 'parent-notice', title: '高一(3)班家长会通知发送完成', desc: '36 位家长已读 · 4 位未读', source: 'notice', sourceLabel: '班级通知', status: 'unread', statusLabel: '家长未读', time: '1 小时前', url: 'app-detail.html?app=notify', icon: 'bell', color: 'blue', priority: 4 },
+    { id: 'school-announcement', title: '学校教研活动安排已更新', desc: '本周五 16:00 语文组公开课', source: 'school', sourceLabel: '学校公告', status: 'unread', statusLabel: '待查看', time: '今天 09:30', url: 'school-wiki.html', icon: 'megaphone', color: 'purple', priority: 5 },
+    { id: 'app-approved', title: '你收藏的“议论文范文导读”有更新', desc: '飞象教研组新增 2 份范文素材', source: 'app', sourceLabel: '应用通知', status: 'done', statusLabel: '已更新', time: '昨天 18:20', url: 'resource-square.html', icon: 'sparkles', color: '', priority: 6 }
+  ];
+
+  function renderWorkFeed() {
+    const list = document.getElementById('wf-list');
+    const empty = document.getElementById('wf-empty');
+    const count = document.getElementById('wf-count');
+    const items = WORK_FEED_ITEMS
+      .sort((a, b) => a.priority - b.priority);
+
+    count.textContent = `共 ${items.length} 条动态`;
+    list.classList.toggle('is-empty', items.length === 0);
+    empty.classList.toggle('is-show', items.length === 0);
+    list.innerHTML = items.map((item) => `
+      <button class="wf-item" onclick="window.location.href='${item.url}'">
+        <span class="wf-icon ${item.color}"><i data-lucide="${item.icon}"></i></span>
+        <span class="wf-main">
+          <span class="wf-title">${item.title}</span>
+          <span class="wf-meta">
+            <span class="wf-tag ${item.status}">${item.statusLabel}</span>
+            <span>${item.sourceLabel}</span>
+            <span>${item.desc}</span>
+            <span>${item.time}</span>
+          </span>
+        </span>
+        <span class="wf-arrow"><i data-lucide="chevron-right"></i></span>
+      </button>
+    `).join('');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  document.addEventListener('DOMContentLoaded', renderWorkFeed);
+</script>
+
+<template id="review-template">
+{
+  "title": "工作动态 · 全部列表",
+  "summary": "工作动态页承接首页“工作动态”的全部入口，用于查看所有接入首页动态流的事项。当前阶段保持轻量列表，不做复杂筛选。",
+  "sections": [
+    {
+      "id": "work-feed-list",
+      "title": "1. 工作动态列表",
+      "body": "展示所有应用接入的动态，老师点击单条动态进入对应业务页。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "工作动态页是首页工作动态的完整列表页，承接任务、通知、公告和应用动态。",
+            "首页只展示 3 条高优先级动态；全部页展示完整动态。当前阶段不提供状态筛选、来源筛选和搜索。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "进入详情",
+              "text": "点击单条动态，按动态类型进入对应业务页面，例如 AI 录题任务、作业处理页、通知应用详情或资源广场。"
+            }
+          ]
+        },
+        {
+          "title": "空状态与异常",
+          "items": [
+            "无动态时展示“暂无工作动态”。",
+            "接口异常时列表区展示空状态，不展示假数据。",
+            "未接入真实详情页的动态，demo 可跳到相近页面或 toast，正式版必须有明确点击目标。"
+          ]
+        }
+      ]
+    }
+  ]
+}
+</template>
+<script src="assets/review.js"></script>
+</body>
+</html>

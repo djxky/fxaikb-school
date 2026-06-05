@@ -12,7 +12,7 @@
  *
  *   activeKey 取值（决定哪个菜单项高亮）：
  *     'home' | 'chat' | 'chat-history' | 'my-apps' | 'my-wiki'
- *     | 'school-wiki' | 'apps' | 'resources' | 'notifications'
+ *     | 'school-wiki' | 'apps' | 'resources'
  */
 
 (function () {
@@ -472,7 +472,6 @@
       return;
     }
 
-    const hasUnreadNotifs = hasUnreadFxNotifs();
     const currentPage = (window.location.pathname.split('/').pop() || 'index.html').toLowerCase();
     const isHomePage = currentPage === 'index.html' || currentPage === '';
 
@@ -515,8 +514,6 @@
       ${navItem({ key: 'admin-teachers', icon: ICONS.shield, label: '学校管理', href: 'admin-teachers.html', activeKey })}
 
       <div class="fx-spacer"></div>
-
-      ${navItem({ key: 'notifications', icon: ICONS.bell, label: '通知', onclick: 'toggleFxNotif(event)', count: hasUnreadNotifs ? 3 : 0, dot: hasUnreadNotifs, activeKey })}
 
       <button type="button" class="fx-user fx-user-btn" onclick="toggleFxUserMenu(event)" data-tooltip="账号设置" onmouseenter="window.showFxTooltip(event)" onmouseleave="window.hideFxTooltip()">
         <div class="fx-avatar">张</div>

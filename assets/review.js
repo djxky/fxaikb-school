@@ -99,8 +99,7 @@
 
   function isSectionOpenByDefault(section, index){
     if(section && typeof section.expanded === 'boolean') return section.expanded;
-    if(section && String(section.tag || '').toUpperCase() === 'CORE') return true;
-    return index === 0;
+    return false;
   }
 
   function summarizeSection(section){
