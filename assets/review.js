@@ -5,7 +5,8 @@
     const tpl = document.getElementById('review-template');
     if(tpl){
       try {
-        const data = JSON.parse(tpl.textContent || '{}');
+        const raw = (tpl.content && tpl.content.textContent) || tpl.textContent || '{}';
+        const data = JSON.parse(raw);
         if(data && Array.isArray(data.sections) && data.sections.length) return data;
       } catch (error) {
         console.warn('[review] invalid review-template JSON', error);

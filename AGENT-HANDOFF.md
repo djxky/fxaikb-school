@@ -11,11 +11,13 @@
 - 页面结构：
   - 首页 / 工作台：`index.html`
   - 对话：`chat.html`、`chat-history.html`
+  - 产品背景介绍：`product-intro.html`（官网/背景介绍页，不纳入过稿体系）
   - 知识库：`school-wiki.html`、`my-wiki.html`、`wiki-entry.html`、`file-preview.html`、`upload-onboarding.html`
   - 应用：`app-square.html`、`my-apps.html`、`app-detail.html`
   - 资源：`resource-square.html`、`resource-detail.html`
   - 题库 / 录题 / 组题：`ai-qbank.html`、`ai-record-jobs.html`、`ai-review.html`、`compose-sheet.html`
-  - 学校 / 管理：`join-school.html`、`admin-teachers.html`
+  - 学校 / 管理：`teacher-login.html`、`join-school.html`、`admin-teachers.html`
+  - 工作动态：`work-feed.html`
 - 共享底座：
   - `assets/feixiang-shell.*`：校园版主壳、侧栏、通知、基础导航。
   - `assets/page-header.*`：页面标题区。
@@ -47,6 +49,9 @@
 - 【2026-06-03】产品稿文字要服务研发过稿，核心写交互和逻辑，不写成啰嗦 PRD，也不能把多步交互压成一条大 bullet。`review.js` 兼容两种结构：旧版 `flow/states/dataRules`；新版 `blocks`，可按“功能说明 / 交互流程 / 业务规则 / 数据说明 / 异常场景 / 关联模块”写清楚，支持列表、表格和 callout。首页已按新版 `blocks` 重写，作为后续逐页补稿标准。
 - 【2026-06-03】19 个最终 HTML 页面已按首页标准补齐结构化产品稿：每个 section 都写入 `blocks`，至少包含“功能说明 / 交互流程 / 业务规则 / 数据说明 / 异常场景 / 关联模块 / QA 检查点”。`assets/review-content.js` 与各页面内联 `review-template` 已同步，避免兜底数据和页面画板不一致。
 - 【2026-06-05】过稿 panel 的产品稿 section 默认全部折叠，不再自动展开 CORE 或第一部分内容；只有模板显式写 `expanded: true` 时才默认展开。
+- 【2026-06-07】`product-intro.html` 定义为产品背景介绍页，不要求挂过稿 panel；`work-feed.html` 已纳入过稿体系，并补齐“功能说明 / 交互流程 / 业务规则 / 数据说明 / 异常场景 / 关联模块 / QA 检查点”。`review.js` 读取页面内联模板时应使用 `template.content.textContent`，否则浏览器里可能读不到 `<template>` 内 JSON。
+- 【2026-06-07】面向研发过稿时，过稿 panel 里的产品稿只写产品视角：触发条件、老师动作、页面反馈、业务规则、数据口径、异常状态和跨页关联；不要写实现方式、后端接口、localStorage、mock、PRD 链接、研发验收模板句。21 个过稿页面已按该口径重写，并与 `assets/review-content.js` 保持一致。
+- 【2026-06-07】后续补稿不能把页面交互压缩成泛泛摘要。首页和新对话页尤其要保留输入框模式 chip、知识库范围、`+` 菜单、附件、快捷创作、空输入、发送反馈等细节；其他页面也要逐页写清入口、点击后的状态变化、操作反馈、空态、无权限、重复操作、失效对象和跳转关系。题库、录题、校对、词条、应用/资源详情、学校加入、教师管理、上传导入和工作动态已按这个标准二次补充。
 
 ## 3. 反模式清单（不要走回头路）
 
@@ -60,6 +65,7 @@
 - 不要在阶段二直接写产品稿；必须先读本文件并扫当前页面 / `data-doc`，输出对账清单后再写。
 - 不要生成独立 `docs/prd/*.md` 作为产品稿主产物；过稿文字应进入右侧 review panel。
 - 不要把过稿 panel 写成大段价值阐释或“是什么 / 为什么”说明卡；也不要为了短而把触发、动作、反馈、业务规则全挤在一条 bullet 里。研发过稿优先看清晰具体的步骤、状态边界、数据口径和跨页关联。
+- 不要为了“统一格式”删除页面已有的具体交互细节。若需要重写文案，先保留当前页面真实入口和用户已确认过的操作，再补异常和关联逻辑。
 
 ## 4. 边界条件 / 异常处理
 
