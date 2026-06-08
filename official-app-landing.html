@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞象官方应用 · 能力介绍</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{
+    --bg:#faf9f6;
+    --surface:#fff;
+    --ink:#161616;
+    --muted:#66645f;
+    --faint:#9c9992;
+    --line:rgba(0,0,0,.08);
+    --gold:#a87e2c;
+    --gold-soft:#fbf5e6;
+    --green:#3f7a61;
+    --green-soft:#eef8f3;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{font:inherit;border:0;cursor:pointer}
+  .page{max-width:1180px;margin:0 auto;padding:42px 32px 80px}
+  .top{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-bottom:40px;
+  }
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    color:#8a6720;
+    font-weight:800;
+  }
+  .brand-mark{
+    width:30px;
+    height:30px;
+    border-radius:9px;
+    display:grid;
+    place-items:center;
+    background:#a87e2c;
+    color:#fff;
+  }
+  .back{
+    height:38px;
+    padding:0 16px;
+    border-radius:10px;
+    background:#fff;
+    border:1px solid var(--line);
+    color:var(--muted);
+  }
+  .hero{
+    display:grid;
+    grid-template-columns:minmax(0,1fr) 420px;
+    gap:48px;
+    align-items:center;
+    padding:54px;
+    border-radius:26px;
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 24px 70px rgba(0,0,0,.04);
+  }
+  .state{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    height:30px;
+    padding:0 12px;
+    border-radius:999px;
+    background:var(--gold-soft);
+    color:#7c5f21;
+    font-size:13px;
+    font-weight:800;
+    margin-bottom:18px;
+  }
+  h1{
+    margin:0 0 18px;
+    font-size:44px;
+    line-height:1.12;
+    letter-spacing:0;
+  }
+  .lead{
+    margin:0 0 30px;
+    max-width:680px;
+    color:var(--muted);
+    font-size:18px;
+    line-height:1.8;
+  }
+  .actions{display:flex;gap:12px;flex-wrap:wrap}
+  .primary,.secondary{
+    height:46px;
+    padding:0 22px;
+    border-radius:12px;
+    font-weight:800;
+  }
+  .primary{background:#111;color:#fff}
+  .secondary{background:#fff;border:1px solid var(--line);color:#333}
+  .visual{
+    min-height:300px;
+    border-radius:22px;
+    background:linear-gradient(135deg,#fff8e7,#e9f7ee);
+    position:relative;
+    overflow:hidden;
+  }
+  .visual:before{
+    content:"";
+    position:absolute;
+    width:210px;
+    height:210px;
+    border-radius:50%;
+    right:42px;
+    top:46px;
+    background:rgba(63,122,97,.2);
+  }
+  .visual:after{
+    content:"";
+    position:absolute;
+    width:136px;
+    height:184px;
+    right:96px;
+    top:54px;
+    border-radius:24px;
+    background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(255,255,255,.44));
+    transform:rotate(22deg);
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.8);
+  }
+  .feature-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:18px;
+    margin-top:22px;
+  }
+  .feature{
+    padding:24px;
+    border-radius:18px;
+    background:#fff;
+    border:1px solid var(--line);
+  }
+  .feature i{
+    width:38px;
+    height:38px;
+    border-radius:12px;
+    display:grid;
+    place-items:center;
+    background:var(--green-soft);
+    color:var(--green);
+    margin-bottom:16px;
+  }
+  .feature h3{margin:0 0 8px;font-size:18px}
+  .feature p{margin:0;color:var(--muted);line-height:1.7}
+  @media (max-width:900px){
+    .page{padding:24px 18px 48px}
+    .hero{grid-template-columns:1fr;padding:30px}
+    .feature-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+  <main class="page">
+    <div class="top">
+      <div class="brand"><span class="brand-mark">飞</span><span>飞象官方应用</span></div>
+      <button class="back" onclick="history.back()">返回应用广场</button>
+    </div>
+
+    <section class="hero">
+      <div>
+        <div class="state"><i data-lucide="lock-keyhole"></i><span>学校暂未开通</span></div>
+        <h1 id="title">飞象官方应用</h1>
+        <p class="lead" id="lead">了解这项能力如何帮助学校提升教学效率。开通后老师可从应用广场直接进入使用。</p>
+        <div class="actions">
+          <button class="primary" onclick="alert('（演示）已提交开通申请')">申请试用</button>
+          <button class="secondary" onclick="alert('（演示）联系飞象顾问')">联系开通</button>
+        </div>
+      </div>
+      <div class="visual" aria-hidden="true"></div>
+    </section>
+
+    <section class="feature-grid" id="features"></section>
+  </main>
+
+<script>
+  const DATA = {
+    'smart-homework': {
+      title: '飞象智慧作业',
+      lead: '覆盖作业布置、智能批改、学情分析和错题沉淀，让老师快速掌握班级完成质量和薄弱知识点。',
+      features: [
+        ['clipboard-check', '作业全流程', '从布置、收取到批改和讲评，形成清晰的班级作业闭环。'],
+        ['chart-no-axes-column', '班级学情分析', '自动汇总得分率、易错点和知识点掌握情况。'],
+        ['book-open-check', '复习任务联动', '把作业错题沉淀到后续订正和复习任务中。']
+      ]
+    },
+    'mistake-diagnosis': {
+      title: '飞象错因诊断',
+      lead: '基于错题、作业和测验结果，归因学生错误类型，帮助老师快速生成讲评建议和个性化补救方案。',
+      features: [
+        ['scan-search', '错因归类', '识别审题、概念、计算、方法和表达等常见错因。'],
+        ['users-round', '班级共性问题', '沉淀班级高频薄弱点，辅助备课和讲评。'],
+        ['sparkles', '讲评建议', '自动生成可直接使用的讲评重点和练习建议。']
+      ]
+    },
+    wrongbook: {
+      title: '错题本',
+      lead: '汇总学生错题、订正记录和复习任务，形成可追踪的个人错题档案，帮助老师安排针对性复习。',
+      features: [
+        ['book-marked', '错题归档', '按学生、知识点、题型和来源自动整理错题。'],
+        ['history', '订正追踪', '记录订正状态和二次作答情况。'],
+        ['calendar-check', '复习计划', '根据错题掌握情况安排后续巩固任务。']
+      ]
+    }
+  };
+  const app = new URLSearchParams(location.search).get('app') || 'smart-homework';
+  const data = DATA[app] || DATA['smart-homework'];
+  document.title = data.title + ' · 能力介绍';
+  document.getElementById('title').textContent = data.title;
+  document.getElementById('lead').textContent = data.lead;
+  document.getElementById('features').innerHTML = data.features.map(([icon,title,body]) => `
+    <article class="feature">
+      <i data-lucide="${icon}"></i>
+      <h3>${title}</h3>
+      <p>${body}</p>
+    </article>
+  `).join('');
+  if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

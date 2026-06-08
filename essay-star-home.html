@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞象 AI 作文星</title>
+<script src="https://unpkg.com/lucide@latest"></script>
+<style>
+  :root{
+    --ink:#151b26;
+    --muted:#667085;
+    --line:#eef0f4;
+    --blue:#2f7df6;
+    --blue-soft:#eef5ff;
+    --mint:#42ddc2;
+    --mint-soft:#ecfff9;
+    --panel:#f8faff;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%;margin:0}
+  body{
+    background:#fff;
+    color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Helvetica Neue",sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  button{font:inherit;border:0;background:none;cursor:pointer}
+  .page{
+    max-width:1240px;
+    margin:0 auto;
+    padding:88px 48px 72px;
+  }
+  .hello{
+    margin:0 0 72px;
+    font-size:32px;
+    line-height:1.25;
+    font-weight:800;
+    letter-spacing:0;
+  }
+  .hero-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:24px;
+    margin-bottom:46px;
+  }
+  .hero-card{
+    position:relative;
+    overflow:hidden;
+    min-height:280px;
+    border-radius:28px;
+    padding:46px 48px;
+  }
+  .hero-card h2{
+    margin:0 0 22px;
+    font-size:34px;
+    line-height:1.15;
+    letter-spacing:0;
+  }
+  .hero-card p{
+    margin:0;
+    font-size:18px;
+    line-height:1.8;
+    color:#1d2736;
+  }
+  .hero-card .primary{
+    position:absolute;
+    left:48px;
+    bottom:42px;
+    min-width:152px;
+    height:54px;
+    border-radius:28px;
+    background:#fff;
+    color:#111827;
+    font-size:18px;
+    font-weight:800;
+    box-shadow:0 16px 36px rgba(39,97,190,.08);
+  }
+  .hero-card .disabled{
+    color:#c6cbd4;
+    box-shadow:none;
+  }
+  .assign{
+    background:linear-gradient(135deg,#f6f9ff 0%,#edf2ff 100%);
+  }
+  .review{
+    background:linear-gradient(135deg,#f1fffa 0%,#ddfbf3 100%);
+  }
+  .book-art{
+    position:absolute;
+    right:34px;
+    bottom:-8px;
+    width:300px;
+    height:230px;
+  }
+  .book-art span{
+    position:absolute;
+    bottom:0;
+    width:88px;
+    border-radius:20px 20px 0 0;
+    transform:skewY(8deg);
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.6);
+  }
+  .book-art span:nth-child(1){right:188px;height:120px;background:rgba(255,255,255,.72)}
+  .book-art span:nth-child(2){right:122px;height:160px;background:linear-gradient(150deg,#62b5ff,#3973ff)}
+  .book-art span:nth-child(3){right:30px;height:196px;width:126px;background:linear-gradient(150deg,#f6f8ff,#a9baff)}
+  .ring-art{
+    position:absolute;
+    right:26px;
+    top:58px;
+    width:300px;
+    height:230px;
+  }
+  .ring-art:before{
+    content:"";
+    position:absolute;
+    width:170px;
+    height:170px;
+    right:112px;
+    top:40px;
+    border-radius:50%;
+    background:conic-gradient(from 20deg,#3be0bf,#dffdf6 68%,#3be0bf);
+  }
+  .ring-art:after{
+    content:"";
+    position:absolute;
+    right:56px;
+    top:18px;
+    width:130px;
+    height:206px;
+    border-radius:26px;
+    background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(189,255,241,.72));
+    transform:rotate(33deg);
+    box-shadow:inset 0 0 0 2px rgba(255,255,255,.7);
+  }
+  .quick-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:20px;
+  }
+  .quick{
+    height:118px;
+    border-radius:18px;
+    background:#fafbfc;
+    border:1px solid #f1f2f4;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    font-size:22px;
+    font-weight:800;
+    color:#1b2430;
+  }
+  .quick [data-lucide]{width:30px;height:30px;stroke-width:1.8}
+  @media (max-width:980px){
+    .page{padding:48px 22px}
+    .hero-grid,.quick-grid{grid-template-columns:1fr}
+    .hero-card{min-height:300px}
+  }
+</style>
+</head>
+<body>
+  <main class="page">
+    <h1 class="hello">张老师，欢迎使用飞象 AI 作文星</h1>
+
+    <section class="hero-grid">
+      <article class="hero-card assign">
+        <h2>布置作文</h2>
+        <p>下载飞象作文纸，AI 帮你进行批改</p>
+        <button class="primary" onclick="toast('进入布置作文')">立即布置</button>
+        <div class="book-art" aria-hidden="true"><span></span><span></span><span></span></div>
+      </article>
+
+      <article class="hero-card review">
+        <h2>批改作文</h2>
+        <p>暂无需要批改的作文</p>
+        <button class="primary disabled" disabled>暂无批改</button>
+        <div class="ring-art" aria-hidden="true"></div>
+      </article>
+    </section>
+
+    <section class="quick-grid">
+      <button class="quick"><i data-lucide="file-pen-line"></i><span>我的作文</span></button>
+      <button class="quick"><i data-lucide="user-round"></i><span>我的学生</span></button>
+      <button class="quick"><i data-lucide="folder"></i><span>范文库</span></button>
+      <button class="quick"><i data-lucide="download"></i><span>下载作文纸</span></button>
+      <button class="quick"><i data-lucide="book-open-check"></i><span>体验 AI 辅导</span></button>
+    </section>
+  </main>
+
+<script>
+  function toast(text){ alert('（演示）' + text); }
+  if(window.lucide) lucide.createIcons();
+</script>
+</body>
+</html>

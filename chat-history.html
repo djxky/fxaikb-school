@@ -98,10 +98,10 @@
       flex-direction:column;
       gap:2px;
     }
-    .ch-item{
-      display:flex;
-      align-items:center;
-      gap:10px;
+	    .ch-item{
+	      display:flex;
+	      align-items:center;
+	      gap:10px;
       width:100%;
       background:transparent;
       border:none;
@@ -109,7 +109,7 @@
       padding:10px 10px;
       text-align:left;
       cursor:pointer;
-      transition:background .12s;
+	      transition:background .12s, opacity .16s, transform .16s;
     }
     .ch-item:hover{ background:#F5F1EB; }
     .ch-item:hover .ch-item-actions{ opacity:1; }
@@ -164,12 +164,149 @@
       cursor:pointer;
       transition:background .12s, color .12s;
     }
-    .ch-action [data-lucide]{ width:12px; height:12px; }
-    .ch-action:hover{
-      background:#E8E2D8;
-      color:#3A3A3A;
-    }
-  </style>
+	    .ch-action [data-lucide]{ width:12px; height:12px; }
+	    .ch-action:hover{
+	      background:#E8E2D8;
+	      color:#3A3A3A;
+	    }
+	    .ch-action.danger:hover{
+	      background:#FFF1EE;
+	      color:#C83C28;
+	    }
+	    .ch-title-input{
+	      width:100%;
+	      height:26px;
+	      border:1px solid #D8D3C9;
+	      border-radius:6px;
+	      background:#FFFFFF;
+	      color:#1E1B16;
+	      font:inherit;
+	      font-size:12.8px;
+	      padding:0 8px;
+	      outline:none;
+	      box-shadow:0 0 0 2px rgba(168,126,44,.1);
+	    }
+	    .ch-item.is-deleting{
+	      opacity:0;
+	      transform:translateX(8px);
+	      pointer-events:none;
+	    }
+	    .ch-confirm-backdrop{
+	      position:fixed;
+	      inset:0;
+	      z-index:5000;
+	      display:grid;
+	      place-items:center;
+	      padding:24px;
+	      background:rgba(23, 19, 12, .32);
+	    }
+	    .ch-confirm-dialog{
+	      width:min(420px, calc(100vw - 32px));
+	      background:var(--surface);
+	      border:1px solid var(--border);
+	      border-radius:16px;
+	      box-shadow:0 32px 80px -28px rgba(30,24,14,.42);
+	      position:relative;
+	      overflow:hidden;
+	    }
+	    .ch-confirm-head{
+	      display:flex;
+	      align-items:center;
+	      gap:10px;
+	      padding:16px 18px 12px;
+	      border-bottom:1px solid var(--border);
+	      padding-right:56px;
+	    }
+	    .ch-confirm-icon{
+	      width:28px;
+	      height:28px;
+	      border-radius:8px;
+	      display:grid;
+	      place-items:center;
+	      flex-shrink:0;
+	      background:#FFF1EE;
+	      color:#A4372F;
+	      border:1px solid #F3C6BE;
+	    }
+	    .ch-confirm-icon [data-lucide]{ width:16px; height:16px; }
+	    .ch-confirm-title{
+	      margin:0;
+	      color:var(--text);
+	      font-size:15px;
+	      line-height:1.35;
+	      font-weight:700;
+	    }
+	    .ch-confirm-close{
+	      position:absolute;
+	      top:12px;
+	      right:14px;
+	      width:28px;
+	      height:28px;
+	      border:0;
+	      background:transparent;
+	      border-radius:8px;
+	      color:var(--text-3);
+	      cursor:pointer;
+	      display:grid;
+	      place-items:center;
+	      transition:background-color .12s, color .12s;
+	    }
+	    .ch-confirm-close:hover{
+	      background:var(--surface-3);
+	      color:var(--text-1);
+	    }
+	    .ch-confirm-close [data-lucide]{ width:16px; height:16px; }
+	    .ch-confirm-body{
+	      padding:16px 18px 18px;
+	      color:var(--text-2);
+	      font-size:13px;
+	      line-height:1.65;
+	    }
+	    .ch-confirm-actions{
+	      display:flex;
+	      align-items:center;
+	      justify-content:flex-end;
+	      gap:10px;
+	      padding:14px 18px;
+	      border-top:1px solid var(--border);
+	      background:var(--surface-2);
+	    }
+	    .ch-confirm-btn{
+	      min-width:72px;
+	      height:32px;
+	      border-radius:8px;
+	      border:1px solid var(--border);
+	      background:var(--surface);
+	      color:var(--text-1);
+	      font-size:12.5px;
+	      font-weight:500;
+	      font-family:inherit;
+	      cursor:pointer;
+	      display:inline-flex;
+	      align-items:center;
+	      justify-content:center;
+	      gap:6px;
+	      transition:background-color .12s, border-color .12s, color .12s;
+	    }
+	    .ch-confirm-btn:hover{
+	      background:var(--surface-3);
+	    }
+	    .ch-confirm-btn.danger{
+	      min-width:88px;
+	      border-color:#A4372F;
+	      background:#A4372F;
+	      color:#FFFFFF;
+	      font-weight:600;
+	    }
+	    .ch-confirm-btn.danger:hover{
+	      border-color:#8F2E27;
+	      background:#8F2E27;
+	    }
+	    @media (max-width: 640px){
+	      .ch-confirm-actions{ justify-content:stretch; }
+	      .ch-confirm-btn{ flex:1; min-width:0; }
+	    }
+	  </style>
 <link rel="stylesheet" href="assets/review.css" />
 </head>
 <body data-page="chat-history">
@@ -205,8 +342,8 @@
                 <div class="ch-item-meta"><span>2026-05-13 18:42</span></div>
               </div>
               <div class="ch-item-actions">
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）重命名')" title="重命名"><i data-lucide="pencil"></i></button>
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）删除对话')" title="删除"><i data-lucide="trash-2"></i></button>
+	                <button class="ch-action" onclick="startRenameHistory(event)" title="重命名"><i data-lucide="pencil"></i></button>
+	                <button class="ch-action danger" onclick="deleteHistoryItem(event)" title="删除"><i data-lucide="trash-2"></i></button>
               </div>
             </div>
 
@@ -217,8 +354,8 @@
                 <div class="ch-item-meta"><span>2026-05-13 16:20</span></div>
               </div>
               <div class="ch-item-actions">
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）重命名')" title="重命名"><i data-lucide="pencil"></i></button>
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）删除对话')" title="删除"><i data-lucide="trash-2"></i></button>
+	                <button class="ch-action" onclick="startRenameHistory(event)" title="重命名"><i data-lucide="pencil"></i></button>
+	                <button class="ch-action danger" onclick="deleteHistoryItem(event)" title="删除"><i data-lucide="trash-2"></i></button>
               </div>
             </div>
 
@@ -229,8 +366,8 @@
                 <div class="ch-item-meta"><span>2026-05-12 21:15</span></div>
               </div>
               <div class="ch-item-actions">
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）重命名')" title="重命名"><i data-lucide="pencil"></i></button>
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）删除对话')" title="删除"><i data-lucide="trash-2"></i></button>
+	                <button class="ch-action" onclick="startRenameHistory(event)" title="重命名"><i data-lucide="pencil"></i></button>
+	                <button class="ch-action danger" onclick="deleteHistoryItem(event)" title="删除"><i data-lucide="trash-2"></i></button>
               </div>
             </div>
 
@@ -241,8 +378,8 @@
                 <div class="ch-item-meta"><span>2026-05-12 14:30</span></div>
               </div>
               <div class="ch-item-actions">
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）重命名')" title="重命名"><i data-lucide="pencil"></i></button>
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）删除对话')" title="删除"><i data-lucide="trash-2"></i></button>
+	                <button class="ch-action" onclick="startRenameHistory(event)" title="重命名"><i data-lucide="pencil"></i></button>
+	                <button class="ch-action danger" onclick="deleteHistoryItem(event)" title="删除"><i data-lucide="trash-2"></i></button>
               </div>
             </div>
 
@@ -253,8 +390,8 @@
                 <div class="ch-item-meta"><span>2026-05-09 19:26</span></div>
               </div>
               <div class="ch-item-actions">
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）重命名')" title="重命名"><i data-lucide="pencil"></i></button>
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）删除对话')" title="删除"><i data-lucide="trash-2"></i></button>
+	                <button class="ch-action" onclick="startRenameHistory(event)" title="重命名"><i data-lucide="pencil"></i></button>
+	                <button class="ch-action danger" onclick="deleteHistoryItem(event)" title="删除"><i data-lucide="trash-2"></i></button>
               </div>
             </div>
 
@@ -265,8 +402,8 @@
                 <div class="ch-item-meta"><span>2026-05-07 15:08</span></div>
               </div>
               <div class="ch-item-actions">
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）重命名')" title="重命名"><i data-lucide="pencil"></i></button>
-                <button class="ch-action" onclick="event.stopPropagation();showToast('（演示）删除对话')" title="删除"><i data-lucide="trash-2"></i></button>
+	                <button class="ch-action" onclick="startRenameHistory(event)" title="重命名"><i data-lucide="pencil"></i></button>
+	                <button class="ch-action danger" onclick="deleteHistoryItem(event)" title="删除"><i data-lucide="trash-2"></i></button>
               </div>
             </div>
           </div>
@@ -285,6 +422,114 @@
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
 <script src="assets/page-header.js"></script>
+<script>
+  function startRenameHistory(event){
+    event.stopPropagation();
+    const item = event.currentTarget.closest('.ch-item');
+    const title = item && item.querySelector('.ch-item-title');
+    if(!item || !title || item.querySelector('.ch-title-input')) return;
+
+    const original = title.textContent.trim();
+    const input = document.createElement('input');
+    input.className = 'ch-title-input';
+    input.value = original;
+    input.maxLength = 60;
+    input.setAttribute('aria-label', '重命名对话标题');
+
+    let finished = false;
+    const finish = (shouldSave) => {
+      if(finished) return;
+      const next = input.value.trim();
+      if(shouldSave && !next){
+        showToast('标题不能为空');
+        input.focus();
+        return;
+      }
+      finished = true;
+      title.textContent = shouldSave ? next : original;
+      title.style.display = '';
+      input.remove();
+      if(shouldSave && next !== original) showToast('已重命名对话');
+    };
+
+    input.addEventListener('click', e => e.stopPropagation());
+    input.addEventListener('keydown', e => {
+      if(e.key === 'Enter'){
+        e.preventDefault();
+        finish(true);
+      }
+      if(e.key === 'Escape'){
+        e.preventDefault();
+        finish(false);
+      }
+    });
+    input.addEventListener('blur', () => finish(true));
+
+    title.style.display = 'none';
+    title.insertAdjacentElement('afterend', input);
+    input.focus();
+    input.select();
+  }
+
+	  function deleteHistoryItem(event){
+	    event.stopPropagation();
+	    const item = event.currentTarget.closest('.ch-item');
+	    const title = item && item.querySelector('.ch-item-title');
+	    const name = title ? title.textContent.trim() : '这条对话';
+	    openHistoryDeleteConfirm(item, name);
+	  }
+
+	  function openHistoryDeleteConfirm(item, name){
+	    const existing = document.querySelector('.ch-confirm-backdrop');
+	    if(existing) existing.remove();
+
+	    const backdrop = document.createElement('div');
+	    backdrop.className = 'ch-confirm-backdrop';
+	    backdrop.setAttribute('role', 'presentation');
+	    backdrop.innerHTML = `
+	      <div class="ch-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="ch-confirm-title">
+	        <button class="ch-confirm-close" type="button" aria-label="关闭"><i data-lucide="x"></i></button>
+	        <div class="ch-confirm-head">
+	          <span class="ch-confirm-icon" aria-hidden="true"><i data-lucide="triangle-alert"></i></span>
+	          <h2 class="ch-confirm-title" id="ch-confirm-title">确认删除历史记录？</h2>
+	        </div>
+	        <div class="ch-confirm-body">删除后将无法恢复，是否继续？</div>
+	        <div class="ch-confirm-actions">
+	          <button class="ch-confirm-btn" type="button" data-action="cancel">取消</button>
+	          <button class="ch-confirm-btn danger" type="button" data-action="confirm">确认删除</button>
+	        </div>
+	      </div>
+	    `;
+
+	    const close = (showCancelToast = true) => {
+	      backdrop.remove();
+	      document.removeEventListener('keydown', onKeydown);
+	      if(showCancelToast) showToast('已取消删除');
+	    };
+	    const confirmDelete = () => {
+	      close(false);
+	      item.classList.add('is-deleting');
+	      setTimeout(() => {
+	        item.remove();
+	        showToast(`已删除「${name}」`);
+	      }, 160);
+	    };
+	    const onKeydown = (e) => {
+	      if(e.key === 'Escape') close();
+	    };
+
+	    backdrop.addEventListener('click', (e) => {
+	      if(e.target === backdrop) close();
+	    });
+	    backdrop.querySelector('.ch-confirm-close').addEventListener('click', () => close());
+	    backdrop.querySelector('[data-action="cancel"]').addEventListener('click', () => close());
+	    backdrop.querySelector('[data-action="confirm"]').addEventListener('click', confirmDelete);
+	    document.addEventListener('keydown', onKeydown);
+	    document.body.appendChild(backdrop);
+	    if(window.lucide) lucide.createIcons();
+	    backdrop.querySelector('[data-action="cancel"]').focus();
+	  }
+	</script>
 
 <!-- pin-comments: 多人评论 -->
 <script>
@@ -310,7 +555,8 @@
         {
           "title": "功能说明",
           "body": [
-            "对话列表展示老师过去的 AI 对话、生成任务和知识库检索记录，便于继续未完成工作。"
+            "对话列表展示老师过去的 AI 对话、生成任务和知识库检索记录，便于继续未完成工作。",
+            "历史对话不是只记录首页普通聊天；从首页、新对话、AI 组题、知识库搜索、创建应用、资源/应用/Wiki 中发起的 AI 对话都应进入历史记录。"
           ]
         },
         {
@@ -340,13 +586,15 @@
           "items": [
             "历史对话属于当前老师个人，不默认共享给学校。",
             "继续对话应恢复原来的知识库范围和上下文。",
+            "创建应用、AI 组题、HTML 生成等带 Canvas 的会话，继续对话时应恢复任务类型、生成成果和最近激活的右侧 Canvas 状态。",
             "删除对话只删除历史记录，不删除源文件或题库题目。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "历史记录包含会话 id、标题、摘要、更新时间、关联资料、知识库范围、最近一条消息。"
+            "历史记录包含会话 id、标题、摘要、入口来源、任务类型、更新时间、关联资料、知识库范围、最近一条消息。",
+            "带成果的历史记录还应保存生成成果、引用资料、右侧 Canvas 类型、最近激活文件或预览对象。"
           ]
         },
         {
@@ -416,34 +664,36 @@
           "items": [
             {
               "label": "打开更多",
-              "text": "点击记录右侧更多按钮。"
-            },
-            {
-              "label": "重命名",
-              "text": "选择重命名后编辑标题，保存后列表即时更新。"
-            },
-            {
-              "label": "删除",
-              "text": "选择删除后弹出确认，确认后移出列表。"
-            },
-            {
-              "label": "取消操作",
-              "text": "关闭菜单不改变记录。"
-            }
+	              "text": "老师将鼠标移到记录行，右侧露出重命名和删除两个图标按钮；点击图标不进入对话。"
+	            },
+	            {
+	              "label": "重命名",
+	              "text": "点击铅笔后，当前标题原地变成输入框并自动选中文本；输入新标题后按 Enter 或失焦保存，按 Esc 取消。保存后列表标题即时更新，后续进入对话页也使用新标题。"
+	            },
+	            {
+	              "label": "删除",
+	              "text": "点击垃圾桶后弹出简单二次确认弹窗，包含警示图标、确认删除历史记录、删除后将无法恢复、取消和确认删除；确认后该记录从列表淡出移除，取消则保留原记录。"
+	            },
+	            {
+	              "label": "取消操作",
+	              "text": "重命名时按 Esc 恢复原标题；删除确认框点取消时关闭确认框并提示已取消删除，列表不变化。"
+	            }
           ]
         },
         {
           "title": "业务规则",
           "items": [
-            "重命名只改变会话标题，不改变消息内容。",
-            "删除需要二次确认。",
-            "正在进行或有生成中的对话应提示删除影响。"
+	            "重命名只改变会话标题，不改变消息内容。",
+	            "删除需要二次确认。",
+	            "删除历史只移出当前老师的历史记录，不删除知识库文件、源文件、题库题目、已生成的课件或题单成品。",
+	            "正在进行或有生成中的对话应提示删除影响。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "行内操作数据包含会话 id、标题、删除状态、最后修改时间。"
+	            "行内操作数据包含会话 id、标题、删除状态、最后修改时间。",
+	            "重命名保存时写入新的会话标题和更新时间；删除确认后写入删除状态或从个人历史索引移除。"
           ]
         },
         {
@@ -454,14 +704,14 @@
             "处理方式"
           ],
           "rows": [
-            {
-              "场景": "标题为空",
-              "处理方式": "保存时提示标题不能为空。"
-            },
-            {
-              "场景": "删除取消",
-              "处理方式": "关闭确认框，记录保留。"
-            },
+	            {
+	              "场景": "标题为空",
+	              "处理方式": "保存时提示标题不能为空，输入框保持焦点，不覆盖原标题。"
+	            },
+	            {
+	              "场景": "删除取消",
+	              "处理方式": "关闭确认框，记录保留在原位置，并给出已取消删除反馈。"
+	            },
             {
               "场景": "删除失败",
               "处理方式": "记录回到列表并提示稍后重试。"
@@ -480,10 +730,10 @@
             "说明"
           ],
           "rows": [
-            {
-              "关联对象": "chat.html",
-              "说明": "重命名后的标题在对话页同步展示。"
-            },
+	            {
+	              "关联对象": "chat.html",
+	              "说明": "重命名后的标题在对话页顶部、侧栏最近对话和继续对话入口同步展示；已删除的历史记录不可再从列表继续。"
+	            },
             {
               "关联对象": "index.html",
               "说明": "最近工作动态可引用历史对话标题。"
@@ -493,9 +743,10 @@
         {
           "title": "QA 检查点",
           "items": [
-            "删除必须二次确认。",
-            "空标题不能保存。",
-            "取消菜单不会误改记录。"
+	            "删除必须二次确认。",
+	            "空标题不能保存。",
+	            "Esc 取消重命名不会误改记录。",
+	            "取消删除不会移除记录，确认删除后列表不再展示该记录。"
           ]
         }
       ]

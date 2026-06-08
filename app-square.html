@@ -139,6 +139,7 @@
     font-weight:650;
   }
   .app-tag.gold{color:#8a6720;background:rgba(255,248,226,.9)}
+  .app-tag.locked{color:#7c5f21;background:rgba(255,255,255,.88);border:1px solid rgba(168,126,44,.22)}
   .app-stats{
     position:absolute;
     right:12px;
@@ -250,12 +251,9 @@
 
     <div class="page-head-tabs">
       <div class="subject-tabs" id="subject-tabs">
-        <button class="subject-tab active" data-cat="all">全部</button>
-        <button class="subject-tab" data-cat="official">飞象官方</button>
-        <button class="subject-tab" data-cat="school">本校共建</button>
-        <button class="subject-tab" data-cat="global">全域热门</button>
-        <button class="subject-tab" data-cat="subject">学科工具</button>
-        <button class="subject-tab" data-cat="tool">效率工具</button>
+        <button class="subject-tab active" data-cat="official">飞象官方</button>
+        <button class="subject-tab" data-cat="global">教师共创</button>
+        <button class="subject-tab" data-cat="school">本校应用</button>
       </div>
       <div class="head-actions">
         <label class="ph-search">
@@ -300,18 +298,19 @@
 
 <script>
   const APPS = [
-    { id:'ai-qbank', title:'AI 题库', desc:'把知识库里的题目结构化展示，方便老师查看、筛选、组题与收藏。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'18.6w', favorites:942, icon:'file-stack', grad:4, cat:['official','subject'], url:'ai-qbank.html' },
-    { id:'ai-record', title:'AI 录题', desc:'上传本地 PDF / Word 自动解析题目，老师校对后入题库。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'6.4w', favorites:420, icon:'scan-search', grad:6, cat:['official','tool'], url:'ai-record-jobs.html' },
-    { id:'ai-essay-star', title:'飞象 AI 作文星', desc:'作文批改、讲评和成长档案，沉淀学生写作过程。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'12.5w', favorites:860, icon:'file-text', grad:1, cat:['official','subject'], url:'app-detail.html?app=ai-essay-star' },
-    { id:'smart-homework', title:'飞象智慧作业', desc:'布置、批改和分析作业，生成班级掌握情况。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'9.7w', favorites:618, icon:'clipboard-list', grad:4, cat:['official','tool'], url:'app-detail.html?app=smart-homework' },
-    { id:'ai-compose', title:'AI 组题', desc:'按知识点、难度和题量生成题单，支持从题篮继续编辑。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'8.9w', favorites:345, icon:'file-stack', grad:6, cat:['official','subject'], url:'compose-sheet.html' },
-    { id:'mistake-diagnosis', title:'飞象错因诊断', desc:'归因学生错题和班级薄弱点，生成讲评建议。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'7.2w', favorites:512, icon:'bar-chart-2', grad:1, cat:['official','tool'], url:'app-detail.html?app=mistake-diagnosis' },
+    { id:'ai-qbank', title:'AI 题库', desc:'把知识库里的题目结构化展示，方便老师查看、筛选、组题与收藏。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'18.6w', favorites:942, icon:'file-stack', grad:4, cat:['official','subject'], contract:'active', url:'ai-qbank.html' },
+    { id:'ai-record', title:'AI 录题', desc:'上传本地 PDF / Word 自动解析题目，老师校对后入题库。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'6.4w', favorites:420, icon:'scan-search', grad:6, cat:['official','tool'], contract:'active', url:'ai-record-jobs.html' },
+    { id:'ai-essay-star', title:'飞象 AI 作文星', desc:'作文批改、讲评和成长档案，沉淀学生写作过程。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'12.5w', favorites:860, icon:'file-text', grad:1, cat:['official','subject'], contract:'active', url:'essay-star-home.html' },
+    { id:'smart-homework', title:'飞象智慧作业', desc:'布置、批改和分析作业，生成班级掌握情况。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'9.7w', favorites:618, icon:'clipboard-list', grad:4, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=smart-homework' },
+    { id:'ai-compose', title:'AI 组题', desc:'按知识点、难度和题量生成题单，支持从题篮继续编辑。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'8.9w', favorites:345, icon:'file-stack', grad:6, cat:['official','subject'], contract:'active', url:'compose-sheet.html' },
+    { id:'mistake-diagnosis', title:'飞象错因诊断', desc:'归因学生错题和班级薄弱点，生成讲评建议。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'7.2w', favorites:512, icon:'bar-chart-2', grad:1, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=mistake-diagnosis' },
+    { id:'wrongbook', title:'错题本', desc:'汇总学生错题、订正记录和复习任务，形成个人错题档案。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'5.8w', favorites:488, icon:'file-text', grad:4, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=wrongbook' },
     { id:'classic-game', title:'文言文情景闯关 (H5)', desc:'将枯燥的文言文背诵转化为互动文字游戏，学生扫码即可在手机上游玩。', author:'李素芬', avatar:'李', avatarColor:'#81628f', badge:'本校', usage:'842', favorites:189, icon:'gamepad-2', grad:2, cat:['school','subject'] },
-    { id:'notify', title:'家长会通知生成器', desc:'输入开会时间和重点，自动生成得体、专业的家长会邀请函及群通知。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'3.2w', favorites:276, icon:'mail', grad:3, cat:['global','tool'] },
-    { id:'lesson-plan', title:'智能教案排版', desc:'输入教学目标和知识点，一键生成符合学校标准格式的 Word 教案。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'8.9w', favorites:345, icon:'file-text', grad:4, cat:['global','tool'] },
+    { id:'notify', title:'家长会通知生成器', desc:'输入开会时间和重点，自动生成得体、专业的家长会邀请函及群通知。', author:'教师共创', avatar:'共', avatarColor:'#53759e', badge:'共创', usage:'3.2w', favorites:276, icon:'mail', grad:3, cat:['global','tool'] },
+    { id:'lesson-plan', title:'智能教案排版', desc:'输入教学目标和知识点，一键生成符合学校标准格式的 Word 教案。', author:'教师共创', avatar:'共', avatarColor:'#53759e', badge:'共创', usage:'8.9w', favorites:345, icon:'file-text', grad:4, cat:['global','tool'] },
     { id:'finance', title:'班费记账本 (Web App)', desc:'轻量级班费管理工具，支持扫码记账、自动生成月度收支图表。', author:'王建华', avatar:'王', avatarColor:'#4a755b', badge:'本校', usage:'156', favorites:31, icon:'pie-chart', grad:5, cat:['school','tool'] },
-    { id:'speaking', title:'英语口语对练 Agent', desc:'模拟真实对话场景，支持语音输入，自动纠正语法和发音错误。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'21.3w', favorites:1120, icon:'mic', grad:6, cat:['global','subject'] },
-    { id:'sports-signup', title:'运动会报名收集', desc:'快速生成报名表单，自动校验每人限报项目数，一键导出 Excel。', author:'全域热门', avatar:'全', avatarColor:'#53759e', badge:'热门', usage:'1.1w', favorites:203, icon:'clipboard-list', grad:7, cat:['global','tool'] },
+    { id:'speaking', title:'英语口语对练 Agent', desc:'模拟真实对话场景，支持语音输入，自动纠正语法和发音错误。', author:'教师共创', avatar:'共', avatarColor:'#53759e', badge:'共创', usage:'21.3w', favorites:1120, icon:'mic', grad:6, cat:['global','subject'] },
+    { id:'sports-signup', title:'运动会报名收集', desc:'快速生成报名表单，自动校验每人限报项目数，一键导出 Excel。', author:'教师共创', avatar:'共', avatarColor:'#53759e', badge:'共创', usage:'1.1w', favorites:203, icon:'clipboard-list', grad:7, cat:['global','tool'] },
     { id:'chemistry-lab', title:'化学实验模拟器', desc:'H5 互动小应用，拖拽烧杯和试剂，安全模拟危险化学反应现象。', author:'赵明杰', avatar:'赵', avatarColor:'#a8626c', badge:'本校', usage:'420', favorites:88, icon:'flask-conical', grad:8, cat:['school','subject'] }
   ];
 
@@ -328,7 +327,7 @@
     'flask-conical':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2"/><path d="M8.5 2h7"/><path d="M7 16h10"/></svg>'
   };
 
-  let currentCat = 'all';
+  let currentCat = 'official';
   let keyword = '';
 
   function escHtml(value){
@@ -339,7 +338,7 @@
     const grid = document.getElementById('grid');
     const q = keyword.trim().toLowerCase();
     const list = APPS.filter(app => {
-      if(currentCat !== 'all' && !app.cat.includes(currentCat)) return false;
+      if(!app.cat.includes(currentCat)) return false;
       if(q && !(app.title + app.desc + app.author).toLowerCase().includes(q)) return false;
       return true;
     });
@@ -349,10 +348,18 @@
       return;
     }
 
-    grid.innerHTML = list.map(app => `
-      <a class="app-card" href="${escHtml(app.url || `app-detail.html?app=${encodeURIComponent(app.id)}`)}">
+    grid.innerHTML = list.map(app => {
+      const isOfficial = app.cat.includes('official');
+      const isLocked = isOfficial && app.contract === 'locked';
+      const href = isLocked ? app.landingUrl : (app.url || `app-detail.html?app=${encodeURIComponent(app.id)}`);
+      const coverTag = isLocked
+        ? '<span class="app-tag locked">未开通</span>'
+        : (isOfficial ? '' : `<span class="app-tag ${app.badge === '官方' ? 'gold' : ''}">${escHtml(app.badge || '热门')}</span>`);
+      const target = isOfficial ? ' target="_blank" rel="noopener"' : '';
+      return `
+      <a class="app-card ${isLocked ? 'is-locked' : ''}" href="${escHtml(href)}"${target}>
         <div class="app-cover bg-grad-${app.grad}">
-          <span class="app-tag ${app.badge === '官方' ? 'gold' : ''}">${escHtml(app.badge || '热门')}</span>
+          ${coverTag}
           <div class="app-cover-icon">${ICON_SVG[app.icon] || ''}</div>
           <span class="app-stats">
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
@@ -371,7 +378,7 @@
           </div>
         </div>
       </a>
-    `).join('');
+    `}).join('');
     bindFavoriteButtons(grid);
   }
 
@@ -391,7 +398,7 @@
     tab.addEventListener('click', () => {
       document.querySelectorAll('.subject-tab').forEach(item => item.classList.remove('active'));
       tab.classList.add('active');
-      currentCat = tab.dataset.cat || 'all';
+      currentCat = tab.dataset.cat || 'official';
       renderCards();
     });
   });
@@ -448,7 +455,9 @@
         {
           "title": "业务规则",
           "items": [
-            "官方应用、学校应用、个人应用需要用来源标识区分。",
+            "应用来源只区分飞象官方、教师共创、本校应用。飞象官方应用固定为 AI 题库、AI 录题、飞象 AI 作文星、飞象智慧作业、AI 组题、飞象错因诊断、错题本。",
+            "飞象官方 tab 已表达来源，官方应用卡片不再展示“官方”角标；未开通应用展示“未开通”标识。",
+            "飞象官方应用按学校合约分流：已开通应用新页面打开产品首页，未开通应用新页面打开能力介绍落地页。",
             "不可用应用可展示但主按钮置灰并说明原因。",
             "应用卡片的收藏状态与我的应用保持一致。"
           ]
@@ -456,7 +465,7 @@
         {
           "title": "数据说明",
           "items": [
-            "应用数据包含名称、简介、来源、分类、适用学科、使用次数、收藏状态、可用状态。"
+            "应用数据包含名称、简介、来源、合约状态、分类、使用次数、收藏状态和跳转地址。"
           ]
         },
         {
@@ -516,12 +525,12 @@
     {
       "id": "app-square-filter",
       "title": "2. 分类与搜索",
-      "body": "分类与搜索帮助老师按学科、教学场景、应用类型和关键词筛选应用。",
+      "body": "来源分类与搜索帮助老师按飞象官方、教师共创、本校应用和关键词筛选应用。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "分类与搜索帮助老师按学科、教学场景、应用类型和关键词筛选应用。"
+            "来源分类与搜索帮助老师按飞象官方、教师共创、本校应用和关键词筛选应用。"
           ]
         },
         {
@@ -542,7 +551,7 @@
             },
             {
               "label": "清空筛选",
-              "text": "一键恢复全部应用。"
+              "text": "清空搜索后回到当前来源分类的默认列表。"
             }
           ]
         },
@@ -551,13 +560,13 @@
           "items": [
             "分类筛选只影响广场列表，不改变我的应用。",
             "搜索关键词为空时展示当前分类的默认排序。",
-            "分类应覆盖备课、讲评、组题、互动、管理等老师常见场景。"
+            "来源分类只保留飞象官方、教师共创、本校应用，不再提供全部、学科工具、效率工具 tab。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "筛选数据包含关键词、分类、学科、来源、是否已收藏。"
+            "筛选数据包含关键词、来源分类、是否已收藏。"
           ]
         },
         {
@@ -574,7 +583,7 @@
             },
             {
               "场景": "分类无应用",
-              "处理方式": "展示该分类暂无应用，并建议查看全部。"
+              "处理方式": "展示该分类暂无应用，并允许切换到其他来源分类。"
             },
             {
               "场景": "关键词过短",

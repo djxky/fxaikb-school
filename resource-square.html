@@ -73,10 +73,14 @@
     min-width: 0;
     padding-bottom: 0;
   }
-  .tabs-row .head-actions {
-    display: flex; align-items: center; gap: 10px;
-    flex-shrink: 0;
-  }
+	  .tabs-row .head-actions {
+	    display: flex; align-items: center; gap: 10px;
+	    flex-shrink: 0;
+	  }
+	  .source-tabs-row {
+	    display: flex; align-items: center; gap: 6px;
+	    padding: 0 0 10px;
+	  }
   .head-row {
     display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 18px;
@@ -117,11 +121,26 @@
     transition: all 0.2s;
   }
   .subject-tab:hover { color: var(--ink); background: var(--bg); }
-  .subject-tab.active {
-    color: var(--gold);
-    background: var(--gold-soft);
-    font-weight: 600;
-  }
+	  .subject-tab.active {
+	    color: var(--gold);
+	    background: var(--gold-soft);
+	    font-weight: 600;
+	  }
+	  .source-tab {
+	    height: 30px;
+	    padding: 0 12px;
+	    border-radius: 15px;
+	    color: var(--muted);
+	    font-size: 12.5px;
+	    font-weight: 500;
+	    white-space: nowrap;
+	  }
+	  .source-tab:hover { color: var(--ink); background: var(--bg); }
+	  .source-tab.active {
+	    color: var(--gold);
+	    background: var(--gold-soft);
+	    font-weight: 600;
+	  }
   .new-badge {
     background: #e65252; color: #fff;
     font-size: 9px; font-weight: 700;
@@ -257,13 +276,13 @@
       </div>
     </header>
 
-    <!-- 学科 Tab 栏 · 吸顶 · 内含搜索 -->
-    <div class="page-head-tabs">
-      <div class="tabs-row">
-        <div class="subject-tabs" id="subject-tabs">
-          <button class="subject-tab active" data-subject="all">推荐</button>
-          <button class="subject-tab" data-subject="chinese">语文</button>
-          <button class="subject-tab" data-subject="math">数学<span class="new-badge">NEW</span></button>
+	    <!-- 学科 Tab 栏 · 吸顶 · 内含搜索 -->
+	    <div class="page-head-tabs">
+	      <div class="tabs-row">
+	        <div class="subject-tabs" id="subject-tabs">
+	          <button class="subject-tab active" data-subject="all">推荐</button>
+	          <button class="subject-tab" data-subject="chinese">语文</button>
+	          <button class="subject-tab" data-subject="math">数学<span class="new-badge">NEW</span></button>
           <button class="subject-tab" data-subject="english">英语</button>
           <button class="subject-tab" data-subject="physics">物理</button>
           <button class="subject-tab" data-subject="chemistry">化学</button>
@@ -272,16 +291,22 @@
           <button class="subject-tab" data-subject="geography">地理</button>
           <button class="subject-tab" data-subject="politics">政治</button>
           <button class="subject-tab" data-subject="it">信息技术</button>
-          <button class="subject-tab" data-subject="art">艺术体育</button>
-        </div>
-        <div class="head-actions">
-          <label class="ph-search">
-            <i data-lucide="search"></i>
-            <input type="text" placeholder="搜索资源、作者…">
-          </label>
-        </div>
-      </div>
-    </div>
+	          <button class="subject-tab" data-subject="art">艺术体育</button>
+	        </div>
+	        <div class="head-actions">
+	          <label class="ph-search">
+	            <i data-lucide="search"></i>
+	            <input type="text" placeholder="搜索资源、作者…">
+	          </label>
+	        </div>
+	      </div>
+	      <div class="source-tabs-row" id="source-tabs">
+	        <button class="source-tab active" data-source="all">全部来源</button>
+	        <button class="source-tab" data-source="official">飞象官方</button>
+	        <button class="source-tab" data-source="global">教师共创</button>
+	        <button class="source-tab" data-source="school">本校资源</button>
+	      </div>
+	    </div>
 
     <div class="grid-wrap">
       <div class="content-grid" id="grid">
@@ -322,25 +347,25 @@
 <script src="assets/ai-create-dock.js"></script>
 
 <script>
-  // ====== mock 资源数据 ======
-  const RESOURCES = [
-    { title: '《荷塘月色》画面捕捉法 · 课堂活动', tag: '课件', tagClass: '', cover: 'mint',  subject: 'chinese', author: '王老师', avatar: '王', avatarColor: '#4a755b', views: '4.9万', fav: 821, official: false, icon: 'book-open' },
-    { title: '文言虚词配对小游戏 · 必考 12 个',     tag: '互动动画', tagClass: '', cover: 'lilac', subject: 'chinese', author: '李老师', avatar: '李', avatarColor: '#81628f', views: '3.2万', fav: 412, official: false, icon: 'gamepad-2' },
-    { title: '现代散文阅读 5 步法 · 附课堂讲义',     tag: 'PPT', tagClass: '', cover: 'sky', subject: 'chinese', author: '陈老师', avatar: '陈', avatarColor: '#53759e', views: '2.8万', fav: 356, official: false, icon: 'presentation' },
-    { title: '议论文 8 大常用角度 + 范文导读',       tag: '⭐ 官方精选', tagClass: 'gold', cover: 'cream', subject: 'chinese', author: '飞象教研组', avatar: '飞', avatarColor: '#a87e2c', views: '8.1万', fav: 1240, official: true, icon: 'crown' },
-    { title: '二次函数图像与性质 · 互动动画',         tag: '互动动画', tagClass: '', cover: 'sky', subject: 'math', author: '张老师', avatar: '张', avatarColor: '#53759e', views: '5.4万', fav: 678, official: false, icon: 'shapes' },
-    { title: '初中几何辅助线 12 招 · 解题模板',     tag: '题单', tagClass: '', cover: 'sand', subject: 'math', author: '刘老师', avatar: '刘', avatarColor: '#a87e2c', views: '6.7万', fav: 932, official: false, icon: 'compass' },
-    { title: '相似三角形判定与应用 · 中考冲刺',     tag: '⭐ 官方精选', tagClass: 'gold', cover: 'cream', subject: 'math', author: '飞象教研组', avatar: '飞', avatarColor: '#a87e2c', views: '7.5万', fav: 1102, official: true, icon: 'crown' },
-    { title: '一次函数实际应用题 · 速解技巧',         tag: '课件', tagClass: '', cover: 'mint', subject: 'math', author: '黄老师', avatar: '黄', avatarColor: '#4a755b', views: '3.6万', fav: 489, official: false, icon: 'book-open' },
-    { title: '高中英语完形填空高频词 200 个',         tag: '题单', tagClass: '', cover: 'lilac', subject: 'english', author: '吴老师', avatar: '吴', avatarColor: '#81628f', views: '4.3万', fav: 612, official: false, icon: 'spell-check' },
-    { title: '英语作文万能开头与结尾模板',           tag: '范文', tagClass: '', cover: 'mist', subject: 'english', author: '徐老师', avatar: '徐', avatarColor: '#6b6a65', views: '3.9万', fav: 521, official: false, icon: 'pen-tool' },
-    { title: '牛顿三大定律 · 经典实验视频集',         tag: '视频', tagClass: '', cover: 'coral', subject: 'physics', author: '杨老师', avatar: '杨', avatarColor: '#a8626c', views: '2.5万', fav: 348, official: false, icon: 'play-circle' },
-    { title: '电路图解题 7 步法 · 含中考真题',         tag: '课件', tagClass: '', cover: 'sky', subject: 'physics', author: '周老师', avatar: '周', avatarColor: '#53759e', views: '3.1万', fav: 412, official: false, icon: 'zap' },
-    { title: '化学方程式配平大全 · 初三总复习',       tag: '题单', tagClass: '', cover: 'mint', subject: 'chemistry', author: '赵老师', avatar: '赵', avatarColor: '#4a755b', views: '4.0万', fav: 583, official: false, icon: 'flask-conical' },
-    { title: '细胞分裂动画演示 · 减数分裂全过程',     tag: '互动动画', tagClass: '', cover: 'peach', subject: 'biology', author: '钱老师', avatar: '钱', avatarColor: '#a87e2c', views: '2.2万', fav: 287, official: false, icon: 'dna' },
-    { title: '中国近代史时间轴 · 互动梳理',           tag: '互动动画', tagClass: '', cover: 'sand', subject: 'history', author: '孙老师', avatar: '孙', avatarColor: '#a87e2c', views: '1.9万', fav: 245, official: false, icon: 'landmark' },
-    { title: '世界气候类型分布 · 高考填图集训',     tag: '题单', tagClass: '', cover: 'mist', subject: 'geography', author: '马老师', avatar: '马', avatarColor: '#6b6a65', views: '2.4万', fav: 312, official: false, icon: 'globe' },
-  ];
+	  // ====== mock 资源数据 ======
+	  const RESOURCES = [
+	    { title: '《荷塘月色》画面捕捉法 · 课堂活动', tag: '课件', tagClass: '', cover: 'mint', subject: 'chinese', source: 'school', author: '王老师', avatar: '王', avatarColor: '#4a755b', views: '4.9万', fav: 821, icon: 'book-open' },
+	    { title: '文言虚词配对小游戏 · 必考 12 个', tag: '互动动画', tagClass: '', cover: 'lilac', subject: 'chinese', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '3.2万', fav: 412, icon: 'gamepad-2' },
+	    { title: '现代散文阅读 5 步法 · 附课堂讲义', tag: 'PPT', tagClass: '', cover: 'sky', subject: 'chinese', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '2.8万', fav: 356, icon: 'presentation' },
+	    { title: '议论文 8 大常用角度 + 范文导读', tag: '飞象官方', tagClass: 'gold', cover: 'cream', subject: 'chinese', source: 'official', author: '飞象官方', avatar: '飞', avatarColor: '#a87e2c', views: '8.1万', fav: 1240, icon: 'crown' },
+	    { title: '二次函数图像与性质 · 互动动画', tag: '互动动画', tagClass: '', cover: 'sky', subject: 'math', source: 'school', author: '张老师', avatar: '张', avatarColor: '#53759e', views: '5.4万', fav: 678, icon: 'shapes' },
+	    { title: '初中几何辅助线 12 招 · 解题模板', tag: '题单', tagClass: '', cover: 'sand', subject: 'math', source: 'school', author: '刘老师', avatar: '刘', avatarColor: '#a87e2c', views: '6.7万', fav: 932, icon: 'compass' },
+	    { title: '相似三角形判定与应用 · 中考冲刺', tag: '飞象官方', tagClass: 'gold', cover: 'cream', subject: 'math', source: 'official', author: '飞象官方', avatar: '飞', avatarColor: '#a87e2c', views: '7.5万', fav: 1102, icon: 'crown' },
+	    { title: '一次函数实际应用题 · 速解技巧', tag: '课件', tagClass: '', cover: 'mint', subject: 'math', source: 'school', author: '黄老师', avatar: '黄', avatarColor: '#4a755b', views: '3.6万', fav: 489, icon: 'book-open' },
+	    { title: '高中英语完形填空高频词 200 个', tag: '题单', tagClass: '', cover: 'lilac', subject: 'english', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '4.3万', fav: 612, icon: 'spell-check' },
+	    { title: '英语作文万能开头与结尾模板', tag: '范文', tagClass: '', cover: 'mist', subject: 'english', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '3.9万', fav: 521, icon: 'pen-tool' },
+	    { title: '牛顿三大定律 · 经典实验视频集', tag: '视频', tagClass: '', cover: 'coral', subject: 'physics', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '2.5万', fav: 348, icon: 'play-circle' },
+	    { title: '电路图解题 7 步法 · 含中考真题', tag: '课件', tagClass: '', cover: 'sky', subject: 'physics', source: 'school', author: '周老师', avatar: '周', avatarColor: '#53759e', views: '3.1万', fav: 412, icon: 'zap' },
+	    { title: '化学方程式配平大全 · 初三总复习', tag: '题单', tagClass: '', cover: 'mint', subject: 'chemistry', source: 'school', author: '赵老师', avatar: '赵', avatarColor: '#4a755b', views: '4.0万', fav: 583, icon: 'flask-conical' },
+	    { title: '细胞分裂动画演示 · 减数分裂全过程', tag: '互动动画', tagClass: '', cover: 'peach', subject: 'biology', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '2.2万', fav: 287, icon: 'dna' },
+	    { title: '中国近代史时间轴 · 互动梳理', tag: '互动动画', tagClass: '', cover: 'sand', subject: 'history', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '1.9万', fav: 245, icon: 'landmark' },
+	    { title: '世界气候类型分布 · 高考填图集训', tag: '题单', tagClass: '', cover: 'mist', subject: 'geography', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '2.4万', fav: 312, icon: 'globe' },
+	  ];
 
   const ICON_SVG = {
     'book-open':    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
@@ -359,14 +384,21 @@
     'globe':        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
   };
 
-  function renderCards(filter = 'all') {
-    const grid = document.getElementById('grid');
-    const list = filter === 'all' ? RESOURCES : RESOURCES.filter(r => r.subject === filter);
+	  let currentSubject = 'all';
+	  let currentSource = 'all';
 
-    if (list.length === 0) {
-      grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px 0; color: var(--muted);">该学科暂无资源，敬请期待</div>';
-      return;
-    }
+	  function renderCards() {
+	    const grid = document.getElementById('grid');
+	    const list = RESOURCES.filter(r => {
+	      const subjectMatched = currentSubject === 'all' || r.subject === currentSubject;
+	      const sourceMatched = currentSource === 'all' || r.source === currentSource;
+	      return subjectMatched && sourceMatched;
+	    });
+
+	    if (list.length === 0) {
+	      grid.innerHTML = '<div style="grid-column: 1 / -1; text-align: center; padding: 60px 0; color: var(--muted);">当前筛选暂无资源，敬请期待</div>';
+	      return;
+	    }
 
     grid.innerHTML = list.map(r => `
       <a class="card" href="resource-detail.html?resource=${encodeURIComponent(r.title)}">
@@ -406,16 +438,26 @@
     });
   }
 
-  document.querySelectorAll('.subject-tab').forEach(tab => {
-    tab.addEventListener('click', () => {
-      document.querySelectorAll('.subject-tab').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      renderCards(tab.dataset.subject);
-    });
-  });
+	  document.querySelectorAll('.subject-tab').forEach(tab => {
+	    tab.addEventListener('click', () => {
+	      document.querySelectorAll('.subject-tab').forEach(t => t.classList.remove('active'));
+	      tab.classList.add('active');
+	      currentSubject = tab.dataset.subject || 'all';
+	      renderCards();
+	    });
+	  });
 
-  // 初始渲染
-  renderCards('all');
+	  document.querySelectorAll('.source-tab').forEach(tab => {
+	    tab.addEventListener('click', () => {
+	      document.querySelectorAll('.source-tab').forEach(t => t.classList.remove('active'));
+	      tab.classList.add('active');
+	      currentSource = tab.dataset.source || 'all';
+	      renderCards();
+	    });
+	  });
+
+	  // 初始渲染
+	  renderCards();
 
   // 初始化 lucide 图标
   if (window.lucide) lucide.createIcons();
