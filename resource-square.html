@@ -302,7 +302,6 @@
 	      </div>
 	      <div class="source-tabs-row" id="source-tabs">
 	        <button class="source-tab active" data-source="all">全部来源</button>
-	        <button class="source-tab" data-source="official">飞象官方</button>
 	        <button class="source-tab" data-source="global">教师共创</button>
 	        <button class="source-tab" data-source="school">本校资源</button>
 	      </div>
@@ -352,10 +351,10 @@
 	    { title: '《荷塘月色》画面捕捉法 · 课堂活动', tag: '课件', tagClass: '', cover: 'mint', subject: 'chinese', source: 'school', author: '王老师', avatar: '王', avatarColor: '#4a755b', views: '4.9万', fav: 821, icon: 'book-open' },
 	    { title: '文言虚词配对小游戏 · 必考 12 个', tag: '互动动画', tagClass: '', cover: 'lilac', subject: 'chinese', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '3.2万', fav: 412, icon: 'gamepad-2' },
 	    { title: '现代散文阅读 5 步法 · 附课堂讲义', tag: 'PPT', tagClass: '', cover: 'sky', subject: 'chinese', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '2.8万', fav: 356, icon: 'presentation' },
-	    { title: '议论文 8 大常用角度 + 范文导读', tag: '飞象官方', tagClass: 'gold', cover: 'cream', subject: 'chinese', source: 'official', author: '飞象官方', avatar: '飞', avatarColor: '#a87e2c', views: '8.1万', fav: 1240, icon: 'crown' },
+	    { title: '议论文 8 大常用角度 + 范文导读', tag: '范文', tagClass: '', cover: 'cream', subject: 'chinese', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '8.1万', fav: 1240, icon: 'crown' },
 	    { title: '二次函数图像与性质 · 互动动画', tag: '互动动画', tagClass: '', cover: 'sky', subject: 'math', source: 'school', author: '张老师', avatar: '张', avatarColor: '#53759e', views: '5.4万', fav: 678, icon: 'shapes' },
 	    { title: '初中几何辅助线 12 招 · 解题模板', tag: '题单', tagClass: '', cover: 'sand', subject: 'math', source: 'school', author: '刘老师', avatar: '刘', avatarColor: '#a87e2c', views: '6.7万', fav: 932, icon: 'compass' },
-	    { title: '相似三角形判定与应用 · 中考冲刺', tag: '飞象官方', tagClass: 'gold', cover: 'cream', subject: 'math', source: 'official', author: '飞象官方', avatar: '飞', avatarColor: '#a87e2c', views: '7.5万', fav: 1102, icon: 'crown' },
+	    { title: '相似三角形判定与应用 · 中考冲刺', tag: '题单', tagClass: '', cover: 'cream', subject: 'math', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '7.5万', fav: 1102, icon: 'crown' },
 	    { title: '一次函数实际应用题 · 速解技巧', tag: '课件', tagClass: '', cover: 'mint', subject: 'math', source: 'school', author: '黄老师', avatar: '黄', avatarColor: '#4a755b', views: '3.6万', fav: 489, icon: 'book-open' },
 	    { title: '高中英语完形填空高频词 200 个', tag: '题单', tagClass: '', cover: 'lilac', subject: 'english', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '4.3万', fav: 612, icon: 'spell-check' },
 	    { title: '英语作文万能开头与结尾模板', tag: '范文', tagClass: '', cover: 'mist', subject: 'english', source: 'global', author: '教师共创', avatar: '共', avatarColor: '#53759e', views: '3.9万', fav: 521, icon: 'pen-tool' },
@@ -400,7 +399,7 @@
 	      return;
 	    }
 
-    grid.innerHTML = list.map(r => `
+	    grid.innerHTML = list.map(r => `
       <a class="card" href="resource-detail.html?resource=${encodeURIComponent(r.title)}">
         <div class="card-cover ${r.cover}">
           <span class="card-tag ${r.tagClass}">${r.tag}</span>
@@ -466,7 +465,7 @@
 <template id="review-template">
 {
   "title": "资源广场 · 发现可复用教学资源",
-  "summary": "资源广场帮助老师发现学校或官方可复用的教学资源，支持筛选、收藏、复制改造和进入详情。",
+  "summary": "资源广场帮助老师发现本校或教师共创的可复用教学资源，支持筛选、收藏、复制改造和进入详情。",
   "sections": [
     {
       "id": "resource-square-list",
@@ -504,7 +503,7 @@
         {
           "title": "业务规则",
           "items": [
-            "资源来源需要区分官方、学校、个人共享。",
+            "资源来源只区分教师共创和本校资源。",
             "复制改造生成老师个人副本，不修改原资源。",
             "无权限资源不能查看完整内容或复制。"
           ]
@@ -572,12 +571,12 @@
     {
       "id": "resource-square-filter",
       "title": "2. 分类筛选",
-      "body": "分类筛选帮助老师按学科、年级、资源类型、来源和关键词定位资源。",
+      "body": "分类筛选帮助老师先按学科定位资源，再按教师共创、本校资源和关键词收窄范围。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "分类筛选帮助老师按学科、年级、资源类型、来源和关键词定位资源。"
+            "分类筛选帮助老师先按学科定位资源，再按教师共创、本校资源和关键词收窄范围。"
           ]
         },
         {
@@ -590,7 +589,7 @@
             },
             {
               "label": "切换分类",
-              "text": "选择资源类型、学科或年级筛选。"
+              "text": "先选择推荐或具体学科，再按来源切换全部来源、教师共创、本校资源。"
             },
             {
               "label": "组合筛选",
@@ -607,7 +606,7 @@
           "items": [
             "筛选只影响广场列表。",
             "关键词为空时按当前分类默认排序。",
-            "学校资源和官方资源可分别筛选。"
+            "教师共创、本校资源可分别筛选。"
           ]
         },
         {
