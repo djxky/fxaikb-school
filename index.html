@@ -164,6 +164,9 @@
   .composer-section {
     display: flex; flex-direction: column; align-items: center; gap: 14px;
     padding: 2px 0 4px;
+    position: relative;
+    z-index: 30;
+    overflow: visible;
   }
   .composer-pill {
     width: 100%; max-width: 760px; min-height: 58px;
@@ -196,7 +199,8 @@
     align-items: end;
   }
   #home-plus-btn { grid-area: plus; }
-  .input-wrap { grid-area: input; display: flex; align-items: center; gap: 8px; width: 100%; min-height: 34px; }
+  .composer-pill.upload-required #home-plus-btn { display: none; }
+  .input-wrap { grid-area: input; display: flex; align-items: center; flex-wrap: wrap; gap: 10px 8px; width: 100%; min-height: 34px; }
   .input-wrap textarea {
     flex: 1; font-size: 16px; color: var(--ink); min-width: 0;
     resize: none; line-height: 1.45; padding: 6px 0; max-height: 160px;
@@ -251,6 +255,87 @@
   .kb-attached-row {
     display: contents;
   }
+  .attachment-row {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    width: 100%;
+    max-height: 168px;
+    overflow: hidden;
+  }
+  .attachment-row:empty {
+    display: none;
+  }
+  .attachment-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    width: 172px;
+    height: 58px;
+    padding: 8px 10px;
+    border: 1px solid transparent;
+    border-radius: 9px;
+    background: rgba(248,248,247,.92);
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 500;
+    position: relative;
+    transition: background .15s, border-color .15s;
+  }
+  .attachment-chip:hover {
+    background: #fff;
+    border-color: var(--line);
+  }
+  .attachment-chip svg.ico {
+    width: 22px;
+    height: 22px;
+    color: var(--green);
+    flex-shrink: 0;
+  }
+  .attachment-meta {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+  }
+  .attachment-chip .attachment-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .attachment-size {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1;
+  }
+  .attachment-thumb {
+    width: 38px;
+    height: 38px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    background:
+      linear-gradient(135deg, rgba(79,140,163,.22), rgba(69,132,99,.22)),
+      linear-gradient(135deg, #f7efe2, #e9f2ee);
+    border: 1px solid rgba(0,0,0,.06);
+  }
+  .attachment-chip .chip-del {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    color: var(--muted);
+    background: rgba(255,255,255,.86);
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    flex-shrink: 0;
+  }
+  .attachment-chip:hover .chip-del { display: inline-flex; }
+  .attachment-chip .chip-del:hover { background: var(--side); color: var(--ink); }
   .kb-attached-chip {
     display: inline-flex; align-items: center; gap: 4px;
     height: 26px; padding: 0 6px 0 10px;
@@ -269,6 +354,72 @@
   }
   .kb-attached-chip:hover .chip-del { opacity: 1; }
   .kb-attached-chip .chip-del:hover { background: rgba(168,126,44,0.15); color: var(--gold); }
+
+  .capability-upload-card {
+    display: none;
+    width: 148px;
+    min-height: 62px;
+    border: 1px dashed rgba(17, 17, 16, .18);
+    border-radius: 10px;
+    background: rgba(255,255,255,.72);
+    color: var(--ink);
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 650;
+    cursor: pointer;
+    transition: border-color .15s, background .15s, color .15s;
+  }
+  .composer-pill.upload-required .capability-upload-card { display: inline-flex; }
+  .capability-upload-card:hover {
+    border-color: var(--gold);
+    background: #fffaf0;
+    color: var(--gold);
+  }
+  .capability-upload-card svg { width: 17px; height: 17px; }
+  .capability-upload-card.is-uploaded {
+    border-style: solid;
+    border-color: rgba(69,132,99,.28);
+    background: var(--green-soft);
+    color: var(--ink);
+    align-items: flex-start;
+    padding: 9px 10px;
+  }
+  .capability-upload-card.is-uploaded .uploaded-line {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+  }
+  .capability-upload-card.is-uploaded .uploaded-name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+  }
+  .capability-upload-card.is-uploaded .uploaded-label {
+    color: var(--green);
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .capability-upload-card .upload-remove {
+    width: 17px;
+    height: 17px;
+    border-radius: 5px;
+    display: grid;
+    place-items: center;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+  .capability-upload-card .upload-remove:hover {
+    background: rgba(69,132,99,.12);
+    color: var(--ink);
+  }
 
   /* + 弹出菜单 · 类 Claude 紧凑风格 */
   .plus-pop { width: 240px; padding: 6px; }
@@ -357,6 +508,9 @@
     display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
     transition: opacity 0.25s, transform 0.25s, height 0.25s;
     max-width: 760px;
+    position: relative;
+    z-index: 60;
+    overflow: visible;
   }
   .intent-chips.hidden-chips {
     opacity: 0;
@@ -366,6 +520,7 @@
     margin-top: -10px;
   }
   .intent-chip {
+    position: relative;
     display: flex; align-items: center; gap: 6px;
     padding: 8px 16px; border-radius: 20px;
     background: rgba(255,255,255,.62); border: 1px solid rgba(0,0,0,.07);
@@ -390,6 +545,80 @@
     padding: 2px 4px;
     margin-left: -2px;
     transform: translateY(-1px);
+  }
+  .capability-tip {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 10px);
+    transform: translate(-50%, -4px);
+    width: 230px;
+    padding: 10px;
+    border-radius: 12px;
+    background: rgba(255,255,255,.96);
+    border: 1px solid var(--line-strong);
+    box-shadow: 0 18px 45px rgba(25,25,24,.14);
+    color: var(--ink);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .16s ease, transform .16s ease;
+    z-index: 2000;
+    text-align: left;
+  }
+  .capability-tip::before {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: -6px;
+    width: 10px;
+    height: 10px;
+    transform: translateX(-50%) rotate(45deg);
+    background: rgba(255,255,255,.96);
+    border-left: 1px solid var(--line-strong);
+    border-top: 1px solid var(--line-strong);
+  }
+  .intent-chip:hover .capability-tip {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+  .capability-tip-preview {
+    height: 84px;
+    border-radius: 9px;
+    background:
+      radial-gradient(circle at 75% 18%, rgba(255,255,255,.28), transparent 26%),
+      linear-gradient(135deg, rgba(25,72,88,.96), rgba(69,132,99,.88));
+    display: grid;
+    place-items: center;
+    color: rgba(255,255,255,.92);
+    margin-bottom: 9px;
+    overflow: hidden;
+  }
+  .capability-tip-preview svg {
+    width: 38px;
+    height: 38px;
+    filter: drop-shadow(0 6px 14px rgba(0,0,0,.22));
+  }
+  .capability-tip-title {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--ink);
+  }
+  .capability-tip-badge {
+    font-size: 10px;
+    line-height: 1;
+    color: #fff;
+    background: #f36b3d;
+    border-radius: 999px;
+    padding: 3px 5px;
+  }
+  .capability-tip-desc {
+    margin-top: 5px;
+    font-size: 12px;
+    line-height: 1.45;
+    color: var(--muted);
+    white-space: normal;
   }
 
   /* Toast */
@@ -505,6 +734,8 @@
   .middle-grid {
     display: grid; grid-template-columns: 1.42fr 1fr; gap: 26px;
     min-height: 288px;
+    position: relative;
+    z-index: 1;
   }
   .zone { display: flex; flex-direction: column; }
   .work-list, .tool-list { flex: 1; }
@@ -761,20 +992,25 @@
 
       <!-- 1. 欢迎语 -->
       <header class="welcome">
-        <h1>下午好，张老师</h1>
+        <h1>张老师，今天想做什么？</h1>
       </header>
 
       <!-- 2. GPT 风格输入区 -->
       <section class="composer-section">
         <div class="composer-pill" id="home-composer">
-          <button class="pill-icon pill-plus" id="home-plus-btn" title="添加附件 / 添加知识库" onclick="togglePlusMenu(event)">
+          <button class="pill-icon pill-plus" id="home-plus-btn" title="添加文件或图片" onclick="togglePlusMenu(event)">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           </button>
           <div class="input-wrap">
+            <div class="attachment-row" id="home-attachment-row"></div>
             <textarea id="home-input" rows="1" placeholder="问点什么……" onkeydown="onHomeKey(event)" oninput="autosize(this)"></textarea>
           </div>
           <div class="chip-row" id="home-chip-row">
             <span id="home-mode" class="pill-mode" style="display:none"></span>
+            <button type="button" class="capability-upload-card" id="home-capability-upload" onclick="uploadCapabilityAttachment(event)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>
+              <span>上传附件</span>
+            </button>
             <div class="kb-attached-row" id="home-kb-row"></div>
           </div>
           <div class="composer-actions">
@@ -792,7 +1028,7 @@
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L9 9l-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/></svg> AI 生成
           </button>
           <button class="intent-chip" data-chip="search" onclick="toggleChip('search')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg> 知识库搜索
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg> 知识库问答
           </button>
           <button class="intent-chip" data-chip="create" onclick="toggleChip('create')">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg> 创建应用
@@ -815,22 +1051,22 @@
             <button class="work-card" onclick="window.location.href='ai-record-jobs.html'">
               <div class="icon-box rose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
               <div class="work-info">
-                <div class="work-title">高一(3)班 · 语文期中模拟卷</div>
-                <div class="work-meta"><span class="work-tag" style="color: var(--rose); background: var(--rose-soft);">刚刚扫描</span> 38 份待批改 · 包含作文</div>
+                <div class="work-title">语文期中模拟卷</div>
+                <div class="work-meta"><span class="work-tag" style="color: var(--rose); background: var(--rose-soft);">刚刚扫描</span> 高一(3)班 · 飞象作业 · 2 分钟前</div>
               </div>
             </button>
             <button class="work-card" onclick="window.location.href='chat.html?resume=1'">
               <div class="icon-box green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4z"/></svg></div>
               <div class="work-info">
-                <div class="work-title">高一(5)班 · 《荷塘月色》课后练习</div>
-                <div class="work-meta"><span class="work-tag" style="color: var(--green); background: var(--green-soft);">刚刚扫描</span> 42 份待批改 · 客观题已出分</div>
+                <div class="work-title">《荷塘月色》课后练习</div>
+                <div class="work-meta"><span class="work-tag" style="color: var(--green); background: var(--green-soft);">待批改</span> 高一(5)班 · 飞象作文 · 10 分钟前</div>
               </div>
             </button>
             <button class="work-card" onclick="window.location.href='ai-review.html'">
               <div class="icon-box blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg></div>
               <div class="work-info">
-                <div class="work-title">高二(2)班 · 文言文专项测验</div>
-                <div class="work-meta"><span class="work-tag">批改中</span> 剩 12 份未批改</div>
+                <div class="work-title">文言文专项测验</div>
+                <div class="work-meta"><span class="work-tag">批改中</span> 高二(2)班 · 飞象作业 · 32 分钟前</div>
               </div>
             </button>
           </div>
@@ -1022,7 +1258,7 @@ function openCommonApp(id) {
   const app = COMMON_APPS.find(item => item.id === id);
   if (!app) return;
   if (commonAppEditing) return;
-  window.location.href = app.url;
+  window.open(app.url, '_blank', 'noopener');
 }
 
 function onCommonAppKey(e, id) {
@@ -1153,7 +1389,7 @@ function switchCommonAppPickerTab(tab) {
 /* 输入框 / 发送 / chip */
 const CHIP_META = {
   ai:     { label: 'AI 生成',  placeholder: '', svg: '<path d="M12 2L9 9l-7 1 5 5-1 7 6-3 6 3-1-7 5-5-7-1z"/>' },
-  search: { label: '知识库搜索', placeholder: '输入搜索内容', svg: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
+  search: { label: '知识库问答', placeholder: '输入问题或资料关键词', svg: '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>' },
   create: { label: '创建应用', placeholder: '描述你想要的应用，比如：班级请假审批小工具',          svg: '<rect x="3" y="3" width="18" height="18" rx="2"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/>' },
 };
 const AI_PLACEHOLDER_EXAMPLES = [
@@ -1163,23 +1399,95 @@ const AI_PLACEHOLDER_EXAMPLES = [
   'AI 组题｜帮我生成一份北京朝阳区七年级上册数学期末考试模拟题',
 ];
 const AI_CAPABILITIES = [
-  { id: 'qbank', label: 'AI 组题', placeholder: AI_PLACEHOLDER_EXAMPLES[3], svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
-  { id: 'animation', label: '教学动画', placeholder: AI_PLACEHOLDER_EXAMPLES[2], svg: '<path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/><path d="m5.6 5.6 2.8 2.8"/><path d="m15.6 15.6 2.8 2.8"/><path d="m18.4 5.6-2.8 2.8"/><path d="m8.4 15.6-2.8 2.8"/><circle cx="12" cy="12" r="3"/>' },
-  { id: 'game', label: '教学游戏', placeholder: '描述知识点和玩法，比如：文言虚词配对小游戏，适合高一课堂 8 分钟。', svg: '<line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/>' },
-  { id: 'interactive', label: '互动课件', placeholder: '描述课堂互动形式，比如：把《西游记》取经路线做成闯关互动课件。', svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/>' },
-  { id: 'data', label: '数据回收', placeholder: '描述你要收集的数据，比如：班会签到、课堂投票、学生自评和统计表。', svg: '<path d="M3 3v18h18"/><path d="M7 15v2"/><path d="M12 9v8"/><path d="M17 12v5"/>' },
+  { id: 'qbank', label: 'AI 组题', desc: '根据知识点、题型和难度快速生成练习、测验或试卷。', placeholder: AI_PLACEHOLDER_EXAMPLES[3], svg: '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>' },
+  { id: 'animation', label: '教学动画', badge: '新功能', desc: '生成用于课堂讲解的专业级互动教学动画。', placeholder: AI_PLACEHOLDER_EXAMPLES[2], svg: '<path d="M12 3v4"/><path d="M12 17v4"/><path d="M3 12h4"/><path d="M17 12h4"/><path d="m5.6 5.6 2.8 2.8"/><path d="m15.6 15.6 2.8 2.8"/><path d="m18.4 5.6-2.8 2.8"/><path d="m8.4 15.6-2.8 2.8"/><circle cx="12" cy="12" r="3"/>' },
+  { id: 'game', label: '教学游戏', badge: '新功能', desc: '把知识点设计成可在课堂中使用的小游戏。', placeholder: '教学游戏｜以《西游记》取经之路为故事线，生成六年级课内古诗词闯关游戏，让学生在游戏化体验中变“被动背诵”为“主动探究”。', svg: '<line x1="6" y1="12" x2="10" y2="12"/><line x1="8" y1="10" x2="8" y2="14"/><line x1="15" y1="13" x2="15.01" y2="13"/><line x1="18" y1="11" x2="18.01" y2="11"/><rect x="2" y="6" width="20" height="12" rx="3"/>' },
+  { id: 'interactive', label: '互动课件', badge: '新功能', desc: '上传教案文件后，生成可操作、可演示的课堂互动课件。', placeholder: AI_PLACEHOLDER_EXAMPLES[0], svg: '<rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h6v6H9z"/>' },
+  { id: 'data', label: '数据回收', badge: '新功能', desc: '上传 HTML 文件后，为课件增加答题、统计和课堂数据回收。', placeholder: '数据回收｜我想在课件的练习环节，增加数据回收功能，了解每道题的正确率及高频错题的情况。', svg: '<path d="M3 3v18h18"/><path d="M7 15v2"/><path d="M12 9v8"/><path d="M17 12v5"/>' },
 ];
 const HOME_DEFAULT = '问点什么……';
+const ATTACHMENT_LIMIT = 10;
 let activeChip = null;
 let activeAiCapability = null;
 let aiPlaceholderIndex = 0;
 let aiPlaceholderTimer = null;
+let attachedItems = [];
+let capabilityUploads = {};
+
+function getUploadRequirement() {
+  if (activeChip !== 'ai') return null;
+  if (activeAiCapability === 'interactive') return { id: 'interactive', label: '上传教案文件', fileName: '初英U1互动课件教案.docx', toast: '已添加教案文件' };
+  if (activeAiCapability === 'data') return { id: 'data', label: '上传HTML文件', fileName: '课堂练习数据回收.html', toast: '已添加 HTML 文件' };
+  return null;
+}
+
+function attachmentIcon(type) {
+  if (type === 'image') return '<span class="attachment-thumb"></span>';
+  return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+}
+
+function applyAttachmentState() {
+  const row = document.getElementById('home-attachment-row');
+  if (!row) return;
+  row.innerHTML = attachedItems.map(item => `
+    <div class="attachment-chip" title="${item.name}">
+      ${attachmentIcon(item.type)}
+      <span class="attachment-meta">
+        <span class="attachment-name">${item.name}</span>
+        <span class="attachment-size">${item.size}</span>
+      </span>
+      <span class="chip-del" title="移除" onclick="event.stopPropagation(); removeAttachment('${item.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </span>
+    </div>
+  `).join('');
+  refreshComposerLayout();
+}
+
+function addAttachment(type) {
+  if (attachedItems.length >= ATTACHMENT_LIMIT) {
+    closeAllPops();
+    showToast(`最多上传 ${ATTACHMENT_LIMIT} 个附件`);
+    return;
+  }
+  const item = type === 'image'
+    ? { id: `image-${Date.now()}`, type: 'image', name: '课堂板书.png', size: '433.92KB' }
+    : { id: `file-${Date.now()}`, type: 'file', name: '教学资料.docx', size: '167KB' };
+  attachedItems.push(item);
+  applyAttachmentState();
+  closeAllPops();
+  showToast(type === 'image' ? '已添加图片' : '已添加文件');
+}
+
+function removeAttachment(id) {
+  attachedItems = attachedItems.filter(item => item.id !== id);
+  applyAttachmentState();
+}
+
+function renderCapabilityUploadCard(uploadCard, uploadReq) {
+  if (!uploadCard) return;
+  const uploaded = uploadReq ? capabilityUploads[uploadReq.id] : null;
+  uploadCard.classList.toggle('is-uploaded', !!uploaded);
+  uploadCard.innerHTML = uploaded ? `
+    <span class="uploaded-label">已上传</span>
+    <span class="uploaded-line">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>
+      <span class="uploaded-name">${uploaded.name}</span>
+      <span class="upload-remove" title="移除" onclick="event.stopPropagation(); removeCapabilityUpload('${uploadReq.id}')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </span>
+    </span>
+  ` : `
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>
+    <span>${uploadReq ? uploadReq.label : '上传附件'}</span>
+  `;
+}
 
 function toggleChip(kind) {
   const next = activeChip === kind ? null : kind;
   activeChip = next;
   activeAiCapability = null;
-  // 知识库搜索 0 KB = 默认搜全部知识库（隐式）；其他模式可继续携带已选知识库。
+  // 知识库问答 0 KB = 默认搜全部知识库（隐式）；其他模式可继续携带已选知识库。
   refreshChips();
   applyKbState();
 }
@@ -1192,10 +1500,14 @@ function clearChip() {
 function selectAiCapability(id) {
   activeChip = 'ai';
   activeAiCapability = id;
+  aiPlaceholderIndex = 0;
   refreshChips();
+  syncAiPlaceholder();
   applyKbState();
 }
 function getAiPlaceholder() {
+  const cap = activeAiCapability ? AI_CAPABILITIES.find(item => item.id === activeAiCapability) : null;
+  if (cap) return cap.placeholder;
   return AI_PLACEHOLDER_EXAMPLES[aiPlaceholderIndex % AI_PLACEHOLDER_EXAMPLES.length];
 }
 function syncAiPlaceholder() {
@@ -1227,7 +1539,7 @@ function renderMainIntentChips() {
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CHIP_META.ai.svg}</svg> AI 生成
     </button>
     <button class="intent-chip ${activeChip === 'search' ? 'active' : ''}" data-chip="search" onclick="toggleChip('search')">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CHIP_META.search.svg}</svg> 知识库搜索
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CHIP_META.search.svg}</svg> 知识库问答
     </button>
     <button class="intent-chip ${activeChip === 'create' ? 'active' : ''}" data-chip="create" onclick="toggleChip('create')">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${CHIP_META.create.svg}</svg> 创建应用
@@ -1239,10 +1551,15 @@ function renderAiCapabilityChips() {
   if (!panel) return;
   panel.innerHTML = `
     ${AI_CAPABILITIES.map(cap => `
-      <button class="intent-chip ${activeAiCapability === cap.id ? 'active' : ''}" data-capability="${cap.id}" onclick="selectAiCapability('${cap.id}')">
+      <button class="intent-chip ai-capability-chip ${activeAiCapability === cap.id ? 'active' : ''}" data-capability="${cap.id}" onclick="selectAiCapability('${cap.id}')">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">${cap.svg}</svg>
         ${cap.label}
         ${cap.beta ? '<span class="chip-beta">BETA</span>' : ''}
+        <span class="capability-tip">
+          <span class="capability-tip-preview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${cap.svg}</svg></span>
+          <span class="capability-tip-title">${cap.label}${cap.badge ? `<span class="capability-tip-badge">${cap.badge}</span>` : ''}</span>
+          <span class="capability-tip-desc">${cap.desc}</span>
+        </span>
       </button>
     `).join('')}
   `;
@@ -1412,7 +1729,7 @@ function applyKbState() {
     return;
   }
   row.innerHTML = list.map(f => `
-    <div class="kb-attached-chip" onclick="togglePlusMenu(event, {openKb:true})" title="管理知识库">
+    <div class="kb-attached-chip" title="已添加知识库">
       <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
       <span>${f.name}</span>
       <span class="chip-del" title="移除" onclick="event.stopPropagation(); removeKb('${f.id}')">
@@ -1428,10 +1745,16 @@ function refreshComposerLayout() {
   if (!composer) return;
   const mode = document.getElementById('home-mode');
   const kbRow = document.getElementById('home-kb-row');
+  const attachmentRow = document.getElementById('home-attachment-row');
+  const uploadCard = document.getElementById('home-capability-upload');
+  const uploadReq = getUploadRequirement();
   const hasMode = mode && mode.style.display !== 'none' && mode.innerHTML.trim() !== '';
   const hasKb = kbRow && kbRow.children.length > 0;
-  composer.classList.toggle('has-chips', !!(hasMode || hasKb));
+  const hasAttachments = attachmentRow && attachmentRow.children.length > 0;
+  renderCapabilityUploadCard(uploadCard, uploadReq);
+  composer.classList.toggle('has-chips', !!(hasMode || hasKb || hasAttachments || uploadReq));
   composer.classList.toggle('ai-mode', activeChip === 'ai');
+  composer.classList.toggle('upload-required', !!uploadReq);
 }
 
 function removeKb(id) {
@@ -1459,12 +1782,25 @@ function selectKbScope(id) {
 }
 
 /* + 主菜单 · openKb=true 时点开主菜单后自动展开知识库二级菜单（pin 点击场景） */
+function uploadCapabilityAttachment(e) {
+  e.stopPropagation();
+  const uploadReq = getUploadRequirement();
+  if (!uploadReq) return;
+  capabilityUploads[uploadReq.id] = { type: 'file', name: uploadReq.fileName };
+  refreshComposerLayout();
+  showToast(uploadReq.toast);
+}
+
+function removeCapabilityUpload(id) {
+  delete capabilityUploads[id];
+  refreshComposerLayout();
+}
+
 function togglePlusMenu(e, opts) {
   e.stopPropagation();
   const wasOpen = !!document.getElementById('plus-pop');
   closeAllPops();
   if (wasOpen) return;
-  const autoOpenKb = opts && opts.openKb === true;
   const btn = document.getElementById('home-plus-btn');
   const rect = btn.getBoundingClientRect();
   const pop = document.createElement('div');
@@ -1475,28 +1811,17 @@ function togglePlusMenu(e, opts) {
   renderPlusMenu(pop);
   document.body.appendChild(pop);
   setTimeout(() => document.addEventListener('click', closeAllPops, { once: true }), 50);
-  if (autoOpenKb) openKbSubmenu({ stopPropagation: () => {} });
 }
 
 function renderPlusMenu(pop) {
-  const count = selectedKbIds.length;
-  const kbActiveClass = count > 0 ? 'is-active' : '';
-  const kbMetaContent = count > 0 ? `<span>${count} 个已选</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg>` : '';
   pop.innerHTML = `
-    <button class="plus-row" onclick="event.stopPropagation();closeAllPops();showToast('（演示）打开文件选择器')">
+    <button class="plus-row" onclick="event.stopPropagation();addAttachment('file')">
       <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-      <span class="row-label">添加文件 / 图片</span>
+      <span class="row-label">添加文件</span>
     </button>
-    <button class="plus-row" onclick="event.stopPropagation();closeAllPops();showToast('（演示）调用摄像头拍照')">
-      <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-      <span class="row-label">拍照 / 扫描</span>
-    </button>
-    <div class="plus-divider"></div>
-    <button class="plus-row ${kbActiveClass}" onclick="event.stopPropagation();openKbSubmenu(event)">
-      <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
-      <span class="row-label">添加知识库</span>
-      <span class="row-meta">${kbMetaContent}</span>
-      <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+    <button class="plus-row" onclick="event.stopPropagation();addAttachment('image')">
+      <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+      <span class="row-label">添加图片</span>
     </button>
   `;
 }
@@ -1640,13 +1965,10 @@ function toggleSidebar() {
   app.dataset.sidebar = app.dataset.sidebar === 'collapsed' ? 'open' : 'collapsed';
 }
 
-/* 时间问候 */
 renderCommonApps();
 (function syncGreet() {
-  const h = new Date().getHours();
-  const greet = h < 11 ? '早上好' : h < 14 ? '中午好' : h < 18 ? '下午好' : '晚上好';
   const el = document.querySelector('.welcome h1');
-  if (el) el.textContent = `${greet}，张老师`;
+  if (el) el.textContent = '张老师，今天想做什么？';
 })();
 </script>
 
@@ -1656,17 +1978,57 @@ renderCommonApps();
   "summary": "首页是老师进入校园版后的默认工作台，只承接高频入口、动态提醒和空间导航；真正的生成、搜索、批改、组题等任务进入对话页或对应业务页完成。",
   "sections": [
     {
+      "id": "home-greeting",
+      "title": "1. 首页问候语",
+      "body": "根据登录老师信息展示通用首屏问候，帮助老师确认当前账号和工作台状态。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "问候语位于首页输入框上方，是老师进入首页后看到的首屏状态信息。",
+            "问候语由老师姓名和通用引导文案组成，例如“张老师，今天想做什么？”。",
+            "问候语只做身份和氛围提示，不承担入口、通知或任务处理能力。"
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "问候语不区分早中晚，避免因客户端时间差异导致展示不一致。",
+            "老师姓名来自当前登录用户资料；demo 阶段固定展示“张老师”。",
+            "如果用户姓名缺失，默认展示老师称呼，例如“老师，今天想做什么？”。",
+            "问候语随页面加载渲染一次；无需在页面停留期间实时刷新。"
+          ]
+        },
+        {
+          "title": "异常场景",
+          "type": "table",
+          "columns": ["场景", "处理方式"],
+          "rows": [
+            {
+              "场景": "未获取到老师姓名",
+              "处理方式": "使用兜底称呼展示，例如“老师，今天想做什么？”。"
+            },
+            {
+              "场景": "客户端时间异常",
+              "处理方式": "问候语不依赖时间，不影响首页展示和其它功能。"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "id": "home-composer",
-      "title": "1. 顶部 AI 输入入口",
-      "body": "收集老师首轮意图，并把 chips 选择、+ 菜单补充内容和知识库范围带入对话。",
+      "title": "2. 顶部 AI 输入入口",
+      "body": "收集老师首轮意图，并把 chips 选择、附件和知识库问答范围带入对话。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
             "首页输入框是校园版最核心的任务入口，老师可以不先找功能，直接描述要做的事。",
-            "输入框下方的 chips 用来帮助老师先声明任务类型：AI 生成、知识库搜索、创建应用；点击后会改变输入框标签、二级选项和发送到对话页的上下文。",
-            "+ 菜单用于补充上下文，包括添加文件/图片、拍照/扫描、添加知识库；它不是独立任务入口，也不是知识库搜索专属能力，而是服务当前输入意图。",
-            "知识库范围不是主模式的一部分：知识库搜索会直接展示范围选择；普通输入、AI 生成和创建应用也都可以通过 + 菜单附加知识库。",
+            "输入框下方的 chips 用来帮助老师先声明任务类型：AI 生成、知识库问答、创建应用；点击后会改变输入框标签、二级选项和发送到对话页的上下文。",
+            "输入框 placeholder 只做示例引导和轮播提示，不提供自动续写、自动补全或自动填入正文。",
+            "+ 菜单用于补充本次任务附件；一期仅支持添加文件、添加图片两个入口，不支持添加知识库、拍照/扫描；普通附件最多上传 10 个。",
+            "知识库范围不是 + 菜单能力：知识库问答会直接展示范围选择；普通输入、AI 生成和创建应用如需引用知识库，由后续对话页或业务页承接。",
             "首页只负责收集意图和上下文，真正的生成、搜索、应用创建、资料引用都在 chat.html 或对应业务页继续。"
           ]
         },
@@ -1680,15 +2042,15 @@ renderCommonApps();
             },
             {
               "label": "点击 AI 生成 chip",
-              "text": "底部 chips 从三类主入口切换为 AI 生成能力：AI 组题、教学动画、教学游戏、互动课件、数据回收；输入框内出现“AI 生成”模式标签，placeholder 轮播展示生成类示例。"
+              "text": "底部 chips 从三类主入口切换为 AI 生成能力：AI 组题、教学动画、教学游戏、互动课件、数据回收；输入框内出现“AI 生成”模式标签，未选择具体能力时 placeholder 轮播展示生成类示例；鼠标 hover 某个能力 chip 时展示功能提示卡。"
             },
             {
               "label": "选择 AI 生成二级能力",
-              "text": "老师点击某个二级能力后，输入框标签变为“AI 生成 · 对应能力”；发送时把能力一起带到 chat.html，例如能力为 AI 组题时，对话页按组题工作流承接。"
+              "text": "老师点击某个二级能力后，输入框标签变为“AI 生成 · 对应能力”；灰色 placeholder 立即切换为当前能力的提示文案，不再继续轮播其它能力示例；发送时把能力一起带到 chat.html，例如能力为 AI 组题时，对话页按组题工作流承接。选中互动课件或数据回收时，输入框内展示对应上传卡片；上传成功后，卡片变为已上传状态，展示文件名并支持移除。"
             },
             {
-              "label": "点击知识库搜索 chip",
-              "text": "底部 chips 直接切换为知识库范围选择：全部知识库、我的知识库、学校知识库等；输入框内出现“知识库搜索”模式标签，placeholder 变为“输入搜索内容”。这里的范围选择是搜索模式的快捷选择，不代表知识库只能在搜索模式下使用。"
+              "label": "点击知识库问答 chip",
+              "text": "底部 chips 直接切换为知识库范围选择：全部知识库、我的知识库、学校知识库等；输入框内出现“知识库问答”模式标签，placeholder 变为“输入问题或资料关键词”。这里的范围选择是问答模式的快捷选择，不代表知识库只能在问答模式下使用。"
             },
             {
               "label": "选择知识库范围",
@@ -1696,58 +2058,57 @@ renderCommonApps();
             },
             {
               "label": "点击创建应用 chip",
-              "text": "输入框内出现“创建应用”模式标签，placeholder 引导老师描述想要的应用；此时仍允许通过 + 菜单添加知识库，作为创建应用的参考资料。"
+              "text": "输入框内出现“创建应用”模式标签，placeholder 引导老师描述想要的应用；一期创建应用的 + 菜单仍只支持添加文件和添加图片。"
             },
             {
-              "label": "点击 + 添加文件/图片",
-              "text": "打开文件选择动作；老师补充的文件作为本次任务附件，后续进入对话页时应作为当前任务上下文，而不是默认进入知识库。"
+              "label": "点击 + 添加文件",
+              "text": "打开文件选择动作；上传成功后，输入框内容区顶部展示附件 chip，样式与飞象老师保持一致，包含文件图标、文件名、文件大小和移除按钮。文件作为本次任务附件，后续进入对话页时应作为当前任务上下文，而不是默认进入知识库。"
             },
             {
-              "label": "点击 + 拍照/扫描",
-              "text": "触发拍照或扫描动作；适合把纸质材料、课堂板书、试卷照片作为本次任务上下文。"
+              "label": "点击 + 添加图片",
+              "text": "打开图片选择动作；上传成功后，输入框内容区顶部展示图片 chip，样式与飞象老师保持一致，包含缩略图、图片名、图片大小和移除按钮。图片作为本次任务附件，后续进入对话页时应作为当前任务上下文。"
             },
             {
-              "label": "点击 + 添加知识库",
-              "text": "点击输入框左侧 + 打开菜单，选择“添加知识库”后在右侧打开知识库二级菜单，支持多选；选择后输入框内展示已选知识库标签，再次点击可取消。"
+              "label": "互动课件上传教案文件",
+              "text": "选择“互动课件”后，输入框内出现“上传教案文件”虚线卡片，并替换左侧 + 按钮；老师点击卡片上传教案文件，作为生成互动课件的必要上下文。"
             },
             {
-              "label": "AI 生成附加知识库",
-              "text": "老师已选择 AI 生成或 AI 生成二级能力后，仍可点击 + 添加知识库；发送后对话页需要同时知道“AI 生成能力”和“本次引用的知识库”，例如用学校知识库资料生成题目、动画或互动课件。"
-            },
-            {
-              "label": "普通输入 / 创建应用附加知识库",
-              "text": "老师未选择主模式时，也可以通过 + 添加知识库，把资料作为普通对话上下文；创建应用模式下添加知识库时，知识库作为应用创建的参考资料。"
+              "label": "数据回收上传 HTML 文件",
+              "text": "选择“数据回收”后，输入框内出现“上传HTML文件”虚线卡片，并替换左侧 + 按钮；老师点击卡片上传 HTML 文件，作为配置数据回收能力的必要上下文。"
             },
             {
               "label": "发送任务",
-              "text": "发送时把文本、主模式、二级能力、已选知识库、附件或扫描内容一起带到 chat.html；首页不直接展示 AI 结果。"
+              "text": "发送时把文本、主模式、二级能力、知识库问答范围和附件内容一起带到 chat.html；首页不直接展示 AI 结果。"
             },
             {
-              "label": "取消模式或知识库",
-              "text": "点击模式标签上的 x 取消主模式；点击知识库标签上的 x 移除单个知识库；移除后输入框布局恢复。"
+              "label": "取消模式或附件要求",
+              "text": "点击模式标签上的 x 取消主模式；取消互动课件或数据回收后，上传卡片消失，左侧 + 按钮恢复。"
             }
           ]
         },
         {
           "title": "业务规则",
           "items": [
-            "AI 生成、知识库搜索、创建应用是互斥主模式，同一时间只能有一个主模式。",
+            "AI 生成、知识库问答、创建应用是互斥主模式，同一时间只能有一个主模式。",
+            "首页和新对话页输入框都没有自动续写功能；老师发送前看到的正文必须来自老师输入或已明确选择的标签/附件。",
             "AI 生成二级能力只有在 AI 生成模式下出现；取消 AI 生成后，二级能力也随之清空。",
-            "知识库范围不是主模式的一部分：知识库搜索会直接展示范围选择，普通输入、AI 生成和创建应用都可以通过 + 菜单附加知识库。",
-            "AI 生成模式下选择知识库时，知识库作为生成参考资料，不把主模式切换为知识库搜索。",
+            "知识库范围不是 + 菜单能力：知识库问答会直接展示范围选择；一期普通输入、AI 生成和创建应用的知识库引用不在首页 + 菜单完成。",
+            "AI 生成如需引用知识库，应在后续对话页或业务页继续选择资料，不把主模式切换为知识库问答。",
             "选择“全部知识库”表示在老师有权限的全部知识库里检索，不展示具体知识库标签。",
             "选择我的知识库或学校知识库时，输入框必须显示可识别、可删除的标签，让老师知道本次任务引用了哪些资料。",
-            "添加文件/图片、拍照/扫描只服务本次任务；除非老师在后续流程明确保存或上传，否则不自动进入我的知识库或学校知识库。",
+            "添加文件和添加图片只服务本次任务；普通附件合计最多 10 个，超出时提示“最多上传 10 个附件”；除非老师在后续流程明确保存或上传，否则不自动进入我的知识库或学校知识库。",
+            "互动课件需要老师上传教案文件；数据回收需要老师上传 HTML 文件；未上传时发送可以进入对话页，但对话页需要继续提示补充文件。",
+            "一期 + 菜单不提供拍照/扫描，也不提供添加知识库入口。",
             "首页空输入不能发送；空输入时已选主模式、二级能力和知识库范围都要保留，方便老师继续补充。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "进入 chat.html 时需要携带：输入文本、主模式、AI 生成二级能力、知识库范围、具体知识库 id、附件或扫描上下文。",
+            "进入 chat.html 时需要携带：输入文本、主模式、AI 生成二级能力、知识库问答范围、具体知识库 id 和附件上下文。",
             "知识库标签需要区分“我的知识库”和“学校知识库”，并保留老师是否有访问权限。",
             "AI 生成能力需要保留能力 id 和展示名称，便于对话页恢复“AI 生成 · 具体能力”的标签。",
-            "附件和扫描材料属于本次任务上下文，后续是否沉淀到知识库由对话页或上传流程决定。"
+            "附件属于本次任务上下文，文件和图片需要区分类型、名称、大小、上传状态和移除状态；后续是否沉淀到知识库由对话页或上传流程决定。"
           ]
         },
         {
@@ -1770,13 +2131,17 @@ renderCommonApps();
               "场景": "知识库范围内暂无资料",
               "处理方式": "允许发送，但对话页需要提示当前范围没有可引用资料，并建议切换范围或上传资料。"
             },
+              {
+                "场景": "附件格式不支持",
+                "处理方式": "提示支持的文件类型，保留输入框文本和已选模式。"
+              },
+              {
+                "场景": "附件数量超过上限",
+                "处理方式": "普通附件已达到 10 个时，不再新增附件，提示“最多上传 10 个附件”。"
+              },
             {
-              "场景": "附件格式不支持",
-              "处理方式": "提示支持的文件类型，保留输入框文本和已选模式。"
-            },
-            {
-              "场景": "拍照/扫描不可用",
-              "处理方式": "提示当前设备不可用，仍保留 + 菜单和其它添加方式。"
+              "场景": "互动课件或数据回收未上传文件",
+              "处理方式": "允许进入对话页，但需要保留能力标签，并在对话页继续提示上传教案文件或 HTML 文件。"
             },
             {
               "场景": "已选知识库被移除或失效",
@@ -1798,7 +2163,7 @@ renderCommonApps();
           "rows": [
             {
               "关联对象": "chat.html",
-              "说明": "承接首页输入文本、模式、AI 能力、知识库范围、附件和扫描上下文。"
+              "说明": "承接首页输入文本、模式、AI 能力、知识库问答范围和附件上下文。"
             },
             {
               "关联对象": "school-wiki.html / my-wiki.html",
@@ -1810,7 +2175,7 @@ renderCommonApps();
             },
             {
               "关联对象": "ai-qbank.html / ai-record-jobs.html",
-              "说明": "AI 组题和拍照/扫描试卷可继续进入题库和录题链路。"
+              "说明": "AI 组题和 AI 录题可继续进入题库和录题链路。"
             }
           ]
         },
@@ -1819,11 +2184,14 @@ renderCommonApps();
           "items": [
             "点击 AI 生成后，下方 chips 应切换为 AI 组题、教学动画、教学游戏、互动课件、数据回收。",
             "选择 AI 生成二级能力后，输入框内标签应显示“AI 生成 · 具体能力”，发送到 chat.html 后能力仍可还原。",
-            "点击知识库搜索后，下方必须直接出现全部知识库、我的知识库、学校知识库等范围选择。",
-            "通过 + 菜单添加知识库后，输入框内应出现知识库标签，并可逐个删除。",
-            "AI 生成模式下通过 + 菜单添加知识库后，输入框应同时保留“AI 生成 / 二级能力”标签和知识库标签。",
-            "+ 菜单的添加文件/图片、拍照/扫描、添加知识库都应有明确反馈，不得静默。",
-            "创建应用模式下仍能添加知识库，发送后对话页应知道这是创建应用的参考资料。",
+            "hover 任一 AI 生成二级能力 chip 时，应展示该能力的功能提示卡；移开后消失，不改变当前选中状态。",
+            "选择具体 AI 生成能力后，placeholder 应固定为该能力对应文案；取消能力后恢复 AI 生成示例轮播。",
+            "点击知识库问答后，下方必须直接出现全部知识库、我的知识库、学校知识库等范围选择。",
+            "选择互动课件后，输入框内应展示“上传教案文件”卡片，并隐藏左侧 + 按钮。",
+            "选择数据回收后，输入框内应展示“上传HTML文件”卡片，并隐藏左侧 + 按钮。",
+            "+ 菜单一期只展示添加文件、添加图片；不得出现拍照/扫描或添加知识库。",
+            "点击 + 添加文件或添加图片后，应在输入框内容区顶部展示对应附件 chip，包含图标或缩略图、名称、大小和移除入口；普通附件最多 10 个。",
+            "互动课件或数据回收上传成功后，必传卡片应变为已上传状态，展示文件名和移除入口。",
             "空输入发送只提示，不跳转，不清空已选状态。"
           ]
         }
@@ -1831,7 +2199,7 @@ renderCommonApps();
     },
     {
       "id": "common-apps",
-      "title": "2. 常用应用",
+      "title": "3. 常用应用",
       "body": "让老师快速进入高频工具，并支持个人化调整。",
       "blocks": [
         {
@@ -1847,7 +2215,7 @@ renderCommonApps();
           "items": [
             {
               "label": "路径 1",
-              "text": "非编辑态点击应用卡片，进入对应应用或业务页。"
+              "text": "非编辑态点击应用卡片，在新页面打开对应应用或业务页；首页保持当前状态不被替换。"
             },
             {
               "label": "路径 2",
@@ -1863,6 +2231,7 @@ renderCommonApps();
           "title": "业务规则",
           "items": [
             "首页最多展示 6 个常用应用。",
+            "常用应用仅作为首页快捷入口；非编辑态打开应用时使用新页面，不覆盖首页。",
             "已添加应用不能重复添加。",
             "编辑态的删除只影响首页展示，不删除应用本身。",
             "官方应用和学校自建应用都可以出现在常用应用中。"
@@ -1893,7 +2262,7 @@ renderCommonApps();
             },
             {
               "场景": "应用入口不可用",
-              "处理方式": "提示该能力暂不可用，不进入空白页。"
+              "处理方式": "提示该能力暂不可用，不打开新页面或空白页。"
             }
           ]
         },
@@ -1927,7 +2296,7 @@ renderCommonApps();
     },
     {
       "id": "work-feed",
-      "title": "3. 工作动态",
+      "title": "4. 工作动态",
       "body": "聚合老师近期需要查看、确认或继续处理的事项。第一版只接入五类明确动态，不做泛通知流。",
       "blocks": [
         {
@@ -1935,7 +2304,8 @@ renderCommonApps();
           "body": [
             "工作动态替代独立通知入口，但不等于通知中心；它只展示老师发起过、参与过，且现在需要查看、确认或继续处理的事项。",
             "第一版只接入五类：飞象作业、飞象作文、错因诊断、AI 录题、知识库文件处理完成。",
-            "首页只展示少量高优先级动态，完整列表进入 work-feed.html 工作动态页。"
+            "首页只展示少量高优先级动态，完整列表进入 work-feed.html 工作动态页。",
+            "首页动态卡片只帮助老师识别事项，不承载作业或作文的完整业务数据。"
           ]
         },
         {
@@ -2014,7 +2384,8 @@ renderCommonApps();
           "title": "业务规则",
           "items": [
             "工作动态只做提醒和跳转，不在首页完成批改、通知发送、组题等重操作。",
-            "每条动态必须有来源、状态、更新时间和目标页面。",
+            "每条动态必须有标题、来源、班级或归属对象、状态、更新时间和目标页面。",
+            "首页卡片不展示提交人数、正确率、学情、批改、讲评等业务详情；这些信息进入目标业务页后查看。",
             "首页动态按优先级展示，避免把老师的一屏变成消息列表。",
             "普通 Wiki 更新、普通资源更新、应用上新、系统公告、纯推荐内容不进入第一版工作动态。",
             "知识库只有在“文件 AI 处理完毕且老师需要查看处理结果”时才进入工作动态；普通知识库内容更新不进入。"
@@ -2023,7 +2394,8 @@ renderCommonApps();
         {
           "title": "数据说明",
           "items": [
-            "动态信息包括标题、来源应用、状态、说明、更新时间、优先级和目标页。",
+            "首页动态信息包括标题、来源应用、归属对象、状态、更新时间、优先级和目标页。",
+            "详细业务数据由来源应用维护，例如作业提交人数、正确率、待确认数、讲评入口等，不在首页动态卡片中展开。",
             "同一事项更新状态时应复用同一业务事项，不重复堆叠无意义通知。",
             "接入动态的业务需要提供动态类型，当前类型限定为 homework、essay、diagnosis、record、knowledge-file。"
           ]
@@ -2090,7 +2462,7 @@ renderCommonApps();
     },
     {
       "id": "global-sidebar",
-      "title": "4. 左侧导航与全局入口",
+      "title": "5. 左侧导航与全局入口",
       "body": "提供校园版全局路由、空间身份和账号入口。",
       "blocks": [
         {

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>飞象老师校园版 · 我的空间</title>
+<title>飞象老师校园版 · 我的作品</title>
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
@@ -456,7 +456,7 @@
     <header class="page-header" data-page-header="my-apps" data-scroll-target=".main">
       <div class="ph-left">
         <i class="ph-icon" data-lucide="layout-grid"></i>
-        <h1 class="ph-title">我的空间</h1>
+        <h1 class="ph-title">我的作品</h1>
       </div>
     </header>
 
@@ -470,7 +470,7 @@
       <div class="head-actions">
         <label class="ph-search">
           <i data-lucide="search"></i>
-          <input type="text" placeholder="在我的空间里搜索…" oninput="onSearch(event)">
+          <input type="text" placeholder="在我的作品里搜索…" oninput="onSearch(event)">
         </label>
       </div>
     </div>
@@ -487,7 +487,7 @@
     <header class="modal-header">
       <div class="modal-title">
         <i data-lucide="plus-circle" style="color: var(--gold-deep); width: 18px; height: 18px;"></i>
-        <span>创建空间内容</span>
+        <span>创建作品</span>
       </div>
       <button class="modal-close" onclick="closeCreateModal()">
         <i data-lucide="x" style="width: 16px; height: 16px;"></i>
@@ -637,7 +637,7 @@
       menuItems = `
         <button class="app-menu-item danger" onclick="event.stopPropagation();closeCardMenus();removeAddedApp('${escapedTitle}')">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><path d="m19 6-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
-          移出空间
+          移出作品
         </button>
       `;
     }
@@ -800,7 +800,7 @@
 
   function openCreateModal() {
     editingAppTitle = null;
-    document.querySelector('.modal-title span').textContent = '创建空间内容';
+    document.querySelector('.modal-title span').textContent = '创建作品';
     selectedIcon = 'sparkles';
     selectedGrad = 1;
     document.getElementById('app-name-input').value = '';
@@ -895,7 +895,7 @@
     selectedGrad = app.grad;
     initModalSelectors();
 
-    document.querySelector('.modal-title span').textContent = '编辑空间内容';
+    document.querySelector('.modal-title span').textContent = '编辑作品';
     document.getElementById('create-app-modal').classList.add('active');
   }
 
@@ -934,18 +934,18 @@
 
 <template id="review-template">
 {
-  "title": "我的作品 · 老师自己的应用和资源",
-  "summary": "我的作品聚合老师收藏、创建或最近使用的应用和资源，帮助老师快速回到自己的常用工作资产。",
+  "title": "我的作品 · 延续个人版的作品空间",
+  "summary": "校园版延续飞象老师个人版“我的空间”的作品心智，但把知识库拆成独立入口；我的作品只承载老师创建、保存和收藏的作品内容。",
   "sections": [
     {
       "id": "my-apps-tabs",
-      "title": "1. 分类切换",
-      "body": "分类切换用于在我的应用、我的资源、最近使用和收藏内容之间快速切换。",
+      "title": "1. 分类与搜索",
+      "body": "页面保持个人版的轻量作品入口，用分类和搜索帮助老师快速回到自己的课件、应用和收藏内容。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "分类切换用于在我的应用、我的资源、最近使用和收藏内容之间快速切换。"
+            "页面保持个人版的轻量作品入口，用分类和搜索帮助老师快速回到自己的课件、应用和收藏内容。"
           ]
         },
         {
@@ -958,30 +958,26 @@
             },
             {
               "label": "切换分类",
-              "text": "点击顶部 tab 查看不同类型内容。"
+              "text": "点击全部作品、我的课件、我的应用、我的收藏，列表即时切换。"
             },
             {
-              "label": "查看数量",
-              "text": "每个分类可展示数量或空状态。"
-            },
-            {
-              "label": "保留位置",
-              "text": "切换回来时尽量保留上次浏览位置。"
+              "label": "搜索作品",
+              "text": "输入作品名称或描述关键词，在当前分类下收敛结果。"
             }
           ]
         },
         {
           "title": "业务规则",
           "items": [
-            "分类只改变当前列表展示，不删除内容。",
-            "最近使用按时间倒序，收藏按收藏时间或自定义排序。",
-            "空分类需要给出可行动入口。"
+            "我的作品只处理作品内容；我的知识库在校园版中作为独立入口承载资料沉淀。",
+            "分类只改变当前列表展示，不改变作品归属。",
+            "搜索和当前分类共同生效。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "分类数据包含类型、数量、最近使用时间、收藏状态。"
+            "作品数据包含标题、简介、类型、来源、作者、收藏量和打开地址。"
           ]
         },
         {
@@ -994,15 +990,11 @@
           "rows": [
             {
               "场景": "分类为空",
-              "处理方式": "展示去广场发现内容的入口。"
+              "处理方式": "展示空态，并保留新建任务入口。"
             },
             {
-              "场景": "内容已失效",
-              "处理方式": "卡片灰态展示或从列表移除。"
-            },
-            {
-              "场景": "筛选状态残留",
-              "处理方式": "切换分类时应按当前分类重新计算列表。"
+              "场景": "搜索无结果",
+              "处理方式": "展示未找到匹配内容。"
             }
           ]
         },
@@ -1016,11 +1008,11 @@
           "rows": [
             {
               "关联对象": "app-square.html",
-              "说明": "空应用分类引导去应用广场。"
+              "说明": "收藏或添加应用后可回到我的作品查看。"
             },
             {
               "关联对象": "resource-square.html",
-              "说明": "空资源分类引导去资源广场。"
+              "说明": "收藏或复制资源后可回到我的作品查看。"
             }
           ]
         },
@@ -1028,8 +1020,8 @@
           "title": "QA 检查点",
           "items": [
             "切换 tab 不误删内容。",
-            "空状态有下一步。",
-            "最近使用排序正确。"
+            "搜索只影响当前列表展示。",
+            "页面名称和个人版“我的空间”的作品心智保持一致。"
           ]
         }
       ]
@@ -1037,12 +1029,12 @@
     {
       "id": "my-apps-grid",
       "title": "2. 内容卡片",
-      "body": "内容卡片展示老师自己的应用、资源或收藏项，并提供打开、取消收藏、删除个人副本等动作。",
+      "body": "内容卡片以作品为中心展示名称、来源和使用热度，老师可以打开作品，或对自己创建和收藏的内容做轻量管理。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "内容卡片展示老师自己的应用、资源或收藏项，并提供打开、取消收藏、删除个人副本等动作。"
+            "内容卡片以作品为中心展示名称、来源和使用热度，老师可以打开作品，或对自己创建和收藏的内容做轻量管理。"
           ]
         },
         {
@@ -1051,15 +1043,15 @@
           "items": [
             {
               "label": "浏览卡片",
-              "text": "老师查看名称、来源、最近使用、收藏状态。"
+              "text": "老师查看作品名称、作者来源、浏览量和收藏量。"
             },
             {
               "label": "打开内容",
-              "text": "点击卡片主体进入应用详情或资源详情。"
+              "text": "点击卡片进入对应应用、资源详情，或在演示态展示打开反馈。"
             },
             {
               "label": "行内操作",
-              "text": "点击更多可取消收藏、删除个人副本或分享。"
+              "text": "点击更多可编辑或删除自己创建的作品，也可取消收藏或移出作品。"
             },
             {
               "label": "状态同步",
@@ -1070,15 +1062,15 @@
         {
           "title": "业务规则",
           "items": [
-            "取消收藏不删除原应用或资源。",
-            "删除个人副本只影响老师自己的副本，不影响学校资源。",
-            "官方或学校内容不可被普通老师删除，只能取消收藏。"
+            "自己创建的作品可以编辑或删除。",
+            "收藏内容可以取消收藏，取消后不影响原应用或原资源。",
+            "移出作品只影响老师个人列表，不改变学校公共内容。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "卡片数据包含内容 id、类型、来源、归属、收藏状态、最近使用、可操作权限。"
+            "卡片数据包含作品标题、描述、类型、来源、作者、状态、浏览量、收藏量和跳转地址。"
           ]
         },
         {
@@ -1091,19 +1083,15 @@
           "rows": [
             {
               "场景": "内容已下架",
-              "处理方式": "卡片显示不可用，进入详情时说明原因。"
+              "处理方式": "进入时提示内容不可用或保留演示反馈。"
             },
             {
               "场景": "取消收藏失败",
-              "处理方式": "恢复原状态并提示。"
+              "处理方式": "保留原卡片并提示。"
             },
             {
               "场景": "删除需确认",
-              "处理方式": "删除个人副本前弹出确认。"
-            },
-            {
-              "场景": "无权限打开",
-              "处理方式": "提示权限变化，保留返回入口。"
+              "处理方式": "删除自己创建的作品前弹出确认。"
             }
           ]
         },
@@ -1117,11 +1105,11 @@
           "rows": [
             {
               "关联对象": "app-detail.html",
-              "说明": "应用卡片进入详情。"
+              "说明": "部分应用作品可进入应用详情或具体应用页。"
             },
             {
               "关联对象": "resource-detail.html",
-              "说明": "资源卡片进入详情。"
+              "说明": "资源作品可进入资源详情。"
             },
             {
               "关联对象": "index.html",
@@ -1133,8 +1121,8 @@
           "title": "QA 检查点",
           "items": [
             "取消收藏不影响广场原内容。",
-            "删除个人副本有确认。",
-            "不同来源的可操作权限正确。"
+            "删除自己创建的作品有确认。",
+            "自己创建和收藏来源的可见操作不同。"
           ]
         }
       ]

@@ -391,6 +391,25 @@ body.review-mode .review-panel {
   outline: 2px solid rgba(124, 58, 237, 0.55) !important;
   outline-offset: 3px;
 }
+body[data-page="app-detail"] .review-switcher,
+body[data-page="resource-detail"] .review-switcher {
+  left: 18px;
+  right: auto;
+  bottom: 92px;
+}
+body[data-page="personal-home"] .review-switcher,
+body[data-page="wiki-home"] .review-switcher,
+body[data-page="wiki-entry"] .review-switcher {
+  left: 264px;
+  right: auto;
+  bottom: 92px;
+}
+body[data-page="ai-qbank"]:not([data-subpage]) .review-switcher {
+  top: 76px;
+  left: 264px;
+  right: auto;
+  bottom: auto;
+}
 @media (max-width: 900px) {
   .review-panel {
     top: 54px;
@@ -402,5 +421,24 @@ body.review-mode .review-panel {
   .review-switcher {
     right: 16px;
     bottom: 14px;
+  }
+  body[data-page="app-detail"] .review-switcher,
+  body[data-page="resource-detail"] .review-switcher {
+    left: 12px;
+    right: auto;
+    bottom: 92px;
+  }
+  body[data-page="personal-home"] .review-switcher,
+  body[data-page="wiki-home"] .review-switcher,
+  body[data-page="wiki-entry"] .review-switcher {
+    left: 12px;
+    right: auto;
+    bottom: 92px;
+  }
+  body[data-page="ai-qbank"]:not([data-subpage]) .review-switcher {
+    left: 12px;
+    right: auto;
+    top: auto;
+    bottom: 92px;
   }
 }

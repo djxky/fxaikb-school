@@ -500,7 +500,7 @@
       ${navItem({ key: 'chat', icon: ICONS.plus, label: '新对话', href: 'chat.html', primary: true, activeKey })}
       ${navItem({ key: 'chat-history', icon: ICONS.history, label: '历史对话', href: 'chat-history.html', count: 86, activeKey })}
 
-      <div class="fx-nav-section">我的</div>
+      <div class="fx-nav-section">我的空间</div>
       ${navItem({ key: 'my-apps', icon: ICONS.apps, label: '我的作品', href: 'my-apps.html', activeKey })}
       ${navItem({ key: 'my-wiki', icon: ICONS.person, label: '我的知识库', href: 'my-wiki.html', activeKey })}
 

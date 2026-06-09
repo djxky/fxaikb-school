@@ -48,21 +48,11 @@
     color: #fff;
   }
   .brand-mark [data-lucide] { width: 17px; height: 17px; }
-  .topbar-note {
-    color: var(--text-3);
-    font-size: 12.5px;
-  }
   .join-main {
-    width: min(1040px, calc(100% - 48px));
+    width: min(560px, calc(100% - 48px));
     margin: 0 auto;
-    padding: 56px 0 72px;
-    display: grid;
-    grid-template-columns: minmax(0, .92fr) minmax(380px, 1fr);
-    gap: 44px;
-    align-items: start;
-  }
-  .school-brief {
-    padding-top: 12px;
+    padding: 64px 0 72px;
+    display: block;
   }
   .status-pill {
     display: inline-flex;
@@ -78,69 +68,6 @@
     font-weight: 700;
   }
   .status-pill [data-lucide] { width: 14px; height: 14px; }
-  h1 {
-    margin: 22px 0 12px;
-    font-size: 34px;
-    line-height: 1.16;
-    letter-spacing: 0;
-  }
-  .brief-copy {
-    max-width: 460px;
-    color: var(--text-2);
-    font-size: 15px;
-  }
-  .school-card {
-    margin-top: 30px;
-    width: min(430px, 100%);
-    border: 1px solid rgba(17,17,16,.08);
-    border-radius: 10px;
-    background: rgba(255,255,255,.72);
-    overflow: hidden;
-  }
-  .school-cover {
-    height: 118px;
-    background:
-      linear-gradient(135deg, rgba(74,117,91,.9), rgba(83,117,158,.72)),
-      radial-gradient(circle at 18% 22%, rgba(255,255,255,.4), transparent 28%);
-    display: flex;
-    align-items: flex-end;
-    padding: 18px;
-  }
-  .school-badge {
-    width: 54px;
-    height: 54px;
-    border-radius: 14px;
-    display: grid;
-    place-items: center;
-    background: rgba(255,255,255,.92);
-    color: #4a755b;
-    box-shadow: 0 12px 24px rgba(0,0,0,.12);
-  }
-  .school-badge [data-lucide] { width: 26px; height: 26px; }
-  .school-meta {
-    padding: 18px;
-  }
-  .school-name {
-    font-size: 17px;
-    font-weight: 750;
-  }
-  .school-detail {
-    margin-top: 8px;
-    display: grid;
-    gap: 8px;
-    color: var(--text-3);
-    font-size: 12.5px;
-  }
-  .meta-row {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .meta-row [data-lucide] {
-    width: 14px;
-    height: 14px;
-    color: var(--gold);
-  }
   .join-card {
     border: 1px solid var(--border-2);
     border-radius: 12px;
@@ -151,6 +78,24 @@
   .join-card-head {
     padding: 22px 24px 16px;
     border-bottom: 1px solid var(--border);
+  }
+  .invite-summary {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+  .school-line {
+    font-size: 20px;
+    line-height: 1.25;
+    font-weight: 750;
+    letter-spacing: 0;
+  }
+  .invite-line {
+    margin-top: 6px;
+    color: var(--text-3);
+    font-size: 12.5px;
   }
   .stepper {
     display: grid;
@@ -186,15 +131,6 @@
   .step.done .step-dot {
     background: var(--gold-bg);
     color: var(--gold-deep);
-  }
-  .card-title {
-    font-size: 19px;
-    font-weight: 750;
-  }
-  .card-subtitle {
-    margin-top: 6px;
-    color: var(--text-3);
-    font-size: 12.5px;
   }
   .join-card-body {
     padding: 22px 24px 24px;
@@ -327,33 +263,9 @@
     color: var(--text-3);
     font-size: 12.5px;
   }
-  .state-tabs {
-    margin-top: 18px;
-    display: inline-flex;
-    padding: 3px;
-    border: 1px solid rgba(17,17,16,.08);
-    border-radius: 9px;
-    background: rgba(255,255,255,.58);
-  }
-  .state-tabs button {
-    height: 28px;
-    border: 0;
-    border-radius: 7px;
-    padding: 0 10px;
-    background: transparent;
-    color: var(--text-3);
-    font-size: 12px;
-    font-weight: 650;
-    cursor: pointer;
-  }
-  .state-tabs button.active {
-    background: #fff;
-    color: var(--text);
-    box-shadow: 0 1px 3px rgba(0,0,0,.08);
-  }
   .link-warning {
     display: none;
-    margin-top: 16px;
+    margin: 0 24px 18px;
     border: 1px solid #f0c7bd;
     background: #fff1ee;
     color: #9d3d2d;
@@ -380,20 +292,16 @@
   }
   @media (max-width: 860px) {
     .join-topbar { padding: 0 18px; }
-    .topbar-note { display: none; }
     .join-main {
       width: calc(100% - 32px);
       padding: 30px 0 48px;
-      grid-template-columns: 1fr;
-      gap: 24px;
     }
-    .school-brief { padding-top: 0; }
-    h1 { font-size: 28px; }
-    .school-card { width: 100%; }
   }
   @media (max-width: 520px) {
     .join-card-head,
     .join-card-body { padding-left: 18px; padding-right: 18px; }
+    .invite-summary { flex-direction: column; gap: 10px; }
+    .school-line { font-size: 18px; }
     .stepper { grid-template-columns: 1fr; }
     .code-row { grid-template-columns: 1fr; }
     .btn { width: 100%; }
@@ -408,45 +316,25 @@
       <div class="brand-mark"><i data-lucide="sparkles"></i></div>
       <span>飞象老师校园版</span>
     </div>
-    <div class="topbar-note">老师加入学校</div>
   </header>
 
   <main class="join-main">
-    <section class="school-brief">
-      <div class="status-pill" id="linkStatus"><i data-lucide="shield-check"></i><span>邀请链接有效</span></div>
-      <h1>加入北京市实验中学</h1>
-      <div class="brief-copy">张老师邀请你加入本校空间。加入后，你可以访问学校知识库、应用广场和学校共享资源。</div>
-      <div class="school-card">
-        <div class="school-cover">
-          <div class="school-badge"><i data-lucide="school"></i></div>
-        </div>
-        <div class="school-meta">
-          <div class="school-name">北京市实验中学</div>
-          <div class="school-detail">
-            <div class="meta-row"><i data-lucide="user-round-check"></i><span>邀请人：张老师 · 管理员</span></div>
-            <div class="meta-row"><i data-lucide="clock-3"></i><span id="expireText">有效期至：2026-06-08 10:18</span></div>
-            <div class="meta-row"><i data-lucide="users"></i><span>已有 42 位老师在本校空间</span></div>
-          </div>
-        </div>
-      </div>
-      <div class="state-tabs" aria-label="演示状态">
-        <button class="active" onclick="setLinkState('valid', this)">有效</button>
-        <button onclick="setLinkState('expired', this)">过期</button>
-        <button onclick="setLinkState('joined', this)">已加入</button>
-      </div>
-      <div class="link-warning" id="linkWarning">这个邀请链接已失效。请联系学校管理员重新发送邀请链接。</div>
-    </section>
-
     <section class="join-card" id="joinCard">
       <div class="join-card-head">
+        <div class="invite-summary">
+          <div>
+            <div class="school-line">加入北京市实验中学</div>
+            <div class="invite-line"><span id="expireText">张老师邀请你加入 · 有效期至 2026-06-08 10:18</span></div>
+          </div>
+          <div class="status-pill" id="linkStatus"><i data-lucide="shield-check"></i><span>邀请链接有效</span></div>
+        </div>
         <div class="stepper">
           <div class="step active" data-step="1"><span class="step-dot">1</span><span>手机号验证</span></div>
           <div class="step" data-step="2"><span class="step-dot">2</span><span>确认身份</span></div>
           <div class="step" data-step="3"><span class="step-dot">3</span><span>进入学校</span></div>
         </div>
-        <div class="card-title" id="cardTitle">先验证手机号</div>
-        <div class="card-subtitle" id="cardSubtitle">使用你平时登录飞象老师的手机号。</div>
       </div>
+      <div class="link-warning" id="linkWarning">这个邀请链接已失效。请联系学校管理员重新发送邀请链接。</div>
       <div class="join-card-body">
         <div class="flow-panel active" id="phonePanel">
           <div class="field-grid">
@@ -548,20 +436,14 @@
     setSteps(step);
     if (step === 1) {
       document.getElementById('phonePanel').classList.add('active');
-      document.getElementById('cardTitle').textContent = '先验证手机号';
-      document.getElementById('cardSubtitle').textContent = '使用你平时登录飞象老师的手机号。';
     }
     if (step === 2) {
       const rawPhone = document.getElementById('phoneInput').value.replace(/\s/g, '');
       document.getElementById('confirmPhone').textContent = formatPhone(rawPhone);
       document.getElementById('profilePanel').classList.add('active');
-      document.getElementById('cardTitle').textContent = '确认你的老师身份';
-      document.getElementById('cardSubtitle').textContent = '姓名和学科会显示在学校老师列表中。';
     }
     if (step === 3) {
       document.getElementById('successPanel').classList.add('active');
-      document.getElementById('cardTitle').textContent = '加入成功';
-      document.getElementById('cardSubtitle').textContent = '欢迎来到北京市实验中学。';
     }
     if (window.lucide) lucide.createIcons();
   }
@@ -579,16 +461,14 @@
     window.location.href = 'index.html';
   }
 
-  function setLinkState(state, button) {
+  function setLinkState(state) {
     document.body.dataset.linkState = state;
-    document.querySelectorAll('.state-tabs button').forEach((item) => item.classList.remove('active'));
-    if (button) button.classList.add('active');
     const status = document.getElementById('linkStatus');
     const warning = document.getElementById('linkWarning');
-    const card = document.getElementById('joinCard');
+    const cardBody = document.querySelector('.join-card-body');
     warning.classList.toggle('visible', state === 'expired');
-    card.style.opacity = state === 'expired' ? '.48' : '1';
-    card.style.pointerEvents = state === 'expired' ? 'none' : 'auto';
+    cardBody.style.opacity = state === 'expired' ? '.48' : '1';
+    cardBody.style.pointerEvents = state === 'expired' ? 'none' : 'auto';
     if (state === 'valid') {
       status.innerHTML = '<i data-lucide="shield-check"></i><span>邀请链接有效</span>';
       goStep(1);
@@ -609,14 +489,11 @@
     const invite = params.get('invite');
     if (invite) {
       const expireText = document.getElementById('expireText');
-      expireText.textContent = state === 'expired' ? '链接已失效：' + invite : '有效期至：2026-06-08 10:18';
+      expireText.textContent = state === 'expired'
+        ? '张老师邀请你加入 · 链接已失效：' + invite
+        : '张老师邀请你加入 · 有效期至 2026-06-08 10:18';
     }
-    const targetButton = Array.from(document.querySelectorAll('.state-tabs button')).find((button) => {
-      if (state === 'expired') return button.textContent.trim() === '过期';
-      if (state === 'joined') return button.textContent.trim() === '已加入';
-      return button.textContent.trim() === '有效';
-    });
-    setLinkState(state, targetButton);
+    setLinkState(state);
   }
 
   document.body.dataset.linkState = 'valid';
@@ -629,14 +506,14 @@
   "summary": "加入学校版页面承接管理员邀请，让老师确认学校、完成手机号验证并进入学校空间。",
   "sections": [
     {
-      "id": "join-school-brief",
-      "title": "1. 邀请说明",
-      "body": "邀请说明区让老师确认自己正在加入哪个学校、邀请人是谁，以及加入后会获得哪些学校空间能力。",
+      "id": "join-school-summary",
+      "title": "1. 邀请确认",
+      "body": "单卡片顶部展示学校名称、邀请人和链接状态，让老师确认后直接进入手机号验证。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "邀请说明区让老师确认自己正在加入哪个学校、邀请人是谁，以及加入后会获得哪些学校空间能力。"
+            "单卡片顶部展示学校名称、邀请人和链接状态，让老师确认后直接进入手机号验证。"
           ]
         },
         {
@@ -649,7 +526,7 @@
             },
             {
               "label": "确认学校",
-              "text": "页面展示学校名称、邀请人、学校标识和加入说明。"
+              "text": "卡片顶部展示学校名称、邀请人和邀请状态。"
             },
             {
               "label": "判断身份",
@@ -689,7 +566,7 @@
             },
             {
               "场景": "已加入学校",
-              "处理方式": "展示已加入状态，并提供进入工作台。"
+              "处理方式": "展示已加入状态，并提供进入学校空间。"
             }
           ]
         },
@@ -706,8 +583,8 @@
               "说明": "管理员创建邀请并查看加入状态。"
             },
             {
-              "关联对象": "teacher-login.html",
-              "说明": "未登录老师需要完成手机号验证。"
+              "关联对象": "手机号验证",
+              "说明": "未登录老师在本页完成手机号验证。"
             }
           ]
         },
@@ -724,12 +601,12 @@
     {
       "id": "join-school-form",
       "title": "2. 手机号验证",
-      "body": "手机号验证用于确认老师身份，并把当前账号和学校成员关系绑定。",
+      "body": "手机号验证用于确认老师账号，验证后补充姓名和任教学科。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "手机号验证用于确认老师身份，并把当前账号和学校成员关系绑定。"
+            "手机号验证用于确认老师账号，验证后补充姓名和任教学科。"
           ]
         },
         {
@@ -742,7 +619,7 @@
             },
             {
               "label": "获取验证码",
-              "text": "点击获取验证码后进入倒计时。"
+              "text": "点击获取验证码后发送短信验证码。"
             },
             {
               "label": "输入验证码",
@@ -750,7 +627,7 @@
             },
             {
               "label": "补充身份",
-              "text": "如学校需要，可补充姓名、学科、年级等信息。"
+              "text": "验证后补充姓名和任教学科。"
             }
           ]
         },
@@ -759,13 +636,13 @@
           "items": [
             "手机号是学校成员识别的主凭据。",
             "验证码错误不能加入学校。",
-            "学校若开启审核，提交后进入待审核而非直接成功。"
+            "老师默认以学科老师身份加入，管理员可在学校管理中调整角色。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "表单数据包含手机号、验证码、姓名、学科、年级、邀请 id、审核状态。"
+            "表单数据包含手机号、验证码、姓名、学科、邀请 id、加入状态。"
           ]
         },
         {
@@ -785,12 +662,8 @@
               "处理方式": "提示重新输入或重新获取。"
             },
             {
-              "场景": "手机号已绑定其他学校",
-              "处理方式": "提示当前绑定情况，避免误加入。"
-            },
-            {
-              "场景": "需要管理员审核",
-              "处理方式": "提交后展示待审核状态。"
+              "场景": "手机号已加入本校",
+              "处理方式": "直接展示已加入状态，并提供进入学校空间。"
             }
           ]
         },
@@ -803,12 +676,12 @@
           ],
           "rows": [
             {
-              "关联对象": "teacher-login.html",
-              "说明": "手机号登录能力与验证规则一致。"
+              "关联对象": "手机号验证",
+              "说明": "本页完成验证码发送、校验和账号确认。"
             },
             {
               "关联对象": "admin-teachers.html",
-              "说明": "提交后成员列表更新为已加入或待审核。"
+              "说明": "提交后成员列表更新为已加入。"
             }
           ]
         },
@@ -816,8 +689,8 @@
           "title": "QA 检查点",
           "items": [
             "手机号格式校验正确。",
-            "验证码倒计时状态正确。",
-            "审核制学校不会直接进入成功态。"
+            "验证码发送和错误提示正确。",
+            "姓名和学科可正确提交。"
           ]
         }
       ]
@@ -825,12 +698,12 @@
     {
       "id": "join-school-success",
       "title": "3. 加入成功",
-      "body": "加入成功页告诉老师已进入学校空间，并引导下一步打开首页、学校知识库或应用广场。",
+      "body": "加入成功页告诉老师已加入学校，并引导进入学校空间。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "加入成功页告诉老师已进入学校空间，并引导下一步打开首页、学校知识库或应用广场。"
+            "加入成功页告诉老师已加入学校，并引导进入学校空间。"
           ]
         },
         {
@@ -842,16 +715,12 @@
               "text": "验证通过后展示成功状态和学校名称。"
             },
             {
-              "label": "进入工作台",
-              "text": "点击进入工作台跳转首页。"
-            },
-            {
-              "label": "查看学校资料",
-              "text": "可直接进入学校知识库查看共享资料。"
+              "label": "进入学校空间",
+              "text": "点击进入学校空间跳转校园版首页。"
             },
             {
               "label": "稍后继续",
-              "text": "关闭后再次访问首页时保持已加入状态。"
+              "text": "再次访问邀请链接时保持已加入状态。"
             }
           ]
         },
@@ -882,10 +751,6 @@
               "处理方式": "保留表单信息并提示原因。"
             },
             {
-              "场景": "审核中",
-              "处理方式": "展示等待审核，不进入成功态。"
-            },
-            {
               "场景": "登录状态失效",
               "处理方式": "提示重新登录后继续加入。"
             }
@@ -902,14 +767,6 @@
             {
               "关联对象": "index.html",
               "说明": "加入后进入校园版首页。"
-            },
-            {
-              "关联对象": "school-wiki.html",
-              "说明": "加入后可访问学校知识库。"
-            },
-            {
-              "关联对象": "app-square.html",
-              "说明": "加入后可访问学校应用广场。"
             }
           ]
         },
@@ -917,8 +774,8 @@
           "title": "QA 检查点",
           "items": [
             "成功页必须显示学校名称。",
-            "审核中和成功态区分清楚。",
-            "进入工作台后学校入口可见。"
+            "进入学校空间按钮可跳转校园版首页。",
+            "已加入状态不会重复创建成员。"
           ]
         }
       ]
