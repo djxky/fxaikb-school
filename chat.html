@@ -861,6 +861,20 @@
   /* 非空状态：empty hero / chips 隐藏（用 :not 提高特异性，覆盖 .intent-chips 的 display:flex） */
   .center:not([data-empty="1"]) .empty-hero,
   .center:not([data-empty="1"]) .empty-chips { display: none; }
+  .center:not([data-empty="1"]) .composer-pill,
+  .center:not([data-empty="1"]) .composer-pill.has-chips {
+    grid-template-columns: 1fr auto;
+    grid-template-areas: "input actions";
+    grid-template-rows: auto;
+    padding: 8px 8px 8px 18px;
+    border-radius: 26px;
+    align-items: center;
+    row-gap: 0;
+  }
+  .center:not([data-empty="1"]) #cc-plus-btn,
+  .center:not([data-empty="1"]) .chip-row {
+    display: none !important;
+  }
 
   /* 空状态下：右侧 Canvas 不显示，整个 grid 退到两列；侧栏正常 */
   .app[data-empty="1"] { grid-template-columns: 240px minmax(0,1fr) 0; }
@@ -3051,9 +3065,16 @@ function setEmpty(isEmpty) {
   const center = document.getElementById('ch-center');
   const app = document.getElementById('app');
   if (!center) return;
+  if (!isEmpty) {
+    ccMode = null;
+    ccAiCapability = null;
+    stopCcAiPlaceholderCarousel();
+    closePlusPop();
+  }
   const v = isEmpty ? '1' : '0';
   center.dataset.empty = v;
   if (app) app.dataset.empty = v;
+  refreshCcModeChip();
   syncCcPlaceholder();
   refreshEmptyChips();
   refreshSend();
@@ -4014,7 +4035,7 @@ function sendInChat() {
   const ta = $('#cc-input');
   let text = ta.value.trim();
   if (!text) { showToast('请输入内容'); return; }
-  if (ccMode && CC_CHIP_META[ccMode]) {
+  if (isEmptyState() && ccMode && CC_CHIP_META[ccMode]) {
     const aiCap = ccMode === 'ai' && ccAiCapability
       ? CC_AI_CAPABILITIES.find(cap => cap.id === ccAiCapability)
       : null;
@@ -4117,9 +4138,9 @@ init();
         {
           "title": "功能说明",
           "body": [
-            "对话页承接首页输入，也允许老师在本页直接发起任务。首轮发送后，系统先判断本轮属于闲聊/普通问答、知识库搜索、知识库问答、AI 组题、AI 生成 HTML 内容、创建应用中的哪一类。",
+            "对话页承接首页或新对话空状态的首轮输入。首轮发送后，系统先判断本轮属于闲聊/普通问答、知识库搜索、知识库问答、AI 组题、AI 生成 HTML 内容、创建应用中的哪一类。",
             "不同类型决定页面布局：闲聊、知识库搜索和知识库问答默认不打开生成型 Canvas；AI 组题、HTML 内容、创建应用会打开右侧成果区，左右保持接近 1:1。",
-            "同一条会话可以在后续追问中切换类型。例如老师先知识库问答，再要求“整理成互动课件”，此时从引用问答态切换到 HTML 生成 Canvas。"
+            "进入对话详情后，底部输入框只用于继续对话、追问或要求调整当前结果，不再展示 AI 生成、知识库问答、创建应用等功能切换入口。"
           ]
         },
         {
@@ -4587,7 +4608,8 @@ init();
           "items": [
             "关闭 Canvas 只收起右侧，不删除结果、不清空对话。",
             "重新打开 Canvas 时应回到最近一次激活成果。",
-            "操作栏文案必须避免混淆：文件按钮文案用保存并在弹窗说明保存到知识库，HTML 用全屏浏览，应用用部署，资料预览用打开原文。"
+            "操作栏文案必须避免混淆：文件按钮文案用保存并在弹窗说明保存到知识库，HTML 用全屏浏览，应用用部署，资料预览用打开原文。",
+            "所有对话详情页的输入框只能继续对话，不能在输入框内切换功能；新建任务或切换能力应回到首页/新对话空状态完成。"
           ]
         },
         {

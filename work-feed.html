@@ -188,10 +188,10 @@
 <script src="assets/page-header.js"></script>
 <script>
   const WORK_FEED_ITEMS = [
-    { id: 'homework-scan', title: '高一(3)班 · 语文期中模拟卷', desc: '38 份待批改 · 包含作文', sourceLabel: '飞象作业', status: 'todo', statusLabel: '刚刚扫描', time: '2 分钟前', url: 'ai-review.html', icon: 'book-open', color: 'rose', priority: 1 },
-    { id: 'essay-scan', title: '高一(5)班 ·《荷塘月色》作文练习', desc: '42 篇作文待确认批改', sourceLabel: '飞象作文', status: 'todo', statusLabel: '待确认', time: '10 分钟前', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 2 },
-    { id: 'diagnosis-report', title: '高二(2)班 · 文言文专项测验错因报告', desc: '班级错因分析已生成，待查看', sourceLabel: '错因诊断', status: 'done', statusLabel: '报告已生成', time: '32 分钟前', url: 'ai-review.html', icon: 'chart-line', color: 'blue', priority: 3 },
-    { id: 'record-confirm', title: '《期中模拟卷》AI 录题完成', desc: '已识别 36 道题，待确认入库', sourceLabel: 'AI 录题', status: 'todo', statusLabel: '待确认', time: '1 小时前', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 4 },
+    { id: 'homework-scan', title: '高一(3)班 · 语文期中模拟卷', desc: '38 份待批改 · 包含作文', sourceLabel: '飞象作业', status: 'todo', statusLabel: '刚刚扫描', time: '扫描 20:12', url: 'ai-review.html', icon: 'book-open', color: 'rose', priority: 1 },
+    { id: 'essay-scan', title: '高一(5)班 ·《荷塘月色》作文练习', desc: '42 篇作文待确认批改', sourceLabel: '飞象作文', status: 'todo', statusLabel: '待确认', time: '扫描 15:07', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 2 },
+    { id: 'diagnosis-report', title: '高二(2)班 · 文言文专项测验错因报告', desc: '班级错因分析已生成，待查看', sourceLabel: '错因诊断', status: 'done', statusLabel: '报告已生成', time: '生成 14:36', url: 'ai-review.html', icon: 'chart-line', color: 'blue', priority: 3 },
+    { id: 'record-confirm', title: '《期中模拟卷》AI 录题完成', desc: '已识别 36 道题，待确认入库', sourceLabel: 'AI 录题', status: 'todo', statusLabel: '待确认', time: '完成 13:20', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 4 },
     { id: 'kb-processed', title: '《高一语文复习资料》处理完成', desc: 'AI 已完成解析，可查看摘要与标签', sourceLabel: '知识库文件', status: 'done', statusLabel: '处理完成', time: '今天 09:30', url: 'file-preview.html', icon: 'file-check-2', color: '', priority: 5 }
   ];
 
@@ -264,7 +264,7 @@
             },
             {
               "label": "浏览动态",
-              "text": "列表展示五类工作动态，包含标题、来源、状态、说明和更新时间。"
+              "text": "列表展示五类工作动态，包含标题、来源、状态、说明和更新时间；更新时间展示为“扫描 20:12 / 完成 13:20”这类业务动作 + 数值时间。"
             },
             {
               "label": "继续处理",
@@ -278,6 +278,7 @@
             "动态只展示老师有权访问的事件。",
             "第一版只展示五类接入范围内的事项，不展示普通内容更新或系统消息。",
             "待处理、待确认、报告已生成、处理完成等状态必须使用老师能理解的业务表达。",
+            "时间展示使用固定数值时间，不使用“2 分钟前 / 1 小时前”等相对时间。",
             "删除或失效的目标不能跳空白页，需要给出状态说明。"
           ]
         },

@@ -740,7 +740,7 @@
   .zone { display: flex; flex-direction: column; }
   .work-list, .tool-list { flex: 1; }
 
-  /* 3A. 最近任务 */
+  /* 3A. 工作动态 */
   .work-list {
     display: flex; flex-direction: column; gap: 0;
     background: rgba(255,255,255,.76);
@@ -759,16 +759,43 @@
   .empty-desc { font-size: 13px; color: var(--muted); max-width: 240px; line-height: 1.5; }
 
   .work-card {
-    background: transparent; border: 0;
-    border-radius: 12px; padding: 14px 16px;
-    display: flex; align-items: center; gap: 14px;
+    position: relative;
+    background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(250,247,240,.62)); border: 0;
+    border-radius: 13px; padding: 13px 16px 13px 20px;
+    display: block;
     text-align: left;
-    min-height: 84px;
+    min-height: 68px;
+    overflow: hidden;
   }
-  .work-card + .work-card { border-top: 1px solid rgba(0,0,0,.055); }
+  .work-card + .work-card { margin-top: 6px; }
+  .work-card::before {
+    content: "";
+    position: absolute;
+    left: 9px; top: 14px; bottom: 14px;
+    width: 3px; border-radius: 999px;
+    background: var(--gold);
+    opacity: .72;
+  }
+  .work-card::after {
+    content: "";
+    position: absolute;
+    right: -24px; top: -30px;
+    width: 92px; height: 92px; border-radius: 50%;
+    background: rgba(184, 133, 35, .08);
+    pointer-events: none;
+  }
+  .work-card:nth-child(2) {
+    background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(238,248,243,.72));
+  }
+  .work-card:nth-child(2)::before { background: var(--green); }
+  .work-card:nth-child(2)::after { background: rgba(66, 126, 92, .08); }
+  .work-card:nth-child(3) {
+    background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(240,247,253,.72));
+  }
+  .work-card:nth-child(3)::before { background: var(--blue); }
+  .work-card:nth-child(3)::after { background: rgba(73, 113, 158, .08); }
   .work-card:hover {
-    background: rgba(255,255,255,.72);
-    box-shadow: none;
+    box-shadow: 0 8px 22px rgba(31, 28, 20, .06);
     transform: none;
   }
   
@@ -782,10 +809,10 @@
   .icon-box.gold { background: var(--gold-soft); color: var(--gold); }
   .icon-box.purple { background: var(--purple-soft); color: var(--purple); }
 
-  .work-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 7px; }
+  .work-info { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
   .work-title { font-size: 14.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .work-meta { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); }
-  .work-tag { background: var(--bg); padding: 2px 8px; border-radius: 999px; color: var(--ink); font-weight: 600; }
+  .work-meta { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .work-meta strong { color: var(--ink); font-weight: 700; }
 
   /* 3B. 常用应用 (改造为 2x3 紧凑网格) */
   .tool-list {
@@ -959,7 +986,6 @@
     .icon-box svg { width: 18px; height: 18px; }
     .work-title { font-size: 13.5px; }
     .work-meta { font-size: 11.5px; }
-    .work-tag { padding: 2px 6px; font-size: 11px; }
 
     /* 缩小常用工具卡片 */
     .tool-list { gap: 2px 8px; padding: 6px; }
@@ -1049,24 +1075,21 @@
           </div>
           <div class="work-list">
             <button class="work-card" onclick="window.location.href='ai-record-jobs.html'">
-              <div class="icon-box rose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
               <div class="work-info">
-                <div class="work-title">语文期中模拟卷</div>
-                <div class="work-meta"><span class="work-tag" style="color: var(--rose); background: var(--rose-soft);">刚刚扫描</span> 高一(3)班 · 飞象作业 · 2 分钟前</div>
+                <div class="work-title" title="原创检测卷 第十二章检测卷">原创检测卷 第十二章检测卷</div>
+                <div class="work-meta">八年级5班 · 提交 <strong>33/46</strong> · 待确认 <strong>0</strong> · 正确率 <strong>72.7%</strong></div>
               </div>
             </button>
             <button class="work-card" onclick="window.location.href='chat.html?resume=1'">
-              <div class="icon-box green"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="m18.5 2.5 3 3L12 15l-4 1 1-4z"/></svg></div>
               <div class="work-info">
-                <div class="work-title">《荷塘月色》课后练习</div>
-                <div class="work-meta"><span class="work-tag" style="color: var(--green); background: var(--green-soft);">待批改</span> 高一(5)班 · 飞象作文 · 10 分钟前</div>
+                <div class="work-title" title="原创检测卷 第十二章检测卷">原创检测卷 第十二章检测卷</div>
+                <div class="work-meta">八年级12班 · 提交 <strong>29/46</strong> · 待确认 <strong>0</strong> · 正确率 <strong>76.7%</strong></div>
               </div>
             </button>
             <button class="work-card" onclick="window.location.href='ai-review.html'">
-              <div class="icon-box blue"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="m7 14 4-4 4 4 5-5"/></svg></div>
               <div class="work-info">
-                <div class="work-title">文言文专项测验</div>
-                <div class="work-meta"><span class="work-tag">批改中</span> 高二(2)班 · 飞象作业 · 32 分钟前</div>
+                <div class="work-title" title="分层作业本 第一部分 课时分层情境练 第八章 运动和力 第4节 同一直线上二力的合成">分层作业本 第一部分 课时分层情境练 第八章 运动和力 第4节 同一直线上二力的合成</div>
+                <div class="work-meta">八年级5班 · 提交 <strong>40/46</strong> · 待确认 <strong>0</strong> · 正确率 <strong>71.5%</strong></div>
               </div>
             </button>
           </div>
@@ -2305,7 +2328,12 @@ renderCommonApps();
             "工作动态替代独立通知入口，但不等于通知中心；它只展示老师发起过、参与过，且现在需要查看、确认或继续处理的事项。",
             "第一版只接入五类：飞象作业、飞象作文、错因诊断、AI 录题、知识库文件处理完成。",
             "首页只展示少量高优先级动态，完整列表进入 work-feed.html 工作动态页。",
-            "首页动态卡片只帮助老师识别事项，不承载作业或作文的完整业务数据。"
+            "首页动态卡片只帮助老师快速识别事项和班级差异，不承载完整业务数据。",
+            "首页卡片采用两行轻装饰展示：第一行展示作业或任务名称，超过一行时省略；第二行展示班级、提交人数、待确认数和正确率。",
+            "作业或任务名称被省略时，hover 标题区域展示完整名称，保证卡片高度一致。",
+            "首页卡片不展示来源图标、来源名称、刚刚扫描等状态 tag、家长端公开状态和操作按钮；这些信息在目标业务页或全部动态页按需展示。",
+            "首页卡片不展示扫描 / 更新时间，避免长标题和弱信息竞争；时间信息进入全部动态页或目标业务页查看。",
+            "同一份作业或作文覆盖多个班级时，首页按班级级任务分别展示；不把不同班级合并成一张卡，避免丢失班级差异。"
           ]
         },
         {
@@ -2321,7 +2349,7 @@ renderCommonApps();
             {
               "来源": "飞象作业",
               "触发条件": "高扫扫描作业完成，老师需要查看或继续批改。",
-              "状态示例": "刚刚扫描 / 待查看",
+              "状态示例": "待查看",
               "点击去向": "进入作业扫描或批改任务页。"
             },
             {
@@ -2356,11 +2384,11 @@ renderCommonApps();
           "items": [
             {
               "label": "飞象作业动态",
-              "text": "点击高扫扫描作业动态，进入作业扫描 / 批改任务页，查看扫描结果、待批改数量或继续批改。"
+              "text": "点击高扫扫描作业动态，进入对应班级的作业扫描 / 批改任务页，查看学情、批改或讲评。"
             },
             {
               "label": "飞象作文动态",
-              "text": "点击高扫扫描作文动态，进入作文批改确认页或作文任务页，确认是否开始批改或继续处理。"
+              "text": "点击高扫扫描作文动态，进入对应班级的作文批改确认页或作文任务页，确认是否开始批改或继续处理。"
             },
             {
               "label": "错因诊断动态",
@@ -2384,8 +2412,11 @@ renderCommonApps();
           "title": "业务规则",
           "items": [
             "工作动态只做提醒和跳转，不在首页完成批改、通知发送、组题等重操作。",
-            "每条动态必须有标题、来源、班级或归属对象、状态、更新时间和目标页面。",
-            "首页卡片不展示提交人数、正确率、学情、批改、讲评等业务详情；这些信息进入目标业务页后查看。",
+            "作业和作文类动态以班级级任务为最小展示单位；同一份作业覆盖多个班级时，首页可以展示多张相邻卡片。",
+            "每条班级级动态必须有标题、来源、班级、提交人数、待确认数、正确率和目标页面。",
+            "首页卡片不展示查看学情、去批改、去讲评等操作按钮；老师点击整张卡片进入目标业务页后再处理。",
+            "首页卡片保留提交人数、待确认、正确率这类班级差异字段；不展示来源 icon、来源名称、状态 tag、家长端公开状态、学生列表、题目明细和讲评内容。",
+            "首页不展示扫描时间；如在全部动态页或业务页展示时间，使用“扫描 20:12 / 更新 14:36”这类数值时间，不使用“2 分钟前”等相对时间。",
             "首页动态按优先级展示，避免把老师的一屏变成消息列表。",
             "普通 Wiki 更新、普通资源更新、应用上新、系统公告、纯推荐内容不进入第一版工作动态。",
             "知识库只有在“文件 AI 处理完毕且老师需要查看处理结果”时才进入工作动态；普通知识库内容更新不进入。"
@@ -2394,8 +2425,10 @@ renderCommonApps();
         {
           "title": "数据说明",
           "items": [
-            "首页动态信息包括标题、来源应用、归属对象、状态、更新时间、优先级和目标页。",
-            "详细业务数据由来源应用维护，例如作业提交人数、正确率、待确认数、讲评入口等，不在首页动态卡片中展开。",
+            "首页动态卡片展示字段包括标题、班级、提交人数、待确认数、正确率和目标页。",
+            "完整动态数据仍可包含来源应用、状态、家长端状态、更新时间和优先级，但首页卡片不直接展示。",
+            "同一作业多班级动态需要保留班级维度，不做汇总覆盖；每张卡片指向对应班级的目标业务页。",
+            "详细业务数据由来源应用维护，例如学生列表、题目明细、讲评入口等，不在首页动态卡片中展开。",
             "同一事项更新状态时应复用同一业务事项，不重复堆叠无意义通知。",
             "接入动态的业务需要提供动态类型，当前类型限定为 homework、essay、diagnosis、record、knowledge-file。"
           ]
