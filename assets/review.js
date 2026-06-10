@@ -56,6 +56,15 @@
     if(block.type === 'callout'){
       return `<div class="review-callout">${escapeHtml(block.text || '')}</div>`;
     }
+    if(block.type === 'link' && block.href){
+      const label = block.label || '查看链接';
+      return `
+        <div class="review-block">
+          ${block.title ? `<h4>${escapeHtml(block.title)}</h4>` : ''}
+          <a class="review-link" href="${escapeHtml(block.href)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>
+        </div>
+      `;
+    }
     if(block.type === 'table' && Array.isArray(block.rows) && block.rows.length){
       const columns = Array.isArray(block.columns) && block.columns.length ? block.columns : Object.keys(block.rows[0] || {});
       return `

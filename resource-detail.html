@@ -383,15 +383,6 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .follow-btn {
-    height: 26px;
-    padding: 0 12px;
-    border-radius: 14px;
-    border: 1px solid var(--line-strong);
-    color: var(--muted);
-    font-size: 12px;
-    flex-shrink: 0;
-  }
   .author-meta {
     color: var(--muted);
     font-size: 12px;
@@ -550,7 +541,6 @@
     <div class="author-main">
       <div class="author-line">
         <span class="author-name" id="author-name">—</span>
-        <button class="follow-btn" type="button" onclick="showToast('（演示）已关注')">已关注</button>
       </div>
       <div class="author-meta" id="author-meta">—</div>
     </div>
@@ -699,7 +689,8 @@ if (window.lucide) lucide.createIcons();
           "items": [
             "收藏不改变资源归属。",
             "一键改编生成个人副本，不修改原资源。",
-            "下载范围不能超过资源本身权限。"
+            "下载范围不能超过资源本身权限。",
+            "校园版不支持关注老师，作者信息旁不展示关注或已关注按钮。"
           ]
         }
       ]
