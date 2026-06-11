@@ -1090,7 +1090,9 @@
     font-size: 12px;
     font-weight: 600;
     flex-shrink: 0;
+    white-space: nowrap;
   }
+  .cv-action span { white-space: nowrap; }
   .cv-action:hover { background: rgba(0,0,0,0.05); color: var(--ink); }
   .cv-action.primary {
     background: var(--green);
@@ -3142,6 +3144,7 @@ function renderCvTop() {
     return;
   }
   const edit = `<button class="cv-action" onclick="showToast('（演示）打开编辑器')" title="编辑">${ICONS.edit}<span>编辑</span></button>`;
+  const qbankEdit = `<button class="cv-action" onclick="window.location.href='compose-sheet.html?source=ai&from=chat'" title="编辑">${ICONS.edit}<span>编辑</span></button>`;
   const download = `<button class="cv-action" onclick="showToast('（演示）下载到本地')" title="下载">${ICONS.download}<span>下载</span></button>`;
   const fullscreen = `<button class="cv-action" onclick="showToast('（演示）全屏浏览')" title="全屏浏览">${ICONS.expand}<span>全屏浏览</span></button>`;
   const link = `<button class="cv-action" onclick="showToast('（演示）打开原文链接')" title="打开原文">${ICONS.expand}<span>打开原文</span></button>`;
@@ -3153,6 +3156,7 @@ function renderCvTop() {
   </button>`;
   const close = `<button class="cv-action" onclick="toggleCanvas()" title="关闭 Canvas">${ICONS.close}</button>`;
   if (meta.kind === 'reference') actions.innerHTML = `${link}${download}${close}`;
+  else if (meta.kind === 'document' && meta.documentMode === 'qbank') actions.innerHTML = `${save}${qbankEdit}${download}${close}`;
   else if (meta.kind === 'document') actions.innerHTML = `${save}${edit}${download}${close}`;
   else if (meta.kind === 'app') actions.innerHTML = `${share}${deploy}${close}`;
   else actions.innerHTML = `${edit}${fullscreen}${download}${close}`;
@@ -3196,6 +3200,7 @@ function openCanvasForScript(script) {
   currentCanvasMeta = {
     title: script.canvasTitle || script.title || '成果预览',
     kind: script.canvasKind || 'document',
+    documentMode: script.documentMode || null,
   };
   canvasTabs = script.canvas.map(id => ({ id, ...CV_RENDERERS[id] })).filter(t => t.render);
   activeCv = script.defaultCv || canvasTabs[0]?.id;
@@ -3455,7 +3460,7 @@ function appendResultCard(content, result) {
 const SCRIPTS = {
   qbank: {
     title: 'AI 组题 · 七年级数学期末模拟题',
-    body: '已完成一套 <b>北京朝阳区七年级上册数学期末考试模拟题</b>，并同步生成答案解析和命题说明。右侧是文件型 Canvas，可以直接编辑、下载，或保存到知识库，方便下次复用。',
+    body: '已完成一套 <b>北京朝阳区七年级上册数学期末考试模拟题</b>，并同步生成答案解析和命题说明。右侧是文件型 Canvas，可以直接编辑、下载，或保存到知识库。点击编辑进入统一题单编辑器；未开通作业系统的学校可使用基础排版、预览、保存、下载、打印和题单分析，作业相关能力保持可见但置灰；开通后可使用作业布置、AI 辅助批改等功能。',
     cites: [
       { n: 1, label: '七上数学期末复习讲义 · 数与式' },
       { n: 2, label: '朝阳区近三年期末题型分布' },
@@ -3464,6 +3469,7 @@ const SCRIPTS = {
     result: { title: '北京朝阳区七年级上册数学期末考试模拟题.docx', type: '文件型成果', action: '保存 / 编辑 / 下载' },
     actions: [],
     canvasKind: 'document',
+    documentMode: 'qbank',
     canvasTitle: '北京朝阳区七年级上册数学期末考试模拟题.docx',
     canvas: ['paper', 'answer', 'brief'],
     defaultCv: 'paper',
@@ -4372,7 +4378,7 @@ init();
           "body": [
             "适用于 AI 组题、试卷、答案解析、命题说明、讲义、教案、学案等文件型成果。",
             "对话区展示生成说明、引用来源和可继续调整的操作；右侧展示文件预览，可在多个文件 tab 间切换。",
-            "文件型成果的主操作是保存、编辑和下载；保存按钮应放在编辑按钮左侧，点击后打开保存到我的知识库弹窗。",
+            "AI 组题文件型成果的主操作是保存、编辑和下载；保存按钮用于打开保存到我的知识库弹窗，编辑按钮进入统一的题单编辑器，右侧不再拆成作业设置和编辑题目两个入口。",
             "AI 组题消息下方不展示查看试卷、查看答案解析、调高难度等额外快捷按钮，避免和右侧文件 tab、输入框追问重复。",
             "AI 组题可以引用老师选择的知识库资料作为生成参考，但第一版不等于自动打通知识库题库。"
           ]
@@ -4391,7 +4397,7 @@ init();
             },
             {
               "label": "编辑",
-              "text": "触发：点击编辑；动作：进入对应文件编辑器或演示态 toast；反馈：老师知道可继续修改文件内容。"
+              "text": "触发：点击编辑；动作：进入统一的题单编辑器；反馈：未购买作业系统的学校可使用基础排版、预览、保存、下载、打印和题单分析；添加题目、布置、作业版式、AI辅助批改、卷参设置和题目框保持可见但置灰；已购买学校在同一编辑器内解锁全部能力。"
             },
             {
               "label": "下载",
@@ -4408,6 +4414,7 @@ init();
           "items": [
             "文件型成果可以保存到知识库，因为它是可复用资料。",
             "保存到知识库只保存当前成果文件，不保存整段对话。",
+            "AI 组题结果页只保留一个编辑入口；权限差异进入题单编辑器后再通过功能可用态表达。",
             "当老师在 AI 组题时附加知识库，系统应把知识库作为参考上下文和引用来源，不自动把知识库文件中的题目加入正式题库。",
             "从知识库资料自动识别题目属于 AI 录题/题库入库链路；第一版优先支持结构清晰的 Word、PDF，PPT、图片或混排资料不承诺稳定切题。",
             "若组题过程需要使用知识库中已入库题目，应明确走题库选题或 AI 录题校对后的正式题目，不从未校对资料中直接抽题。",

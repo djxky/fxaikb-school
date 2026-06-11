@@ -324,12 +324,13 @@
 
 <script>
   const APPS = [
-    { id:'ai-qbank', title:'AI 校本题库', desc:'把知识库里的题目结构化展示，方便老师查看、筛选、组题与收藏。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'18.6w', favorites:942, icon:'file-stack', grad:4, cat:['official','subject'], contract:'active', url:'ai-qbank.html' },
-    { id:'ai-record', title:'AI 录题', desc:'上传本地 PDF / Word 自动解析题目，老师校对后入题库。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'6.4w', favorites:420, icon:'scan-search', grad:6, cat:['official','tool'], contract:'active', url:'ai-record-jobs.html' },
-    { id:'ai-essay-star', title:'飞象 AI 作文星', desc:'作文批改、讲评和成长档案，沉淀学生写作过程。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'12.5w', favorites:860, icon:'file-text', grad:1, cat:['official','subject'], contract:'active', url:'essay-star-home.html' },
-    { id:'smart-homework', title:'飞象智慧作业', desc:'布置、批改和分析作业，生成班级掌握情况。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'9.7w', favorites:618, icon:'clipboard-list', grad:4, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=smart-homework' },
-    { id:'mistake-diagnosis', title:'飞象错因诊断', desc:'归因学生错题和班级薄弱点，生成讲评建议。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'7.2w', favorites:512, icon:'bar-chart-2', grad:1, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=mistake-diagnosis' },
-    { id:'wrongbook', title:'错题本', desc:'汇总学生错题、订正记录和复习任务，形成个人错题档案。', author:'飞象官方', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'5.8w', favorites:488, icon:'file-text', grad:4, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=wrongbook' },
+    { id:'ai-qbank', title:'AI 校本题库', desc:'把知识库里的题目结构化展示，方便老师查看、筛选、组题与收藏。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'18.6w', favorites:942, icon:'file-stack', grad:4, cat:['official','subject'], contract:'active', url:'ai-qbank.html' },
+    { id:'ai-record', title:'AI 录题', desc:'上传本地 PDF / Word 自动解析题目，老师校对后入题库。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'6.4w', favorites:420, icon:'scan-search', grad:6, cat:['official','tool'], contract:'active', url:'ai-record-jobs.html' },
+    { id:'ai-essay-star', title:'飞象 AI 作文星', desc:'作文批改、讲评和成长档案，沉淀学生写作过程。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'12.5w', favorites:860, icon:'file-text', grad:1, cat:['official','subject'], contract:'active', url:'essay-star-home.html' },
+    { id:'smart-homework', title:'飞象智慧作业', desc:'布置、批改和分析作业，生成班级掌握情况。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'9.7w', favorites:618, icon:'clipboard-list', grad:4, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=smart-homework' },
+    { id:'feixiang-classroom', title:'飞象课堂', desc:'课堂互动、课件演示和随堂反馈一体化，帮助老师把生成内容带进课堂使用。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'10.2w', favorites:536, icon:'presentation', grad:10, cat:['official','tool'], contract:'active', url:'https://ke.feixiangxingqiu.com/#/lesson-list' },
+    { id:'mistake-diagnosis', title:'飞象错因诊断', desc:'归因学生错题和班级薄弱点，生成讲评建议。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'7.2w', favorites:512, icon:'bar-chart-2', grad:1, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=mistake-diagnosis' },
+    { id:'wrongbook', title:'错题本', desc:'汇总学生错题、订正记录和复习任务，形成个人错题档案。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', usage:'5.8w', favorites:488, icon:'file-text', grad:4, cat:['official','tool'], contract:'locked', landingUrl:'official-app-landing.html?app=wrongbook' },
     { id:'classic-game', title:'文言文情景闯关 (H5)', desc:'将枯燥的文言文背诵转化为互动文字游戏，学生扫码即可在手机上游玩。', author:'李素芬', avatar:'李', avatarColor:'#81628f', badge:'本校', usage:'842', favorites:189, icon:'gamepad-2', grad:2, cat:['school','subject'] },
     { id:'notify', title:'家长会通知生成器', desc:'输入开会时间和重点，自动生成得体、专业的家长会邀请函及群通知。', author:'飞象老师精选', avatar:'精', avatarColor:'#53759e', badge:'精选', usage:'3.2w', favorites:276, icon:'mail', grad:3, cat:['global','tool'] },
     { id:'lesson-plan', title:'智能教案排版', desc:'输入教学目标和知识点，一键生成符合学校标准格式的 Word 教案。', author:'飞象老师精选', avatar:'精', avatarColor:'#53759e', badge:'精选', usage:'8.9w', favorites:345, icon:'file-text', grad:4, cat:['global','tool'] },
@@ -343,6 +344,7 @@
     'bar-chart-2':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
     'gamepad-2':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="6" y1="11" x2="10" y2="11"/><line x1="8" y1="9" x2="8" y2="13"/><line x1="15" y1="12" x2="15.01" y2="12"/><line x1="18" y1="10" x2="18.01" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258A4 4 0 0 0 17.32 5z"/></svg>',
     'mail':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>',
+    'presentation':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>',
     'file-stack':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 2H8a2 2 0 0 0-2 2v12"/><path d="M18 6H10a2 2 0 0 0-2 2v12"/><path d="M12 10h8v12h-8z"/><path d="M15 14h2"/><path d="M15 18h2"/></svg>',
     'scan-search':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11" cy="11" r="3"/><path d="m16 16-2.2-2.2"/></svg>',
     'file-text':'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
@@ -507,8 +509,8 @@
         {
           "title": "业务规则",
           "items": [
-	            "应用来源只区分飞象官方、飞象老师精选、本校应用。飞象官方应用固定为 AI 校本题库、AI 录题、飞象 AI 作文星、飞象智慧作业、飞象错因诊断、错题本。",
-	            "飞象官方 tab 已表达来源，官方应用卡片不再展示“官方”角标；未开通应用展示“未开通”标识。",
+	            "应用来源只区分飞象官方、飞象老师精选、本校应用。飞象官方应用固定为 AI 校本题库、AI 录题、飞象 AI 作文星、飞象智慧作业、飞象课堂、飞象错因诊断、错题本。",
+	            "飞象官方 tab 已表达来源，官方应用卡片不再展示“官方”角标；作者统一展示为“飞象星球”；未开通应用展示“未开通”标识。",
 	            "飞象官方应用按学校合约分流：有合约的应用在新页面打开产品首页；没有合约的应用在新页面打开能力介绍页，不直接打开产品首页。",
 	            "飞象老师精选 tab 下的展示、排序、筛选和详情逻辑与飞象老师个人版保持一致。",
 	            "飞象老师精选应用在校园版内复制、改编或发布时遵循校园版发布规则：生成老师个人副本，发布后进入本校应用或我的应用，仅按学校权限可见，不回流个人版社区。",
@@ -519,7 +521,7 @@
         {
           "title": "数据说明",
 	          "items": [
-	            "应用数据包含名称、简介、来源、合约状态、分类、使用次数、收藏状态和跳转地址。",
+	            "应用数据包含名称、简介、来源、作者、合约状态、分类、收藏状态和跳转地址；飞象官方应用不展示浏览数据。",
 	            "飞象官方应用需要区分有合约产品首页地址和无合约能力介绍页地址。",
 	            "飞象老师精选应用复用个人版广场数据，但校园版发布结果写入学校维度。"
 	          ]
@@ -575,7 +577,7 @@
         {
           "title": "QA 检查点",
 	          "items": [
-	            "来源标签清晰。",
+	            "来源分类和作者展示清晰，飞象官方应用作者为飞象星球。",
 	            "有合约的飞象官方应用新页面打开产品首页。",
 	            "无合约的飞象官方应用新页面打开能力介绍页。",
 	            "飞象老师精选应用复制或发布后遵循校园版本校应用规则。",
