@@ -157,8 +157,9 @@
     .hero-card{min-height:300px}
   }
 </style>
+<link rel="stylesheet" href="assets/review.css" />
 </head>
-<body>
+<body data-page="essay-star-home">
   <main class="page">
     <h1 class="hello">张老师，欢迎使用飞象 AI 作文星</h1>
 
@@ -191,5 +192,67 @@
   function toast(text){ alert('（演示）' + text); }
   if(window.lucide) lucide.createIcons();
 </script>
+<template id="review-template">
+{
+  "title": "飞象 AI 作文星 · 官方应用首页",
+  "summary": "作文星首页是校园版中进入作文布置、批改和作文资源能力的轻量落地页，当前以演示态展示入口和空状态。",
+  "sections": [
+    {
+      "id": "essay-star-entry",
+      "title": "1. 作文星能力入口",
+      "body": "页面展示作文星的一期核心入口：布置作文、批改作文和常用快捷能力。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "老师从应用广场进入作文星后，先看到欢迎语和两个核心卡片：布置作文、批改作文。",
+            "布置作文是可操作入口；批改作文在当前演示数据下为空态，按钮置灰。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "进入页面",
+              "text": "触发：从应用广场点击飞象 AI 作文星；动作：打开作文星首页；反馈：展示老师称呼、布置作文卡片、批改作文空态和快捷入口。"
+            },
+            {
+              "label": "布置作文",
+              "text": "触发：点击立即布置；动作：演示提示进入布置作文；反馈：后续正式版本应进入作文布置流程。"
+            },
+            {
+              "label": "批改作文空态",
+              "text": "触发：当前没有待批改作文；动作：批改按钮禁用；反馈：页面显示“暂无需要批改的作文”。"
+            },
+            {
+              "label": "快捷入口",
+              "text": "触发：点击我的作文、我的学生、范文库、下载作文纸或体验 AI 辅导；动作：当前仅展示静态入口；反馈：后续接入对应作文星页面。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "没有待批改作文时，不能展示可点击的批改 CTA。",
+            "作文星属于飞象官方应用入口，校园版只负责承接入口与权限，不在本页展示学校知识库内容。",
+            "正式接入后，布置作文、批改作文和快捷入口需要进入作文星对应业务页。"
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "批改作文空态按钮不可点击。",
+            "点击立即布置有明确反馈。",
+            "快捷入口文字与作文星能力一致，不混入普通资源广场行为。"
+          ]
+        }
+      ]
+    }
+  ]
+}
+</template>
+<script src="assets/review-content.js"></script>
+<script src="assets/review.js"></script>
 </body>
 </html>

@@ -7,6 +7,7 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/page-header.css" />
+<link rel="stylesheet" href="assets/review.css" />
 <style>
   :root{--bg:#faf9f6;--surface:#fff;--ink:#111110;--muted:#6b6a65;--faint:#a19f99;--line:rgba(0,0,0,.06);--line-strong:rgba(0,0,0,.12);--gold:#a87e2c;--gold-soft:#fbf5e6;--radius-lg:18px}
   *{box-sizing:border-box}
@@ -56,7 +57,7 @@
   @media (max-width:720px){.app{grid-template-columns:1fr}.content-grid{grid-template-columns:1fr}.search-row{align-items:stretch}.search-box{width:100%;min-width:0}}
 </style>
 </head>
-<body>
+<body data-page="resource-search">
 <div class="app">
   <aside id="feixiang-sidebar"></aside>
   <main class="main">
@@ -203,5 +204,117 @@
   });
   render();
 </script>
+<template id="review-template">
+{
+  "title": "搜索资源 · 结果页",
+  "summary": "搜索资源页承接资源广场搜索，支持飞象老师精选/本校资源来源切换和学科筛选，帮助老师快速进入资源详情并收藏资源。",
+  "sections": [
+    {
+      "id": "resource-search-filter",
+      "title": "1. 搜索、来源与学科筛选",
+      "body": "老师可以在资源来源和学科范围内搜索资源，页面用 URL 参数保留当前状态。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "顶部包含返回资源广场、搜索框、搜索按钮、来源 tab 和学科 tab。",
+            "来源包含飞象老师精选和本校资源；学科 tab 根据当前来源下实际有资源的学科生成。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "进入搜索页",
+              "text": "触发：从资源广场搜索或直接访问；动作：读取 q/source/subject 参数；反馈：搜索框、来源 tab、学科 tab 还原当前状态。"
+            },
+            {
+              "label": "提交搜索",
+              "text": "触发：点击搜索或按 Enter；动作：按资源标题、标签、作者和学科匹配；反馈：结果列表刷新，URL 同步。"
+            },
+            {
+              "label": "切换来源",
+              "text": "触发：点击来源 tab；动作：切换精选/本校资源；反馈：学科重置为推荐并重新生成可选学科。"
+            },
+            {
+              "label": "切换学科",
+              "text": "触发：点击学科 tab；动作：在当前来源和关键词内过滤；反馈：结果列表只保留对应学科。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "空关键词提交时不刷新结果，焦点回到搜索框。",
+            "学科 tab 只展示当前来源下有资源的学科，避免空筛选。",
+            "搜索结果必须区分飞象老师精选和本校资源来源。"
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "URL 参数 q/source/subject 能还原页面。",
+            "切换来源后学科回到推荐。",
+            "无匹配资源时展示空状态。"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "resource-search-results",
+      "title": "2. 资源结果卡片",
+      "body": "结果卡片展示资源类型、热度、作者和收藏入口，点击进入资源详情。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "卡片展示资源类型标签、封面、标题、作者、浏览量和收藏数。",
+            "点击卡片进入 resource-detail.html，后续可预览、收藏、分享、一键改编或下载。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "打开资源详情",
+              "text": "触发：点击卡片主体；动作：携带资源标题进入详情页；反馈：资源详情页展示预览、作者、相关推荐和底部操作栏。"
+            },
+            {
+              "label": "收藏资源",
+              "text": "触发：点击收藏按钮；动作：只切换当前卡片收藏态；反馈：收藏数加一或恢复，页面不跳转。"
+            }
+          ]
+        },
+        {
+          "title": "关联模块",
+          "type": "table",
+          "columns": [
+            "关联对象",
+            "说明"
+          ],
+          "rows": [
+            {
+              "关联对象": "resource-square.html",
+              "说明": "搜索入口来源页。"
+            },
+            {
+              "关联对象": "resource-detail.html",
+              "说明": "资源预览、一键改编和下载承接页。"
+            },
+            {
+              "关联对象": "my-apps.html",
+              "说明": "收藏或改编后的资源进入我的作品。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</template>
+<script src="assets/review-content.js"></script>
+<script src="assets/review.js"></script>
 </body>
 </html>

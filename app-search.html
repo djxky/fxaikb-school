@@ -7,6 +7,7 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/page-header.css" />
+<link rel="stylesheet" href="assets/review.css" />
 <style>
   :root{--bg:#faf9f6;--surface:#fff;--ink:#111110;--muted:#6b6a65;--faint:#a19f99;--line:rgba(0,0,0,.07);--line-strong:rgba(0,0,0,.14);--gold:#a87e2c;--gold-bg:#fbf5e6;--radius:16px}
   *{box-sizing:border-box}
@@ -55,7 +56,7 @@
   @media (max-width:720px){.app{grid-template-columns:1fr}.content-grid{grid-template-columns:1fr}.search-row{align-items:stretch}.search-box{width:100%;min-width:0}}
 </style>
 </head>
-<body>
+<body data-page="app-search">
 <div class="app">
   <aside id="feixiang-sidebar"></aside>
   <main class="main">
@@ -86,8 +87,6 @@
     { id:'ai-essay-star', title:'飞象 AI 作文星', desc:'作文批改、讲评和成长档案，沉淀学生写作过程。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', favorites:860, icon:'file-text', grad:1, cat:['official'], contract:'active', url:'essay-star-home.html' },
     { id:'smart-homework', title:'飞象智慧作业', desc:'布置、批改和分析作业，生成班级掌握情况。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', favorites:618, icon:'clipboard-list', grad:4, cat:['official'], contract:'locked', landingUrl:'official-app-landing.html?app=smart-homework' },
     { id:'feixiang-classroom', title:'飞象课堂', desc:'课堂互动、课件演示和随堂反馈一体化，帮助老师把生成内容带进课堂使用。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', favorites:536, icon:'presentation', grad:10, cat:['official'], contract:'active', url:'https://ke.feixiangxingqiu.com/#/lesson-list' },
-    { id:'mistake-diagnosis', title:'飞象错因诊断', desc:'归因学生错题和班级薄弱点，生成讲评建议。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', favorites:512, icon:'bar-chart-2', grad:1, cat:['official'], contract:'locked', landingUrl:'official-app-landing.html?app=mistake-diagnosis' },
-    { id:'wrongbook', title:'错题本', desc:'汇总学生错题、订正记录和复习任务，形成个人错题档案。', author:'飞象星球', avatar:'飞', avatarColor:'#a87e2c', badge:'官方', favorites:488, icon:'file-text', grad:4, cat:['official'], contract:'locked', landingUrl:'official-app-landing.html?app=wrongbook' },
     { id:'notify', title:'家长会通知生成器', desc:'输入开会时间和重点，自动生成得体、专业的家长会邀请函及群通知。', author:'飞象老师精选', avatar:'精', avatarColor:'#53759e', badge:'精选', usage:'3.2w', favorites:276, icon:'mail', grad:3, cat:['global'] },
     { id:'lesson-plan', title:'智能教案排版', desc:'输入教学目标和知识点，一键生成符合学校标准格式的 Word 教案。', author:'飞象老师精选', avatar:'精', avatarColor:'#53759e', badge:'精选', usage:'8.9w', favorites:345, icon:'file-text', grad:4, cat:['global'] },
     { id:'speaking', title:'英语口语对练 Agent', desc:'模拟真实对话场景，支持语音输入，自动纠正语法和发音错误。', author:'飞象老师精选', avatar:'精', avatarColor:'#53759e', badge:'精选', usage:'21.3w', favorites:1120, icon:'mic', grad:6, cat:['global'] },
@@ -176,5 +175,113 @@
   });
   render();
 </script>
+<template id="review-template">
+{
+  "title": "搜索应用 · 结果页",
+  "summary": "搜索应用页承接应用广场的搜索入口，支持按飞象官方、飞象老师精选、本校应用切换结果，并让老师继续进入应用详情、官方落地页或外部课堂应用。",
+  "sections": [
+    {
+      "id": "app-search-filter",
+      "title": "1. 搜索与分类筛选",
+      "body": "老师输入关键词后，在当前应用分类内查看匹配结果，并可切换应用来源范围。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "页面顶部保留返回应用广场、搜索框、搜索按钮和来源 tab。",
+            "来源 tab 包含飞象官方、飞象老师精选、本校应用；切换 tab 后保留当前关键词并刷新结果。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "进入搜索页",
+              "text": "触发：从应用广场搜索或直接访问搜索页；动作：读取 URL 中的 q/tab 参数；反馈：搜索框回填关键词，来源 tab 高亮当前范围。"
+            },
+            {
+              "label": "提交搜索",
+              "text": "触发：点击搜索按钮或按 Enter；动作：按标题、描述、作者匹配当前范围内应用；反馈：列表立即刷新，URL 同步 q/tab。"
+            },
+            {
+              "label": "切换来源",
+              "text": "触发：点击来源 tab；动作：切换 official/global/school 范围；反馈：结果列表更新，当前关键词不清空。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "空关键词提交时不刷新结果，焦点回到搜索框。",
+            "搜索只在当前来源范围内生效，不跨 tab 混排。",
+            "未开通官方应用展示未开通标识，点击进入官方应用落地页。"
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "URL 参数 q/tab 能还原页面状态。",
+            "切换 tab 后搜索框内容保持不丢失。",
+            "无匹配结果时展示空状态。"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "app-search-results",
+      "title": "2. 应用结果卡片",
+      "body": "结果卡片帮助老师判断应用来源、可用状态和后续动作。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "卡片展示封面、标题、描述、作者、收藏数或使用数据。",
+            "可用应用进入对应功能页或应用详情；未开通官方应用进入官方应用介绍页。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "打开应用",
+              "text": "触发：点击卡片主体；动作：按应用状态跳转；反馈：可用应用进入功能页，未开通应用进入落地页。"
+            },
+            {
+              "label": "收藏应用",
+              "text": "触发：点击收藏按钮；动作：只切换当前卡片收藏态；反馈：收藏数加一或恢复，页面不跳转。"
+            }
+          ]
+        },
+        {
+          "title": "关联模块",
+          "type": "table",
+          "columns": [
+            "关联对象",
+            "说明"
+          ],
+          "rows": [
+            {
+              "关联对象": "app-square.html",
+              "说明": "搜索入口来源页。"
+            },
+            {
+              "关联对象": "app-detail.html",
+              "说明": "普通应用详情承接页。"
+            },
+            {
+              "关联对象": "official-app-landing.html",
+              "说明": "未开通官方应用介绍页。"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+</template>
+<script src="assets/review-content.js"></script>
+<script src="assets/review.js"></script>
 </body>
 </html>

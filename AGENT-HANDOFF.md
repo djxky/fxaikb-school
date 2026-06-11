@@ -13,8 +13,8 @@
   - 对话：`chat.html`、`chat-history.html`
   - 产品背景介绍：`product-intro.html`（官网/背景介绍页，不纳入过稿体系）
   - 知识库：`school-wiki.html`、`my-wiki.html`、`wiki-entry.html`、`file-preview.html`、`upload-onboarding.html`
-  - 应用：`app-square.html`、`my-apps.html`、`app-detail.html`
-  - 资源：`resource-square.html`、`resource-detail.html`
+  - 应用：`app-square.html`、`app-search.html`、`my-apps.html`、`app-detail.html`
+  - 资源：`resource-square.html`、`resource-search.html`、`resource-detail.html`
   - 题库 / 录题 / 组题：`ai-qbank.html`、`ai-record-jobs.html`、`ai-review.html`、`compose-sheet.html`
   - 学校 / 管理：`teacher-login.html`、`join-school.html`、`admin-teachers.html`
   - 工作动态：`work-feed.html`
@@ -52,6 +52,7 @@
 - 【2026-06-07】`product-intro.html` 定义为产品背景介绍页，不要求挂过稿 panel；`work-feed.html` 已纳入过稿体系，并补齐“功能说明 / 交互流程 / 业务规则 / 数据说明 / 异常场景 / 关联模块 / QA 检查点”。`review.js` 读取页面内联模板时应使用 `template.content.textContent`，否则浏览器里可能读不到 `<template>` 内 JSON。
 - 【2026-06-07】面向研发过稿时，过稿 panel 里的产品稿只写产品视角：触发条件、老师动作、页面反馈、业务规则、数据口径、异常状态和跨页关联；不要写实现方式、后端接口、localStorage、mock、PRD 链接、研发验收模板句。21 个过稿页面已按该口径重写，并与 `assets/review-content.js` 保持一致。
 - 【2026-06-07】后续补稿不能把页面交互压缩成泛泛摘要。首页和新对话页尤其要保留输入框模式 chip、知识库范围、`+` 菜单、附件、快捷创作、空输入、发送反馈等细节；其他页面也要逐页写清入口、点击后的状态变化、操作反馈、空态、无权限、重复操作、失效对象和跳转关系。题库、录题、校对、词条、应用/资源详情、学校加入、教师管理、上传导入和工作动态已按这个标准二次补充。
+- 【2026-06-11】`app-search.html` 和 `resource-search.html` 已进入最终页面清单并补齐过稿；除 `product-intro.html` 这个背景介绍页外，最终目录里的页面都应挂 `review-template`、`review-content.js` 和 `review.js`，并保持内联模板与兜底数据同步。
 
 ## 3. 反模式清单（不要走回头路）
 

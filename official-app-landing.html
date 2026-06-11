@@ -163,8 +163,9 @@
     .feature-grid{grid-template-columns:1fr}
   }
 </style>
+<link rel="stylesheet" href="assets/review.css" />
 </head>
-<body>
+<body data-page="official-app-landing">
   <main class="page">
     <div class="top">
       <div class="brand"><span class="brand-mark">飞</span><span>飞象官方应用</span></div>
@@ -240,5 +241,91 @@
   `).join('');
   if(window.lucide) lucide.createIcons();
 </script>
+<template id="review-template">
+{
+  "title": "飞象官方应用 · 能力介绍",
+  "summary": "官方应用落地页用于承接学校未开通或需介绍的官方能力，解释能力价值，并提供申请试用/联系开通操作。",
+  "sections": [
+    {
+      "id": "official-app-state",
+      "title": "1. 未开通应用介绍",
+      "body": "当学校尚未开通某个官方应用时，老师看到能力介绍而不是空白或错误页。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "页面根据 URL 参数 app 切换官方应用名称、介绍文案和三项能力说明。",
+            "默认展示“学校暂未开通”状态，并给出申请试用和联系开通两个动作。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "进入落地页",
+              "text": "触发：从应用广场点击未开通官方应用；动作：读取 app 参数并渲染对应内容；反馈：标题、说明和功能卡片同步更新。"
+            },
+            {
+              "label": "返回应用广场",
+              "text": "触发：点击返回应用广场；动作：执行浏览器返回；反馈：回到上一个应用广场或搜索页。"
+            },
+            {
+              "label": "申请试用",
+              "text": "触发：点击申请试用；动作：当前演示提示已提交申请；反馈：后续正式版本应创建开通线索。"
+            },
+            {
+              "label": "联系开通",
+              "text": "触发：点击联系开通；动作：当前演示提示联系飞象顾问；反馈：后续正式版本应进入联系/咨询流程。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "未开通官方应用不直接跳业务系统，避免老师误以为已有权限。",
+            "未知 app 参数使用默认官方应用内容兜底。",
+            "申请和联系入口只表达开通意向，不在本页承诺立即开通。"
+          ]
+        },
+        {
+          "title": "数据说明",
+          "items": [
+            "页面依赖 app 参数选择官方应用配置；每个配置包含标题、导语和三项功能说明。"
+          ]
+        },
+        {
+          "title": "关联模块",
+          "type": "table",
+          "columns": [
+            "关联对象",
+            "说明"
+          ],
+          "rows": [
+            {
+              "关联对象": "app-square.html",
+              "说明": "官方应用入口来源。"
+            },
+            {
+              "关联对象": "app-search.html",
+              "说明": "搜索结果中未开通官方应用也可进入本页。"
+            }
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "不同 app 参数能切换标题和功能卡片。",
+            "返回按钮可回到来源页。",
+            "申请试用和联系开通均有反馈。"
+          ]
+        }
+      ]
+    }
+  ]
+}
+</template>
+<script src="assets/review-content.js"></script>
+<script src="assets/review.js"></script>
 </body>
 </html>
