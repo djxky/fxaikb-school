@@ -146,14 +146,15 @@
     pointer-events: none;
   }
   .content-wrap {
-    width: 100%; max-width: 1080px;
+    width: 100%; max-width: 980px;
     height: 100vh;
-    margin: 0 auto; padding: 40px 40px 22px;
-    display: flex; flex-direction: column; gap: 24px;
+    margin: 0 auto; padding: 42px 38px 28px;
+    display: flex; flex-direction: column; gap: 30px;
     position: relative; z-index: 1;
   }
 
   /* 1. 欢迎语 */
+  .welcome { display: block; }
   .welcome h1 {
     margin: 0; font-size: 28px; font-weight: 680; letter-spacing: 0;
     text-align: center;
@@ -163,16 +164,16 @@
   /* 2. 输入区 */
   .composer-section {
     display: flex; flex-direction: column; align-items: center; gap: 14px;
-    padding: 2px 0 4px;
+    padding: 0 0 4px;
     position: relative;
     z-index: 30;
     overflow: visible;
   }
   .composer-pill {
-    width: 100%; max-width: 760px; min-height: 58px;
+    width: 100%; max-width: 880px; min-height: 58px;
     background:
       linear-gradient(#fff, #fff) padding-box,
-      linear-gradient(100deg, rgba(168,126,44,.45), rgba(79,140,163,.34), rgba(116,102,168,.32)) border-box;
+      linear-gradient(100deg, rgba(168,126,44,.55), rgba(79,140,163,.24), rgba(116,102,168,.22)) border-box;
     border: 1px solid transparent;
     border-radius: 29px; padding: 9px 9px 9px 13px;
     display: grid;
@@ -507,7 +508,8 @@
   .intent-chips {
     display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
     transition: opacity 0.25s, transform 0.25s, height 0.25s;
-    max-width: 760px;
+    max-width: 880px;
+    margin-top: 0;
     position: relative;
     z-index: 60;
     overflow: visible;
@@ -527,6 +529,13 @@
     font-size: 13px; color: var(--muted); font-weight: 500;
     backdrop-filter: blur(8px);
   }
+  .composer-chip {
+    position: relative;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 0;
+    color: var(--muted); font-size: 13px; font-weight: 500;
+  }
+  .composer-chip:hover { color: var(--ink); }
   .intent-chip:hover { background: var(--surface); border-color: rgba(79,140,163,.28); color: var(--ink); }
   .intent-chip.active {
     background: #fff;
@@ -732,22 +741,23 @@
 
   /* 3. 中段双栏 */
   .middle-grid {
-    display: grid; grid-template-columns: 1.42fr 1fr; gap: 26px;
-    min-height: 288px;
+    display: flex; flex-direction: column; gap: 34px;
+    min-height: 0;
     position: relative;
     z-index: 1;
   }
+  .middle-grid .zone:nth-child(2) { order: -1; }
   .zone { display: flex; flex-direction: column; }
   .work-list, .tool-list { flex: 1; }
 
   /* 3A. 工作动态 */
   .work-list {
-    display: flex; flex-direction: column; gap: 0;
-    background: rgba(255,255,255,.76);
-    border: 1px solid rgba(0,0,0,.055);
-    border-radius: 18px;
-    padding: 8px;
-    backdrop-filter: blur(8px);
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    backdrop-filter: none;
   }
   .empty-state {
     flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;
@@ -760,42 +770,41 @@
 
   .work-card {
     position: relative;
-    background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(250,247,240,.62)); border: 0;
-    border-radius: 13px; padding: 13px 16px 13px 20px;
-    display: block;
+    background: transparent; border: 0;
+    border-radius: 10px; padding: 2px 0 2px 42px;
+    display: flex; align-items: center;
     text-align: left;
-    min-height: 68px;
-    overflow: hidden;
+    min-height: 54px;
+    overflow: visible;
   }
-  .work-card + .work-card { margin-top: 6px; }
+  .work-card + .work-card { margin-top: 0; }
   .work-card::before {
     content: "";
     position: absolute;
-    left: 9px; top: 14px; bottom: 14px;
-    width: 3px; border-radius: 999px;
-    background: var(--gold);
-    opacity: .72;
+    left: 0; top: 50%; transform: translateY(-50%);
+    width: 30px; height: 38px; border-radius: 3px;
+    background:
+      linear-gradient(#fff, #fff) padding-box,
+      linear-gradient(180deg, rgba(168,126,44,.25), rgba(168,126,44,.08)) border-box;
+    border: 1px solid rgba(0,0,0,.08);
+    box-shadow: 0 5px 12px rgba(17,17,16,.06);
+    opacity: 1;
   }
   .work-card::after {
     content: "";
     position: absolute;
-    right: -24px; top: -30px;
-    width: 92px; height: 92px; border-radius: 50%;
-    background: rgba(184, 133, 35, .08);
+    left: 6px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 20px;
+    background:
+      linear-gradient(var(--line-strong), var(--line-strong)) 0 3px / 12px 1px no-repeat,
+      linear-gradient(var(--line), var(--line)) 0 8px / 18px 1px no-repeat,
+      linear-gradient(var(--line), var(--line)) 0 13px / 15px 1px no-repeat;
     pointer-events: none;
   }
-  .work-card:nth-child(2) {
-    background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(238,248,243,.72));
-  }
-  .work-card:nth-child(2)::before { background: var(--green); }
-  .work-card:nth-child(2)::after { background: rgba(66, 126, 92, .08); }
-  .work-card:nth-child(3) {
-    background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(240,247,253,.72));
-  }
-  .work-card:nth-child(3)::before { background: var(--blue); }
-  .work-card:nth-child(3)::after { background: rgba(73, 113, 158, .08); }
+  .work-card:nth-child(2)::before { border-color: rgba(74,117,91,.16); }
+  .work-card:nth-child(3)::before { border-color: rgba(83,117,158,.16); }
   .work-card:hover {
-    box-shadow: 0 8px 22px rgba(31, 28, 20, .06);
+    box-shadow: none;
     transform: none;
   }
   
@@ -809,43 +818,42 @@
   .icon-box.gold { background: var(--gold-soft); color: var(--gold); }
   .icon-box.purple { background: var(--purple-soft); color: var(--purple); }
 
-  .work-info { min-width: 0; display: flex; flex-direction: column; gap: 8px; }
-  .work-title { font-size: 14.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .work-meta { display: flex; align-items: center; gap: 10px; font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .work-info { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .work-title { font-size: 13.5px; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .work-meta { display: flex; align-items: center; gap: 8px; font-size: 11.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .work-meta strong { color: var(--ink); font-weight: 700; }
 
-  /* 3B. 常用应用 (改造为 2x3 紧凑网格) */
+  /* 3B. 常用应用 */
   .tool-list {
-    display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: repeat(3, minmax(0, 1fr));
-    gap: 2px 10px;
-    background: rgba(255,255,255,.76);
-    border: 1px solid rgba(0,0,0,.055);
-    border-radius: 18px;
-    padding: 8px;
-    backdrop-filter: blur(8px);
+    display: flex; align-items: flex-start; gap: 34px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    padding: 2px 0 0;
+    backdrop-filter: none;
   }
   .tool-row {
     position: relative;
     background: transparent; border: 0;
-    border-radius: 12px; padding: 11px 13px;
-    display: flex; flex-direction: row; align-items: center; gap: 12px;
-    text-align: left; height: 100%; min-height: 72px;
+    border-radius: 12px; padding: 0;
+    display: flex; flex-direction: column; align-items: center; gap: 9px;
+    text-align: center; width: 64px; min-height: 74px;
     cursor: pointer;
   }
-  .tool-row:hover { background: rgba(255,255,255,.72); box-shadow: none; transform: none; }
-  .tool-list.is-editing .tool-row { padding-left: 34px; cursor: grab; }
+  .tool-row:hover { background: transparent; box-shadow: none; transform: translateY(-1px); }
+  .tool-list.is-editing .tool-row { padding-left: 0; cursor: grab; }
   .tool-list.is-editing .tool-row:active { cursor: grabbing; }
   .tool-list.is-editing .tool-row:hover { transform: none; }
   .tool-row.is-dragging { opacity: .45; box-shadow: 0 10px 24px rgba(0,0,0,.08); }
   .tool-row.is-drag-over { border-color: rgba(168,126,44,.55); background: var(--gold-soft); }
   .tool-list.is-editing .tool-add-row { cursor: pointer; }
   .tool-drag {
-    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    position: absolute; left: 50%; top: -18px; transform: translateX(-50%);
     width: 14px; height: 20px; display: none; color: var(--faint);
   }
   .tool-list.is-editing .tool-drag { display: grid; place-items: center; }
   .tool-remove {
-    position: absolute; right: 8px; top: 8px;
+    position: absolute; right: 4px; top: -4px;
     width: 20px; height: 20px; border-radius: 50%;
     display: none; place-items: center;
     background: var(--bg); color: var(--muted);
@@ -854,23 +862,30 @@
   .tool-list.is-editing .tool-remove { display: grid; }
   .tool-remove:hover { background: var(--rose-soft); color: var(--rose); }
   .tool-add-row {
-    border: 1px dashed var(--line-strong);
+    border: 0;
     color: var(--muted);
     justify-content: center;
-    background: rgba(255,255,255,.45);
+    background: transparent;
   }
-  .tool-add-row:hover { color: var(--gold); border-color: rgba(168,126,44,.35); background: var(--gold-soft); }
+  .tool-add-row:hover { color: var(--gold); border-color: transparent; background: transparent; }
   .tool-empty-row {
     border: 1px dashed rgba(0,0,0,.05);
     background: rgba(255,255,255,.24);
     pointer-events: none;
   }
-  .tool-icon { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; }
-  .tool-info { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; }
-  .tool-name-wrap { display: flex; align-items: center; gap: 6px; width: 100%; }
-  .tool-row .tool-name { font-size: 13.5px; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tool-icon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; }
+  .tool-info { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; width: 100%; }
+  .tool-name-wrap { display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; }
+  .tool-row .tool-name { font-size: 12.5px; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 72px; }
   .badge-official { font-size: 10px; font-weight: 600; color: var(--gold); background: var(--gold-soft); padding: 1px 4px; border-radius: 4px; flex-shrink: 0; line-height: 1.2; }
   .tool-row .tool-desc { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .tool-add-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    display: grid; place-items: center;
+    border: 1px solid var(--line-strong);
+    background: rgba(255,255,255,.62);
+    color: var(--muted);
+  }
   .app-pick-backdrop {
     position: fixed; inset: 0; z-index: 190;
     background: rgba(17,17,16,.12);
@@ -928,16 +943,16 @@
   }
   .content-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
   .card {
-    background: rgba(255,255,255,.72); border: 1px solid rgba(0,0,0,.055);
-    border-radius: 16px; overflow: hidden; display: flex; flex-direction: column;
+    background: transparent; border: 0;
+    border-radius: 12px; overflow: hidden; display: flex; flex-direction: column;
     text-align: left;
     text-decoration: none; color: inherit; cursor: pointer;
-    min-height: 164px;
-    backdrop-filter: blur(8px);
+    min-height: 190px;
+    backdrop-filter: none;
   }
-  .card:hover { border-color: rgba(79,140,163,.22); box-shadow: 0 10px 26px rgba(17,17,16,0.05); transform: translateY(-2px); }
+  .card:hover { box-shadow: none; transform: translateY(-2px); }
   
-  .card-cover { height: 70px; position: relative; }
+  .card-cover { height: 106px; position: relative; border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,.055); }
   .card-cover.mint { background: linear-gradient(135deg, #edf5ee, #d8eadb); }
   .card-cover.lilac { background: linear-gradient(135deg, #f5f0f6, #e6d8ea); }
   .card-cover.sky { background: linear-gradient(135deg, #eff4f9, #dbe6f0); }
@@ -950,46 +965,46 @@
   }
   .card-tag.gold { color: var(--gold); }
   
-  .card-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 7px; flex: 1; }
+  .card-body { padding: 12px 0 0; display: flex; flex-direction: column; gap: 7px; flex: 1; }
   .card-title { font-size: 14px; font-weight: 600; line-height: 1.4; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 40px; }
   .card-author { margin-top: auto; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); padding-top: 4px; }
   .author-avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--line-strong); display: grid; place-items: center; font-size: 10px; color: #fff; font-weight: 600; }
   
   @media (max-height: 900px) {
-    .content-wrap { gap: 20px; padding: 28px 40px 18px; }
-    .welcome h1 { font-size: 25px; }
-    .composer-section { gap: 12px; }
-    .composer-pill { min-height: 54px; }
-    .middle-grid { gap: 24px; min-height: 288px; }
-    .work-card { padding: 12px 14px; min-height: 76px; }
-    .tool-row { padding: 10px 12px; gap: 10px; min-height: 66px; }
-    .card { min-height: 146px; }
-    .card-cover { height: 56px; }
+    .content-wrap { gap: 24px; padding: 28px 38px 18px; }
+    .welcome h1 { font-size: 24px; }
+    .composer-section { gap: 0; }
+    .composer-pill { min-height: 82px; }
+    .middle-grid { gap: 28px; min-height: 0; }
+    .work-card { padding: 2px 0 2px 42px; min-height: 52px; }
+    .tool-row { padding: 0; gap: 8px; min-height: 70px; }
+    .card { min-height: 170px; }
+    .card-cover { height: 92px; }
   }
 
   @media (max-height: 800px) {
     .main { overflow-y: hidden; } /* 强制小屏幕不滚动 */
-    .content-wrap { gap: 15px; padding: 18px 32px 12px; }
+    .content-wrap { gap: 18px; padding: 18px 32px 12px; }
     .welcome h1 { font-size: 22px; }
-    .composer-section { gap: 10px; }
-    .composer-pill { min-height: 50px; max-width: 720px; }
+    .composer-section { gap: 0; }
+    .composer-pill { min-height: 76px; max-width: none; }
     .pill-icon { width: 32px; height: 32px; }
-    .intent-chip { padding: 6px 14px; font-size: 12px; }
+    .intent-chip { padding: 0; font-size: 12px; }
     .block-head { margin-bottom: 9px; }
     .block-title { font-size: 15px; }
-    .middle-grid { gap: 20px; min-height: 246px; }
+    .middle-grid { gap: 22px; min-height: 0; }
     
     /* 缩小最近任务卡片 */
-    .work-list { gap: 0; padding: 6px; }
-    .work-card { padding: 10px 12px; gap: 12px; min-height: 68px; }
+    .work-list { gap: 22px; padding: 0; }
+    .work-card { padding: 2px 0 2px 38px; gap: 0; min-height: 48px; }
     .icon-box { width: 36px; height: 36px; border-radius: 10px; }
     .icon-box svg { width: 18px; height: 18px; }
     .work-title { font-size: 13.5px; }
     .work-meta { font-size: 11.5px; }
 
     /* 缩小常用工具卡片 */
-    .tool-list { gap: 2px 8px; padding: 6px; }
-    .tool-row { padding: 9px 11px; gap: 10px; min-height: 58px; }
+    .tool-list { gap: 26px; padding: 0; }
+    .tool-row { padding: 0; gap: 8px; min-height: 64px; }
     .tool-icon { width: 30px; height: 30px; }
     .tool-icon svg { width: 16px; height: 16px; }
     .tool-row .tool-name { font-size: 13px; }
@@ -997,10 +1012,10 @@
 
     /* 缩小推荐卡片 */
     .content-grid { gap: 14px; }
-    .card { min-height: 126px; }
-    .card-cover { height: 42px; }
+    .card { min-height: 150px; }
+    .card-cover { height: 78px; }
     .card-tag { top: 8px; left: 8px; padding: 2px 8px; font-size: 10px; }
-    .card-body { padding: 10px 12px; gap: 6px; }
+    .card-body { padding: 9px 0 0; gap: 6px; }
     .card-title { font-size: 13px; min-height: 36px; line-height: 1.3; }
     .card-author { font-size: 11px; }
   }
@@ -1077,19 +1092,19 @@
             <button class="work-card" onclick="window.location.href='ai-record-jobs.html'">
               <div class="work-info">
                 <div class="work-title" title="原创检测卷 第十二章检测卷">原创检测卷 第十二章检测卷</div>
-                <div class="work-meta">八年级5班 · 提交 <strong>33/46</strong> · 待确认 <strong>0</strong> · 正确率 <strong>72.7%</strong></div>
+                <div class="work-meta"><span>八年级5班</span> <span>提交 <strong>33/46</strong></span> <span>待确认 <strong>0</strong></span> <span>正确率 <strong>72.7%</strong></span></div>
               </div>
             </button>
             <button class="work-card" onclick="window.location.href='chat.html?resume=1'">
               <div class="work-info">
                 <div class="work-title" title="原创检测卷 第十二章检测卷">原创检测卷 第十二章检测卷</div>
-                <div class="work-meta">八年级12班 · 提交 <strong>29/46</strong> · 待确认 <strong>0</strong> · 正确率 <strong>76.7%</strong></div>
+                <div class="work-meta"><span>八年级12班</span> <span>提交 <strong>29/46</strong></span> <span>待确认 <strong>0</strong></span> <span>正确率 <strong>76.7%</strong></span></div>
               </div>
             </button>
             <button class="work-card" onclick="window.location.href='ai-review.html'">
               <div class="work-info">
                 <div class="work-title" title="分层作业本 第一部分 课时分层情境练 第八章 运动和力 第4节 同一直线上二力的合成">分层作业本 第一部分 课时分层情境练 第八章 运动和力 第4节 同一直线上二力的合成</div>
-                <div class="work-meta">八年级5班 · 提交 <strong>40/46</strong> · 待确认 <strong>0</strong> · 正确率 <strong>71.5%</strong></div>
+                <div class="work-meta"><span>八年级5班</span> <span>提交 <strong>40/46</strong></span> <span>待确认 <strong>0</strong></span> <span>正确率 <strong>71.5%</strong></span></div>
               </div>
             </button>
           </div>
@@ -1242,7 +1257,6 @@ function renderCommonApps() {
       <div class="tool-info">
         <div class="tool-name-wrap">
           <div class="tool-name">${app.name}</div>
-          ${app.official ? '<div class="badge-official">官方</div>' : ''}
         </div>
       </div>
       <button type="button" class="tool-remove" title="移除" draggable="false" onpointerdown="event.stopPropagation()" onclick="event.stopPropagation();removeCommonApp('${app.id}')">
@@ -1250,12 +1264,14 @@ function renderCommonApps() {
       </button>
     </div>
   `).join('');
-  const emptyHtml = commonAppEditing ? Array.from({ length: emptySlots }).map(() => `
+  const emptyHtml = emptySlots > 0 ? `
     <button type="button" class="tool-row tool-add-row" onclick="openCommonAppPicker(event)">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      <span class="tool-add-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      </span>
       添加应用
     </button>
-  `).join('') : '';
+  ` : '';
   list.innerHTML = appHtml + emptyHtml;
 }
 
@@ -1989,6 +2005,7 @@ function toggleSidebar() {
 }
 
 renderCommonApps();
+renderMainIntentChips();
 (function syncGreet() {
   const el = document.querySelector('.welcome h1');
   if (el) el.textContent = '张老师，今天想做什么？';
@@ -2229,6 +2246,7 @@ renderCommonApps();
           "title": "功能说明",
           "body": [
             "常用应用展示老师日常最常打开的工具。",
+            "首页以横向图标入口展示常用应用，图标下方展示应用名称；不在首页展示应用说明。",
             "编辑态用于调整首页入口，不等于应用广场管理。",
             "添加常用应用弹窗提供“我的收藏”和“我的应用”两个 tab，默认展示“我的收藏”。",
             "“我的收藏”只展示当前老师主动收藏的应用，不展示系统推荐、最近使用、未收藏应用或其他老师收藏的应用。",
@@ -2265,6 +2283,7 @@ renderCommonApps();
           "title": "业务规则",
           "items": [
             "首页最多展示 6 个常用应用。",
+            "未满 6 个时，末尾展示“添加应用”入口；点击后打开添加常用应用弹窗。",
             "常用应用仅作为首页快捷入口；非编辑态打开应用时使用新页面，不覆盖首页。",
             "已添加应用不能重复添加。",
             "编辑态的删除只影响首页展示，不删除应用本身。",
@@ -2357,6 +2376,7 @@ renderCommonApps();
             "第一版只接入五类：飞象作业、飞象作文、错因诊断、AI 录题、知识库文件处理完成。",
             "首页只展示少量高优先级动态，完整列表进入 work-feed.html 工作动态页。",
             "首页动态卡片只帮助老师快速识别事项和班级差异，不承载完整业务数据。",
+            "首页工作动态采用横向摘要列表，一屏展示少量高优先级动态。",
             "首页卡片采用两行轻装饰展示：第一行展示作业或任务名称，超过一行时省略；第二行展示班级、提交人数、待确认数和正确率。",
             "作业或任务名称被省略时，hover 标题区域展示完整名称，保证卡片高度一致。",
             "首页卡片不展示来源图标、来源名称、刚刚扫描等状态 tag、家长端公开状态和操作按钮；这些信息在目标业务页或全部动态页按需展示。",

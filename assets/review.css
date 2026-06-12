@@ -370,6 +370,26 @@ body.review-mode .review-panel {
   color: #5f4310;
   background: #fff4d8;
 }
+.review-image-card {
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #fff;
+}
+.review-image-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.review-image-card figcaption {
+  padding: 8px 10px;
+  border-top: 1px solid #e2e8f0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.55;
+  background: #f8fafc;
+}
 .review-table-wrap {
   overflow-x: auto;
   border: 1px solid #e2e8f0;

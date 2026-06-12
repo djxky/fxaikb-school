@@ -65,6 +65,17 @@
         </div>
       `;
     }
+    if(block.type === 'image' && block.src){
+      return `
+        <div class="review-block">
+          ${block.title ? `<h4>${escapeHtml(block.title)}</h4>` : ''}
+          <figure class="review-image-card">
+            <img src="${escapeHtml(block.src)}" alt="${escapeHtml(block.alt || block.title || '过稿配图')}" loading="lazy">
+            ${block.caption ? `<figcaption>${escapeHtml(block.caption)}</figcaption>` : ''}
+          </figure>
+        </div>
+      `;
+    }
     if(block.type === 'table' && Array.isArray(block.rows) && block.rows.length){
       const columns = Array.isArray(block.columns) && block.columns.length ? block.columns : Object.keys(block.rows[0] || {});
       return `
