@@ -1,0 +1,695 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>飞象智能作业</title>
+  <style>
+    :root {
+      --ink: #1b1f23;
+      --muted: #66717d;
+      --line: #dce6ec;
+      --blue: #2d7fc4;
+      --blue-deep: #185b96;
+      --cyan: #dff2f7;
+      --green: #78b992;
+      --orange: #f18f4b;
+      --paper: #ffffff;
+      --wash: #f5f9fb;
+      --shadow: 0 18px 48px rgba(36, 72, 99, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background: var(--paper);
+      letter-spacing: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 18px clamp(20px, 5vw, 72px);
+      background: rgba(255, 255, 255, 0.86);
+      border-bottom: 1px solid rgba(220, 230, 236, 0.8);
+      backdrop-filter: blur(18px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: linear-gradient(145deg, var(--blue), #68c6d7 55%, var(--green));
+      box-shadow: 0 8px 20px rgba(45, 127, 196, 0.25);
+    }
+
+    .nav {
+      display: flex;
+      gap: 20px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 680px;
+      overflow: hidden;
+      background: #dcecf2;
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(222, 241, 247, 0.94) 0%, rgba(222, 241, 247, 0.74) 42%, rgba(222, 241, 247, 0.16) 72%),
+        url("assets/feixiang-homework/homework-hero.jpg") center / cover no-repeat;
+    }
+
+    .hero-inner {
+      position: relative;
+      display: grid;
+      align-items: center;
+      min-height: 680px;
+      width: min(1160px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 64px 0 96px;
+    }
+
+    .eyebrow {
+      margin: 0 0 22px;
+      color: var(--blue-deep);
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(54px, 9vw, 118px);
+      line-height: 0.95;
+      font-weight: 900;
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin: 32px 0 0;
+      color: #25313a;
+      font-size: clamp(20px, 2.8vw, 34px);
+      line-height: 1.35;
+      font-weight: 800;
+    }
+
+    .hero-desc {
+      max-width: 720px;
+      margin: 26px 0 0;
+      color: #3f4d57;
+      font-size: 18px;
+      line-height: 1.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 36px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 8px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .button.primary {
+      color: white;
+      background: var(--blue-deep);
+      box-shadow: 0 12px 26px rgba(24, 91, 150, 0.22);
+    }
+
+    .button.secondary {
+      color: var(--blue-deep);
+      background: rgba(255, 255, 255, 0.72);
+      border-color: rgba(45, 127, 196, 0.25);
+    }
+
+    section {
+      padding: 88px clamp(20px, 5vw, 72px);
+    }
+
+    .section-inner {
+      width: min(1160px, 100%);
+      margin: 0 auto;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 52px;
+      align-items: end;
+      padding-top: 42px;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-kicker {
+      color: var(--blue);
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 12px 0 0;
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.1;
+      font-weight: 900;
+    }
+
+    .lead {
+      margin: 0;
+      color: #33404a;
+      font-size: 21px;
+      line-height: 1.85;
+    }
+
+    .loop-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-top: 48px;
+    }
+
+    .loop-item {
+      position: relative;
+      min-height: 160px;
+      padding: 22px;
+      overflow: hidden;
+      border: 1px solid #e5edf2;
+      border-radius: 8px;
+      background: #f4f7f9;
+    }
+
+    .loop-item::after {
+      content: "";
+      position: absolute;
+      right: -48px;
+      bottom: -54px;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      background: rgba(120, 185, 146, 0.28);
+    }
+
+    .loop-item:nth-child(2)::after {
+      background: rgba(45, 127, 196, 0.22);
+    }
+
+    .loop-item:nth-child(3)::after {
+      background: rgba(241, 143, 75, 0.22);
+    }
+
+    .loop-item strong {
+      display: block;
+      font-size: 30px;
+      line-height: 1;
+    }
+
+    .loop-item h3 {
+      position: relative;
+      z-index: 1;
+      margin: 16px 0 10px;
+      font-size: 24px;
+      line-height: 1.18;
+    }
+
+    .loop-item p {
+      position: relative;
+      z-index: 1;
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .feature {
+      background: var(--wash);
+    }
+
+    .feature-stack {
+      display: grid;
+      gap: 76px;
+      margin-top: 56px;
+    }
+
+    .feature-row {
+      display: grid;
+      grid-template-columns: 0.82fr 1.18fr;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .feature-row:nth-child(even) {
+      grid-template-columns: 1.18fr 0.82fr;
+    }
+
+    .feature-row:nth-child(even) .feature-text {
+      order: 2;
+    }
+
+    .feature-text h3 {
+      margin: 0 0 18px;
+      font-size: clamp(28px, 4vw, 42px);
+      line-height: 1.18;
+    }
+
+    .feature-text p {
+      margin: 0;
+      color: #394752;
+      font-size: 19px;
+      line-height: 1.95;
+    }
+
+    .highlight {
+      color: var(--blue-deep);
+      font-weight: 900;
+    }
+
+    .media-frame {
+      padding: 18px;
+      border-radius: 8px;
+      background: #e9eef2;
+      box-shadow: var(--shadow);
+    }
+
+    .media-frame img {
+      display: block;
+      width: 100%;
+      border-radius: 6px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 310px 1fr;
+      gap: 40px;
+      margin-top: 52px;
+      align-items: start;
+    }
+
+    .tab-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .tab-button {
+      appearance: none;
+      width: 100%;
+      padding: 18px;
+      color: #27333c;
+      text-align: left;
+      border: 1px solid #dfe8ee;
+      border-radius: 8px;
+      background: #fff;
+      cursor: pointer;
+    }
+
+    .tab-button strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 18px;
+    }
+
+    .tab-button span {
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .tab-button.active {
+      color: white;
+      border-color: var(--blue-deep);
+      background: var(--blue-deep);
+      box-shadow: 0 14px 34px rgba(24, 91, 150, 0.22);
+    }
+
+    .tab-button.active span {
+      color: rgba(255, 255, 255, 0.76);
+    }
+
+    .tab-panel {
+      display: none;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    .value-band {
+      color: white;
+      background: #202b34;
+    }
+
+    .value-band .section-head {
+      border-color: rgba(255, 255, 255, 0.18);
+    }
+
+    .value-band .section-kicker,
+    .value-band .lead {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+    .value-band h2 {
+      color: white;
+    }
+
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 44px;
+    }
+
+    .value-card {
+      min-height: 210px;
+      padding: 28px;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .value-card h3 {
+      margin: 0 0 14px;
+      font-size: 24px;
+    }
+
+    .value-card p {
+      margin: 0;
+      color: rgba(255, 255, 255, 0.72);
+      line-height: 1.8;
+    }
+
+    footer {
+      padding: 38px clamp(20px, 5vw, 72px);
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    footer div {
+      width: min(1160px, 100%);
+      margin: 0 auto;
+    }
+
+    @media (max-width: 900px) {
+      .nav {
+        display: none;
+      }
+
+      .hero,
+      .hero-inner {
+        min-height: 620px;
+      }
+
+      .section-head,
+      .feature-row,
+      .feature-row:nth-child(even),
+      .tabs {
+        grid-template-columns: 1fr;
+      }
+
+      .feature-row:nth-child(even) .feature-text {
+        order: 0;
+      }
+
+      .loop-grid,
+      .value-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 620px) {
+      .topbar {
+        padding: 14px 18px;
+      }
+
+      .hero::before {
+        background:
+          linear-gradient(180deg, rgba(222, 241, 247, 0.98) 0%, rgba(222, 241, 247, 0.88) 58%, rgba(222, 241, 247, 0.22) 100%),
+          url("assets/feixiang-homework/homework-hero.jpg") center bottom / cover no-repeat;
+      }
+
+      .hero,
+      .hero-inner {
+        min-height: 720px;
+      }
+
+      section {
+        padding: 62px 18px;
+      }
+
+      .loop-grid,
+      .value-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .media-frame {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="飞象智能作业">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>飞象智能作业</span>
+    </a>
+    <nav class="nav" aria-label="页面导航">
+      <a href="#loop">作业闭环</a>
+      <a href="#features">核心能力</a>
+      <a href="#scenes">界面展示</a>
+      <a href="#value">应用价值</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-inner">
+        <div>
+          <p class="eyebrow">AI EDUCATION SOLUTIONS</p>
+          <h1>飞象智能作业</h1>
+          <p class="hero-copy">专为学校研发的个性化作业全流程解决方案</p>
+          <p class="hero-desc">利用生成式人工智能赋能学生的大规模个性化学习与老师的精准教学，围绕作业设计、批改采集、学情诊断和以评促学建立数据驱动闭环。</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#features">查看核心能力</a>
+            <a class="button secondary" href="#scenes">浏览界面展示</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="loop">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">DATA-DRIVEN LOOP</div>
+            <h2>从作业设计到以评促学的完整闭环</h2>
+          </div>
+          <p class="lead">飞象智能作业以 AI 赋能精准教学，构建“作业精准设计、数据有效采集、学情可视化、以评促学个性化”的数据驱动闭环，推动教学模式改革，为教师减压增能，为学生减负提质，为管理提供标尺。</p>
+        </div>
+
+        <div class="loop-grid">
+          <article class="loop-item">
+            <strong>01.</strong>
+            <h3>作业设计</h3>
+            <p>从题海到量身定制，支持本地题库与 AI 精准推题。</p>
+          </article>
+          <article class="loop-item">
+            <strong>02.</strong>
+            <h3>智能批采</h3>
+            <p>同步完成批改与数据入库，让反馈从小时级变成分钟级。</p>
+          </article>
+          <article class="loop-item">
+            <strong>03.</strong>
+            <h3>精准学情</h3>
+            <p>沉淀作业、测验与批改数据，形成可追踪的学情画像。</p>
+          </article>
+          <article class="loop-item">
+            <strong>04.</strong>
+            <h3>以评促学</h3>
+            <p>基于真实薄弱点生成个性化建议、练习和学习手册。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="feature" id="features">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">CORE CAPABILITIES</div>
+            <h2>围绕真实教学流程设计</h2>
+          </div>
+          <p class="lead">它不是单点工具，而是把老师备作业、收作业、批作业、看学情、做干预的工作流串起来，让数据自然沉淀在教学过程里。</p>
+        </div>
+
+        <div class="feature-stack">
+          <article class="feature-row">
+            <div class="feature-text">
+              <h3>AI 精准作业设计<br>从“题海”到量身定制</h3>
+              <p>飞象题库提供海量题型新、考点新、时间新的本地创新题，并支持 AI 一键生成 AI 口算、AI 字词、AI 英汉互译等高频小练题单。系统可基于班级和学生个人学情精准推题，实现共性补强、分层进阶、个性根治。</p>
+            </div>
+            <div class="media-frame">
+              <img src="assets/feixiang-homework/assignment-design.jpg" alt="飞象智能作业的作业设计界面">
+            </div>
+          </article>
+
+          <article class="feature-row">
+            <div class="feature-text">
+              <h3>智能批改采集<br>从“小时级”到“分钟级”反馈</h3>
+              <p>系统同步完成批改与数据入库，将教师从机械劳动中解放。<span class="highlight">批改全题型覆盖</span>，支持应用题、作文等复杂题型；<span class="highlight">多维度采集</span>学生原始作答、教师批改痕迹和分数等关键数据。</p>
+            </div>
+            <div class="media-frame">
+              <img src="assets/feixiang-homework/grading-flow.jpg" alt="飞象智能作业的批改采集流程">
+            </div>
+          </article>
+
+          <article class="feature-row">
+            <div class="feature-text">
+              <h3>作业/测验精准学情诊断报告</h3>
+              <p>AI 驱动作业数据统计、聚类与多维归因，为教学决策提供靶向建议，构建“作业-学情-讲评-练习”的数据驱动闭环，让教学决策聚焦真实薄弱点，赋能教师精准干预。</p>
+            </div>
+            <div class="media-frame">
+              <img src="assets/feixiang-homework/learning-report.jpg" alt="飞象智能作业的学情诊断报告界面">
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="scenes">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">PRODUCT SCENES</div>
+            <h2>按教学场景查看产品能力</h2>
+          </div>
+          <p class="lead">从教师端选题到扫描批改，再到班级学情分析和个性化学习手册，页面内容来自品牌手册中的飞象智能作业章节。</p>
+        </div>
+
+        <div class="tabs">
+          <div class="tab-list" role="tablist" aria-label="产品场景">
+            <button class="tab-button active" type="button" role="tab" aria-selected="true" data-tab="design">
+              <strong>作业精准设计</strong>
+              <span>围绕教材、知识点、题型和学生学情组合题单。</span>
+            </button>
+            <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="grading">
+              <strong>批改与采集</strong>
+              <span>识别手写答案，保留批改轨迹，沉淀作业数据。</span>
+            </button>
+            <button class="tab-button" type="button" role="tab" aria-selected="false" data-tab="report">
+              <strong>学情诊断报告</strong>
+              <span>定位薄弱点，生成个性化学习手册和讲评建议。</span>
+            </button>
+          </div>
+
+          <div>
+            <div class="tab-panel active" id="tab-design">
+              <div class="media-frame">
+                <img src="assets/feixiang-homework/assignment-design.jpg" alt="作业精准设计界面展示">
+              </div>
+            </div>
+            <div class="tab-panel" id="tab-grading">
+              <div class="media-frame">
+                <img src="assets/feixiang-homework/grading-flow.jpg" alt="批改与数据采集界面展示">
+              </div>
+            </div>
+            <div class="tab-panel" id="tab-report">
+              <div class="media-frame">
+                <img src="assets/feixiang-homework/learning-report.jpg" alt="学情诊断报告界面展示">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="value-band" id="value">
+      <div class="section-inner">
+        <div class="section-head">
+          <div>
+            <div class="section-kicker">TEACHING VALUE</div>
+            <h2>为学校、教师和学生同时创造价值</h2>
+          </div>
+          <p class="lead">飞象智能作业把“精准”落在教学日常中：老师少做重复劳动，学生获得更匹配的练习，学校管理获得可观测、可复盘的过程数据。</p>
+        </div>
+
+        <div class="value-grid">
+          <article class="value-card">
+            <h3>教师减压增能</h3>
+            <p>AI 批改、自动采集和学情分析减少机械劳动，让老师把时间放回讲评、辅导和个性化干预。</p>
+          </article>
+          <article class="value-card">
+            <h3>学生减负提质</h3>
+            <p>基于班级与个人学情推题，避免低效刷题，帮助学生围绕真实薄弱点进行分层进阶。</p>
+          </article>
+          <article class="value-card">
+            <h3>管理有据可依</h3>
+            <p>沉淀作业、测验、批改、讲评和练习数据，为学校教学质量改进提供可视化标尺。</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div>内容整理自《品牌手册0604-cmyk.pdf》中“飞象智能作业”章节。</div>
+  </footer>
+
+  <script>
+    const buttons = document.querySelectorAll(".tab-button");
+    const panels = document.querySelectorAll(".tab-panel");
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const target = button.dataset.tab;
+
+        buttons.forEach((item) => {
+          const active = item === button;
+          item.classList.toggle("active", active);
+          item.setAttribute("aria-selected", String(active));
+        });
+
+        panels.forEach((panel) => {
+          panel.classList.toggle("active", panel.id === `tab-${target}`);
+        });
+      });
+    });
+  </script>
+</body>
+</html>
