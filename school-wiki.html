@@ -1708,7 +1708,7 @@
             "directoryPreview 包含 name、summary、pageCount、sourceIds。",
             "fullWikiDirectory 包含 groups、items、sourceIds、uncategorizedItems。",
             "每个 item 包含 title、wikiCount 或 sourceCount、targetUrl。",
-            "gradeSubjectWiki 包含 name、grade、subject、summary、toc、topicGroups、sourceFiles。"
+            "gradeSubjectWiki 包含 name、grade、subject、summary、toc、topicGroups、recentUpdates。"
           ]
         }
       ]
@@ -1746,7 +1746,9 @@
           "items": [
             "teachingSceneCards 包含 id、name、summary、wikiCount、sourceCount、targetUrl、sourceIds。",
             "教学场景卡片的 targetType 固定为 wiki。",
-            "sceneWiki 包含 name、summary、toc、subjectGroups、sourceFiles。",
+            "sceneWiki 包含 name、summary、toc、subjectGroups、recentUpdates。",
+            "recentUpdates 的副标题由 AI 生成，格式为：资料类型 + 归入的 Wiki/目录 + 可用场景或变化点。",
+            "副标题不要只写“教案 · 二次函数”这类弱标签，必须说明这条更新为什么值得点击。",
             "AI 生成卡片内容和场景 Wiki 正文，前端只负责固定结构渲染。"
           ]
         }
@@ -1780,7 +1782,8 @@
         {
           "title": "数据字段",
           "items": [
-            "recentUpdates 包含 title、summary、updatedAt、sourceIds、targetType、targetLabel、targetUrl。",
+            "recentUpdates 包含 title、subtitle、updatedAt、sourceIds、targetType、targetLabel、targetUrl。",
+            "subtitle 由 AI 生成，用于说明资料类型、归入的 Wiki/目录，以及可用场景或变化点。",
             "targetType 只允许 wiki 或 file。",
             "recentUpdates 前端最多渲染 20 条。"
           ]
