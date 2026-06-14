@@ -3479,6 +3479,8 @@
             "items": [
               "知识目录不跳文件夹页面，也不等同于用户上传时的文件夹结构。",
 	              "即使资料都是零散文件，系统也要优先识别学科，再结合年级、教学主题、教学场景或资料类型生成 Wiki 目录。",
+	              "第一版目录型 Wiki 包含两类：年级学科目录 Wiki 和教学场景目录 Wiki。",
+	              "年级学科目录 Wiki 以“九年级数学、七年级语文”这类粒度呈现，不单独拆学科页或年级页。",
               "每个 Wiki 目录项点击后进入对应 Wiki 词条。",
 	              "AI 只生成主题分组、词条名称、摘要和来源关系；栏目标题、弱提示和展开按钮由产品固定。",
               "暂时无法判断主题的资料不强行编入正式目录，也不在老师 Wiki 页展示为模块。",
@@ -3492,7 +3494,8 @@
             "items": [
               "directoryPreview 包含 name、summary、pageCount、sourceIds。",
               "fullWikiDirectory 包含 groups、items、sourceIds、uncategorizedItems。",
-              "每个 item 包含 title、wikiCount 或 sourceCount、targetUrl。"
+              "每个 item 包含 title、wikiCount 或 sourceCount、targetUrl。",
+              "gradeSubjectWiki 包含 name、grade、subject、summary、toc、topicGroups、sourceFiles。"
             ]
           }
         ]
@@ -3500,33 +3503,38 @@
       {
         "id": "school-wiki-workflows",
         "title": "4. 按教学场景查找",
-        "body": "按教学场景查找服务老师带着具体任务进入的场景，例如备课、授课、作业评价、讲评和复习。它是首页真正的行动入口。",
+        "body": "按教学场景查找服务老师带着具体任务进入资料，例如备课、授课、作业评价和中考复习。首页展示为卡片入口，点击后进入对应场景 Wiki 词条。",
         "blocks": [
           {
             "title": "页面展示",
             "body": [
-              "展示 3-5 个教学场景入口：备课资源、课堂教学、作业与测评、中考复习等。",
-              "每个入口说明里面有什么资料，而不是使用资料成熟度标签。",
-              "每张卡片保留明确动作文案，例如查看备课资源、查看课堂教学。",
-              "点击后进入教学场景聚合页；聚合页内提供学科、年级、资料类型筛选。"
+              "展示 3-5 个教学场景卡片，例如备课资源、课堂教学、作业与测评、中考复习。",
+              "每张卡片展示场景名称、覆盖内容、资料数量、Wiki 数量和明确动作文案。",
+              "点击卡片进入对应场景 Wiki 词条；不是进入筛选页、文件夹页或功能工作台。",
+              "场景卡片不展示筛选器、生成动作或独立工作台按钮。",
+              "同一 Wiki 词条或资料可以同时出现在知识目录和多个教学场景 Wiki 中。"
             ]
           },
           {
             "title": "业务规则",
             "items": [
-              "教学场景入口不是完整目录，只是任务型聚合入口。",
-              "点击后进入场景页，不直接跳单个 Wiki 词条。",
-              "场景页不是 Wiki 词条页，也不是文件夹页；它聚合相关 Wiki、原始资料和可继续生成的内容。",
-              "场景页内再按学科、年级、资料类型筛选内容。",
-              "资料不足的教学场景不强行展示为主入口。"
+              "教学场景不是独立功能页，而是 AI 对 Wiki 和资料的任务视角分类。",
+              "点击教学场景卡片进入对应场景 Wiki 词条，例如《备课资源》。",
+              "点击 Wiki 词条进入对应词条；点击资料链接进入文件预览。",
+              "目录型 Wiki 统一为顶部概览 + 主目录 + 近期更新；场景 Wiki 的主目录按学科与年级组织。",
+              "《备课资源》这类高阶场景词条必须先按学科组织，再在学科下按年级、课型或教学主题展开。",
+              "备课资源页不能只写泛泛摘要，必须让老师能按学科、年级和主题逐层定位。",
+              "AI 根据资料内容识别学科、年级、教学任务和资料类型，不依赖上传文件夹。",
+              "资料不足的教学场景少展示或不展示，不用空模块补版面。"
             ]
           },
           {
             "title": "数据字段",
             "items": [
-              "workflows 包含 id、name、summary、fileCount、wikiCount、sourceIds、targetUrl。",
-              "workflowPage 包含 filters、relatedWiki、sourceFiles、generationActions。",
-              "targetUrl 指向教学场景聚合页，例如备课资源、课堂教学、作业测评或中考复习。"
+              "teachingSceneCards 包含 id、name、summary、wikiCount、sourceCount、targetUrl、sourceIds。",
+              "教学场景卡片的 targetType 固定为 wiki。",
+              "sceneWiki 包含 name、summary、toc、subjectGroups、sourceFiles。",
+              "AI 生成卡片内容和场景 Wiki 正文，前端只负责固定结构渲染。"
             ]
           }
         ]
@@ -3560,7 +3568,7 @@
             "title": "数据字段",
             "items": [
               "recentUpdates 包含 title、summary、updatedAt、sourceIds、targetType、targetLabel、targetUrl。",
-              "targetType 只允许 wiki、workflow、file 三类。",
+              "targetType 只允许 wiki 或 file。",
               "recentUpdates 前端最多渲染 20 条。"
             ]
           }
@@ -3612,7 +3620,7 @@
               },
               {
                 "label": "结构生成",
-                "text": "生成 overview、directoryPreview、fullWikiDirectory、workflows、recentUpdates、organizationStatus，并把提问上下文交给页面下方输入框。"
+                "text": "生成 overview、directoryPreview、fullWikiDirectory、teachingSceneCards、sceneWiki、recentUpdates、organizationStatus，并把提问上下文交给页面下方输入框。"
               },
               {
                 "label": "程序校验",
@@ -3627,7 +3635,7 @@
           {
             "title": "核心原则",
             "items": [
-              "首页给地图，知识目录给全量，输入框给当前知识库提问，教学场景入口给行动，近期更新给回访。",
+              "首页给地图，知识目录给全量，输入框给当前知识库提问，教学场景给任务视角，近期更新给回访。",
               "首页主入口只有两类：知识目录、按教学场景查找；提问由统一输入框承接。",
               "目录区直接展示可点击 Wiki 词条，不使用不能点的胶囊或伪入口。",
               "目录展示更多必须发生在分组内部，按钮文案说明本组词条数量。",

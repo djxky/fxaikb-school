@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>飞象 AI · 工作台</title>
+<title>飞象 AI · 学校知识库</title>
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
@@ -278,185 +278,6 @@
 	    font-weight:700;
 	  }
 	  .kb-entry-cta [data-lucide]{ width:14px;height:14px; }
-	  #view-workflow{ display:none; }
-	  .app[data-view="workflow"] #view-wiki{ display:none; }
-	  .app[data-view="workflow"] #view-workflow{ display:block; }
-	  .workflow-back{
-	    display:inline-flex;
-	    align-items:center;
-	    gap:5px;
-	    margin-bottom:18px;
-	    color:var(--gold-deep);
-	    font-size:12.5px;
-	    font-weight:700;
-	    cursor:pointer;
-	  }
-	  .workflow-back [data-lucide]{ width:14px;height:14px; }
-	  .workflow-hero{
-	    margin-bottom:22px;
-	    padding-bottom:18px;
-	    border-bottom:1px solid var(--border);
-	  }
-	  .workflow-kicker{
-	    display:flex;
-	    align-items:center;
-	    gap:6px;
-	    margin-bottom:8px;
-	    color:var(--text-3);
-	    font-size:12px;
-	    font-weight:700;
-	  }
-	  .workflow-kicker [data-lucide]{ width:14px;height:14px;color:var(--gold); }
-	  .workflow-title{
-	    margin:0;
-	    font-family:Georgia,'Songti SC','PingFang SC',serif;
-	    font-size:28px;
-	    line-height:1.25;
-	    font-weight:600;
-	    color:var(--text);
-	  }
-	  .workflow-sub{
-	    margin:10px 0 0;
-	    color:var(--text-2);
-	    font-size:14px;
-	    line-height:1.75;
-	  }
-	  .workflow-meta{
-	    display:flex;
-	    flex-wrap:wrap;
-	    gap:8px;
-	    margin-top:14px;
-	    color:var(--text-3);
-	    font-size:12px;
-	  }
-	  .workflow-filter{
-	    margin-bottom:22px;
-	    padding:12px 0;
-	    border-top:1px solid var(--border-3);
-	    border-bottom:1px solid var(--border-3);
-	  }
-	  .workflow-filter-row{
-	    display:flex;
-	    align-items:center;
-	    gap:8px;
-	    margin:7px 0;
-	  }
-	  .workflow-filter-label{
-	    width:38px;
-	    color:var(--text-3);
-	    font-size:12px;
-	    flex-shrink:0;
-	  }
-	  .workflow-filter-chip{
-	    height:25px;
-	    padding:0 10px;
-	    border-radius:999px;
-	    border:1px solid var(--border);
-	    background:var(--surface);
-	    color:var(--text-2);
-	    font-size:12px;
-	    cursor:pointer;
-	  }
-	  .workflow-filter-chip.active{
-	    border-color:rgba(168,126,44,.28);
-	    background:var(--gold-bg);
-	    color:var(--gold-deep);
-	    font-weight:700;
-	  }
-	  .workflow-layout{
-	    display:grid;
-	    grid-template-columns:minmax(0,1fr) minmax(260px,.72fr);
-	    gap:28px;
-	  }
-	  .workflow-block{
-	    margin-bottom:26px;
-	  }
-	  .workflow-block-head{
-	    display:flex;
-	    align-items:baseline;
-	    justify-content:space-between;
-	    gap:12px;
-	    padding-bottom:8px;
-	    border-bottom:1px solid var(--border-3);
-	  }
-	  .workflow-block-title{
-	    margin:0;
-	    font-family:Georgia,'Songti SC','PingFang SC',serif;
-	    font-size:17px;
-	    line-height:1.3;
-	    font-weight:600;
-	    color:var(--text);
-	  }
-	  .workflow-block-note{
-	    color:var(--text-3);
-	    font-size:12px;
-	    white-space:nowrap;
-	  }
-	  .workflow-row{
-	    display:grid;
-	    grid-template-columns:minmax(0,1fr) auto;
-	    gap:14px;
-	    width:100%;
-	    padding:13px 0;
-	    border-bottom:1px dashed var(--border);
-	    text-align:left;
-	    cursor:pointer;
-	  }
-	  .workflow-row:hover .workflow-row-title{ color:var(--gold-deep); }
-	  .workflow-row-title{
-	    font-size:14px;
-	    font-weight:700;
-	    color:var(--text);
-	  }
-	  .workflow-row-desc{
-	    margin-top:3px;
-	    color:var(--text-2);
-	    font-size:12.5px;
-	    line-height:1.6;
-	  }
-	  .workflow-row-meta{
-	    color:var(--text-3);
-	    font-size:11.5px;
-	    white-space:nowrap;
-	  }
-	  .workflow-action-grid{
-	    display:grid;
-	    gap:10px;
-	  }
-	  .workflow-action{
-	    display:flex;
-	    gap:10px;
-	    align-items:flex-start;
-	    padding:12px;
-	    border:1px solid var(--border);
-	    border-radius:8px;
-	    background:var(--surface);
-	    cursor:pointer;
-	    text-align:left;
-	    transition:border-color .15s, background .15s;
-	  }
-	  .workflow-action:hover{
-	    border-color:rgba(168,126,44,.28);
-	    background:#fffdf8;
-	  }
-	  .workflow-action [data-lucide]{
-	    width:16px;
-	    height:16px;
-	    color:var(--gold);
-	    margin-top:2px;
-	  }
-	  .workflow-action b{
-	    display:block;
-	    color:var(--text);
-	    font-size:13.5px;
-	  }
-	  .workflow-action span{
-	    display:block;
-	    margin-top:2px;
-	    color:var(--text-2);
-	    font-size:12px;
-	    line-height:1.5;
-	  }
 	  .kb-card-actions{
 	    display:flex;
 	    flex-wrap:wrap;
@@ -740,11 +561,6 @@
 	  @media (max-width: 860px){
 	    .kb-topic-list li,
 	    .kb-source-list li{ grid-template-columns:1fr; }
-	    .workflow-layout{ grid-template-columns:1fr; }
-	    .workflow-filter-row{ align-items:flex-start; flex-wrap:wrap; }
-	    .workflow-filter-label{ width:100%; }
-	    .workflow-row{ grid-template-columns:1fr; }
-	    .workflow-row-meta{ white-space:normal; }
 	  }
 	</style>
 <link rel="stylesheet" href="assets/review.css" />
@@ -844,7 +660,7 @@
 	              <h3 class="kb-subject-title">数学</h3>
 	              <span class="kb-subject-meta">以九年级复习资料为主 · 42 个词条</span>
 	            </div>
-	            <h3 class="wiki-h3">九年级数学复习 <span class="h3-count">12 个 Wiki</span></h3>
+	            <h3 class="wiki-h3"><a class="wlink" onclick="openWiki('九年级数学')">九年级数学</a> <span class="h3-count">12 个 Wiki</span></h3>
 	            <p class="subject-para">
 	              <a class="wlink" onclick="openWiki('二次函数图像与性质')">二次函数图像与性质</a><span class="wcount">12</span>
 	              <span class="sep">·</span>
@@ -944,9 +760,9 @@
 
 	        <section class="kb-home-section" id="kb-workflows">
 	          <h2 class="wiki-h2">按教学场景查找</h2>
-	          <p class="kb-section-intro">面向备课、授课、作业评价和复习备考等常用场景，汇总相关 Wiki 词条、原始资料和可继续生成的内容。</p>
+	          <p class="kb-section-intro">面向备课、授课、作业评价和复习备考等常用场景，汇总相关 Wiki 词条和原始资料。</p>
 	          <div class="kb-card-grid">
-	            <button class="kb-entry-card" onclick="openWorkflow('备课资源')">
+	            <button class="kb-entry-card" onclick="openWiki('备课资源')">
 	              <div class="kb-entry-top">
 	                <span class="kb-entry-title"><i data-lucide="book-open"></i>备课资源</span>
 	              </div>
@@ -954,7 +770,7 @@
 	              <span class="kb-entry-cta">查看备课资源 <i data-lucide="arrow-right"></i></span>
 	              <div class="kb-entry-meta"><span><i data-lucide="file-text"></i>214 份资料</span><span>12 页 Wiki</span></div>
 	            </button>
-	            <button class="kb-entry-card" onclick="openWorkflow('课堂教学')">
+	            <button class="kb-entry-card" onclick="openWiki('课堂教学')">
 	              <div class="kb-entry-top">
 	                <span class="kb-entry-title"><i data-lucide="presentation"></i>课堂教学</span>
 	              </div>
@@ -962,7 +778,7 @@
 	              <span class="kb-entry-cta">查看课堂教学 <i data-lucide="arrow-right"></i></span>
 	              <div class="kb-entry-meta"><span><i data-lucide="file-text"></i>186 份资料</span><span>9 页 Wiki</span></div>
 	            </button>
-	            <button class="kb-entry-card" onclick="openWorkflow('作业与测评')">
+	            <button class="kb-entry-card" onclick="openWiki('作业与测评')">
 	              <div class="kb-entry-top">
 	                <span class="kb-entry-title"><i data-lucide="clipboard-check"></i>作业与测评</span>
 	              </div>
@@ -970,7 +786,7 @@
 	              <span class="kb-entry-cta">查看作业与测评 <i data-lucide="arrow-right"></i></span>
 	              <div class="kb-entry-meta"><span><i data-lucide="file-text"></i>132 份资料</span><span>7 页 Wiki</span></div>
 	            </button>
-	            <button class="kb-entry-card" onclick="openWorkflow('中考复习')">
+	            <button class="kb-entry-card" onclick="openWiki('中考复习')">
 	              <div class="kb-entry-top">
 	                <span class="kb-entry-title"><i data-lucide="target"></i>中考复习</span>
 	              </div>
@@ -1057,150 +873,6 @@
 
       </article>
 
-      <article class="wiki-page kb-workflow-page" id="view-workflow" aria-hidden="true">
-        <button class="workflow-back" onclick="backToWikiHome()">
-          <i data-lucide="arrow-left"></i>
-          返回学校知识库
-        </button>
-
-        <header class="workflow-hero">
-          <div class="workflow-kicker">
-            <i data-lucide="briefcase-business"></i>
-            教学场景
-          </div>
-          <h1 class="workflow-title" id="workflow-title">备课资源</h1>
-          <p class="workflow-sub" id="workflow-sub">
-            汇总可直接用于备课的 Wiki 词条、原始资料和可继续生成的内容。进入场景后再按学科、年级和资料类型筛选。
-          </p>
-          <div class="workflow-meta">
-            <span id="workflow-scope">数学 · 九年级为主</span>
-            <span>·</span>
-            <span id="workflow-file-count">214 份资料</span>
-            <span>·</span>
-            <span id="workflow-wiki-count">12 个 Wiki 词条</span>
-            <span>·</span>
-            <span>最近更新 今天 09:14</span>
-          </div>
-        </header>
-
-        <section class="workflow-filter" aria-label="筛选条件">
-          <div class="workflow-filter-row" data-filter-group="subject">
-            <span class="workflow-filter-label">学科</span>
-            <button class="workflow-filter-chip active" onclick="selectWorkflowFilter(this)">全部</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">数学</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">语文</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">英语</button>
-          </div>
-          <div class="workflow-filter-row" data-filter-group="grade">
-            <span class="workflow-filter-label">年级</span>
-            <button class="workflow-filter-chip active" onclick="selectWorkflowFilter(this)">全部</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">七年级</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">八年级</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">九年级</button>
-          </div>
-          <div class="workflow-filter-row" data-filter-group="type">
-            <span class="workflow-filter-label">类型</span>
-            <button class="workflow-filter-chip active" onclick="selectWorkflowFilter(this)">全部</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">教案</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">课件</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">导入活动</button>
-            <button class="workflow-filter-chip" onclick="selectWorkflowFilter(this)">单元目标</button>
-          </div>
-        </section>
-
-        <div class="workflow-layout">
-          <div>
-            <section class="workflow-block">
-              <div class="workflow-block-head">
-                <h2 class="workflow-block-title">相关 Wiki</h2>
-                <span class="workflow-block-note">点击进入词条</span>
-              </div>
-              <button class="workflow-row" onclick="openWiki('二次函数图像与性质')">
-                <span>
-                  <span class="workflow-row-title">二次函数图像与性质</span>
-                  <span class="workflow-row-desc">覆盖导入课件、教学设计、板书图解和课堂追问。</span>
-                </span>
-                <span class="workflow-row-meta">12 份来源</span>
-              </button>
-              <button class="workflow-row" onclick="openWiki('复习课教学设计')">
-                <span>
-                  <span class="workflow-row-title">复习课教学设计</span>
-                  <span class="workflow-row-desc">整理单元目标、重点问题、课堂练习和复盘建议。</span>
-                </span>
-                <span class="workflow-row-meta">6 份来源</span>
-              </button>
-              <button class="workflow-row" onclick="openWiki('中考压轴·函数综合')">
-                <span>
-                  <span class="workflow-row-title">中考压轴 · 函数综合</span>
-                  <span class="workflow-row-desc">适合复习课备课，包含动点、最值和存在性问题素材。</span>
-                </span>
-                <span class="workflow-row-meta">18 份来源</span>
-              </button>
-            </section>
-
-            <section class="workflow-block">
-              <div class="workflow-block-head">
-                <h2 class="workflow-block-title">可用资料</h2>
-                <span class="workflow-block-note">课件、教案、活动材料</span>
-              </div>
-              <button class="workflow-row" onclick="showToast('预览《二次函数·导入课件.pptx》')">
-                <span>
-                  <span class="workflow-row-title">二次函数 · 导入课件.pptx</span>
-                  <span class="workflow-row-desc">适合第一课时导入，包含图像变化观察活动。</span>
-                </span>
-                <span class="workflow-row-meta">课件 · 张老师</span>
-              </button>
-              <button class="workflow-row" onclick="showToast('预览《教学设计·二次函数.docx》')">
-                <span>
-                  <span class="workflow-row-title">教学设计 · 二次函数.docx</span>
-                  <span class="workflow-row-desc">包含教学目标、重点难点、课堂环节和板书安排。</span>
-                </span>
-                <span class="workflow-row-meta">教案 · 张老师</span>
-              </button>
-              <button class="workflow-row" onclick="showToast('预览《函数图像变换课堂活动.pdf》')">
-                <span>
-                  <span class="workflow-row-title">函数图像变换课堂活动.pdf</span>
-                  <span class="workflow-row-desc">用于小组探究，可配合投影和练习题使用。</span>
-                </span>
-                <span class="workflow-row-meta">活动 · 教研组</span>
-              </button>
-            </section>
-          </div>
-
-          <aside>
-            <section class="workflow-block">
-              <div class="workflow-block-head">
-                <h2 class="workflow-block-title">可继续生成</h2>
-                <span class="workflow-block-note">基于当前筛选</span>
-              </div>
-              <div class="workflow-action-grid">
-                <button class="workflow-action" onclick="showToast('基于当前资料生成教案')">
-                  <i data-lucide="file-pen-line"></i>
-                  <span><b>生成教案</b><span>按当前 Wiki 和课件生成一课时教学设计。</span></span>
-                </button>
-                <button class="workflow-action" onclick="showToast('基于当前资料生成导入活动')">
-                  <i data-lucide="sparkles"></i>
-                  <span><b>生成导入活动</b><span>提取情境、问题链和课堂追问。</span></span>
-                </button>
-                <button class="workflow-action" onclick="showToast('基于当前资料生成分层练习')">
-                  <i data-lucide="list-checks"></i>
-                  <span><b>生成分层练习</b><span>按 A/B/C 难度生成配套练习。</span></span>
-                </button>
-              </div>
-            </section>
-
-            <section class="workflow-block">
-              <div class="workflow-block-head">
-                <h2 class="workflow-block-title">当前筛选说明</h2>
-                <span class="workflow-block-note">示例</span>
-              </div>
-              <p class="kb-section-intro" id="workflow-filter-note">
-                当前展示全部学科、全部年级、全部资料类型。选择筛选项后，场景页保留同一任务入口，只收窄资料范围。
-              </p>
-            </section>
-          </aside>
-        </div>
-      </article>
     </div>
 
     <!-- 学校知识库文件夹视图：由 assets/v28.js 的 renderPersonalFolderView 渲染 -->
@@ -1829,76 +1501,6 @@
 <script src="assets/shared/v28-modals.js?v=20260521g"></script>
 <script src="assets/page-header.js"></script>
 <script>
-  const workflowConfigs = {
-    '备课资源': {
-      title: '备课资源',
-      sub: '汇总可直接用于备课的 Wiki 词条、原始资料和可继续生成的内容。进入场景后再按学科、年级和资料类型筛选。',
-      scope: '数学 · 九年级为主',
-      files: '214 份资料',
-      wiki: '12 个 Wiki 词条'
-    },
-    '课堂教学': {
-      title: '课堂教学',
-      sub: '汇总授课时可直接使用的课件、板书照片、课堂追问和公开课案例，再按学科、年级和资料类型筛选。',
-      scope: '数学 · 函数与几何专题',
-      files: '186 份资料',
-      wiki: '9 个 Wiki 词条'
-    },
-    '作业与测评': {
-      title: '作业与测评',
-      sub: '汇总练习题、测验卷、错题分析和评价标准，帮助老师围绕作业设计和讲评快速找资料。',
-      scope: '数学 · 九年级测评',
-      files: '132 份资料',
-      wiki: '7 个 Wiki 词条'
-    },
-    '中考复习': {
-      title: '中考复习',
-      sub: '汇总专题复习、函数综合、几何压轴、一模二模试卷和讲评资料，适合复习备考场景。',
-      scope: '数学 · 九年级复习',
-      files: '280 份资料',
-      wiki: '14 个 Wiki 词条'
-    }
-  };
-
-  function openWorkflow(name){
-    const config = workflowConfigs[name] || workflowConfigs['备课资源'];
-    document.getElementById('workflow-title').textContent = config.title;
-    document.getElementById('workflow-sub').textContent = config.sub;
-    document.getElementById('workflow-scope').textContent = config.scope;
-    document.getElementById('workflow-file-count').textContent = config.files;
-    document.getElementById('workflow-wiki-count').textContent = config.wiki;
-    const app = document.getElementById('app');
-    app.dataset.view = 'workflow';
-    app.dataset.chat = 'closed';
-    document.getElementById('view-workflow').setAttribute('aria-hidden', 'false');
-    const scroller = document.querySelector('.workspace-scroll');
-    if(scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
-    if(window.lucide) lucide.createIcons();
-  }
-
-  function backToWikiHome(){
-    const app = document.getElementById('app');
-    app.dataset.view = 'wiki';
-    app.dataset.chat = 'closed';
-    document.getElementById('view-workflow').setAttribute('aria-hidden', 'true');
-    const scroller = document.querySelector('.workspace-scroll');
-    if(scroller) scroller.scrollTo({ top: 0, behavior: 'smooth' });
-  }
-
-  function selectWorkflowFilter(button){
-    const row = button.closest('.workflow-filter-row');
-    if(!row) return;
-    row.querySelectorAll('.workflow-filter-chip').forEach(chip => chip.classList.remove('active'));
-    button.classList.add('active');
-    const values = Array.from(document.querySelectorAll('.workflow-filter-row')).map(group => {
-      const label = group.querySelector('.workflow-filter-label')?.textContent || '';
-      const active = group.querySelector('.workflow-filter-chip.active')?.textContent || '全部';
-      return `${label}：${active}`;
-    });
-    const note = document.getElementById('workflow-filter-note');
-    if(note) note.textContent = `当前筛选为${values.join('、')}。场景页仍围绕同一个教学任务，只收窄相关 Wiki、资料和生成动作的范围。`;
-  }
-
 	  function toggleDirectoryGroup(button){
 	    const group = button.dataset.directoryToggle;
 	    const items = document.querySelectorAll(`[data-directory-group="${group}"]`);
@@ -2088,9 +1690,11 @@
         {
           "title": "交互规则",
           "items": [
-	            "知识目录不跳文件夹页面，也不等同于用户上传时的文件夹结构。",
+            "知识目录不跳文件夹页面，也不等同于用户上传时的文件夹结构。",
 	            "即使资料都是零散文件，系统也要优先识别学科，再结合年级、教学主题、教学场景或资料类型生成 Wiki 目录。",
-	            "每个 Wiki 目录项点击后进入对应 Wiki 词条。",
+	            "第一版目录型 Wiki 包含两类：年级学科目录 Wiki 和教学场景目录 Wiki。",
+	            "年级学科目录 Wiki 以“九年级数学、七年级语文”这类粒度呈现，不单独拆学科页或年级页。",
+              "每个 Wiki 目录项点击后进入对应 Wiki 词条。",
 	            "AI 只生成主题分组、词条名称、摘要和来源关系；栏目标题、弱提示和展开按钮由产品固定。",
             "暂时无法判断主题的资料不强行编入正式目录，也不在老师 Wiki 页展示为模块。",
             "原始文件夹视图只用于查看和管理来源文件，不承担“知识目录”的职责。",
@@ -2103,7 +1707,8 @@
           "items": [
             "directoryPreview 包含 name、summary、pageCount、sourceIds。",
             "fullWikiDirectory 包含 groups、items、sourceIds、uncategorizedItems。",
-            "每个 item 包含 title、wikiCount 或 sourceCount、targetUrl。"
+            "每个 item 包含 title、wikiCount 或 sourceCount、targetUrl。",
+            "gradeSubjectWiki 包含 name、grade、subject、summary、toc、topicGroups、sourceFiles。"
           ]
         }
       ]
@@ -2111,33 +1716,38 @@
     {
       "id": "school-wiki-workflows",
       "title": "4. 按教学场景查找",
-      "body": "按教学场景查找服务老师带着具体任务进入的场景，例如备课、授课、作业评价、讲评和复习。它是首页真正的行动入口。",
+      "body": "按教学场景查找服务老师带着具体任务进入资料，例如备课、授课、作业评价和中考复习。首页展示为卡片入口，点击后进入对应场景 Wiki 词条。",
       "blocks": [
         {
           "title": "页面展示",
           "body": [
-            "展示 3-5 个教学场景入口：备课资源、课堂教学、作业与测评、中考复习等。",
-            "每个入口说明里面有什么资料，而不是使用资料成熟度标签。",
-            "每张卡片保留明确动作文案，例如查看备课资源、查看课堂教学。",
-            "点击后进入教学场景聚合页；聚合页内提供学科、年级、资料类型筛选。"
+            "展示 3-5 个教学场景卡片，例如备课资源、课堂教学、作业与测评、中考复习。",
+            "每张卡片展示场景名称、覆盖内容、资料数量、Wiki 数量和明确动作文案。",
+            "点击卡片进入对应场景 Wiki 词条；不是进入筛选页、文件夹页或功能工作台。",
+            "场景卡片不展示筛选器、生成动作或独立工作台按钮。",
+            "同一 Wiki 词条或资料可以同时出现在知识目录和多个教学场景 Wiki 中。"
           ]
         },
         {
           "title": "业务规则",
           "items": [
-            "教学场景入口不是完整目录，只是任务型聚合入口。",
-            "点击后进入场景页，不直接跳单个 Wiki 词条。",
-            "场景页不是 Wiki 词条页，也不是文件夹页；它聚合相关 Wiki、原始资料和可继续生成的内容。",
-            "场景页内再按学科、年级、资料类型筛选内容。",
-            "资料不足的教学场景不强行展示为主入口。"
+            "教学场景不是独立功能页，而是 AI 对 Wiki 和资料的任务视角分类。",
+            "点击教学场景卡片进入对应场景 Wiki 词条，例如《备课资源》。",
+            "点击 Wiki 词条进入对应词条；点击资料链接进入文件预览。",
+            "目录型 Wiki 统一为顶部概览 + 主目录 + 近期更新；场景 Wiki 的主目录按学科与年级组织。",
+            "《备课资源》这类高阶场景词条必须先按学科组织，再在学科下按年级、课型或教学主题展开。",
+            "备课资源页不能只写泛泛摘要，必须让老师能按学科、年级和主题逐层定位。",
+            "AI 根据资料内容识别学科、年级、教学任务和资料类型，不依赖上传文件夹。",
+            "资料不足的教学场景少展示或不展示，不用空模块补版面。"
           ]
         },
         {
           "title": "数据字段",
           "items": [
-            "workflows 包含 id、name、summary、fileCount、wikiCount、sourceIds、targetUrl。",
-            "workflowPage 包含 filters、relatedWiki、sourceFiles、generationActions。",
-            "targetUrl 指向教学场景聚合页，例如备课资源、课堂教学、作业测评或中考复习。"
+            "teachingSceneCards 包含 id、name、summary、wikiCount、sourceCount、targetUrl、sourceIds。",
+            "教学场景卡片的 targetType 固定为 wiki。",
+            "sceneWiki 包含 name、summary、toc、subjectGroups、sourceFiles。",
+            "AI 生成卡片内容和场景 Wiki 正文，前端只负责固定结构渲染。"
           ]
         }
       ]
@@ -2171,7 +1781,7 @@
           "title": "数据字段",
           "items": [
             "recentUpdates 包含 title、summary、updatedAt、sourceIds、targetType、targetLabel、targetUrl。",
-            "targetType 只允许 wiki、workflow、file 三类。",
+            "targetType 只允许 wiki 或 file。",
             "recentUpdates 前端最多渲染 20 条。"
           ]
         }
@@ -2223,7 +1833,7 @@
             },
             {
               "label": "结构生成",
-              "text": "生成 overview、directoryPreview、fullWikiDirectory、workflows、recentUpdates、organizationStatus，并把提问上下文交给页面下方输入框。"
+              "text": "生成 overview、directoryPreview、fullWikiDirectory、teachingSceneCards、sceneWiki、recentUpdates、organizationStatus，并把提问上下文交给页面下方输入框。"
             },
             {
               "label": "程序校验",
@@ -2238,7 +1848,7 @@
         {
           "title": "核心原则",
           "items": [
-              "首页给地图，知识目录给全量，输入框给当前知识库提问，教学场景入口给行动，近期更新给回访。",
+              "首页给地图，知识目录给全量，输入框给当前知识库提问，教学场景给任务视角，近期更新给回访。",
               "首页主入口只有两类：知识目录、按教学场景查找；提问由统一输入框承接。",
               "目录区直接展示可点击 Wiki 词条，不使用不能点的胶囊或伪入口。",
               "目录展示更多必须发生在分组内部，按钮文案说明本组词条数量。",

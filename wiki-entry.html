@@ -123,6 +123,188 @@
     font-variant-numeric: tabular-nums;
   }
 
+  body[data-page="wiki-entry"] .wiki-page .wiki-hero{
+    margin-bottom:34px;
+  }
+  body[data-page="wiki-entry"] .wiki-page .wiki-hero-meta .item{
+    color:var(--text-3);
+  }
+  body[data-page="wiki-entry"] .wiki-page .wiki-hero-meta .item b{
+    color:var(--text-2);
+  }
+
+  .scene-read-path{
+    display:grid;
+    grid-template-columns:repeat(3, minmax(0, 1fr));
+    gap:10px;
+    margin:18px 0 4px;
+  }
+  .scene-step{
+    padding:12px 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:var(--surface-2);
+  }
+  .scene-step b{
+    display:block;
+    margin-bottom:4px;
+    color:var(--gold-deep);
+    font-size:12px;
+  }
+  .scene-step span{
+    display:block;
+    color:var(--text-2);
+    font-size:12.5px;
+    line-height:1.55;
+  }
+  .scene-coverage{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:10px;
+    margin:16px 0 4px;
+  }
+  .scene-coverage-card{
+    padding:12px 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:#fff;
+  }
+  .scene-coverage-card strong{
+    display:block;
+    color:var(--text);
+    font-size:14px;
+    margin-bottom:4px;
+  }
+  .scene-coverage-card span{
+    color:var(--text-2);
+    font-size:12.5px;
+    line-height:1.55;
+  }
+  .scene-subject-group{
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px dashed var(--border-3);
+  }
+  .scene-subject-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:12px;
+    margin-bottom:8px;
+  }
+  .scene-subject-head h3{
+    margin:0;
+    color:var(--text);
+    font-size:17px;
+    font-family:Georgia,'Songti SC','PingFang SC',serif;
+    font-weight:600;
+  }
+  .scene-subject-head span{
+    color:var(--text-3);
+    font-size:12px;
+    white-space:nowrap;
+  }
+  .scene-grade-list{
+    display:grid;
+    gap:10px;
+    margin:12px 0 0;
+  }
+  .scene-grade-row{
+    padding:12px 13px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:#fff;
+  }
+  .scene-grade-name{
+    color:var(--text);
+    font-size:13px;
+    font-weight:700;
+    margin-bottom:8px;
+  }
+  .scene-grade-topics{
+    display:flex;
+    flex-wrap:wrap;
+    align-items:center;
+    gap:7px 10px;
+    font-size:13px;
+    line-height:1.55;
+  }
+  .scene-topic-item{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    max-width:100%;
+    min-width:0;
+  }
+  .scene-topic-item .wlink{
+    overflow-wrap:anywhere;
+  }
+  .scene-topics-extra{
+    display:contents;
+  }
+  .scene-topics-extra[hidden]{
+    display:none;
+  }
+  .scene-topic-toggle{
+    height:24px;
+    padding:0 8px;
+    border:0;
+    border-radius:6px;
+    background:var(--surface-2);
+    color:var(--gold-deep);
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .scene-topic-toggle:hover{
+    background:var(--gold-bg);
+  }
+  .scene-update-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  .scene-update-list li{
+    margin:0;
+  }
+  .scene-update-row{
+    width:100%;
+    display:grid;
+    grid-template-columns:minmax(0,1fr) auto;
+    gap:12px;
+    align-items:center;
+    padding:11px 0;
+    border:0;
+    border-bottom:1px dashed var(--border-3);
+    background:transparent;
+    text-align:left;
+    cursor:pointer;
+  }
+  .scene-update-list li:last-child .scene-update-row{ border-bottom:0; }
+  .scene-update-row:hover .scene-update-title{ color:var(--gold-deep); }
+  .scene-update-row:hover .scene-update-desc{ color:var(--text); }
+  .scene-update-title{
+    color:var(--text);
+    font-size:13px;
+    font-weight:700;
+  }
+  .scene-update-desc{
+    margin-top:3px;
+    color:var(--text-2);
+    font-size:12.5px;
+    line-height:1.55;
+  }
+  .scene-update-time{
+    color:var(--text-3);
+    font-size:11.5px;
+    white-space:nowrap;
+  }
+  @media (max-width: 760px){
+    .scene-read-path{ grid-template-columns:1fr; }
+    .scene-subject-head{ display:block; }
+  }
+
 </style>
 <link rel="stylesheet" href="assets/review.css" />
 </head>
@@ -156,8 +338,8 @@
         <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索 Wiki、文件" aria-expanded="false">
           <i data-lucide="search"></i>
         </button>
-        <button class="ph-action is-meta" id="btn-toggle-right" onclick="toggleRight()" title="查看这页 Wiki 的整理依据、来源资料和相关内容">
-          <i data-lucide="panel-right-open"></i><span>整理依据</span>
+        <button class="ph-action is-meta" id="btn-toggle-right" onclick="toggleRight()" title="查看这页 Wiki 的 AI 相关资料、原文件和关联内容">
+          <i data-lucide="panel-right-open"></i><span>AI 相关资料</span>
         </button>
         <span class="ph-action-sep" aria-hidden="true"></span>
         <button class="ph-action" data-doc="download-btn-wiki-entry" onclick="V28DownloadDialog.open({ context:'wiki-entry', subject:'二次函数图像与性质' })" title="下载">
@@ -214,8 +396,8 @@
             <li><a onclick="scrollToSec('s-vertex')">3 · 顶点坐标</a></li>
             <li><a onclick="scrollToSec('s-mono')">4 · 增减性</a></li>
             <li><a onclick="scrollToSec('s-cross')">5 · 与坐标轴的交点</a></li>
+            <li><a onclick="scrollToSec('s-teaching-notes')">题型与易错</a></li>
             <li><a onclick="scrollToSec('s-related')">相关词条</a></li>
-            <li><a onclick="scrollToSec('s-sources')">本词条来源（12 份）</a></li>
           </ol>
         </nav>
 
@@ -338,6 +520,28 @@
           </p>
         </section>
 
+        <!-- ───── 题型与易错 ───── -->
+        <section class="entry-sec" id="s-teaching-notes">
+          <h2 class="entry-h2">
+            题型与易错
+            <span class="h2-note">从课件、习题和错题材料中整理</span>
+          </h2>
+          <div class="related-cluster">
+            <div class="rc-group">
+              <div class="rc-label">常见题型</div>
+              <p class="subject-para">
+                求顶点坐标、判断增减性、由图像读参数、函数与方程综合、含参区间最值。
+              </p>
+            </div>
+            <div class="rc-group">
+              <div class="rc-label">高频易错</div>
+              <p class="subject-para">
+                学生容易把对称轴当成固定数，忽略参数变化；也容易直接套顶点公式，而没有先判断是否更适合配方。
+              </p>
+            </div>
+          </div>
+        </section>
+
         <!-- ───── 相关词条 ───── -->
         <section class="entry-sec" id="s-related">
           <h2 class="entry-h2">相关词条</h2>
@@ -382,95 +586,9 @@
           </div>
         </section>
 
-        <!-- ───── 本词条来源（raw sources）───── -->
-        <section class="entry-sec" id="s-sources">
-          <h2 class="entry-h2">
-            本词条来源
-            <span class="h2-note">12 份原文件 · AI 引用追溯到行级</span>
-          </h2>
-          <p class="entry-p entry-sources-intro">
-            这一页所有内容，都来自下面这 12 份资料。<b>每段正文末尾的引文</b>都会跳回原文相应位置——
-            想看原版始终能回去。
-          </p>
-          <ul class="src-list">
-            <li>
-              <a class="src-item" onclick="window.location.href='file-preview.html'" title="点击打开文件预览页">
-                <i data-lucide="presentation"></i>
-                <span class="src-name">二次函数·导入课件.pptx</span>
-                <span class="src-by">张老师 · 上传于 5 天前</span>
-                <span class="src-use">引用 3 处</span>
-              </a>
-            </li>
-            <li>
-              <a class="src-item" onclick="showToast('（演示）打开《教学设计·二次函数.docx》')">
-                <i data-lucide="file-text"></i>
-                <span class="src-name">教学设计·二次函数.docx</span>
-                <span class="src-by">张老师 · 上传于 5 天前</span>
-                <span class="src-use">引用 4 处</span>
-              </a>
-            </li>
-            <li>
-              <a class="src-item" onclick="showToast('（演示）打开《配套习题汇编.pdf》')">
-                <i data-lucide="book"></i>
-                <span class="src-name">八下函数·配套习题汇编.pdf</span>
-                <span class="src-by">全校共建 · 1 个月前</span>
-                <span class="src-use">引用 6 处</span>
-              </a>
-            </li>
-            <li>
-              <a class="src-item" onclick="showToast('（演示）打开《海淀区 2026 一模卷·数学.pdf》')">
-                <i data-lucide="file-text"></i>
-                <span class="src-name">海淀区 2026 一模卷·数学.pdf</span>
-                <span class="src-by">李素芬 · 上传于 1 周前</span>
-                <span class="src-use">引用 5 处（T6 / T22 等）</span>
-              </a>
-            </li>
-            <li>
-              <a class="src-item" onclick="showToast('（演示）打开《SAS 判定·公开课板书.jpg》')">
-                <i data-lucide="image"></i>
-                <span class="src-name">王建华·公开课板书（4 张）</span>
-                <span class="src-by">王建华 · 上传于 2 周前</span>
-                <span class="src-use">引用 2 处</span>
-              </a>
-            </li>
-            <li>
-              <a class="src-item" onclick="showToast('（演示）打开《赵明杰·错题剖析.docx》')">
-                <i data-lucide="file-text"></i>
-                <span class="src-name">赵明杰·错题剖析.docx</span>
-                <span class="src-by">赵明杰 · 上传于 2 周前</span>
-                <span class="src-use">引用 3 处</span>
-              </a>
-            </li>
-            <li>
-              <a class="src-item" onclick="showToast('（演示）打开《八(3)班·错题精选》')">
-                <i data-lucide="clipboard-list"></i>
-                <span class="src-name">八(3)班·错题精选.xlsx</span>
-                <span class="src-by">张老师 · 上传于 3 周前</span>
-                <span class="src-use">引用 2 处</span>
-              </a>
-            </li>
-            <li>
-              <a class="src-item" onclick="showToast('（演示）打开《北京中考真题 2021-2025》')">
-                <i data-lucide="folder-archive"></i>
-                <span class="src-name">北京中考真题 2021-2025（5 份）</span>
-                <span class="src-by">学校公共库 · 3 周前</span>
-                <span class="src-use">引用 8 处</span>
-              </a>
-            </li>
-            <li>
-              <a class="src-item more" onclick="showToast('（演示）展开剩余 4 份资料')">
-                <i data-lucide="more-horizontal"></i>
-                <span class="src-name">…还有 4 份资料</span>
-                <span class="src-by">点击展开</span>
-                <span class="src-use"></span>
-              </a>
-            </li>
-          </ul>
-        </section>
-
         <!-- ───── 底部说明 ───── -->
         <div class="wiki-foot entry-foot">
-          这页 Wiki 是 <b>AI 基于上面这 12 份资料整理</b> 生成的——每段都能追溯到原文件第几页。
+          这页 Wiki 是 <b>AI 基于校内资料整理</b> 生成的——正文引用和完整来源可在右侧「AI 相关资料」中查看。
           组里任何老师上传或修改资料，AI 会自动并入这一页，下次打开就是更新版。
         </div>
 
@@ -663,7 +781,7 @@
     <!-- Canvas 顶部 tab 切换 -->
     <div class="canvas-head">
       <div class="canvas-tabs" id="canvas-tabs">
-        <!-- 整理依据 tabs · 阅读 mode 显示 -->
+        <!-- AI 相关资料 tabs · 阅读 mode 显示 -->
         <button class="cv-tab tab-meta active" data-cv="wiki" onclick="switchCanvas('wiki')">
           <i data-lucide="file-text"></i>
           原文件
@@ -687,7 +805,7 @@
           <span class="cv-tab-meta">· 5 道</span>
         </button>
       </div>
-      <button class="cv-collapse-btn" onclick="collapseRight()" title="收起整理依据">
+      <button class="cv-collapse-btn" onclick="collapseRight()" title="收起 AI 相关资料">
         <i data-lucide="panel-right-close"></i>
       </button>
     </div>
@@ -1023,18 +1141,484 @@
 <script src="assets/v28-folder.js?v=20260518gh"></script>
 <script src="assets/page-header.js"></script>
 <script>
-  /* wiki-entry · 根据 URL ?w= 参数动态切换词条标题（共用模板） */
+  /* wiki-entry · 根据 URL ?w= 参数动态切换词条标题 */
   (function(){
     const params = new URLSearchParams(location.search);
     const w = params.get('w');
     if(!w || w === '二次函数图像与性质') return;
 
+    const sceneEntries = {
+      '备课资源': {
+        type: '教学场景',
+        crumbParent: '教学场景',
+        subject: '教学场景 · 备课',
+        lead: '本页按备课任务整理可用 Wiki 与来源资料，覆盖教学设计、课件、导入活动、单元目标和参考资料。目前数学九年级资料最完整，语文、英语、物理已有稳定主题；可从下方学科与年级目录进入。',
+        meta: [
+          ['files', '资料', '214 份'],
+          ['book-open', 'Wiki', '12 个'],
+          ['refresh-cw', '更新', '今天 09:14']
+        ],
+        toc: [
+          ['s-scene-subjects', '1 · 按学科与年级'],
+          ['s-scene-sources', '2 · 近期更新']
+        ],
+        sections: [
+          {
+            id: 's-scene-subjects',
+            title: '1 · 按学科与年级',
+            body: '每个学科下优先展示资料较充分的年级和教学主题，便于备课前快速定位可用内容。',
+            subjectGroups: [
+              {
+                title: '数学',
+                meta: '126 份资料 · 8 个 Wiki',
+                body: '资料集中在九年级复习、函数专题、几何专题和中考压轴题；八年级已有一次函数、勾股定理和相似预备内容。',
+                grades: [
+                  ['七年级', [['有理数与整式入门', '14 份来源'], ['平面图形初步', '9 份来源']]],
+                  ['八年级', [['一次函数复习', '11 份来源'], ['勾股定理与几何证明', '10 份来源']]],
+                  ['九年级', [['二次函数图像与性质', '12 份来源'], ['中考压轴·函数综合', '18 份来源'], ['全等三角形判定', '10 份来源'], ['相似三角形判定与性质', '8 份来源'], ['一模二模试卷讲评', '6 份来源'], ['压轴题分层练习', '4 份来源']]]
+                ]
+              },
+              {
+                title: '语文',
+                meta: '34 份资料 · 2 个 Wiki',
+                body: '以作文讲评、现代文阅读和单元教学设计为主，适合语文组共备与讲评课参考。',
+                grades: [
+                  ['七年级', [['记叙文阅读入门', '5 份来源']]],
+                  ['八年级', [['说明文阅读方法', '6 份来源']]],
+                  ['九年级', [['九年级作文讲评', '9 份来源'], ['现代文阅读答题方法', '7 份来源'], ['议论文写作训练', '6 份来源'], ['古诗文复习课设计', '5 份来源'], ['中考作文素材积累', '4 份来源']]]
+                ]
+              },
+              {
+                title: '英语',
+                meta: '29 份资料 · 1 个 Wiki',
+                body: '已整理阅读理解、单元词汇和写作模板，资料量仍在增长。',
+                grades: [
+                  ['七年级', [['单元词汇与句型', '4 份来源']]],
+                  ['八年级', [['阅读理解讲评素材', '6 份来源']]],
+                  ['九年级', [['九年级英语写作模板', '8 份来源'], ['中考英语作文表达', '5 份来源']]]
+                ]
+              },
+              {
+                title: '物理',
+                meta: '25 份资料 · 1 个 Wiki',
+                body: '以电学复习、实验记录和中考题型归纳为主，适合复习课和实验课备课。',
+                grades: [
+                  ['八年级', [['力学实验与现象解释', '7 份来源']]],
+                  ['九年级', [['电学专题复习', '11 份来源'], ['实验探究题讲评', '5 份来源']]]
+                ]
+              }
+            ]
+          },
+          {
+            id: 's-scene-sources',
+            title: '2 · 近期更新',
+            body: '以下是最近进入备课资源目录的代表资料，点击可进入文件预览，查看原文、AI 摘要和关联词条。',
+            files: [
+              ['教学设计 · 二次函数.docx', '数学 · 九年级 · 教学设计', '今天 09:14'],
+              ['二次函数 · 导入课件.pptx', '数学 · 九年级 · 课件', '昨天'],
+              ['九年级作文讲评样例.docx', '语文 · 九年级 · 讲评', '本周'],
+              ['英语写作模板 · 观点表达.pptx', '英语 · 九年级 · 写作', '本周'],
+              ['电学实验探究题汇编.pdf', '物理 · 九年级 · 实验', '本周']
+            ]
+          }
+        ]
+      },
+      '课堂教学': {
+        subject: '教学场景 · 课堂教学',
+        lead: '本页汇总适合课堂授课使用的 Wiki 词条和来源资料，包括课堂活动、板书照片、课堂追问、公开课案例和教学过程材料。',
+        meta: [
+          ['files', '来源', '186 份资料'],
+          ['book-open', '关联', '9 个 Wiki'],
+          ['layers', '覆盖', '函数图像、几何活动、辅助线策略'],
+          ['refresh-cw', '更新', '今天 09:14']
+        ],
+        toc: [
+          ['s-scene-overview', '1 · 课堂内容概览'],
+          ['s-scene-topics', '2 · 相关 Wiki 词条'],
+          ['s-scene-sources', '3 · 来源资料'],
+          ['s-scene-related', '4 · 关联场景']
+        ],
+        sections: [
+          {
+            id: 's-scene-overview',
+            title: '1 · 课堂内容概览',
+            body: '课堂教学资料集中在函数图像变换、几何课堂活动和辅助线策略，适合老师查找可直接用于授课的课堂追问、板书设计和公开课案例。'
+          },
+          {
+            id: 's-scene-topics',
+            title: '2 · 相关 Wiki 词条',
+            body: '这些词条更偏向课堂呈现与教学过程，可先看词条摘要，再进入来源资料。',
+            links: [
+              ['几何课堂活动', '5 份来源'],
+              ['函数图像变换', '6 份来源'],
+              ['辅助线策略', '5 份来源'],
+              ['几何证明方法', '6 份来源']
+            ]
+          },
+          {
+            id: 's-scene-sources',
+            title: '3 · 来源资料',
+            body: '课堂教学场景优先展示课件、板书照片、课堂活动单和公开课记录。',
+            files: [
+              ['函数图像变换课堂活动.pdf', '课堂活动'],
+              ['公开课板书照片', '板书照片'],
+              ['相似三角形 · 实际应用例题.pptx', '课件'],
+              ['王老师 · 公开课听课记录.docx', '听课记录']
+            ]
+          },
+          {
+            id: 's-scene-related',
+            title: '4 · 关联场景',
+            body: '课堂教学常与备课资源和作业测评联动，便于从教学设计继续查看课堂实施和课后评价。',
+            links: [
+              ['备课资源', '12 个 Wiki'],
+              ['作业与测评', '7 个 Wiki']
+            ]
+          }
+        ]
+      },
+      '九年级数学': {
+        type: '年级学科',
+        crumbParent: '年级学科',
+        subject: '年级学科 · 九年级数学',
+        lead: '本页按课程内容整理九年级数学相关 Wiki 与来源资料，覆盖函数、几何、方程与代数和中考复习。目前函数与几何资料最完整，包含课件、教案、试卷讲评和分层练习；可从下方单元与专题目录进入具体词条。',
+        meta: [
+          ['files', '资料', '312 份'],
+          ['book-open', 'Wiki', '42 个'],
+          ['refresh-cw', '更新', '今天 09:14']
+        ],
+        toc: [
+          ['s-grade-units', '1 · 单元与专题目录'],
+          ['s-grade-updates', '2 · 近期更新']
+        ],
+        sections: [
+          {
+            id: 's-grade-units',
+            title: '1 · 单元与专题目录',
+            body: '每个专题下优先展示可直接进入的 Wiki 词条，资料来源包括课件、教案、试卷、讲评材料和板书照片。',
+            subjectGroups: [
+              {
+                title: '函数专题',
+                meta: '128 份资料 · 15 个 Wiki',
+                body: '覆盖二次函数图像与性质、函数图像变换、函数应用题和函数综合压轴题。',
+                grades: [
+                  ['新课', [['二次函数图像与性质', '12 份来源'], ['函数图像变换', '6 份来源'], ['函数解析式求法', '5 份来源'], ['函数图像与性质归纳', '7 份来源'], ['函数实际应用', '6 份来源']]],
+                  ['专题复习', [['二次函数综合复习', '8 份来源'], ['一次函数与二次函数综合', '8 份来源'], ['函数综合题讲评', '4 份来源'], ['函数易错点', '5 份来源'], ['函数单元复习', '6 份来源']]],
+                  ['中考压轴', [['中考压轴·函数综合', '18 份来源'], ['海淀一模函数题型', '7 份来源'], ['动点与最值', '5 份来源'], ['存在性问题', '4 份来源'], ['新定义函数题型', '5 份来源']]]
+                ]
+              },
+              {
+                title: '几何专题',
+                meta: '96 份资料 · 12 个 Wiki',
+                body: '覆盖全等、相似、圆、辅助线和几何压轴题，适合新课与专题复习共同使用。',
+                grades: [
+                  ['基础方法', [['全等三角形判定', '10 份来源'], ['相似三角形判定与性质', '8 份来源'], ['圆的基本性质', '6 份来源'], ['平行线与角度关系', '4 份来源']]],
+                  ['解题策略', [['辅助线策略', '5 份来源'], ['几何证明方法', '6 份来源'], ['相似模型归纳', '6 份来源'], ['全等模型训练', '4 份来源'], ['几何课堂活动', '5 份来源']]],
+                  ['综合训练', [['圆的综合问题', '7 份来源'], ['几何压轴专题', '9 份来源'], ['动点与最值', '5 份来源'], ['几何压轴讲评', '7 份来源'], ['作图与探究', '4 份来源']]]
+                ]
+              },
+              {
+                title: '方程与代数',
+                meta: '43 份资料 · 6 个 Wiki',
+                body: '资料集中在一元二次方程、根的判别式和方程函数综合应用。',
+                grades: [
+                  ['核心概念', [['一元二次方程根的判别式', '7 份来源'], ['配方法与公式法', '5 份来源']]],
+                  ['综合应用', [['函数与方程综合', '6 份来源'], ['代数式变形训练', '4 份来源']]]
+                ]
+              },
+              {
+                title: '中考复习',
+                meta: '45 份资料 · 9 个 Wiki',
+                body: '覆盖阶段诊断、一模二模讲评、压轴题分层训练和考点梳理。',
+                grades: [
+                  ['阶段复习', [['中考考点梳理', '8 份来源'], ['阶段诊断与讲评', '5 份来源']]],
+                  ['试卷讲评', [['一模二模试卷讲评', '6 份来源'], ['海淀一模函数题型', '7 份来源']]],
+                  ['分层训练', [['压轴题分层练习', '4 份来源'], ['新定义题型训练', '5 份来源']]]
+                ]
+              }
+            ]
+          },
+          {
+            id: 's-grade-updates',
+            title: '2 · 近期更新',
+            body: '以下是最近进入九年级数学目录的代表资料，点击可查看文件预览和关联 Wiki。',
+            files: [
+              ['海淀区 2026 一模卷 · 数学.pdf', '试卷 · 一模讲评', '今天 09:14'],
+              ['教学设计 · 二次函数.docx', '教案 · 二次函数', '昨天'],
+              ['二次函数 · 导入课件.pptx', '课件 · 新课导入', '本周'],
+              ['相似三角形 · 公开课设计.docx', '教案 · 几何专题', '本周'],
+              ['根的判别式分层练习.docx', '题单 · 方程专题', '本周']
+            ]
+          }
+        ]
+      },
+      '作业与测评': {
+        subject: '教学场景 · 作业与测评',
+        lead: '本页汇总与练习、测验、错题分析和评价标准相关的 Wiki 词条及来源资料，帮助老师从作业设计进入讲评和学情诊断。',
+        meta: [
+          ['files', '来源', '132 份资料'],
+          ['book-open', '关联', '7 个 Wiki'],
+          ['layers', '覆盖', '练习题、测验卷、错题归因、评价标准'],
+          ['refresh-cw', '更新', '本周']
+        ],
+        toc: [
+          ['s-scene-overview', '1 · 测评内容概览'],
+          ['s-scene-topics', '2 · 相关 Wiki 词条'],
+          ['s-scene-sources', '3 · 来源资料'],
+          ['s-scene-related', '4 · 关联场景']
+        ],
+        sections: [
+          {
+            id: 's-scene-overview',
+            title: '1 · 测评内容概览',
+            body: '作业与测评资料以分层练习、测验卷讲评、错题归因和评价量规为主，适合老师设计练习、分析错因和准备讲评课。'
+          },
+          {
+            id: 's-scene-topics',
+            title: '2 · 相关 Wiki 词条',
+            body: '以下词条可帮助老师从题目、错因和评价标准三个角度理解已有资料。',
+            links: [
+              ['错题归因模板', '6 份来源'],
+              ['测验卷讲评', '7 份来源'],
+              ['分层练习设计', '9 份来源'],
+              ['评价标准与量规', '4 份来源']
+            ]
+          },
+          {
+            id: 's-scene-sources',
+            title: '3 · 来源资料',
+            body: '测评资料优先展示练习、测验卷、错题清单和评价标准。',
+            files: [
+              ['八(3)班 · 错题精选.xlsx', '错题清单'],
+              ['根的判别式分层练习.docx', '分层练习'],
+              ['一元二次方程单元测评.pdf', '测验卷'],
+              ['赵明杰 · 错题剖析.docx', '错题分析']
+            ]
+          },
+          {
+            id: 's-scene-related',
+            title: '4 · 关联场景',
+            body: '测评资料常用于中考复习和课堂讲评，可继续查看相关场景下的 Wiki 组织。',
+            links: [
+              ['课堂教学', '9 个 Wiki'],
+              ['中考复习', '14 个 Wiki']
+            ]
+          }
+        ]
+      },
+      '复习备考': {
+        subject: '教学场景 · 复习备考',
+        lead: '本页汇总中考复习、压轴题、阶段诊断和一模二模讲评相关的 Wiki 词条及来源资料，帮助老师快速了解复习备考资料覆盖范围。',
+        meta: [
+          ['files', '来源', '280 份资料'],
+          ['book-open', '关联', '14 个 Wiki'],
+          ['layers', '覆盖', '函数综合、几何压轴、一模二模、专题讲评'],
+          ['refresh-cw', '更新', '本周']
+        ],
+        toc: [
+          ['s-scene-overview', '1 · 复习内容概览'],
+          ['s-scene-topics', '2 · 相关 Wiki 词条'],
+          ['s-scene-sources', '3 · 来源资料'],
+          ['s-scene-related', '4 · 关联场景']
+        ],
+        sections: [
+          {
+            id: 's-scene-overview',
+            title: '1 · 复习内容概览',
+            body: '复习备考资料主要覆盖九年级数学复习、中考压轴题、一模二模试卷讲评和专题训练，适合老师快速定位复习课和试卷讲评材料。'
+          },
+          {
+            id: 's-scene-topics',
+            title: '2 · 相关 Wiki 词条',
+            body: '以下词条按复习阶段和题型专题组织，可用于整体复习规划和专题讲评。',
+            links: [
+              ['中考压轴·函数综合', '18 份来源'],
+              ['海淀一模函数题型', '7 份来源'],
+              ['全等三角形判定', '10 份来源'],
+              ['一模二模试卷讲评', '6 份来源']
+            ]
+          },
+          {
+            id: 's-scene-sources',
+            title: '3 · 来源资料',
+            body: '复习备考场景优先展示试卷、专题课件、真题汇编和命题趋势分析。',
+            files: [
+              ['海淀区 2026 一模卷 · 数学.pdf', '试卷'],
+              ['函数综合 · 中考压轴专题.pptx', '专题课件'],
+              ['北京中考真题 2021-2025（5 份）', '真题汇编'],
+              ['命题趋势 · 近 5 年中考分析.docx', '分析材料']
+            ]
+          },
+          {
+            id: 's-scene-related',
+            title: '4 · 关联场景',
+            body: '复习备考资料可回到备课资源查看教学设计，也可进入作业与测评查看分层练习和错题分析。',
+            links: [
+              ['备课资源', '12 个 Wiki'],
+              ['作业与测评', '7 个 Wiki']
+            ]
+          }
+        ]
+      }
+    };
+    sceneEntries['中考复习'] = {
+      ...sceneEntries['复习备考'],
+      subject: '教学场景 · 中考复习',
+      lead: '本页汇总中考复习、压轴题、阶段诊断和一模二模讲评相关的 Wiki 词条及来源资料，帮助老师快速了解中考复习资料覆盖范围。'
+    };
+
+    function escapeHtml(text){
+      return String(text).replace(/[&<>"']/g, ch => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[ch]));
+    }
+
+    function renderSceneEntry(entryName, data){
+      document.title = `${entryName} · 飞象 AI`;
+
+      const crumbItems = document.querySelectorAll('.ph-crumb-item span');
+      if(crumbItems[1]) crumbItems[1].textContent = data.crumbParent || 'Wiki 目录';
+      const crumbCurrent = document.querySelector('.ph-crumb-current span:last-child');
+      if(crumbCurrent) crumbCurrent.textContent = entryName;
+      document.querySelectorAll('[data-doc="download-btn-wiki-entry"], [data-doc="share-btn-wiki-entry"]').forEach(btn => {
+        btn.setAttribute('onclick', btn.getAttribute('onclick')?.replace(/subject:'[^']*'/, `subject:'${entryName}'`) || '');
+      });
+
+      const article = document.getElementById('view-wiki');
+      if(!article) return;
+
+      const metaHtml = data.meta.map(([, label, value], index) => `
+        ${index ? '<span class="em-sep">·</span>' : ''}
+        <span class="item">${escapeHtml(label)} <b>${escapeHtml(value)}</b></span>
+      `).join('');
+
+      const sectionHtml = data.sections.map(section => {
+        const readPath = section.id === 's-scene-guide' && data.readPath
+          ? `<div class="scene-read-path">${data.readPath.map(([title, text]) => `
+              <div class="scene-step">
+                <b>${escapeHtml(title)}</b>
+                <span>${escapeHtml(text)}</span>
+              </div>
+            `).join('')}</div>`
+          : '';
+        const coverage = section.id === 's-scene-overview' && data.coverage
+          ? `<div class="scene-coverage">${data.coverage.map(([title, text]) => `
+              <div class="scene-coverage-card">
+                <strong>${escapeHtml(title)}</strong>
+                <span>${escapeHtml(text)}</span>
+              </div>
+            `).join('')}</div>`
+          : '';
+        const subjectGroups = section.subjectGroups
+          ? section.subjectGroups.map((group, groupIndex) => `
+              <div class="scene-subject-group">
+                <div class="scene-subject-head">
+                  <h3>${escapeHtml(group.title)}</h3>
+                  <span>${escapeHtml(group.meta)}</span>
+                </div>
+                <p class="entry-p">${escapeHtml(group.body)}</p>
+                <div class="scene-grade-list">
+                  ${group.grades.map(([grade, topics], gradeIndex) => {
+                    const visibleTopics = topics.slice(0, 4);
+                    const hiddenTopics = topics.slice(4);
+                    const hiddenId = `scene-topics-${section.id}-${groupIndex}-${gradeIndex}`;
+                    const topicItem = ([title, meta]) => `
+                      <span class="scene-topic-item">
+                        <a class="wlink" onclick="openWiki('${escapeHtml(title)}')">${escapeHtml(title)}</a>
+                        <span class="wcount">${escapeHtml(meta)}</span>
+                      </span>
+                    `;
+                    return `
+                    <div class="scene-grade-row">
+                      <div class="scene-grade-name">${escapeHtml(grade)}</div>
+                      <div class="scene-grade-topics">
+                        ${visibleTopics.map(topicItem).join('')}
+                        ${hiddenTopics.length ? `
+                          <span class="scene-topics-extra" id="${hiddenId}" hidden>
+                            ${hiddenTopics.map(topicItem).join('')}
+                          </span>
+                          <button class="scene-topic-toggle" onclick="toggleSceneTopics('${hiddenId}', this)" data-collapsed-label="展开全部" data-expanded-label="收起">展开全部</button>
+                        ` : ''}
+                      </div>
+                    </div>
+                  `}).join('')}
+                </div>
+              </div>
+            `).join('')
+          : '';
+        const links = section.links
+          ? `<p class="entry-p">${section.links.map(([title, meta]) => `<a class="wlink" onclick="openWiki('${escapeHtml(title)}')">${escapeHtml(title)}</a><span class="wcount">${escapeHtml(meta)}</span>`).join('<span class="sep">·</span>')}</p>`
+          : '';
+        const files = section.files
+          ? `<ul class="scene-update-list">${section.files.map(([title, meta, time]) => `
+              <li>
+                <button class="scene-update-row" onclick="showToast('预览《${escapeHtml(title)}》')">
+                  <div>
+                    <div class="scene-update-title">${escapeHtml(title)}</div>
+                    <div class="scene-update-desc">${escapeHtml(meta)}</div>
+                  </div>
+                  <span class="scene-update-time">${escapeHtml(time || '本周')}</span>
+                </button>
+              </li>
+            `).join('')}</ul>`
+          : '';
+        return `
+          <section class="entry-sec" id="${section.id}">
+            <h2 class="entry-h2">${escapeHtml(section.title)}</h2>
+            <p class="entry-p">${escapeHtml(section.body)}</p>
+            ${readPath}
+            ${coverage}
+            ${subjectGroups}
+            ${links}
+            ${files}
+          </section>
+        `;
+      }).join('');
+
+      article.innerHTML = `
+        <header class="wiki-hero">
+          <div class="wiki-hero-badge">
+            <i data-lucide="sparkles"></i>
+            ${escapeHtml(data.type || 'Wiki 词条')}
+          </div>
+          <h1 class="wiki-hero-title">${escapeHtml(entryName)}</h1>
+          <p class="wiki-hero-sub">${escapeHtml(data.lead)}</p>
+          <div class="wiki-hero-meta">${metaHtml}</div>
+        </header>
+
+        ${sectionHtml}
+
+      `;
+
+      if(window.lucide) lucide.createIcons();
+    }
+
+    function toggleSceneTopics(id, btn){
+      const target = document.getElementById(id);
+      if(!target || !btn) return;
+      const expanded = !target.hidden;
+      target.hidden = expanded;
+      btn.textContent = expanded
+        ? (btn.dataset.collapsedLabel || '展开更多')
+        : (btn.dataset.expandedLabel || '收起');
+    }
+
+    if(sceneEntries[w]){
+      renderSceneEntry(w, sceneEntries[w]);
+      return;
+    }
+
     /* 1. tab 标题 */
-    document.title = `${w} · 飞象 AI [build ag]`;
+    document.title = `${w} · 飞象 AI`;
 
     /* 2. 面包屑末项 */
-    const lastCrumb = document.querySelector('.entry-breadcrumb .ebc-current span:last-child');
-    if(lastCrumb) lastCrumb.textContent = w;
+    document.querySelectorAll('.ph-crumb-current span:last-child').forEach((el, index, list) => {
+      if(index === list.length - 1) el.textContent = w;
+    });
 
     /* 3. wiki hero 大标题 */
     const heroTitle = document.querySelector('.entry-hero .entry-title');
@@ -1043,16 +1627,6 @@
     /* 4. 顶部 wiki badge 旁的学科标签（如果词条名带「函数」「几何」可以保留；这里简化处理） */
     /* 跳过，演示阶段所有词条都属于「数学 · 九年级 · 函数」也合理 */
 
-    /* 5. hero 下加一行极低调的演示提示，正文为何不变 */
-    const meta = document.querySelector('.entry-hero .entry-meta');
-    if(meta && !document.getElementById('demo-fallback-hint')){
-      const hint = document.createElement('div');
-      hint.id = 'demo-fallback-hint';
-      hint.style.cssText = 'margin-top:14px;padding:8px 12px;background:rgba(192,142,79,.06);border:1px solid rgba(192,142,79,.18);border-radius:8px;font-size:12px;color:var(--text-2);line-height:1.5;letter-spacing:.005em;display:flex;gap:8px;align-items:flex-start;';
-      hint.innerHTML = `<i data-lucide="info" style="width:14px;height:14px;color:var(--gold);flex-shrink:0;margin-top:2px;"></i><span>演示版：所有 wiki 词条共用本页结构。当前以 <b>《二次函数图像与性质》</b> 的正文作范式，正式版本《${w}》会有 AI 独立整理的内容。</span>`;
-      meta.parentNode.insertBefore(hint, meta.nextSibling);
-      if(window.lucide) lucide.createIcons();
-    }
   })();
 
   /* wiki-entry · 根据 URL ?view= 参数自动切换视图（Wiki / 图谱 / 文件夹）*/
