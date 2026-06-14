@@ -146,7 +146,7 @@
     pointer-events: none;
   }
   .content-wrap {
-    width: 100%; max-width: 980px;
+    width: 100%; max-width: 1180px;
     height: 100vh;
     margin: 0 auto; padding: 42px 38px 28px;
     display: flex; flex-direction: column; gap: 30px;
@@ -170,7 +170,7 @@
     overflow: visible;
   }
   .composer-pill {
-    width: 100%; max-width: 880px; min-height: 58px;
+    width: 100%; max-width: 980px; min-height: 58px;
     background:
       linear-gradient(#fff, #fff) padding-box,
       linear-gradient(100deg, rgba(168,126,44,.55), rgba(79,140,163,.24), rgba(116,102,168,.22)) border-box;
@@ -825,7 +825,7 @@
 
   /* 3B. 常用应用 */
   .tool-list {
-    display: flex; align-items: flex-start; gap: 34px;
+    display: flex; align-items: flex-start; gap: 30px;
     background: transparent;
     border: 0;
     border-radius: 0;
@@ -837,21 +837,13 @@
     background: transparent; border: 0;
     border-radius: 12px; padding: 0;
     display: flex; flex-direction: column; align-items: center; gap: 9px;
-    text-align: center; width: 64px; min-height: 74px;
+    text-align: center; width: 96px; min-height: 74px;
     cursor: pointer;
   }
   .tool-row:hover { background: transparent; box-shadow: none; transform: translateY(-1px); }
-  .tool-list.is-editing .tool-row { padding-left: 0; cursor: grab; }
-  .tool-list.is-editing .tool-row:active { cursor: grabbing; }
+  .tool-list.is-editing .tool-row { padding-left: 0; cursor: default; }
   .tool-list.is-editing .tool-row:hover { transform: none; }
-  .tool-row.is-dragging { opacity: .45; box-shadow: 0 10px 24px rgba(0,0,0,.08); }
-  .tool-row.is-drag-over { border-color: rgba(168,126,44,.55); background: var(--gold-soft); }
   .tool-list.is-editing .tool-add-row { cursor: pointer; }
-  .tool-drag {
-    position: absolute; left: 50%; top: -18px; transform: translateX(-50%);
-    width: 14px; height: 20px; display: none; color: var(--faint);
-  }
-  .tool-list.is-editing .tool-drag { display: grid; place-items: center; }
   .tool-remove {
     position: absolute; right: 4px; top: -4px;
     width: 20px; height: 20px; border-radius: 50%;
@@ -876,7 +868,7 @@
   .tool-icon { width: 38px; height: 38px; border-radius: 10px; display: grid; place-items: center; flex-shrink: 0; }
   .tool-info { display: flex; flex-direction: column; justify-content: center; gap: 2px; min-width: 0; width: 100%; }
   .tool-name-wrap { display: flex; align-items: center; justify-content: center; gap: 4px; width: 100%; }
-  .tool-row .tool-name { font-size: 12.5px; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 72px; }
+  .tool-row .tool-name { font-size: 12.5px; font-weight: 650; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 96px; }
   .badge-official { font-size: 10px; font-weight: 600; color: var(--gold); background: var(--gold-soft); padding: 1px 4px; border-radius: 4px; flex-shrink: 0; line-height: 1.2; }
   .tool-row .tool-desc { font-size: 11px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tool-add-icon {
@@ -971,49 +963,53 @@
   .author-avatar { width: 20px; height: 20px; border-radius: 50%; background: var(--line-strong); display: grid; place-items: center; font-size: 10px; color: #fff; font-weight: 600; }
   
   @media (max-height: 900px) {
-    .content-wrap { gap: 24px; padding: 28px 38px 18px; }
+    .content-wrap { max-width: 1240px; gap: 30px; padding: 28px 48px 24px; }
     .welcome h1 { font-size: 24px; }
-    .composer-section { gap: 0; }
-    .composer-pill { min-height: 82px; }
-    .middle-grid { gap: 28px; min-height: 0; }
-    .work-card { padding: 2px 0 2px 42px; min-height: 52px; }
-    .tool-row { padding: 0; gap: 8px; min-height: 70px; }
-    .card { min-height: 170px; }
-    .card-cover { height: 92px; }
+    .composer-section { gap: 12px; }
+    .composer-pill { min-height: 54px; max-width: 1040px; }
+    .middle-grid { gap: 34px; min-height: 0; }
+    .work-list { gap: 32px; }
+    .work-card { padding: 2px 0 2px 42px; min-height: 54px; }
+    .tool-list { gap: 36px; }
+    .tool-row { padding: 0; gap: 8px; min-height: 72px; }
+    .featured-section { padding-top: 4px; }
+    .card { min-height: 184px; }
+    .card-cover { height: 98px; }
   }
 
   @media (max-height: 800px) {
     .main { overflow-y: hidden; } /* 强制小屏幕不滚动 */
-    .content-wrap { gap: 18px; padding: 18px 32px 12px; }
+    .content-wrap { max-width: 1240px; gap: 26px; padding: 20px 48px 20px; }
     .welcome h1 { font-size: 22px; }
-    .composer-section { gap: 0; }
-    .composer-pill { min-height: 76px; max-width: none; }
+    .composer-section { gap: 10px; }
+    .composer-pill { min-height: 52px; max-width: 1040px; }
     .pill-icon { width: 32px; height: 32px; }
-    .intent-chip { padding: 0; font-size: 12px; }
+    .intent-chip { padding: 6px 14px; border-radius: 18px; border: 1px solid rgba(0,0,0,.07); background: rgba(255,255,255,.62); font-size: 12px; }
     .block-head { margin-bottom: 9px; }
     .block-title { font-size: 15px; }
-    .middle-grid { gap: 22px; min-height: 0; }
+    .middle-grid { gap: 30px; min-height: 0; }
     
     /* 缩小最近任务卡片 */
-    .work-list { gap: 22px; padding: 0; }
-    .work-card { padding: 2px 0 2px 38px; gap: 0; min-height: 48px; }
+    .work-list { gap: 30px; padding: 0; }
+    .work-card { padding: 2px 0 2px 38px; gap: 0; min-height: 50px; }
     .icon-box { width: 36px; height: 36px; border-radius: 10px; }
     .icon-box svg { width: 18px; height: 18px; }
     .work-title { font-size: 13.5px; }
     .work-meta { font-size: 11.5px; }
 
     /* 缩小常用工具卡片 */
-    .tool-list { gap: 26px; padding: 0; }
-    .tool-row { padding: 0; gap: 8px; min-height: 64px; }
+    .tool-list { gap: 34px; padding: 0; }
+    .tool-row { padding: 0; gap: 8px; min-height: 68px; }
     .tool-icon { width: 30px; height: 30px; }
     .tool-icon svg { width: 16px; height: 16px; }
-    .tool-row .tool-name { font-size: 13px; }
+    .tool-row .tool-name { font-size: 12.5px; max-width: 96px; }
     .tool-row .tool-desc { font-size: 10.5px; }
 
     /* 缩小推荐卡片 */
-    .content-grid { gap: 14px; }
-    .card { min-height: 150px; }
-    .card-cover { height: 78px; }
+    .featured-section { padding-top: 2px; }
+    .content-grid { gap: 18px; }
+    .card { min-height: 176px; }
+    .card-cover { height: 96px; }
     .card-tag { top: 8px; left: 8px; padding: 2px 8px; font-size: 10px; }
     .card-body { padding: 9px 0 0; gap: 6px; }
     .card-title { font-size: 13px; min-height: 36px; line-height: 1.3; }
@@ -1222,7 +1218,6 @@ const COMMON_APPS = [
 ];
 let commonAppEditing = false;
 let commonAppIds = ['qbank', 'record', 'essay', 'notify', 'schedule'];
-let draggedCommonAppId = null;
 let commonAppPickerTab = 'favorite';
 
 function appIcon(app, size = 18) {
@@ -1240,19 +1235,10 @@ function renderCommonApps() {
       role="button"
       tabindex="0"
       class="tool-row"
-      draggable="${commonAppEditing ? 'true' : 'false'}"
       data-app-id="${app.id}"
       onclick="openCommonApp('${app.id}')"
       onkeydown="onCommonAppKey(event, '${app.id}')"
-      ondragstart="startCommonAppDrag(event, '${app.id}')"
-      ondragover="overCommonAppDrag(event, '${app.id}')"
-      ondragleave="leaveCommonAppDrag(event)"
-      ondrop="dropCommonApp(event, '${app.id}')"
-      ondragend="endCommonAppDrag(event)"
     >
-      <span class="tool-drag" title="拖拽排序">
-        <svg width="12" height="18" viewBox="0 0 12 18" fill="currentColor"><circle cx="4" cy="3" r="1.2"/><circle cx="8" cy="3" r="1.2"/><circle cx="4" cy="9" r="1.2"/><circle cx="8" cy="9" r="1.2"/><circle cx="4" cy="15" r="1.2"/><circle cx="8" cy="15" r="1.2"/></svg>
-      </span>
       ${appIcon(app)}
       <div class="tool-info">
         <div class="tool-name-wrap">
@@ -1264,7 +1250,7 @@ function renderCommonApps() {
       </button>
     </div>
   `).join('');
-  const emptyHtml = emptySlots > 0 ? `
+  const emptyHtml = commonAppEditing && emptySlots > 0 ? `
     <button type="button" class="tool-row tool-add-row" onclick="openCommonAppPicker(event)">
       <span class="tool-add-icon">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
@@ -1304,46 +1290,6 @@ function onCommonAppKey(e, id) {
   if (e.key !== 'Enter' && e.key !== ' ') return;
   e.preventDefault();
   openCommonApp(id);
-}
-
-function startCommonAppDrag(e, id) {
-  if (!commonAppEditing) {
-    e.preventDefault();
-    return;
-  }
-  draggedCommonAppId = id;
-  e.currentTarget.classList.add('is-dragging');
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/plain', id);
-}
-
-function overCommonAppDrag(e, targetId) {
-  if (!commonAppEditing || !draggedCommonAppId || draggedCommonAppId === targetId) return;
-  e.preventDefault();
-  e.dataTransfer.dropEffect = 'move';
-  e.currentTarget.classList.add('is-drag-over');
-}
-
-function leaveCommonAppDrag(e) {
-  e.currentTarget.classList.remove('is-drag-over');
-}
-
-function dropCommonApp(e, targetId) {
-  e.preventDefault();
-  document.querySelectorAll('.tool-row.is-drag-over').forEach(el => el.classList.remove('is-drag-over'));
-  if (!commonAppEditing || !draggedCommonAppId || draggedCommonAppId === targetId) return;
-  const fromIndex = commonAppIds.indexOf(draggedCommonAppId);
-  const toIndex = commonAppIds.indexOf(targetId);
-  if (fromIndex < 0 || toIndex < 0) return;
-  const [movedId] = commonAppIds.splice(fromIndex, 1);
-  commonAppIds.splice(toIndex, 0, movedId);
-  renderCommonApps();
-}
-
-function endCommonAppDrag(e) {
-  e.currentTarget.classList.remove('is-dragging');
-  document.querySelectorAll('.tool-row.is-drag-over').forEach(el => el.classList.remove('is-drag-over'));
-  draggedCommonAppId = null;
 }
 
 function removeCommonApp(id) {
@@ -2263,7 +2209,7 @@ renderMainIntentChips();
             },
             {
               "label": "路径 2",
-              "text": "点击编辑后进入排序和移除状态；点击完成退出编辑。"
+              "text": "点击编辑后进入移除和添加状态；点击完成退出编辑。"
             },
             {
               "label": "路径 3",
@@ -2283,7 +2229,7 @@ renderMainIntentChips();
           "title": "业务规则",
           "items": [
             "首页最多展示 6 个常用应用。",
-            "未满 6 个时，末尾展示“添加应用”入口；点击后打开添加常用应用弹窗。",
+            "非编辑态不展示“添加应用”入口；点击编辑后，若未满 6 个，末尾展示“添加应用”入口。",
             "常用应用仅作为首页快捷入口；非编辑态打开应用时使用新页面，不覆盖首页。",
             "已添加应用不能重复添加。",
             "编辑态的删除只影响首页展示，不删除应用本身。",
@@ -2297,7 +2243,6 @@ renderMainIntentChips();
           "title": "数据说明",
           "items": [
             "每个常用应用需要名称、图标、来源、入口地址和是否已添加状态。",
-            "排序结果属于当前老师的个人偏好。",
             "添加弹窗需要区分应用来源类型：favorite 表示当前老师收藏的应用，mine 表示当前老师个人应用。",
             "收藏数据至少包含应用 id、收藏人 id、收藏状态和收藏时间；不能只根据应用热度或推荐标签进入“我的收藏”。"
           ]
@@ -2316,7 +2261,7 @@ renderMainIntentChips();
             },
             {
               "场景": "已达 6 个应用",
-              "处理方式": "添加入口置灰，提示已满。"
+              "处理方式": "编辑态末尾不展示添加入口；若弹窗已打开，未添加应用右侧显示“已满”并置灰。"
             },
             {
               "场景": "我的收藏为空",
