@@ -49,14 +49,66 @@
         || PAGE_KEY;
     const NICK_KEY = 'pc::nickname';
     const VIEW_KEY = 'pc::view'; // 'page' | 'project'
+    window.__PIN_COMMENTS_DEBUG = {
+        projectKey: PROJECT_KEY,
+        pageKey: PAGE_KEY,
+        hasFetch: !!window.fetch,
+        mode: 'init',
+        loadCount: null,
+        lastError: null
+    };
+    function syncDebug() {
+        if (!document.documentElement) return;
+        const dbg = window.__PIN_COMMENTS_DEBUG;
+        document.documentElement.setAttribute('data-pc-debug-mode', dbg.mode || '');
+        document.documentElement.setAttribute('data-pc-debug-fetch', String(!!dbg.hasFetch));
+        document.documentElement.setAttribute('data-pc-debug-count', dbg.loadCount == null ? '' : String(dbg.loadCount));
+        document.documentElement.setAttribute('data-pc-debug-error', dbg.lastError || '');
+    }
+    syncDebug();
 
     if (!PROJECT_KEY) {
         console.warn('[pin-comments] 缺少 projectKey，多人评论已禁用。请在引入脚本前设置 window.PIN_COMMENTS = { url, anonKey, projectKey }');
     }
 
-    const supabaseClient = (window.supabase && CONFIG.url && CONFIG.anonKey && PROJECT_KEY)
-        ? window.supabase.createClient(CONFIG.url, CONFIG.anonKey)
-        : null;
+    let supabaseClient = null;
+
+    function ensureSupabaseClient() {
+        if (supabaseClient) return true;
+        if (!window.supabase || !CONFIG.url || !CONFIG.anonKey || !PROJECT_KEY) return false;
+        supabaseClient = window.supabase.createClient(CONFIG.url, CONFIG.anonKey);
+        window.__PIN_COMMENTS_DEBUG.mode = 'sdk';
+        syncDebug();
+        return true;
+    }
+
+    function isRestReady() {
+        const ready = !!(CONFIG.url && CONFIG.anonKey && PROJECT_KEY && window.fetch);
+        window.__PIN_COMMENTS_DEBUG.hasFetch = !!window.fetch;
+        if (ready && !supabaseClient) window.__PIN_COMMENTS_DEBUG.mode = 'rest';
+        syncDebug();
+        return ready;
+    }
+
+    async function restRequest(tableAndQuery, options) {
+        const base = String(CONFIG.url || '').replace(/\/+$/, '');
+        const res = await fetch(`${base}/rest/v1/${tableAndQuery}`, {
+            method: (options && options.method) || 'GET',
+            headers: Object.assign({
+                apikey: CONFIG.anonKey,
+                Authorization: `Bearer ${CONFIG.anonKey}`,
+                'Content-Type': 'application/json'
+            }, (options && options.headers) || {}),
+            body: options && options.body ? JSON.stringify(options.body) : undefined
+        });
+        const text = await res.text();
+        const data = text ? JSON.parse(text) : null;
+        if (!res.ok) {
+            const error = data || { message: res.statusText, status: res.status };
+            throw error;
+        }
+        return data;
+    }
 
     const STATUS = {
         todo:      { label: '待修改', color: '#F59E0B', bg: '#FEF3C7' },
@@ -99,7 +151,7 @@
 
     // ============= Supabase 存储 =============
     function isCloudReady() {
-        return !!supabaseClient;
+        return ensureSupabaseClient() || isRestReady();
     }
 
     function toPin(row) {
@@ -131,12 +183,19 @@
     // selector 只在当前页有效，所以画布只画 PAGE_KEY 的 pin；抽屉里全量展示。
     async function fetchPins() {
         if (!isCloudReady()) return [];
-        const { data, error } = await supabaseClient
-            .from('comment_pins')
-            .select('id, page_key, page_title, selector, x_pct, y_pct, is_fixed, status, created_at, created_by, comment_messages(id, author, body, created_at)')
-            .eq('project_key', PROJECT_KEY)
-            .order('created_at', { ascending: true });
-        if (error) throw error;
+        let data;
+        if (supabaseClient) {
+            const result = await supabaseClient
+                .from('comment_pins')
+                .select('id, page_key, page_title, selector, x_pct, y_pct, is_fixed, status, created_at, created_by, comment_messages(id, author, body, created_at)')
+                .eq('project_key', PROJECT_KEY)
+                .order('created_at', { ascending: true });
+            if (result.error) throw result.error;
+            data = result.data;
+        } else {
+            const select = 'id,page_key,page_title,selector,x_pct,y_pct,is_fixed,status,created_at,created_by,comment_messages(id,author,body,created_at)';
+            data = await restRequest(`comment_pins?select=${encodeURIComponent(select)}&project_key=eq.${encodeURIComponent(PROJECT_KEY)}&order=created_at.asc`);
+        }
         return (data || [])
             .map(toPin)
             .filter(pin => pin.comments.length > 0);
@@ -144,13 +203,20 @@
 
     async function refreshFromCloud(quiet) {
         if (!isCloudReady()) {
+            window.__PIN_COMMENTS_DEBUG.mode = 'not-ready';
+            syncDebug();
             if (!quiet) showToast('未连接 Supabase，多人评论不可用');
             return;
         }
         try {
             pins = await fetchPins();
+            window.__PIN_COMMENTS_DEBUG.loadCount = pins.length;
+            window.__PIN_COMMENTS_DEBUG.lastError = null;
+            syncDebug();
             refreshAllUi();
         } catch (err) {
+            window.__PIN_COMMENTS_DEBUG.lastError = err && (err.message || err.details || JSON.stringify(err));
+            syncDebug();
             console.error('[pin-comments] load failed', err);
             if (!quiet) showToast('评论同步失败，请检查 Supabase 配置');
         }
@@ -162,7 +228,7 @@
     }
 
     function setupRealtime() {
-        if (!isCloudReady() || realtimeChannel) return;
+        if (!ensureSupabaseClient() || realtimeChannel) return;
         // 项目级订阅：同一 projectKey 下任何页面变更都触发刷新
         realtimeChannel = supabaseClient
             .channel(`pin-comments:${PROJECT_KEY}`)
@@ -186,58 +252,96 @@
     }
 
     async function insertPin(pin) {
-        const { data, error } = await supabaseClient
-            .from('comment_pins')
-            .insert({
-                id: pin.id,
-                project_key: PROJECT_KEY,
-                page_key: PAGE_KEY,
-                page_title: PAGE_TITLE,
-                selector: pin.selector,
-                x_pct: pin.xPct,
-                y_pct: pin.yPct,
-                is_fixed: pin.isFixed,
-                status: pin.status,
-                created_by: pin.createdBy
-            })
-            .select('id, page_key, page_title, selector, x_pct, y_pct, is_fixed, status, created_at, created_by, comment_messages(id, author, body, created_at)')
-            .single();
-        if (error) throw error;
+        const body = {
+            id: pin.id,
+            project_key: PROJECT_KEY,
+            page_key: PAGE_KEY,
+            page_title: PAGE_TITLE,
+            selector: pin.selector,
+            x_pct: pin.xPct,
+            y_pct: pin.yPct,
+            is_fixed: pin.isFixed,
+            status: pin.status,
+            created_by: pin.createdBy
+        };
+        let data;
+        if (supabaseClient) {
+            const result = await supabaseClient
+                .from('comment_pins')
+                .insert(body)
+                .select('id, page_key, page_title, selector, x_pct, y_pct, is_fixed, status, created_at, created_by, comment_messages(id, author, body, created_at)')
+                .single();
+            if (result.error) throw result.error;
+            data = result.data;
+        } else {
+            const select = 'id,page_key,page_title,selector,x_pct,y_pct,is_fixed,status,created_at,created_by,comment_messages(id,author,body,created_at)';
+            const rows = await restRequest(`comment_pins?select=${encodeURIComponent(select)}`, {
+                method: 'POST',
+                headers: { Prefer: 'return=representation' },
+                body
+            });
+            data = rows && rows[0];
+        }
         return toPin(data);
     }
 
     async function insertComment(pinId, body) {
-        const { data, error } = await supabaseClient
-            .from('comment_messages')
-            .insert({
-                pin_id: pinId,
-                project_key: PROJECT_KEY,
-                page_key: PAGE_KEY,
-                author: getNick(),
-                body
-            })
-            .select('id, author, body, created_at')
-            .single();
-        if (error) throw error;
+        const payload = {
+            pin_id: pinId,
+            project_key: PROJECT_KEY,
+            page_key: PAGE_KEY,
+            author: getNick(),
+            body
+        };
+        let data;
+        if (supabaseClient) {
+            const result = await supabaseClient
+                .from('comment_messages')
+                .insert(payload)
+                .select('id, author, body, created_at')
+                .single();
+            if (result.error) throw result.error;
+            data = result.data;
+        } else {
+            const rows = await restRequest('comment_messages?select=id,author,body,created_at', {
+                method: 'POST',
+                headers: { Prefer: 'return=representation' },
+                body: payload
+            });
+            data = rows && rows[0];
+        }
         return { id: data.id, author: data.author, body: data.body, ts: data.created_at };
     }
 
     async function updatePinStatus(pinId, status) {
-        const { error } = await supabaseClient
-            .from('comment_pins')
-            .update({ status })
-            .eq('id', pinId)
-            .eq('project_key', PROJECT_KEY);
-        if (error) throw error;
+        if (supabaseClient) {
+            const { error } = await supabaseClient
+                .from('comment_pins')
+                .update({ status })
+                .eq('id', pinId)
+                .eq('project_key', PROJECT_KEY);
+            if (error) throw error;
+        } else {
+            await restRequest(`comment_pins?id=eq.${encodeURIComponent(pinId)}&project_key=eq.${encodeURIComponent(PROJECT_KEY)}`, {
+                method: 'PATCH',
+                body: { status }
+            });
+        }
     }
 
     async function deletePin(pinId) {
-        const { error } = await supabaseClient
-            .from('comment_pins')
-            .delete()
-            .eq('id', pinId)
-            .eq('project_key', PROJECT_KEY);
-        if (error) throw error;
+        if (supabaseClient) {
+            const { error } = await supabaseClient
+                .from('comment_pins')
+                .delete()
+                .eq('id', pinId)
+                .eq('project_key', PROJECT_KEY);
+            if (error) throw error;
+        } else {
+            await restRequest(`comment_pins?id=eq.${encodeURIComponent(pinId)}&project_key=eq.${encodeURIComponent(PROJECT_KEY)}`, {
+                method: 'DELETE'
+            });
+        }
     }
 
     function getNick() {
@@ -603,7 +707,7 @@
     function refreshAllUi() {
         renderPins();
         refreshFab();
-        if (drawerOpen) renderDrawer();
+        if (drawerEl) renderDrawer();
         if (pinsHidden && activePinId) {
             closeActiveCard();
             return;
@@ -1381,6 +1485,12 @@
             if (pendingPinId) jumpToPinAfterLoad(pendingPinId);
         });
         setupRealtime();
+        window.addEventListener('supabase:ready', () => {
+            refreshFromCloud(true).then(() => {
+                if (pendingPinId) jumpToPinAfterLoad(pendingPinId);
+            });
+            setupRealtime();
+        }, { once: true });
 
         let raf;
         const reposition = () => {
