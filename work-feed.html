@@ -150,7 +150,7 @@
         <div class="wf-container">
           <div class="wf-summary">
             <span id="wf-count">共 0 条动态</span>
-            <span>按优先级与更新时间排序</span>
+            <span>按处理优先级排序</span>
           </div>
 
           <div class="wf-list" id="wf-list"></div>
@@ -175,15 +175,14 @@
 <script src="assets/page-header.js"></script>
 <script>
   const WORK_FEED_ITEMS = [
-    { id: 'homework-scan', title: '八 数据的表示和分析 第4课时 平均数的再认识', desc: '五年级8班 · 提交 15/42', time: '扫描 20:12', url: 'ai-review.html', icon: 'book-open', color: 'rose', priority: 1 },
-    { id: 'homework-review', title: '文言文专项测验', desc: '高二(2)班 · 错因报告已生成，待查看', time: '生成 14:36', url: 'ai-review.html', icon: 'chart-line', color: 'blue', priority: 2 },
-    { id: 'essay-scan', title: '成长路上，请以《你是美好的代名词》为题', desc: '3 个班 · 126 篇待确认', time: '布置 06月11日 17:23', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 3 },
-    { id: 'essay-review', title: '如果那一天可以重来，你会停留、回头还是前行？', desc: '9 个班 · 76 份批改待确认', time: '布置 06月09日 14:27', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 4 },
-    { id: 'record-confirm', title: '《期中模拟卷》', desc: 'AI 录题 · 解析完成 · 共 36 题', time: '完成 13:20', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 5 },
-    { id: 'record-failed', title: '《函数单元练习》', desc: 'AI 录题 · 解析失败', time: '失败 11:42', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 6 },
-    { id: 'kb-processed', title: '《高一语文复习资料》', desc: '知识库 · 可查看解析', time: '今天 09:30', url: 'file-preview.html', icon: 'file-check-2', color: '', priority: 7 },
-    { id: 'kb-classify', title: '《现代散文阅读素材》', desc: '知识库 · 待确认归类', time: '今天 09:18', url: 'file-preview.html', icon: 'file-question', color: '', priority: 8 },
-    { id: 'kb-failed', title: '《期末复习讲义》', desc: '知识库 · 解析失败', time: '昨天 18:40', url: 'file-preview.html', icon: 'file-warning', color: '', priority: 9 }
+    { id: 'homework-scan', title: '八 数据的表示和分析 第4课时 平均数的再认识', desc: '五年级8班 · 提交 15/42', url: 'ai-review.html', icon: 'book-open', color: 'rose', priority: 1 },
+    { id: 'essay-scan', title: '成长路上，请以《你是美好的代名词》为题', desc: '3 个班 · 126 篇待确认', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 3 },
+    { id: 'essay-review', title: '如果那一天可以重来，你会停留、回头还是前行？', desc: '9 个班 · 76 份批改待确认', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 4 },
+    { id: 'record-confirm', title: '《期中模拟卷》', desc: 'AI 录题 · 解析完成 · 共 36 题', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 5 },
+    { id: 'record-failed', title: '《函数单元练习》', desc: 'AI 录题 · 解析失败', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 6 },
+    { id: 'kb-processed', title: '《高一语文复习资料》', desc: '知识库 · 处理完成 · 可查看摘要', url: 'file-preview.html', icon: 'file-check-2', color: '', priority: 7 },
+    { id: 'kb-classify', title: '《现代散文阅读素材》', desc: '知识库 · 待确认归类', url: 'file-preview.html', icon: 'file-question', color: '', priority: 8 },
+    { id: 'kb-failed', title: '《期末复习讲义》', desc: '知识库 · 解析失败', url: 'file-preview.html', icon: 'file-warning', color: '', priority: 9 }
   ];
 
   function renderWorkFeed() {
@@ -203,7 +202,6 @@
           <span class="wf-title">${item.title}</span>
           <span class="wf-meta">
             <span>${item.desc}</span>
-            <span>${item.time}</span>
           </span>
         </span>
         <span class="wf-arrow"><i data-lucide="chevron-right"></i></span>
@@ -218,7 +216,7 @@
 <template id="review-template">
 {
   "title": "工作动态 · 全部列表",
-  "summary": "工作动态页展示首页工作动态的完整列表。第一版只承接飞象作业、飞象作文、错因诊断、AI 录题、知识库文件处理完成五类事项。",
+  "summary": "工作动态页展示首页工作动态的完整列表。第一版只承接飞象作业、飞象作文、AI 录题、知识库文件处理四类事项。",
   "sections": [
     {
       "id": "work-feed-list",
@@ -229,10 +227,10 @@
           "title": "功能说明",
           "body": [
             "工作动态列表展示老师需要查看、确认或继续处理的事项，点击后进入对应业务页。",
-            "第一版范围固定为五类：飞象作业、飞象作文、错因诊断、AI 录题、知识库文件处理完成。",
+            "第一版范围固定为四类：飞象作业、飞象作文、AI 录题、知识库文件处理。",
             "普通 Wiki 更新、资源更新、应用上新、系统公告不进入当前列表。",
             "全部列表可以展示同一类型下的多条任务，知识库按单个文件事件逐条展示，不要求后端汇总。",
-            "全部列表的卡片内容与首页保持同一套标题/副标题规则；全部列表只在副标题末尾额外补充业务时间。"
+            "全部列表的卡片内容与首页保持同一套标题/副标题规则；不在列表副标题展示扫描、布置、完成等业务时间，避免和处理优先级排序混淆。"
           ]
         },
         {
@@ -240,7 +238,6 @@
           "items": [
             "飞象作业：高扫扫描作业完成，老师需要查看或继续批改。",
               "飞象作文：高扫扫描作文完成，老师需要确认批改；一个作文题目聚合为一条动态，可覆盖多个班，动态卡片展示真实作文题目或题干摘要。",
-            "错因诊断：报告生成完成，老师需要查看分析结果。",
             "AI 录题：题目录入处理完成，需要老师确认入库。",
             "知识库文件处理：我的知识库或学校知识库文件 AI 处理完毕、待确认归类或解析失败，需要老师查看处理结果。"
           ]
@@ -255,11 +252,11 @@
             },
             {
               "label": "浏览动态",
-              "text": "列表展示五类工作动态，包含标题、来源、状态、说明和更新时间；更新时间展示为“扫描 20:12 / 完成 13:20”这类业务动作 + 数值时间。"
+                "text": "列表展示四类工作动态，包含标题、类型图标、说明和目标入口；时间进入业务详情页查看。"
             },
             {
               "label": "继续处理",
-              "text": "点击动态主体进入对应页面，例如作业批改、作文确认、错因报告、AI 录题确认或知识库文件详情。"
+                "text": "点击动态主体进入对应页面，例如作业批改、作文确认、AI 录题确认或知识库文件详情。"
             }
           ]
         },
@@ -267,21 +264,21 @@
           "title": "业务规则",
           "items": [
             "动态只展示老师有权访问的事件。",
-            "第一版只展示五类接入范围内的事项，不展示普通内容更新或系统消息。",
+              "第一版只展示四类接入范围内的事项，不展示普通内容更新、错因报告或系统消息。",
             "卡片标题统一只展示对象名称：作业题目、作文题目、AI 录题文件题目、知识库文件题目；解析完成、处理完成、待确认、解析失败等状态不写进标题。",
             "全部列表不额外展示独立状态标签；作业和作文类型由 icon 区分，AI 录题和知识库在副标题前保留功能标识。",
             "待处理、待确认、报告已生成、处理完成等状态必须使用老师能理解的业务表达。",
               "作文动态按作文题目聚合展示，不按班级拆成多条；卡片标题使用真实作文题目或题干摘要，长题目一行省略；作业动态仍按班级任务展示。",
             "AI 录题和知识库动态按文件事件逐条展示；如果同一文件状态更新，复用同一条动态，不重复堆叠。",
-            "时间展示使用固定数值时间，不使用“2 分钟前 / 1 小时前”等相对时间。",
+              "列表页不展示扫描、布置、完成等业务时间；如果目标业务页展示时间，使用固定数值时间，不使用“2 分钟前 / 1 小时前”等相对时间。",
             "删除或失效的目标不能跳空白页，需要给出状态说明。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "动态数据包含事件类型、标题、摘要、时间、关联对象、状态、来源、优先级、目标页面和可见范围。",
-            "副标题字段规则：作业展示班级、提交数和非零待确认数；作文展示覆盖班级数和待确认或待批改篇数；AI 录题展示功能标识、解析状态和题目数量，顺序为“AI 录题 · 解析完成 · 共 N 题”，解析失败时不展示题目数量；知识库展示功能标识和处理状态。",
+            "动态数据包含事件类型、标题、摘要、时间、关联对象、状态、来源、优先级、目标页面和可见范围；列表页只使用其中的标题、摘要、类型、优先级和目标页面。",
+            "副标题字段规则：作业展示班级、提交数和非零待确认数；作文展示覆盖班级数和待确认或待批改篇数；AI 录题展示功能标识、解析状态和题目数量，顺序为“AI 录题 · 解析完成 · 共 N 题”，解析失败时不展示题目数量；知识库展示功能标识、处理状态和可查看结果。",
             "作业数据需要班级和提交进度；作文数据需要作文题目或题干摘要、覆盖班级数和作文篇数；AI 录题数据需要文件名、识别题数和解析状态；知识库数据需要文件名、所属知识库和处理状态。"
           ]
         },
@@ -324,8 +321,8 @@
               "说明": "录题待校对动态进入任务。"
             },
             {
-              "关联对象": "ai-review.html / 错因诊断报告页",
-              "说明": "承接作业批改和错因诊断报告动态。"
+              "关联对象": "ai-review.html",
+              "说明": "承接作业批改动态。"
             },
             {
               "关联对象": "file-preview.html",
