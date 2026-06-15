@@ -453,7 +453,10 @@
     const ceLabel = document.getElementById('ce-kb-label');
     if(ceName) ceName.textContent = label;
     if(ceLabel) ceLabel.textContent = label;
-    document.querySelectorAll('.bb-ctx .ctx-name').forEach(el => { el.textContent = label; });
+    document.querySelectorAll('.bb-ctx .ctx-name').forEach(el => {
+      if(el.closest('.bottom-bar[data-mode="knowledge-qa"]')) return;
+      el.textContent = label;
+    });
   }
   window.getChatScopeIds = getChatScopeIds;
   window.setChatScopeIds = setChatScopeIds;

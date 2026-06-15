@@ -1891,6 +1891,35 @@ body[data-page="wiki-entry"] .app[data-right="expanded"] .canvas-head{
 }
 .bb-hint b{ color:var(--text-3);font-weight:500;font-family:ui-monospace,Menlo,monospace; }
 
+/* 知识库页底部输入框：固定为知识库问答，收起态只保留当前范围 + 单行输入 */
+.bottom-bar[data-mode="knowledge-qa"] .bb-wrap{
+  padding:6px 8px 6px 10px;
+}
+.bottom-bar[data-mode="knowledge-qa"] .bb-wrap:focus-within{
+  padding:6px 8px 6px 10px;
+}
+.bottom-bar[data-mode="knowledge-qa"] .bb-tools,
+.bottom-bar[data-mode="knowledge-qa"] .bb-hint,
+.bottom-bar[data-mode="knowledge-qa"] .bb-input-btn:not(.send){
+  display:none;
+}
+.bottom-bar[data-mode="knowledge-qa"] .bb-input{
+  min-height:28px;
+}
+.bottom-bar[data-mode="knowledge-qa"] .bb-input textarea{
+  height:22px;
+  min-height:22px;
+}
+.bottom-bar[data-mode="knowledge-qa"] .bb-input textarea:focus{
+  height:auto;
+}
+.bottom-bar[data-mode="knowledge-qa"] .bb-ctx{
+  cursor:default;
+}
+.bottom-bar[data-mode="knowledge-qa"] .bb-ctx .chev{
+  display:none;
+}
+
 /* ────────────────────────────────────────────────────
    Wiki 首页内容 — 维基百科风格
    信息密度高、纯文本为主、内联链接密集

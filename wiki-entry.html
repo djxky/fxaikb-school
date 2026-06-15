@@ -726,49 +726,21 @@
     </div>
 
     <!-- ════════════ 底部 Command Bar ════════════ -->
-    <div class="bottom-bar" id="bottom-bar">
+    <div class="bottom-bar" id="bottom-bar" data-mode="knowledge-qa">
 
       <div class="bb-wrap">
-        <!-- 工具 chips（默认收起，聚焦展开 · 全部基于当前词条） -->
-        <div class="bb-tools">
-          <button class="bb-chip" tabindex="-1" onclick="useFromBar('基于这一页给八(3)班出 5 道分层练习，A/B/C 三难度')">
-            <i data-lucide="sparkles"></i> 基于这页出题
-          </button>
-          <button class="bb-chip" tabindex="-1" onclick="useFromBar('把这一页做成第二课时课件，约 12 页，给八(3)班用')">
-            <i data-lucide="layout"></i> 做成课件
-          </button>
-          <button class="bb-chip" tabindex="-1" onclick="useFromBar('把第 4 节「增减性」换一种更直观的讲法')">
-            <i data-lucide="messages-square"></i> 换种讲法
-          </button>
-          <button class="bb-chip" tabindex="-1" onclick="useFromBar('给这一页做个 2 分钟动画讲解')">
-            <i data-lucide="play-circle"></i> 教学动画
-          </button>
-        </div>
-
-        <!-- 默认一行：上下文 + 输入 + 按钮 -->
+        <!-- 默认一行：知识库范围 + 问答输入 + 发送 -->
         <div class="bb-input">
-          <button class="bb-ctx" tabindex="-1"
-            data-kb-picker-trigger
-            onclick="openKbPicker(this)"
-            title="选择飞象基于哪些知识库回答">
+          <button class="bb-ctx" tabindex="-1" title="当前知识库范围：当前词条">
             <i data-lucide="book-open" class="lead"></i>
-            <span class="ctx-name">全部知识库</span>
-            <i data-lucide="chevron-down" class="chev"></i>
+            <span class="ctx-name">当前词条 · 二次函数</span>
           </button>
           <textarea id="bb-textarea" rows="1" placeholder="基于这一页问飞象点什么…"
             oninput="autosize(this);refreshBarSend()"
             onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();submitFromBar()}"></textarea>
-          <button class="bb-input-btn" tabindex="-1" title="附件" onclick="showToast('（演示）添加附件')">
-            <i data-lucide="paperclip"></i>
-          </button>
           <button class="bb-input-btn send idle" id="bb-send" title="发送（Enter）" onclick="submitFromBar()">
             <i data-lucide="arrow-up"></i>
           </button>
-        </div>
-
-        <!-- hint（默认收起，聚焦展开） -->
-        <div class="bb-hint">
-          <b>Enter</b> 发送 · <b>Shift+Enter</b> 换行 · AI 只基于你的资料回答
         </div>
       </div>
     </div>
