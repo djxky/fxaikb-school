@@ -497,6 +497,7 @@
         </button>
       </div>
 
+      ${navItem({ key: 'home', icon: ICONS.home, label: '首页', href: 'index.html', activeKey })}
       ${navItem({ key: 'chat', icon: ICONS.plus, label: '新对话', href: 'chat.html', primary: true, activeKey })}
       ${navItem({ key: 'chat-history', icon: ICONS.history, label: '历史对话', href: 'chat-history.html', count: 86, activeKey })}
 

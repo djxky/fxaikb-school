@@ -15,6 +15,45 @@
     margin:0 auto;
     padding:24px 22px 96px;
   }
+  body[data-subpage="ai-review"] .app{
+    grid-template-columns:minmax(0,1fr) 0 !important;
+  }
+  body[data-subpage="ai-review"] #feixiang-sidebar{
+    display:none !important;
+  }
+  body[data-subpage="ai-review"] .workspace{
+    min-width:0;
+  }
+  body[data-subpage="ai-review"] .page-header{
+    overflow:visible;
+  }
+  body[data-subpage="ai-review"] .ph-left{
+    max-width:none;
+    overflow:visible;
+  }
+  .rv-home-btn{
+    display:inline-flex;
+    align-items:center;
+    height:32px;
+    width:32px;
+    justify-content:center;
+    border:1px solid #E0DCD2;
+    border-radius:8px;
+    background:#FFFFFF;
+    color:#5A5550;
+    text-decoration:none;
+    flex-shrink:0;
+    transition:background .12s,border-color .12s,color .12s;
+  }
+  .rv-home-btn:hover{
+    background:#FAFAF8;
+    border-color:#D4CFC8;
+    color:#1A1A1A;
+  }
+  .rv-home-btn [data-lucide]{
+    width:15px;
+    height:15px;
+  }
   .rv-bcbar{
     display:flex; align-items:center; gap:6px;
     font-size:12px; color:var(--text-3);
@@ -297,6 +336,9 @@
     <!-- 统一页面顶栏 · 新页面打开后不展示面包屑 -->
     <header class="page-header" data-page-header="ai-review">
       <div class="ph-left">
+        <a class="rv-home-btn" href="index.html" title="回到首页">
+          <i data-lucide="home"></i>
+        </a>
         <i class="ph-icon" data-lucide="check-square"></i>
         <h1 class="ph-title">AI 录题校对</h1>
       </div>
@@ -526,7 +568,8 @@
         {
           "title": "功能说明",
           "body": [
-            "文件信息区让老师确认当前校对的是哪份资料，并查看解析状态、页数和识别题量。"
+            "文件信息区让老师确认当前校对的是哪份资料，并查看解析状态、页数和识别题量。",
+            "AI 录题校对承接 AI 录题独立产品页的任务链路；左侧不展示知识库导航，顶部提供首页按钮返回校园版首页。"
           ]
         },
         {

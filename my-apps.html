@@ -701,7 +701,7 @@
       const favCount = Number.isFinite(app.favorites) ? app.favorites : 0;
       const clickAction = app.source === 'created' 
         ? `showToast('（演示）打开：${escapedTitle}')`
-        : (app.href === '#' ? `showToast('（演示）打开：${escapedTitle}')` : `location.href='${app.href}'`);
+        : (app.href === '#' ? `showToast('（演示）打开：${escapedTitle}')` : `window.open('${app.href}', '_blank', 'noopener')`);
 
       // 提取作者简称
       let authorName = app.origin || '飞象星球';
