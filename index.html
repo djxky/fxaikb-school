@@ -1076,7 +1076,7 @@
             </a>
           </div>
           <div class="work-list">
-            <button class="work-card" onclick="window.location.href='ai-review.html'">
+            <button class="work-card" onclick="window.location.href='homework-insight.html'">
               <span class="work-icon homework" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1 0-4h12"/></svg>
               </span>
@@ -1085,7 +1085,7 @@
                 <div class="work-meta"><span>五年级8班</span> <span>提交 <strong>15/42</strong></span></div>
               </div>
             </button>
-            <button class="work-card" onclick="window.location.href='chat.html?resume=1'">
+            <button class="work-card" onclick="window.location.href='essay-insight.html'">
               <span class="work-icon essay" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
               </span>
@@ -1094,7 +1094,7 @@
                 <div class="work-meta"><span><strong>3</strong> 个班</span> <span><strong>126</strong> 篇待确认</span></div>
               </div>
             </button>
-            <button class="work-card" onclick="window.location.href='ai-record-jobs.html'">
+            <button class="work-card" onclick="window.location.href='ai-review.html'">
               <span class="work-icon record" aria-hidden="true">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11" cy="11" r="3"/><path d="m16 16-2.2-2.2"/></svg>
               </span>
@@ -2351,19 +2351,19 @@ renderMainIntentChips();
               "来源": "飞象作业",
               "触发条件": "高扫扫描作业完成，老师需要查看或继续批改。",
               "状态示例": "待查看",
-              "点击去向": "进入作业扫描或批改任务页。"
+              "点击去向": "进入班级作业学情页。"
             },
             {
               "来源": "飞象作文",
               "触发条件": "高扫扫描作文完成，老师需要确认批改。",
               "状态示例": "待确认 / 待批改",
-              "点击去向": "进入作文批改确认页或作文任务页。"
+              "点击去向": "进入作文学情页。"
             },
             {
               "来源": "AI 录题",
               "触发条件": "AI 录题处理完成或需要老师确认。",
               "状态示例": "待确认 / 处理完成",
-              "点击去向": "进入 AI 录题确认页。"
+              "点击去向": "解析成功进入文件对照页，解析失败进入 AI 录题列表页。"
             },
             {
               "来源": "知识库文件处理",
@@ -2379,15 +2379,15 @@ renderMainIntentChips();
           "items": [
             {
               "label": "飞象作业动态",
-              "text": "点击高扫扫描作业动态，进入对应班级的作业扫描 / 批改任务页，查看学情、批改或讲评。"
+              "text": "点击作业动态，进入对应班级作业学情页。"
             },
             {
               "label": "飞象作文动态",
-              "text": "点击高扫扫描作文动态，进入对应班级的作文批改确认页或作文任务页，确认是否开始批改或继续处理。"
+              "text": "点击作文动态，进入作文学情页，查看各班作文批改确认情况。"
             },
             {
               "label": "AI 录题动态",
-              "text": "点击 AI 录题动态，进入 AI 录题确认页，查看识别题目并确认入库。"
+              "text": "点击 AI 录题动态时，解析成功进入文件对照页，解析失败进入 AI 录题列表页。"
             },
             {
               "label": "知识库文件处理动态",
@@ -2414,7 +2414,8 @@ renderMainIntentChips();
             "首页不展示扫描时间；如在全部动态页或业务页展示时间，使用“扫描 20:12 / 更新 14:36”这类数值时间，不使用“2 分钟前”等相对时间。",
             "首页动态按优先级展示，避免把老师的一屏变成消息列表。",
             "普通 Wiki 更新、普通资源更新、应用上新、系统公告、纯推荐内容不进入第一版工作动态。",
-            "知识库可以按单文件事件逐条进入工作动态，但只展示文件处理完成、待确认归类、解析失败等与文件处理结果相关的事项；普通 Wiki 更新不进入。"
+            "知识库可以按单文件事件逐条进入工作动态，但只展示文件处理完成、待确认归类、解析失败等与文件处理结果相关的事项；普通 Wiki 更新不进入。",
+            "AI 录题解析完成动态进入文件对照页；AI 录题解析失败动态进入 AI 录题列表页。"
           ]
         },
         {
@@ -2464,8 +2465,12 @@ renderMainIntentChips();
               "说明": "展示全部工作动态。"
             },
             {
+              "关联对象": "homework-insight.html / essay-insight.html",
+              "说明": "承接作业和作文学情动态。"
+            },
+            {
               "关联对象": "ai-record-jobs.html / ai-review.html",
-              "说明": "承接录题和批改类动态。"
+              "说明": "承接 AI 录题失败列表和解析成功文件对照页。"
             },
             {
               "关联对象": "my-wiki.html / school-wiki.html / file-preview.html",

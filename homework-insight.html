@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>飞象老师校园版 · 班级作业学情</title>
+<script src="assets/lucide-loader.js"></script>
+<link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+<link rel="stylesheet" href="assets/feixiang-shell.css" />
+<link rel="stylesheet" href="assets/page-header.css" />
+<style>
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--text); font-size: 14px; line-height: 1.5; }
+  .insight-page { padding: 24px 40px 64px; }
+  .insight-wrap { width: min(980px, 100%); margin: 0 auto; }
+  .insight-card {
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    background: #fff;
+    padding: 22px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.04);
+  }
+  .insight-title { margin: 0; font-size: 22px; line-height: 1.35; color: var(--ink); }
+  .insight-sub { margin-top: 8px; color: var(--muted); font-size: 13px; }
+  .metric-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 22px; }
+  .metric { border: 1px solid var(--line); border-radius: 12px; padding: 16px; background: var(--bg-soft, #f8f9fb); }
+  .metric-label { color: var(--muted); font-size: 12px; }
+  .metric-value { margin-top: 6px; font-size: 24px; font-weight: 750; color: var(--ink); }
+  .section-title { margin: 24px 0 10px; font-size: 15px; font-weight: 700; color: var(--ink); }
+  .simple-list { display: grid; gap: 8px; }
+  .simple-row { display: flex; justify-content: space-between; gap: 16px; border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; background: #fff; }
+  .simple-row span:last-child { color: var(--muted); }
+</style>
+</head>
+<body data-page="homework-insight">
+<div class="app" id="app" data-view="home" data-chat="closed">
+  <aside class="sidebar-left" id="feixiang-sidebar"></aside>
+  <main class="workspace">
+    <header class="page-header" data-page-header="homework-insight">
+      <div class="ph-left">
+        <i class="ph-icon" data-lucide="book-open"></i>
+        <h1 class="ph-title">班级作业学情</h1>
+        <span class="ph-subtitle">五年级8班 · 提交 15/42</span>
+      </div>
+    </header>
+    <div class="workspace-scroll">
+      <section class="insight-page">
+        <div class="insight-wrap">
+          <div class="insight-card">
+            <h2 class="insight-title">八 数据的表示和分析 第4课时 平均数的再认识</h2>
+            <div class="insight-sub">从工作动态进入后，默认定位到对应班级的作业学情。</div>
+            <div class="metric-grid">
+              <div class="metric"><div class="metric-label">提交人数</div><div class="metric-value">15/42</div></div>
+              <div class="metric"><div class="metric-label">待确认</div><div class="metric-value">0</div></div>
+              <div class="metric"><div class="metric-label">正确率</div><div class="metric-value">69.8%</div></div>
+            </div>
+            <div class="section-title">主要薄弱点</div>
+            <div class="simple-list">
+              <div class="simple-row"><span>平均数意义与数据代表性</span><span>7 人需讲评</span></div>
+              <div class="simple-row"><span>根据统计图提取有效信息</span><span>5 人需讲评</span></div>
+              <div class="simple-row"><span>计算过程书写不完整</span><span>4 人需订正</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <aside class="sidebar-right"></aside>
+</div>
+<script src="assets/feixiang-shell.js"></script>
+<script>renderFeixiangSidebar('home');</script>
+<script src="assets/page-header.js"></script>
+<script>if (window.lucide) lucide.createIcons();</script>
+</body>
+</html>
