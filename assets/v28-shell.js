@@ -1179,7 +1179,7 @@
     closeKbAdminMenu();
     closeKbVisibilityEditor();
     closeKbEditor();
-    window.location.href = `01-upload-onboarding.html?from=team&kb=${encodeURIComponent(kbVisibilityCurrentId)}`;
+    window.location.href = `upload-onboarding.html?from=team&kb=${encodeURIComponent(kbVisibilityCurrentId)}`;
   }
 
   function openKbEditor(mode, anchorRect){

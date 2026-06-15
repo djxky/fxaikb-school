@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>二次函数图像与性质 · 飞象 AI</title>
-<script src="https://unpkg.com/lucide@latest"></script>
+<script src="assets/lucide-loader.js"></script>
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
@@ -338,8 +338,8 @@
         <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索 Wiki、文件" aria-expanded="false">
           <i data-lucide="search"></i>
         </button>
-        <button class="ph-action is-meta" id="btn-toggle-right" onclick="toggleRight()" title="查看这页 Wiki 的 AI 相关资料、原文件和关联内容">
-          <i data-lucide="panel-right-open"></i><span>AI 相关资料</span>
+        <button class="ph-action is-meta" id="btn-toggle-right" onclick="toggleRight()" title="查看这页 Wiki 的 AI 解读">
+          <i data-lucide="panel-right-open"></i><span>AI 解读</span>
         </button>
         <span class="ph-action-sep" aria-hidden="true"></span>
         <button class="ph-action" data-doc="download-btn-wiki-entry" onclick="V28DownloadDialog.open({ context:'wiki-entry', subject:'二次函数图像与性质' })" title="下载">
@@ -588,7 +588,7 @@
 
         <!-- ───── 底部说明 ───── -->
         <div class="wiki-foot entry-foot">
-          这页 Wiki 是 <b>AI 基于校内资料整理</b> 生成的——正文引用和完整来源可在右侧「AI 相关资料」中查看。
+          这页 Wiki 是 <b>AI 基于校内资料整理</b> 生成的——正文引用和关联内容可在右侧「AI 解读」中查看。
           组里任何老师上传或修改资料，AI 会自动并入这一页，下次打开就是更新版。
         </div>
 
@@ -753,20 +753,15 @@
     <!-- Canvas 顶部 tab 切换 -->
     <div class="canvas-head">
       <div class="canvas-tabs" id="canvas-tabs">
-        <!-- AI 相关资料 tabs · 阅读 mode 显示 -->
+        <!-- AI 解读 tabs · 阅读 mode 显示 -->
         <button class="cv-tab tab-meta active" data-cv="wiki" onclick="switchCanvas('wiki')">
-          <i data-lucide="file-text"></i>
-          原文件
+          <i data-lucide="files"></i>
+          关联文件
           <span class="cv-tab-meta">· 12</span>
         </button>
-        <button class="cv-tab tab-meta" data-cv="backlinks" onclick="switchCanvas('backlinks')">
-          <i data-lucide="git-branch"></i>
-          反向链接
-          <span class="cv-tab-meta">· 3</span>
-        </button>
         <button class="cv-tab tab-meta" data-cv="related" onclick="switchCanvas('related')">
-          <i data-lucide="network"></i>
-          相关页面
+          <i data-lucide="book-open"></i>
+          相关 Wiki
           <span class="cv-tab-meta">· 5</span>
         </button>
 
@@ -777,21 +772,21 @@
           <span class="cv-tab-meta">· 5 道</span>
         </button>
       </div>
-      <button class="cv-collapse-btn" onclick="collapseRight()" title="收起 AI 相关资料">
+      <button class="cv-collapse-btn" onclick="collapseRight()" title="收起 AI 解读">
         <i data-lucide="panel-right-close"></i>
       </button>
     </div>
 
     <div class="canvas-body">
 
-      <!-- Pane 1：原文件 · 阅读 mode 默认 active -->
+      <!-- Pane 1：关联文件 · 阅读 mode 默认 active -->
       <div class="cv-pane active" data-pane="wiki">
         <article class="cv-meta">
 
           <header class="cm-head">
-            <div class="cm-head-title">原文件 · 12 份</div>
+            <div class="cm-head-title">关联文件 · 12 份</div>
             <div class="cm-head-sub">
-              飞象 AI 整理于 <b>今天 09:14</b> · 每段内容可追溯到原文件页码
+              支撑本页内容的校内资料，可查看文件、页码和贡献内容
             </div>
           </header>
 
@@ -801,42 +796,42 @@
                 <i data-lucide="file"></i>
                 导入课件.pptx
               </a>
-              <span class="cm-src-pages">P3 · P5 · P12</span>
+              <span class="cm-src-pages">课件 · P3 / P5 / P12 · 补充开口方向、对称轴和顶点坐标图示</span>
             </li>
             <li class="cm-source">
               <a class="cm-src-name" onclick="showToast('（演示）打开《配套习题汇编.pdf》P12')">
                 <i data-lucide="file"></i>
                 配套习题汇编.pdf
               </a>
-              <span class="cm-src-pages">P12 · P15 · P28</span>
+              <span class="cm-src-pages">题单 · P12 / P15 / P28 · 补充基础练习与判别式题型</span>
             </li>
             <li class="cm-source">
               <a class="cm-src-name" onclick="showToast('（演示）打开《教学设计·二次函数.docx》P5')">
                 <i data-lucide="file"></i>
                 教学设计 · 二次函数.docx
               </a>
-              <span class="cm-src-pages">P5 · P7</span>
+              <span class="cm-src-pages">教案 · P5 / P7 · 补充教学目标与课堂活动</span>
             </li>
             <li class="cm-source">
               <a class="cm-src-name" onclick="showToast('（演示）打开《海淀区 2026 一模卷》T6')">
                 <i data-lucide="file"></i>
                 海淀区 2026 一模卷.pdf
               </a>
-              <span class="cm-src-pages">T6</span>
+              <span class="cm-src-pages">试卷 · T6 · 补充一模函数题型</span>
             </li>
             <li class="cm-source">
               <a class="cm-src-name" onclick="showToast('（演示）打开《王老师·公开课板书.pdf》')">
                 <i data-lucide="file"></i>
                 王老师 · 公开课板书.pdf
               </a>
-              <span class="cm-src-pages">P2 · P4</span>
+              <span class="cm-src-pages">板书 · P2 / P4 · 补充图像性质板书</span>
             </li>
             <li class="cm-source">
               <a class="cm-src-name" onclick="showToast('（演示）打开《八(3)班·二次函数周测卷.pdf》')">
                 <i data-lucide="file"></i>
                 八(3)班 · 二次函数周测卷.pdf
               </a>
-              <span class="cm-src-pages">P1 · P3</span>
+              <span class="cm-src-pages">测验卷 · P1 / P3 · 补充班级易错点</span>
             </li>
             <li class="cm-source cm-source-more" id="cm-source-more">
               <a class="cm-src-name" onclick="toggleSources()">
@@ -890,63 +885,20 @@
 
           <footer class="cm-foot">
             <i data-lucide="info"></i>
-            <span>新资料上传后，飞象 AI 会自动并入本页，下次打开就是最新版。</span>
+              <span>关联文件由 AI 根据正文引用和语义关联生成，点击文件可继续查看原文。</span>
           </footer>
 
         </article>
       </div>
 
-      <!-- Pane 2：反向链接 -->
-      <div class="cv-pane" data-pane="backlinks">
-        <article class="cv-meta">
-
-          <header class="cm-head">
-            <div class="cm-head-title">反向链接 · 3 处</div>
-            <div class="cm-head-sub">
-              本页被以下 <b>3 个 Wiki</b> 引用，飞象 AI 自动维护
-            </div>
-          </header>
-
-          <ul class="cm-backlink-list">
-            <li class="cm-backlink">
-              <a class="cm-bl-name" onclick="openWiki('中考压轴 · 函数综合')">
-                <i data-lucide="book-open"></i>
-                中考压轴 · 函数综合
-              </a>
-              <span class="cm-bl-count">引用 3 处 · 用作压轴题命题依据</span>
-            </li>
-            <li class="cm-backlink">
-              <a class="cm-bl-name" onclick="openWiki('八(3)班数学薄弱点画像')">
-                <i data-lucide="book-open"></i>
-                八(3)班数学薄弱点画像
-              </a>
-              <span class="cm-bl-count">引用 2 处 · 用于错题归因分析</span>
-            </li>
-            <li class="cm-backlink">
-              <a class="cm-bl-name" onclick="openWiki('分层练习设计法')">
-                <i data-lucide="book-open"></i>
-                分层练习设计法
-              </a>
-              <span class="cm-bl-count">引用 1 处 · A/B/C 三档题源参考</span>
-            </li>
-          </ul>
-
-          <footer class="cm-foot">
-            <i data-lucide="info"></i>
-            <span>反向链接由 AI 自动检测——其他 Wiki 引用本页时会自动出现在这里。</span>
-          </footer>
-
-        </article>
-      </div>
-
-      <!-- Pane 3：相关页面（AI 推断的知识关联） -->
+      <!-- Pane 2：相关 Wiki（AI 推断的知识关联） -->
       <div class="cv-pane" data-pane="related">
         <article class="cv-meta">
 
           <header class="cm-head">
-            <div class="cm-head-title">相关页面 · 5 个</div>
+            <div class="cm-head-title">相关 Wiki · 5 个</div>
             <div class="cm-head-sub">
-              飞象 AI 根据知识结构推断的关联 Wiki
+              根据知识结构和校内资料引用生成，可继续打开查看
             </div>
           </header>
 
@@ -1019,8 +971,55 @@
 
           <footer class="cm-foot">
             <i data-lucide="info"></i>
-            <span>关联由 AI 推断——你也可以在对话中说「这页和 XX 也相关」，AI 会更新。</span>
+            <span>相关 Wiki 由 AI 根据知识结构和校内资料引用生成，点击词条可继续查看。</span>
           </footer>
+
+        </article>
+      </div>
+
+      <!-- 兼容旧状态：历史版本可能仍会尝试切到 backlinks，内容与「相关 Wiki」保持一致，不作为可见 tab 展示 -->
+      <div class="cv-pane" data-pane="backlinks">
+        <article class="cv-meta">
+
+          <header class="cm-head">
+            <div class="cm-head-title">相关 Wiki · 5 个</div>
+            <div class="cm-head-sub">
+              根据知识结构和校内资料引用生成，可继续打开查看
+            </div>
+          </header>
+
+          <ul class="cm-related-list">
+            <li class="cm-related">
+              <div class="cm-rl-row">
+                <a class="cm-rl-name" onclick="openWiki('一元二次方程根的判别式')">
+                  <i data-lucide="book-open"></i>
+                  一元二次方程根的判别式
+                </a>
+                <span class="cm-rl-tag tag-pre">前置概念</span>
+              </div>
+              <p class="cm-rl-reason">判别式 Δ 决定二次函数与 x 轴交点的个数，是理解图像交点的前置内容。</p>
+            </li>
+            <li class="cm-related">
+              <div class="cm-rl-row">
+                <a class="cm-rl-name" onclick="openWiki('二次函数核心考点')">
+                  <i data-lucide="book-open"></i>
+                  二次函数核心考点
+                </a>
+                <span class="cm-rl-tag tag-parent">上级主题</span>
+              </div>
+              <p class="cm-rl-reason">本页是二次函数核心考点下的图像与性质专题。</p>
+            </li>
+            <li class="cm-related">
+              <div class="cm-rl-row">
+                <a class="cm-rl-name" onclick="openWiki('中考压轴 · 函数综合')">
+                  <i data-lucide="book-open"></i>
+                  中考压轴 · 函数综合
+                </a>
+                <span class="cm-rl-tag tag-app">后续应用</span>
+              </div>
+              <p class="cm-rl-reason">对称轴、顶点公式和交点分析是函数压轴题的常用基础。</p>
+            </li>
+          </ul>
 
         </article>
       </div>
@@ -1625,7 +1624,7 @@
     pageKey: 'wiki-entry.html'
   };
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/shared/supabase-optional.js"></script>
 <script src="./assets/shared/pin-comments.js"></script>
 <template id="review-template">
 {
@@ -1656,12 +1655,12 @@
               "text": "查看摘要、关键概念、教学建议和来源引用。"
             },
             {
-              "label": "切换侧栏",
-              "text": "在来源、反向链接、相关词条、测验等 tab 之间切换。"
+              "label": "查看 AI 解读",
+              "text": "右侧 AI 解读固定为关联文件和相关 Wiki 两个入口。"
             },
             {
-              "label": "点击引用",
-              "text": "点击来源定位到原文件或文件页码。"
+              "label": "追溯来源",
+              "text": "点击关联文件可打开原文件，查看文件类型、引用位置和贡献说明。"
             }
           ]
         },
@@ -1670,13 +1669,14 @@
           "items": [
             "词条必须保留来源引用，AI 整理内容不能脱离原文。",
             "学校词条和个人词条需要明确归属。",
-            "关联内容只展示当前老师有权限访问的资料。"
+            "关联内容只展示当前老师有权限访问的资料。",
+            "AI 解读的 tab 结构固定；文件名称、引用位置、贡献说明和关联原因由 AI 生成。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "词条数据包含标题、正文、摘要、来源文件、引用位置、关联词条、归属知识库、更新时间。"
+            "词条数据包含标题、正文、摘要、关联文件、引用位置、贡献说明、相关 Wiki、关联原因、归属知识库和更新时间。"
           ]
         },
         {

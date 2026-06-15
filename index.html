@@ -446,7 +446,7 @@
   .plus-pop .plus-row .row-chevron { width: 12px; height: 12px; color: var(--muted); flex-shrink: 0; }
   .plus-pop .plus-divider { height: 1px; background: var(--line); margin: 4px 4px; }
 
-  /* 二级菜单 · 知识库多选 */
+  /* 二级菜单 · 知识库单选 */
   .kb-submenu {
     position: fixed;
     width: 280px;
@@ -752,7 +752,7 @@
 
   /* 3A. 工作动态 */
   .work-list {
-    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 28px;
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px;
     background: transparent;
     border: 0;
     border-radius: 0;
@@ -778,31 +778,22 @@
     overflow: visible;
   }
   .work-card + .work-card { margin-top: 0; }
-  .work-card::before {
-    content: "";
+  .work-icon {
     position: absolute;
     left: 0; top: 50%; transform: translateY(-50%);
     width: 30px; height: 38px; border-radius: 3px;
-    background:
-      linear-gradient(#fff, #fff) padding-box,
-      linear-gradient(180deg, rgba(168,126,44,.25), rgba(168,126,44,.08)) border-box;
+    display: grid;
+    place-items: center;
+    color: var(--gold);
+    background: #fff;
     border: 1px solid rgba(0,0,0,.08);
     box-shadow: 0 5px 12px rgba(17,17,16,.06);
-    opacity: 1;
   }
-  .work-card::after {
-    content: "";
-    position: absolute;
-    left: 6px; top: 50%; transform: translateY(-50%);
-    width: 18px; height: 20px;
-    background:
-      linear-gradient(var(--line-strong), var(--line-strong)) 0 3px / 12px 1px no-repeat,
-      linear-gradient(var(--line), var(--line)) 0 8px / 18px 1px no-repeat,
-      linear-gradient(var(--line), var(--line)) 0 13px / 15px 1px no-repeat;
-    pointer-events: none;
-  }
-  .work-card:nth-child(2)::before { border-color: rgba(74,117,91,.16); }
-  .work-card:nth-child(3)::before { border-color: rgba(83,117,158,.16); }
+  .work-icon svg { width: 17px; height: 17px; stroke-width: 2; }
+  .work-icon.homework { color: #B85F73; border-color: rgba(184,95,115,.18); background: #F9EEF1; }
+  .work-icon.essay { color: #4D8B69; border-color: rgba(77,139,105,.18); background: #EAF5EF; }
+  .work-icon.record { color: #815995; border-color: rgba(129,89,149,.18); background: #F4EEF7; }
+  .work-icon.knowledge { color: #53759E; border-color: rgba(83,117,158,.18); background: #EEF5FB; }
   .work-card:hover {
     box-shadow: none;
     transform: none;
@@ -1085,22 +1076,40 @@
             </a>
           </div>
           <div class="work-list">
-            <button class="work-card" onclick="window.location.href='ai-record-jobs.html'">
+            <button class="work-card" onclick="window.location.href='ai-review.html'">
+              <span class="work-icon homework" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M4 19.5V5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1 0-4h12"/></svg>
+              </span>
               <div class="work-info">
-                <div class="work-title" title="原创检测卷 第十二章检测卷">原创检测卷 第十二章检测卷</div>
-                <div class="work-meta"><span>八年级5班</span> <span>提交 <strong>33/46</strong></span> <span>待确认 <strong>0</strong></span> <span>正确率 <strong>72.7%</strong></span></div>
+                <div class="work-title" title="八 数据的表示和分析 第4课时 平均数的再认识">八 数据的表示和分析 第4课时 平均数的再认识</div>
+                <div class="work-meta"><span>五年级8班</span> <span>提交 <strong>15/42</strong></span></div>
               </div>
             </button>
             <button class="work-card" onclick="window.location.href='chat.html?resume=1'">
+              <span class="work-icon essay" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>
+              </span>
               <div class="work-info">
-                <div class="work-title" title="原创检测卷 第十二章检测卷">原创检测卷 第十二章检测卷</div>
-                <div class="work-meta"><span>八年级12班</span> <span>提交 <strong>29/46</strong></span> <span>待确认 <strong>0</strong></span> <span>正确率 <strong>76.7%</strong></span></div>
+                <div class="work-title" title="成长路上，请以《你是美好的代名词》为题">成长路上，请以《你是美好的代名词》为题</div>
+                <div class="work-meta"><span><strong>3</strong> 个班</span> <span><strong>126</strong> 篇待确认</span></div>
               </div>
             </button>
-            <button class="work-card" onclick="window.location.href='ai-review.html'">
+            <button class="work-card" onclick="window.location.href='ai-record-jobs.html'">
+              <span class="work-icon record" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="11" cy="11" r="3"/><path d="m16 16-2.2-2.2"/></svg>
+              </span>
               <div class="work-info">
-                <div class="work-title" title="分层作业本 第一部分 课时分层情境练 第八章 运动和力 第4节 同一直线上二力的合成">分层作业本 第一部分 课时分层情境练 第八章 运动和力 第4节 同一直线上二力的合成</div>
-                <div class="work-meta"><span>八年级5班</span> <span>提交 <strong>40/46</strong></span> <span>待确认 <strong>0</strong></span> <span>正确率 <strong>71.5%</strong></span></div>
+                <div class="work-title" title="《期中模拟卷》">《期中模拟卷》</div>
+                <div class="work-meta"><span>AI 录题</span> <span>解析完成</span> <span>共 <strong>36</strong> 题</span></div>
+              </div>
+            </button>
+            <button class="work-card" onclick="window.location.href='file-preview.html'">
+              <span class="work-icon knowledge" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6"/><path d="m9 15 2 2 4-4"/></svg>
+              </span>
+              <div class="work-info">
+                <div class="work-title" title="《高一语文复习资料》">《高一语文复习资料》</div>
+                <div class="work-meta"><span>知识库</span> <span>可查看解析</span></div>
               </div>
             </button>
           </div>
@@ -1693,7 +1702,7 @@ function toggleUserMenu(e) {
   setTimeout(() => document.addEventListener('click', closeAllPops, { once: true }), 50);
 }
 
-/* 知识库 · 多选模型（类 Claude Add to project）· 飞象老师真实结构：仅"我的 + 学校"两个 */
+/* 知识库问答范围 · 首页只允许单选：全部 / 我的 / 学校 */
 const KB_FOLDERS = [
   { id: 'mine',   name: '我的知识库',   count: 18 },
   { id: 'school', name: '学校知识库',   count: 348 },
@@ -1703,7 +1712,7 @@ let selectedKbIds = [];
 function isKbEnabled() { return selectedKbIds.length > 0; }
 function getKbFolders() { return KB_FOLDERS.filter(f => selectedKbIds.includes(f.id)); }
 
-/* pin 标签文案：0 选隐藏；1 选显示该库名；2 选（全选）显示"全部知识库" */
+/* pin 标签文案：0 选隐藏；1 选显示该库名；全部知识库不展示具体标签 */
 function applyKbState() {
   const row = document.getElementById('home-kb-row');
   if (!row) return;
@@ -1757,9 +1766,7 @@ function selectKbScope(id) {
   if (activeChip !== 'search') activeChip = 'search';
   if (id === 'all') selectedKbIds = [];
   else {
-    const idx = selectedKbIds.indexOf(id);
-    if (idx >= 0) selectedKbIds.splice(idx, 1);
-    else selectedKbIds.push(id);
+    selectedKbIds = selectedKbIds.includes(id) ? [] : [id];
   }
   applyKbState();
   refreshChips();
@@ -1811,7 +1818,7 @@ function renderPlusMenu(pop) {
   `;
 }
 
-/* 二级菜单 · 知识库多选 */
+/* 二级菜单 · 知识库单选 */
 function openKbSubmenu(e) {
   e.stopPropagation();
   const main = document.getElementById('plus-pop');
@@ -1836,7 +1843,7 @@ function openKbSubmenu(e) {
 function renderKbSubmenu(sub) {
   sub.innerHTML = `
     <div class="kb-submenu-title">
-      <span>选择要添加的知识库 · 可多选</span>
+      <span>选择知识库范围 · 单选</span>
       ${selectedKbIds.length ? `<span class="kb-submenu-clear" onclick="event.stopPropagation();clearAllKb()">清空</span>` : ''}
     </div>
     ${KB_FOLDERS.map(f => {
@@ -1853,9 +1860,7 @@ function renderKbSubmenu(sub) {
 }
 
 function toggleKbItem(id) {
-  const idx = selectedKbIds.indexOf(id);
-  if (idx >= 0) selectedKbIds.splice(idx, 1);
-  else selectedKbIds.push(id);
+  selectedKbIds = selectedKbIds.includes(id) ? [] : [id];
   applyKbState();
   if (activeChip === 'search') refreshChips();
   const sub = document.getElementById('kb-submenu');
@@ -2036,11 +2041,11 @@ renderMainIntentChips();
             },
             {
               "label": "点击知识库问答 chip",
-              "text": "底部 chips 直接切换为知识库范围选择：全部知识库、我的知识库、学校知识库等；输入框内出现“知识库问答”模式标签，placeholder 变为“输入问题或资料关键词”。这里的范围选择是问答模式的快捷选择，不代表知识库只能在问答模式下使用。"
+              "text": "底部 chips 直接切换为知识库范围选择：全部知识库、我的知识库、学校知识库等；输入框内出现“知识库问答”模式标签，placeholder 变为“输入问题或资料关键词”。知识库问答范围为单选，同一时间只能选择一个范围。"
             },
             {
               "label": "选择知识库范围",
-              "text": "选择全部知识库时不展示具体知识库标签；选择我的知识库或学校知识库时，输入框前方出现知识库标签，可点击管理或点 x 移除。"
+              "text": "选择全部知识库时不展示具体知识库标签；选择我的知识库或学校知识库时，输入框前方出现对应知识库标签，可点 x 移除。再次选择另一个知识库范围时，直接替换当前范围，不叠加多个知识库。"
             },
             {
               "label": "点击创建应用 chip",
@@ -2080,8 +2085,9 @@ renderMainIntentChips();
             "AI 生成二级能力只有在 AI 生成模式下出现；取消 AI 生成后，二级能力也随之清空。",
             "知识库范围不是 + 菜单能力：知识库问答会直接展示范围选择；一期普通输入、AI 生成和创建应用的知识库引用不在首页 + 菜单完成。",
             "AI 生成如需引用知识库，应在后续对话页或业务页继续选择资料，不把主模式切换为知识库问答。",
+            "知识库问答的范围选择为单选；“全部知识库”“我的知识库”“学校知识库”三者互斥。",
             "选择“全部知识库”表示在老师有权限的全部知识库里检索，不展示具体知识库标签。",
-            "选择我的知识库或学校知识库时，输入框必须显示可识别、可删除的标签，让老师知道本次任务引用了哪些资料。",
+            "选择我的知识库或学校知识库时，输入框必须显示可识别、可删除的标签，让老师知道本次问答基于哪个范围。",
             "添加文件和添加图片只服务本次任务；普通附件合计最多 10 个，超出时提示“最多上传 10 个附件”；除非老师在后续流程明确保存或上传，否则不自动进入我的知识库或学校知识库。",
             "互动课件需要老师上传教案文件；数据回收需要老师上传 HTML 文件；未上传时发送可以进入对话页，但对话页需要继续提示补充文件。",
             "一期 + 菜单不提供拍照/扫描，也不提供添加知识库入口。",
@@ -2091,7 +2097,7 @@ renderMainIntentChips();
         {
           "title": "数据说明",
           "items": [
-            "进入 chat.html 时需要携带：输入文本、主模式、AI 生成二级能力、知识库问答范围、具体知识库 id 和附件上下文。",
+            "进入 chat.html 时需要携带：输入文本、主模式、AI 生成二级能力、知识库问答范围、单个具体知识库 id 和附件上下文。",
             "知识库标签需要区分“我的知识库”和“学校知识库”，并保留老师是否有访问权限。",
             "AI 生成能力需要保留能力 id 和展示名称，便于对话页恢复“AI 生成 · 具体能力”的标签。",
             "附件属于本次任务上下文，文件和图片需要区分类型、名称、大小、上传状态和移除状态；后续是否沉淀到知识库由对话页或上传流程决定。"
@@ -2320,13 +2326,15 @@ renderMainIntentChips();
             "工作动态替代独立通知入口，但不等于通知中心；它只展示老师发起过、参与过，且现在需要查看、确认或继续处理的事项。",
             "第一版只接入五类：飞象作业、飞象作文、错因诊断、AI 录题、知识库文件处理完成。",
             "首页只展示少量高优先级动态，完整列表进入 work-feed.html 工作动态页。",
-            "首页动态卡片只帮助老师快速识别事项和班级差异，不承载完整业务数据。",
+            "首页动态卡片只帮助老师快速识别事项、处理状态和点击去向，不承载完整业务数据。",
             "首页工作动态采用横向摘要列表，一屏展示少量高优先级动态。",
-            "首页卡片采用两行轻装饰展示：第一行展示作业或任务名称，超过一行时省略；第二行展示班级、提交人数、待确认数和正确率。",
+            "首页卡片采用两行轻装饰展示：标题统一展示对象名称，包括作业题目、作文题目、AI 录题文件题目和知识库文件题目；副标题根据不同类型展示班级、数量和状态。作业和作文不重复展示类型文字；AI 录题和知识库在副标题前保留功能标识，避免文件名本身难以判断来源。",
             "作业或任务名称被省略时，hover 标题区域展示完整名称，保证卡片高度一致。",
-            "首页卡片不展示来源图标、来源名称、刚刚扫描等状态 tag、家长端公开状态和操作按钮；这些信息在目标业务页或全部动态页按需展示。",
+            "首页卡片用不同 icon 区分作业、作文、AI 录题和知识库，不在第二行重复展示类型文字。",
+            "首页卡片不展示来源名称、刚刚扫描等状态 tag、家长端公开状态和操作按钮；这些信息在目标业务页或全部动态页按需展示。",
             "首页卡片不展示扫描 / 更新时间，避免长标题和弱信息竞争；时间信息进入全部动态页或目标业务页查看。",
-            "同一份作业或作文覆盖多个班级时，首页按班级级任务分别展示；不把不同班级合并成一张卡，避免丢失班级差异。"
+            "作业按班级级任务展示；作文按作文题目聚合展示，一个作文题目一张卡，首页展示可识别的真实题目或题干摘要，覆盖班级数和作文篇数放在第二行。",
+            "AI 录题按文件展示，知识库按文件事件逐条展示。"
           ]
         },
         {
@@ -2393,7 +2401,7 @@ renderMainIntentChips();
             },
             {
               "label": "知识库文件处理动态",
-              "text": "点击文件处理完成动态，进入对应知识库文件详情，查看 AI 解析结果、摘要、标签或入库状态。"
+              "text": "点击文件处理完成动态，进入对应知识库文件详情，查看 AI 解析结果、摘要、标签或处理状态。"
             },
             {
               "label": "全部动态",
@@ -2405,22 +2413,27 @@ renderMainIntentChips();
           "title": "业务规则",
           "items": [
             "工作动态只做提醒和跳转，不在首页完成批改、通知发送、组题等重操作。",
-            "作业和作文类动态以班级级任务为最小展示单位；同一份作业覆盖多个班级时，首页可以展示多张相邻卡片。",
-            "每条班级级动态必须有标题、来源、班级、提交人数、待确认数、正确率和目标页面。",
+            "卡片标题统一只展示对象名称：作业题目、作文题目、AI 录题文件题目、知识库文件题目；解析完成、处理完成、待确认、解析失败等状态不写进标题。",
+            "作业动态以班级级任务为最小展示单位；同一份作业覆盖多个班级时，首页可以展示多张相邻卡片。",
+            "作文动态以作文题目为最小展示单位；同一个作文覆盖多个班级时聚合为一张卡，第二行展示班级数和作文篇数。",
+            "AI 录题动态以录题文件为最小展示单位，第二行展示识别题数和解析状态。",
+            "知识库动态以单个文件事件为最小展示单位，第二行展示所属知识库和处理结果。",
+            "每条动态必须有标题、来源、关键数量或处理结果、目标页面。",
             "首页卡片不展示查看学情、去批改、去讲评等操作按钮；老师点击整张卡片进入目标业务页后再处理。",
-            "首页卡片保留提交人数、待确认、正确率这类班级差异字段；不展示来源 icon、来源名称、状态 tag、家长端公开状态、学生列表、题目明细和讲评内容。",
+            "首页卡片保留每类任务最关键的第二行信息：作业展示班级和提交进度，有待确认时展示待确认数量，没有待确认时不展示；作文展示班级数和待确认篇数；AI 录题展示“AI 录题”、解析状态和题目数量，顺序为“AI 录题 · 解析完成 · 共 N 题”，解析失败时不展示题目数量；知识库展示“知识库”和处理状态，不展示知识库名称。",
             "首页不展示扫描时间；如在全部动态页或业务页展示时间，使用“扫描 20:12 / 更新 14:36”这类数值时间，不使用“2 分钟前”等相对时间。",
             "首页动态按优先级展示，避免把老师的一屏变成消息列表。",
             "普通 Wiki 更新、普通资源更新、应用上新、系统公告、纯推荐内容不进入第一版工作动态。",
-            "知识库只有在“文件 AI 处理完毕且老师需要查看处理结果”时才进入工作动态；普通知识库内容更新不进入。"
+            "知识库可以按单文件事件逐条进入工作动态，但只展示文件处理完成、待确认归类、解析失败等与文件处理结果相关的事项；普通 Wiki 更新不进入。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "首页动态卡片展示字段包括标题、班级、提交人数、待确认数、正确率和目标页。",
+            "首页动态卡片展示字段包括标题、类型 icon、关键数量或处理结果、状态和目标页。",
+            "副标题字段规则：作业展示班级、提交数和非零待确认数；作文展示覆盖班级数和待确认或待批改篇数；AI 录题展示功能标识、解析状态和题目数量；知识库展示功能标识和处理状态。",
             "完整动态数据仍可包含来源应用、状态、家长端状态、更新时间和优先级，但首页卡片不直接展示。",
-            "同一作业多班级动态需要保留班级维度，不做汇总覆盖；每张卡片指向对应班级的目标业务页。",
+            "同一作业多班级动态需要保留班级维度，不做汇总覆盖；同一作文多班级动态需要按作文题目聚合为一张卡。",
             "详细业务数据由来源应用维护，例如学生列表、题目明细、讲评入口等，不在首页动态卡片中展开。",
             "同一事项更新状态时应复用同一业务事项，不重复堆叠无意义通知。",
             "接入动态的业务需要提供动态类型，当前类型限定为 homework、essay、diagnosis、record、knowledge-file。"
@@ -2601,7 +2614,7 @@ renderMainIntentChips();
     pageKey: 'index.html'
   };
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/shared/supabase-optional.js"></script>
 <script src="./assets/shared/pin-comments.js"></script>
 </body>
 </html>

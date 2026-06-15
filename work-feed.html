@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>飞象老师校园版 · 工作动态</title>
-<script src="https://unpkg.com/lucide@latest"></script>
+<script src="assets/lucide-loader.js"></script>
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/page-header.css" />
@@ -92,19 +92,6 @@
     font-size: 12px;
     flex-wrap: wrap;
   }
-  .wf-tag {
-    display: inline-flex;
-    align-items: center;
-    height: 22px;
-    padding: 0 8px;
-    border-radius: 999px;
-    background: var(--bg);
-    color: var(--text-2);
-    font-weight: 700;
-  }
-  .wf-tag.todo { color: #B85F73; background: #F9EEF1; }
-  .wf-tag.unread { color: #A87E2C; background: #FFF6DF; }
-  .wf-tag.done { color: #4D8B69; background: #EAF5EF; }
   .wf-arrow {
     width: 28px;
     height: 28px;
@@ -188,11 +175,15 @@
 <script src="assets/page-header.js"></script>
 <script>
   const WORK_FEED_ITEMS = [
-    { id: 'homework-scan', title: '高一(3)班 · 语文期中模拟卷', desc: '38 份待批改 · 包含作文', sourceLabel: '飞象作业', status: 'todo', statusLabel: '刚刚扫描', time: '扫描 20:12', url: 'ai-review.html', icon: 'book-open', color: 'rose', priority: 1 },
-    { id: 'essay-scan', title: '高一(5)班 ·《荷塘月色》作文练习', desc: '42 篇作文待确认批改', sourceLabel: '飞象作文', status: 'todo', statusLabel: '待确认', time: '扫描 15:07', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 2 },
-    { id: 'diagnosis-report', title: '高二(2)班 · 文言文专项测验错因报告', desc: '班级错因分析已生成，待查看', sourceLabel: '错因诊断', status: 'done', statusLabel: '报告已生成', time: '生成 14:36', url: 'ai-review.html', icon: 'chart-line', color: 'blue', priority: 3 },
-    { id: 'record-confirm', title: '《期中模拟卷》AI 录题完成', desc: '已识别 36 道题，待确认入库', sourceLabel: 'AI 录题', status: 'todo', statusLabel: '待确认', time: '完成 13:20', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 4 },
-    { id: 'kb-processed', title: '《高一语文复习资料》处理完成', desc: 'AI 已完成解析，可查看摘要与标签', sourceLabel: '知识库文件', status: 'done', statusLabel: '处理完成', time: '今天 09:30', url: 'file-preview.html', icon: 'file-check-2', color: '', priority: 5 }
+    { id: 'homework-scan', title: '八 数据的表示和分析 第4课时 平均数的再认识', desc: '五年级8班 · 提交 15/42', time: '扫描 20:12', url: 'ai-review.html', icon: 'book-open', color: 'rose', priority: 1 },
+    { id: 'homework-review', title: '文言文专项测验', desc: '高二(2)班 · 错因报告已生成，待查看', time: '生成 14:36', url: 'ai-review.html', icon: 'chart-line', color: 'blue', priority: 2 },
+    { id: 'essay-scan', title: '成长路上，请以《你是美好的代名词》为题', desc: '3 个班 · 126 篇待确认', time: '布置 06月11日 17:23', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 3 },
+    { id: 'essay-review', title: '如果那一天可以重来，你会停留、回头还是前行？', desc: '9 个班 · 76 份批改待确认', time: '布置 06月09日 14:27', url: 'chat.html?resume=1', icon: 'square-pen', color: 'green', priority: 4 },
+    { id: 'record-confirm', title: '《期中模拟卷》', desc: 'AI 录题 · 解析完成 · 共 36 题', time: '完成 13:20', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 5 },
+    { id: 'record-failed', title: '《函数单元练习》', desc: 'AI 录题 · 解析失败', time: '失败 11:42', url: 'ai-record-jobs.html', icon: 'scan-line', color: 'purple', priority: 6 },
+    { id: 'kb-processed', title: '《高一语文复习资料》', desc: '知识库 · 可查看解析', time: '今天 09:30', url: 'file-preview.html', icon: 'file-check-2', color: '', priority: 7 },
+    { id: 'kb-classify', title: '《现代散文阅读素材》', desc: '知识库 · 待确认归类', time: '今天 09:18', url: 'file-preview.html', icon: 'file-question', color: '', priority: 8 },
+    { id: 'kb-failed', title: '《期末复习讲义》', desc: '知识库 · 解析失败', time: '昨天 18:40', url: 'file-preview.html', icon: 'file-warning', color: '', priority: 9 }
   ];
 
   function renderWorkFeed() {
@@ -211,8 +202,6 @@
         <span class="wf-main">
           <span class="wf-title">${item.title}</span>
           <span class="wf-meta">
-            <span class="wf-tag ${item.status}">${item.statusLabel}</span>
-            <span>${item.sourceLabel}</span>
             <span>${item.desc}</span>
             <span>${item.time}</span>
           </span>
@@ -241,17 +230,19 @@
           "body": [
             "工作动态列表展示老师需要查看、确认或继续处理的事项，点击后进入对应业务页。",
             "第一版范围固定为五类：飞象作业、飞象作文、错因诊断、AI 录题、知识库文件处理完成。",
-            "普通 Wiki 更新、资源更新、应用上新、系统公告不进入当前列表。"
+            "普通 Wiki 更新、资源更新、应用上新、系统公告不进入当前列表。",
+            "全部列表可以展示同一类型下的多条任务，知识库按单个文件事件逐条展示，不要求后端汇总。",
+            "全部列表的卡片内容与首页保持同一套标题/副标题规则；全部列表只在副标题末尾额外补充业务时间。"
           ]
         },
         {
           "title": "第一版接入范围",
           "items": [
             "飞象作业：高扫扫描作业完成，老师需要查看或继续批改。",
-            "飞象作文：高扫扫描作文完成，老师需要确认批改。",
+              "飞象作文：高扫扫描作文完成，老师需要确认批改；一个作文题目聚合为一条动态，可覆盖多个班，动态卡片展示真实作文题目或题干摘要。",
             "错因诊断：报告生成完成，老师需要查看分析结果。",
             "AI 录题：题目录入处理完成，需要老师确认入库。",
-            "知识库文件处理：我的知识库或学校知识库文件 AI 处理完毕，需要老师查看解析结果。"
+            "知识库文件处理：我的知识库或学校知识库文件 AI 处理完毕、待确认归类或解析失败，需要老师查看处理结果。"
           ]
         },
         {
@@ -277,7 +268,11 @@
           "items": [
             "动态只展示老师有权访问的事件。",
             "第一版只展示五类接入范围内的事项，不展示普通内容更新或系统消息。",
+            "卡片标题统一只展示对象名称：作业题目、作文题目、AI 录题文件题目、知识库文件题目；解析完成、处理完成、待确认、解析失败等状态不写进标题。",
+            "全部列表不额外展示独立状态标签；作业和作文类型由 icon 区分，AI 录题和知识库在副标题前保留功能标识。",
             "待处理、待确认、报告已生成、处理完成等状态必须使用老师能理解的业务表达。",
+              "作文动态按作文题目聚合展示，不按班级拆成多条；卡片标题使用真实作文题目或题干摘要，长题目一行省略；作业动态仍按班级任务展示。",
+            "AI 录题和知识库动态按文件事件逐条展示；如果同一文件状态更新，复用同一条动态，不重复堆叠。",
             "时间展示使用固定数值时间，不使用“2 分钟前 / 1 小时前”等相对时间。",
             "删除或失效的目标不能跳空白页，需要给出状态说明。"
           ]
@@ -285,7 +280,9 @@
         {
           "title": "数据说明",
           "items": [
-            "动态数据包含事件类型、标题、摘要、时间、关联对象、状态、来源、优先级、目标页面和可见范围。"
+            "动态数据包含事件类型、标题、摘要、时间、关联对象、状态、来源、优先级、目标页面和可见范围。",
+            "副标题字段规则：作业展示班级、提交数和非零待确认数；作文展示覆盖班级数和待确认或待批改篇数；AI 录题展示功能标识、解析状态和题目数量，顺序为“AI 录题 · 解析完成 · 共 N 题”，解析失败时不展示题目数量；知识库展示功能标识和处理状态。",
+            "作业数据需要班级和提交进度；作文数据需要作文题目或题干摘要、覆盖班级数和作文篇数；AI 录题数据需要文件名、识别题数和解析状态；知识库数据需要文件名、所属知识库和处理状态。"
           ]
         },
         {

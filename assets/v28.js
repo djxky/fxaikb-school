@@ -2061,9 +2061,9 @@ function personalBackToRoot(){
 function personalUploadToCurrentFolder(){
   const folderQs = _personalCurrentFolder ? `&folder=${encodeURIComponent(_personalCurrentFolder)}` : '';
   if(CURRENT_KB_SCOPE === 'personal'){
-    window.location.href = `01-upload-onboarding.html?from=personal${folderQs}`;
+    window.location.href = `upload-onboarding.html?from=personal${folderQs}`;
   } else {
-    window.location.href = `01-upload-onboarding.html?from=team&kb=${encodeURIComponent(CURRENT_KB_SCOPE)}${folderQs}`;
+    window.location.href = `upload-onboarding.html?from=team&kb=${encodeURIComponent(CURRENT_KB_SCOPE)}${folderQs}`;
   }
 }
 

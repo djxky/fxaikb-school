@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>导入课件.pptx · 飞象 AI</title>
-<script src="https://unpkg.com/lucide@latest"></script>
+<script src="assets/lucide-loader.js"></script>
 <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
@@ -482,8 +482,8 @@
         <!-- ───── 底部说明（占位，下面所有旧 wiki 内容会被删掉） ───── -->
         <div class="wiki-foot entry-foot" style="margin-top:32px">
           这份原文件由 <b>张老师 5 天前上传</b>。飞象 AI 已读完 28 页，把第 <b>3、5、12 页</b> 的内容
-          融进了《二次函数图像与性质》Wiki——右边「AI 解读」面板里能看到 AI 怎么吸收这份资料，以及它衍生出了哪些
-          相关 Wiki、AI 出过的题、其他同主题资料。
+          融进了《二次函数图像与性质》Wiki——右边「AI 解读」面板里能看到 AI 怎么理解这份资料，以及它进入了哪些
+          相关 Wiki。
           <a onclick="window.location.href='wiki-entry.html'">查看本文件参与的 Wiki →</a>
         </div>
 
@@ -998,15 +998,9 @@
         </button>
         <button class="cv-tab tab-meta" data-cv="backlinks" onclick="switchCanvas('backlinks')">
           <i data-lucide="book-open"></i>
-          关联 Wiki
+          相关 Wiki
           <span class="cv-tab-meta">· 3</span>
         </button>
-        <button class="cv-tab tab-meta" data-cv="related" onclick="switchCanvas('related')">
-          <i data-lucide="files"></i>
-          同主题资料
-          <span class="cv-tab-meta">· 11</span>
-        </button>
-
         <!-- AI 产物 tab · chat-open mode 显示 -->
         <button class="cv-tab tab-canvas" data-cv="quiz" onclick="switchCanvas('quiz')" hidden id="cv-tab-quiz">
           <i data-lucide="sparkles"></i>
@@ -1042,6 +1036,13 @@
           </div>
 
           <div class="fp-ai-block">
+            <div class="fp-ai-label"><i data-lucide="map"></i> 适用范围</div>
+            <p class="fp-ai-text">
+              适合用于九年级数学二次函数起始课或复习导入。资料偏概念建立和图像观察，不适合作为完整练习课材料单独使用。
+            </p>
+          </div>
+
+          <div class="fp-ai-block">
             <div class="fp-ai-label"><i data-lucide="git-compare"></i> 与组里其他课件的差异</div>
             <ul class="fp-ai-list">
               <li><b>图示数量更多</b>——5 张抛物线对比，比组内平均（2.1 张）更直观</li>
@@ -1072,14 +1073,14 @@
         </article>
       </div>
 
-      <!-- Pane 2：关联 Wiki -->
+      <!-- Pane 2：相关 Wiki -->
       <div class="cv-pane" data-pane="backlinks">
         <article class="cv-meta">
 
           <header class="cm-head">
-            <div class="cm-head-title">关联 Wiki · 3 个</div>
+            <div class="cm-head-title">相关 Wiki · 3 个</div>
             <div class="cm-head-sub">
-              本文件被 <b>3 个 Wiki</b> 引用 · 点击进入 Wiki 看更全的整理
+              本文件已进入以下 Wiki，点击词条查看完整整理
             </div>
           </header>
 
@@ -1089,132 +1090,27 @@
                 <i data-lucide="book-open"></i>
                 二次函数图像与性质
               </a>
-              <span class="cm-bl-count">本文件 P3 / P5 / P12 被引用 · 3 处</span>
+              <span class="cm-bl-count">P3 / P5 / P12 · 支撑开口方向、顶点坐标和对称轴说明</span>
             </li>
             <li class="cm-backlink">
               <a class="cm-bl-name" onclick="openWiki('中考压轴 · 函数综合')">
                 <i data-lucide="book-open"></i>
                 中考压轴 · 函数综合
               </a>
-              <span class="cm-bl-count">本文件 P5（顶点公式） 被引用 · 1 处</span>
+              <span class="cm-bl-count">P5 · 补充顶点公式在压轴题中的使用方式</span>
             </li>
             <li class="cm-backlink">
               <a class="cm-bl-name" onclick="openWiki('分层练习设计法')">
                 <i data-lucide="book-open"></i>
                 分层练习设计法
               </a>
-              <span class="cm-bl-count">本文件 P3 例题 被用作 A 档基础题源</span>
+              <span class="cm-bl-count">P3 · 作为 A 档基础练习的题源参考</span>
             </li>
           </ul>
 
           <footer class="cm-foot">
             <i data-lucide="info"></i>
-            <span>每当本文件被新 Wiki 引用，飞象 AI 会自动出现在这里。</span>
-          </footer>
-
-        </article>
-      </div>
-
-      <!-- Pane 3：同主题资料 -->
-      <div class="cv-pane" data-pane="related">
-        <article class="cv-meta">
-
-          <header class="cm-head">
-            <div class="cm-head-title">同主题资料 · 11 份</div>
-            <div class="cm-head-sub">
-              组里其他老师准备的「二次函数·第一课时」相关资料 · AI 自动归类
-            </div>
-          </header>
-
-          <ul class="cm-source-list">
-            <li class="cm-source">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《二次函数·导入课件 v2.pptx》')">
-                <i data-lucide="presentation"></i>
-                二次函数·导入课件 v2.pptx
-              </a>
-              <span class="cm-src-pages">李老师 · 30 页</span>
-            </li>
-            <li class="cm-source">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《教学设计·二次函数.docx》')">
-                <i data-lucide="file-text"></i>
-                教学设计·二次函数.docx
-              </a>
-              <span class="cm-src-pages">张老师 · 12 页</span>
-            </li>
-            <li class="cm-source">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《配套习题汇编.pdf》')">
-                <i data-lucide="book"></i>
-                配套习题汇编.pdf
-              </a>
-              <span class="cm-src-pages">全校共建 · 36 页</span>
-            </li>
-            <li class="cm-source">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《王老师·公开课板书.pdf》')">
-                <i data-lucide="image"></i>
-                王老师·公开课板书.pdf
-              </a>
-              <span class="cm-src-pages">王建华 · 4 张</span>
-            </li>
-            <li class="cm-source">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《八(3)班·二次函数周测卷.pdf》')">
-                <i data-lucide="file-text"></i>
-                八(3)班·二次函数周测卷.pdf
-              </a>
-              <span class="cm-src-pages">张老师 · 2 页</span>
-            </li>
-            <li class="cm-source">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《海淀区 2026 一模卷》')">
-                <i data-lucide="file-text"></i>
-                海淀区 2026 一模卷·数学.pdf
-              </a>
-              <span class="cm-src-pages">李素芬 · T6</span>
-            </li>
-            <li class="cm-source cm-source-more" id="cm-source-more">
-              <a class="cm-src-name" onclick="toggleSources()">
-                <i data-lucide="chevron-down"></i>
-                展开全部 11 份
-              </a>
-            </li>
-            <li class="cm-source cm-source-hidden">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《赵明杰·错题剖析.docx》')">
-                <i data-lucide="file-text"></i>
-                赵明杰·错题剖析.docx
-              </a>
-              <span class="cm-src-pages">赵明杰 · 8 页</span>
-            </li>
-            <li class="cm-source cm-source-hidden">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《八(3)班·错题精选.xlsx》')">
-                <i data-lucide="clipboard-list"></i>
-                八(3)班·错题精选.xlsx
-              </a>
-              <span class="cm-src-pages">张老师 · 42 行</span>
-            </li>
-            <li class="cm-source cm-source-hidden">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《北京中考真题 2021-2025》')">
-                <i data-lucide="folder-archive"></i>
-                北京中考真题 2021-2025
-              </a>
-              <span class="cm-src-pages">公共库 · 5 份</span>
-            </li>
-            <li class="cm-source cm-source-hidden">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《二次函数·课堂例题集.docx》')">
-                <i data-lucide="file-text"></i>
-                二次函数·课堂例题集.docx
-              </a>
-              <span class="cm-src-pages">李老师 · 10 页</span>
-            </li>
-            <li class="cm-source cm-source-hidden">
-              <a class="cm-src-name" onclick="showToast('（演示）打开《人教版八下教师用书 P78》')">
-                <i data-lucide="book"></i>
-                人教版八下教师用书.pdf
-              </a>
-              <span class="cm-src-pages">公共库 · P78</span>
-            </li>
-          </ul>
-
-          <footer class="cm-foot">
-            <i data-lucide="info"></i>
-            <span>同主题文件由 AI 根据知识点聚类 · 点击文件名可预览。</span>
+            <span>相关 Wiki 由 AI 根据引用位置和内容语义生成，可用于追溯这份文件被如何使用。</span>
           </footer>
 
         </article>
@@ -1349,7 +1245,7 @@
     pageKey: 'file-preview.html'
   };
 </script>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="assets/shared/supabase-optional.js"></script>
 <script src="./assets/shared/pin-comments.js"></script>
 <template id="review-template">
 {
@@ -1456,12 +1352,13 @@
     {
       "id": "file-ai-summary",
       "title": "2. AI 解读",
-      "body": "AI 解读区展示对原文件的摘要、重点知识点、可追溯引用和可继续提问入口。",
+      "body": "AI 解读区固定为 AI 摘要和相关 Wiki 两个入口，帮助老师理解这份文件的内容价值和被哪些 Wiki 使用。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "AI 解读区展示对原文件的摘要、重点知识点、可追溯引用和可继续提问入口。"
+            "AI 摘要展示文件概括、适用范围、关键页码和使用建议。",
+            "相关 Wiki 展示这份文件进入了哪些 Wiki，以及对应页码和贡献说明。"
           ]
         },
         {
@@ -1470,11 +1367,11 @@
           "items": [
             {
               "label": "查看摘要",
-              "text": "老师打开文件后看到 AI 摘要和重点条目。"
+              "text": "老师打开文件后看到 AI 摘要，快速判断这份资料适合什么场景。"
             },
             {
-              "label": "定位引用",
-              "text": "点击摘要中的来源或页码，原文滚动到对应位置。"
+              "label": "查看相关 Wiki",
+              "text": "切换到相关 Wiki，了解这份文件被哪些 Wiki 吸收，以及贡献了哪些内容。"
             },
             {
               "label": "继续提问",
@@ -1487,13 +1384,14 @@
           "items": [
             "AI 解读必须能追溯到原文位置。",
             "摘要是辅助理解，不替代原文。",
-            "继续提问应限定在当前文件或明确展示上下文范围。"
+            "继续提问应限定在当前文件或明确展示上下文范围。",
+            "同主题资料、题目集不作为文件页 AI 解读的一级 tab；如需展示，可作为 AI 摘要中的建议内容。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "解读数据包含摘要、知识点、引用页码、关联词条、对话上下文范围。"
+            "解读数据包含文件摘要、适用范围、关键页码、使用建议、相关 Wiki、引用位置、贡献说明和对话上下文范围。"
           ]
         },
         {
