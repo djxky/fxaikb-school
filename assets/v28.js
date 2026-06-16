@@ -237,12 +237,12 @@ function renderTopSearchResults(keyword){
 
   /* 无命中态 · 给一个 AI 兜底 + 提示当前 scope 影响 */
   if(!hits.length){
-    /* 如果当前 scope 不是 all，看看 all 范围下是否有结果 → 引导用户切到全部 */
+    /* 如果当前 scope 没命中，看看更大范围下是否有结果 */
     const allHits = scope !== 'all'
       ? TOP_SEARCH_POOL.filter(it => it.main.toLowerCase().includes(kwLower) || it.sub.toLowerCase().includes(kwLower)).length
       : 0;
     const scopeHint = (scope !== 'all' && allHits > 0)
-      ? `当前范围"${escapeHtml(scopeLabel)}"内没找到，全部知识库内有 ${allHits} 条`
+      ? `当前范围"${escapeHtml(scopeLabel)}"内没找到，其他范围内有 ${allHits} 条`
       : '换个关键字试试，或让 AI 帮你找';
     const switchAllBtn = (scope !== 'all' && allHits > 0)
       ? `<button class="top-search-empty-btn top-search-empty-btn--ghost" onclick="switchTopSearchScope('all')">

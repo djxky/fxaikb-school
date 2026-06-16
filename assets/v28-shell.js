@@ -403,6 +403,14 @@
   function getAllKbIds(){
     return KB_ITEMS.filter(i => i.scope === 'personal' || i.scope === 'team').map(i => i.id);
   }
+  function getDefaultChatScopeIds(){
+    const school = KB_ITEMS.find(i => i.id === 'school');
+    if(school) return ['school'];
+    const team = KB_ITEMS.find(i => i.scope === 'team');
+    if(team) return [team.id];
+    const personal = KB_ITEMS.find(i => i.scope === 'personal');
+    return personal ? [personal.id] : [];
+  }
   function loadChatScopeIds(){
     try {
       const raw = sessionStorage.getItem(CHAT_SCOPE_STORAGE_KEY);
@@ -415,7 +423,7 @@
         }
       }
     } catch(_){}
-    return getAllKbIds();
+    return getDefaultChatScopeIds();
   }
   function saveChatScopeIds(ids){
     try {
@@ -425,8 +433,7 @@
   let CHAT_SCOPE_IDS = loadChatScopeIds();
 
   function getChatScopeIds(){
-    /* 兜底：scope 为空时回到全选 */
-    if(!CHAT_SCOPE_IDS || !CHAT_SCOPE_IDS.length) CHAT_SCOPE_IDS = getAllKbIds();
+    if(!CHAT_SCOPE_IDS || !CHAT_SCOPE_IDS.length) CHAT_SCOPE_IDS = getDefaultChatScopeIds();
     return CHAT_SCOPE_IDS.slice();
   }
   function setChatScopeIds(ids){
@@ -436,9 +443,7 @@
     syncChatScopeLabels();
   }
   function getChatScopeLabel(){
-    const all = getAllKbIds();
     const ids = getChatScopeIds();
-    if(ids.length === all.length) return '全部知识库';
     if(ids.length === 1){
       const item = KB_ITEMS.find(i => i.id === ids[0]);
       return item ? item.name : ids[0];
