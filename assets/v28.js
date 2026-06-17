@@ -54,7 +54,7 @@ function accountMenuAction(label){
 /* ============================================================
  * 顶栏搜索 · 实时筛选 + 关键字高亮 + 类型分组
  * ------------------------------------------------------------
- * mock 数据池覆盖 4 种类型（Wiki / 文件 / 题目 / 对话）
+ * mock 数据池覆盖 2 种类型（Wiki / 文件）
  * 关键字模糊匹配 main + sub 字段，命中处 <mark> 高亮
  * 空输入态显示"推荐内容"前 4 条；无命中态显示空态 + AI 兜底
  * ============================================================ */
@@ -71,28 +71,36 @@ const TOP_SEARCH_SCOPES = [
   { id:'school',   label:'学校知识库', group:'school' }
 ];
 
-/* mock 数据池 · kb 字段只有 personal / school 两种 */
+/* mock 数据池 · kb 字段只有 personal / school 两种；传统搜索只做标题定位 */
 const TOP_SEARCH_POOL = [
   /* Wiki 词条 */
-  { type:'wiki', label:'Wiki', icon:'book-open', kb:'school',   main:'二次函数图像与性质', sub:'Wiki · 学校知识库 · 引用 12 份资料', href:'wiki-entry.html' },
-  { type:'wiki', label:'Wiki', icon:'book-open', kb:'school',   main:'相似三角形的判定方法', sub:'Wiki · 学校知识库 · 引用 8 份资料', href:'wiki-entry.html' },
-  { type:'wiki', label:'Wiki', icon:'book-open', kb:'school',   main:'圆与切线的位置关系', sub:'Wiki · 学校知识库 · 引用 5 份资料', href:'wiki-entry.html' },
-  { type:'wiki', label:'Wiki', icon:'book-open', kb:'school',   main:'勾股定理及其逆定理', sub:'Wiki · 学校知识库 · 引用 9 份资料', href:'wiki-entry.html' },
+  { type:'wiki', label:'主题', icon:'book-open', kb:'school',   main:'二次函数图像与性质', sub:'学校知识库', href:'wiki-entry.html' },
+  { type:'wiki', label:'主题', icon:'book-open', kb:'school',   main:'相似三角形的判定方法', sub:'学校知识库', href:'wiki-entry.html' },
+  { type:'wiki', label:'主题', icon:'book-open', kb:'school',   main:'圆与切线的位置关系', sub:'学校知识库', href:'wiki-entry.html' },
+  { type:'wiki', label:'主题', icon:'book-open', kb:'school',   main:'勾股定理及其逆定理', sub:'学校知识库', href:'wiki-entry.html' },
   /* 文件 */
-  { type:'file', label:'文件', icon:'presentation',     kb:'personal', main:'二次函数·导入课件.pptx', sub:'文件 · 我的知识库 · 4.2 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'file-text',        kb:'school',   main:'二次函数公开课教案.docx', sub:'文件 · 学校知识库 · 王老师上传 · 1.8 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'image',            kb:'school',   main:'相似三角形板书照片.jpg', sub:'文件 · 学校知识库 · 李老师上传 · 2.1 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'file-spreadsheet', kb:'personal', main:'八年级期中成绩单.xlsx', sub:'文件 · 我的知识库 · 38 KB', href:'file-preview.html' },
-  /* 题目 */
-  { type:'qbank', label:'题目', icon:'file-stack', kb:'school', main:'二次函数分层练习题组', sub:'题库 · 学校知识库 · 38 道 · A/B/C 三难度', href:'ai-qbank.html' },
-  { type:'qbank', label:'题目', icon:'file-stack', kb:'school', main:'相似三角形综合训练', sub:'题库 · 学校知识库 · 24 道', href:'ai-qbank.html' },
-  /* 对话 · 归 personal */
-  { type:'chat', label:'对话', icon:'message-square', kb:'personal', main:'围绕「二次函数」出 5 道分层练习', sub:'对话 · 昨天 · 12 条消息', href:'chat-history.html' },
-  { type:'chat', label:'对话', icon:'message-square', kb:'personal', main:'勾股定理课件 12 页大纲', sub:'对话 · 3 天前 · 8 条消息', href:'chat-history.html' }
+  { type:'file', label:'文件', icon:'presentation',     kb:'personal', main:'二次函数·导入课件.pptx', sub:'我的知识库 · 4.2 MB', href:'file-preview.html' },
+  { type:'file', label:'文件', icon:'file-text',        kb:'school',   main:'二次函数公开课教案.docx', sub:'学校知识库 · 1.8 MB', href:'file-preview.html' },
+  { type:'file', label:'文件', icon:'image',            kb:'school',   main:'相似三角形板书照片.jpg', sub:'学校知识库 · 2.1 MB', href:'file-preview.html' },
+  { type:'file', label:'文件', icon:'file-spreadsheet', kb:'personal', main:'八年级期中成绩单.xlsx', sub:'我的知识库 · 38 KB', href:'file-preview.html' }
 ];
 
 let _topSearchDebounce = null;
 let _topSearchScope = 'all';  /* 当前搜索范围 · 默认全部 */
+
+function getFixedTopSearchScope(){
+  const pageId = document.body?.dataset?.page || '';
+  const kb = document.getElementById('app')?.dataset?.kb || '';
+  if(pageId === 'wiki-home' || kb === 'school') return 'school';
+  if(pageId === 'personal-home' || kb === 'personal') return 'personal';
+  return null;
+}
+
+function getTopSearchPlaceholder(scopeId){
+  if(scopeId === 'school') return '搜索学校知识库的标题或文件名…';
+  if(scopeId === 'personal') return '搜索我的知识库标题或文件名…';
+  return '搜索知识库标题或文件名…';
+}
 
 function ensureTopSearchPanel(){
   let panel = document.getElementById('top-search-panel');
@@ -102,29 +110,40 @@ function ensureTopSearchPanel(){
   const anchor = document.querySelector('.topbar') || document.querySelector('.page-header');
   if(!workspace || !anchor) return null;
 
+  const fixedScope = getFixedTopSearchScope();
+  if(fixedScope) _topSearchScope = fixedScope;
+
   panel = document.createElement('div');
   panel.className = 'top-search-panel';
   panel.id = 'top-search-panel';
   panel.innerHTML = `
     <div class="top-search-input">
       <i data-lucide="search"></i>
-      <input id="top-search-input" type="text" placeholder="搜索 Wiki、文件、题目、对话…" autocomplete="off"
+      <input id="top-search-input" type="text" placeholder="${escapeHtml(getTopSearchPlaceholder(_topSearchScope))}" autocomplete="off"
              oninput="onTopSearchInput(this.value)"
              onkeydown="if(event.key==='Escape'){ closeTopSearch(); }" />
       <span class="spot-esc" onclick="closeTopSearch()">Esc</span>
     </div>
     <div class="top-search-scope">
-      <button class="top-search-scope-trigger" id="top-search-scope-trigger"
-              onclick="toggleTopSearchScopeDropdown(event)"
-              aria-haspopup="listbox" aria-expanded="false">
-        <span class="top-search-scope-trigger-label">
-          范围 · <b id="top-search-scope-current">${escapeHtml(getScopeLabel(_topSearchScope))}</b>
-        </span>
-        <i data-lucide="chevron-down"></i>
-      </button>
-      <div class="top-search-scope-dropdown" id="top-search-scope-dropdown" role="listbox">
-        ${renderScopeDropdownItems()}
-      </div>
+      ${fixedScope ? `
+        <div class="top-search-scope-trigger is-fixed" id="top-search-scope-trigger" aria-disabled="true">
+          <span class="top-search-scope-trigger-label">
+            范围 · <b id="top-search-scope-current">${escapeHtml(getScopeLabel(_topSearchScope))}</b>
+          </span>
+        </div>
+      ` : `
+        <button class="top-search-scope-trigger" id="top-search-scope-trigger"
+                onclick="toggleTopSearchScopeDropdown(event)"
+                aria-haspopup="listbox" aria-expanded="false">
+          <span class="top-search-scope-trigger-label">
+            范围 · <b id="top-search-scope-current">${escapeHtml(getScopeLabel(_topSearchScope))}</b>
+          </span>
+          <i data-lucide="chevron-down"></i>
+        </button>
+        <div class="top-search-scope-dropdown" id="top-search-scope-dropdown" role="listbox">
+          ${renderScopeDropdownItems()}
+        </div>
+      `}
     </div>
     <div class="top-search-results" id="top-search-results"></div>
   `;
@@ -139,6 +158,7 @@ function getScopeLabel(scopeId){
 }
 
 function renderScopeDropdownItems(){
+  if(getFixedTopSearchScope()) return '';
   /* 按 group 分段：all → mine → team
    * 用 group 字段做分隔标签，让"我的"和"团队"视觉分开
    */
@@ -163,6 +183,7 @@ function renderScopeDropdownItems(){
 /* 打开/关闭下拉 · 点外部自动关闭由全局 click 监听处理 */
 function toggleTopSearchScopeDropdown(event){
   if(event) event.stopPropagation();
+  if(getFixedTopSearchScope()) return;
   const dropdown = document.getElementById('top-search-scope-dropdown');
   const trigger = document.getElementById('top-search-scope-trigger');
   if(!dropdown || !trigger) return;
@@ -180,6 +201,8 @@ function closeTopSearchScopeDropdown(){
 
 /* 切换搜索范围 · 重新渲染下拉 + 结果 */
 function switchTopSearchScope(scopeId){
+  const fixedScope = getFixedTopSearchScope();
+  if(fixedScope) scopeId = fixedScope;
   _topSearchScope = scopeId;
   /* 更新触发器显示的当前选中名 */
   const cur = document.getElementById('top-search-scope-current');
@@ -205,6 +228,8 @@ function renderTopSearchResults(keyword){
   const wrap = document.getElementById('top-search-results');
   if(!wrap) return;
   const kw = (keyword || '').trim();
+  const fixedScope = getFixedTopSearchScope();
+  if(fixedScope) _topSearchScope = fixedScope;
   const scope = _topSearchScope;
   const scopeLabel = (TOP_SEARCH_SCOPES.find(s => s.id === scope) || {}).label || '全部';
 
@@ -216,8 +241,8 @@ function renderTopSearchResults(keyword){
    */
   if(!kw){
     const hintText = scope === 'all'
-      ? '输入关键字搜索 Wiki、文件、题目、对话'
-      : `输入关键字 · 范围 ${escapeHtml(scopeLabel)}`;
+      ? '输入标题或文件名关键字'
+      : `输入标题或文件名 · 范围 ${escapeHtml(scopeLabel)}`;
     wrap.innerHTML = `
       <div class="top-search-hint">
         <i data-lucide="search"></i>
@@ -228,22 +253,24 @@ function renderTopSearchResults(keyword){
     return;
   }
 
-  /* 模糊匹配 main + sub · 同时受 scope 限制 */
+  /* 模糊匹配标题 / 文件名 · 同时受 scope 限制 */
   const kwLower = kw.toLowerCase();
   const hits = TOP_SEARCH_POOL.filter(it =>
     inScope(it) &&
-    (it.main.toLowerCase().includes(kwLower) || it.sub.toLowerCase().includes(kwLower))
+    it.main.toLowerCase().includes(kwLower)
   );
 
   /* 无命中态 · 给一个 AI 兜底 + 提示当前 scope 影响 */
   if(!hits.length){
     /* 如果当前 scope 没命中，看看更大范围下是否有结果 */
-    const allHits = scope !== 'all'
-      ? TOP_SEARCH_POOL.filter(it => it.main.toLowerCase().includes(kwLower) || it.sub.toLowerCase().includes(kwLower)).length
+    const allHits = !fixedScope && scope !== 'all'
+      ? TOP_SEARCH_POOL.filter(it => it.main.toLowerCase().includes(kwLower)).length
       : 0;
-    const scopeHint = (scope !== 'all' && allHits > 0)
+    const scopeHint = fixedScope
+      ? '当前知识库内未找到匹配标题，可换个关键字或让 AI 帮你找'
+      : (scope !== 'all' && allHits > 0)
       ? `当前范围"${escapeHtml(scopeLabel)}"内没找到，其他范围内有 ${allHits} 条`
-      : '换个关键字试试，或让 AI 帮你找';
+      : '换个标题关键字试试，或让 AI 帮你找';
     const switchAllBtn = (scope !== 'all' && allHits > 0)
       ? `<button class="top-search-empty-btn top-search-empty-btn--ghost" onclick="switchTopSearchScope('all')">
            <i data-lucide="layers"></i><span>切到全部 · ${allHits} 条</span>
@@ -266,21 +293,10 @@ function renderTopSearchResults(keyword){
     return;
   }
 
-  /* 按类型分组渲染 · 让结果有结构感 */
-  const groups = {};
-  hits.forEach(it => {
-    if(!groups[it.type]) groups[it.type] = { label: it.label, items: [] };
-    groups[it.type].items.push(it);
-  });
-  const order = ['wiki', 'file', 'qbank', 'chat'];
+  /* 简单列表渲染 · 传统搜索只负责快速定位 */
   const scopeBadge = scope === 'all' ? '' : ` · 范围 <b>${escapeHtml(scopeLabel)}</b>`;
   let html = `<div class="top-search-count">找到 ${hits.length} 条结果${scopeBadge}</div>`;
-  order.forEach(t => {
-    if(!groups[t]) return;
-    const g = groups[t];
-    html += `<div class="top-search-section-label">${g.label} · ${g.items.length}</div>`;
-    html += g.items.map(it => itemHtml(it, kw)).join('');
-  });
+  html += hits.map(it => itemHtml(it, kw)).join('');
   wrap.innerHTML = html;
   if(window.lucide) lucide.createIcons();
 }
@@ -1138,7 +1154,7 @@ function showToast(msg, duration = 2200){
 
 /* ══════════════════════════════════════════════
    KB 文件夹演示数据（个人 + 团队，共用一份渲染逻辑）
-   · 个人 KB（personal）   : 张老师私人，87 份资料 / 5 个文件夹
+   · 个人 KB（personal）   : 张老师私人，41 份演示资料 / 5 个文件夹
    · 团队 KB（math-group） : 张老师作为 admin，演示完整管理能力
    · 其它团队 KB           : 按 demo 演示"非管理员视图"，仅展示 mock 列表
    ·
@@ -1146,69 +1162,76 @@ function showToast(msg, duration = 2200){
    · CRUD 仍只在 admin KB 起效（演示数据 → localStorage 持久化）
    ══════════════════════════════════════════════ */
 /* 旧名保留兼容（个人 KB 的 localStorage key 已经存了一些用户数据） */
-const PERSONAL_KB_STORAGE_KEY = 'v28_personal_kb_state';
+const PERSONAL_KB_STORAGE_KEY = 'v28_personal_kb_state_wiki_demo_v2';
 /* 根目录"散文件"桶的 id：显式给一个非空字符串便于复用 files[id] 索引 */
 const ROOT_FOLDER_ID = '__root__';
 
 const PERSONAL_KB_DEFAULT = {
   /* parentId === null  → 顶层（根目录直接子节点） */
   folders: [
-    { id:'lessons', parentId:null, name:'教案 / 课件', count:18 },
-    { id:'tests',   parentId:null, name:'试卷 / 习题', count:24 },
-    { id:'class',   parentId:null, name:'学情 / 学生作业', count:16 },
-    { id:'notes',   parentId:null, name:'笔记 / 备课参考', count:14 },
-    { id:'other',   parentId:null, name:'其他', count:15 },
+    { id:'prep', parentId:null, name:'备课资源', count:12 },
+    { id:'teaching', parentId:null, name:'课堂教学', count:7 },
+    { id:'assessment', parentId:null, name:'作业与测评', count:11 },
+    { id:'exam', parentId:null, name:'复习备考', count:8 },
+    { id:'notes', parentId:null, name:'我的笔记', count:3 },
   ],
   /* 每个文件夹的演示文件（每个文件夹列 8-10 条，剩下作"还有 N 条"占位） */
   files: {
-    lessons: [
-      { name:'二次函数第二课时·导入与图像.pptx', icon:'presentation', source:'张老师', time:'今天 10:42', size:'8.2 MB', wiki:'二次函数核心考点' },
+    prep: [
+      { name:'二次函数第二课时·导入与图像.pptx', icon:'presentation', source:'张老师', time:'今天 10:42', size:'8.2 MB', wiki:'二次函数图像与性质' },
       { name:'相似三角形判定·公开课设计.docx', icon:'file-text', source:'张老师', time:'昨天 16:08', size:'1.4 MB', wiki:'相似三角形判定与应用' },
       { name:'一元二次方程·配方法教学设计.docx', icon:'file-text', source:'张老师', time:'12-09 09:31', size:'860 KB', wiki:'一元二次方程根的判别式' },
-      { name:'圆的切线性质·教学动画.mp4', icon:'video', source:'张老师', time:'12-05 14:22', size:'34 MB', wiki:'圆与三角形综合' },
-      { name:'二次函数对称轴·板书图.jpg', icon:'image', source:'张老师', time:'12-03 11:08', size:'2.1 MB', wiki:'二次函数核心考点' },
       { name:'相似三角形·实际应用例题.pptx', icon:'presentation', source:'张老师', time:'11-28 17:50', size:'5.6 MB', wiki:'相似三角形判定与应用' },
       { name:'函数综合·中考压轴专题.pptx', icon:'presentation', source:'张老师', time:'11-22 10:40', size:'9.8 MB', wiki:null },
       { name:'圆的辅助线·常用套路.docx', icon:'file-text', source:'张老师', time:'11-18 15:20', size:'620 KB', wiki:'圆与三角形综合' },
-      { name:'勾股定理·章末复习课件.pptx', icon:'presentation', source:'张老师', time:'11-12 09:00', size:'7.4 MB', wiki:null },
+      { name:'复习课教学设计·函数单元.docx', icon:'file-text', source:'张老师', time:'11-16 19:30', size:'740 KB', wiki:'函数图像变换' },
+      { name:'锐角三角函数·基础概念课件.pptx', icon:'presentation', source:'张老师', time:'11-14 08:45', size:'4.8 MB', wiki:'锐角三角函数应用' },
+      { name:'反比例函数·错题导入课件.pptx', icon:'presentation', source:'张老师', time:'11-12 09:00', size:'5.1 MB', wiki:'反比例函数' },
+      { name:'九年级数学·期末复习计划.docx', icon:'file-text', source:'张老师', time:'11-10 17:20', size:'360 KB', wiki:null },
+      { name:'二次函数单元目标与重难点.docx', icon:'file-text', source:'张老师', time:'11-08 20:10', size:'280 KB', wiki:'二次函数图像与性质' },
+      { name:'圆与三角形综合·例题整理.docx', icon:'file-text', source:'张老师', time:'11-06 18:40', size:'510 KB', wiki:'圆与三角形综合' },
     ],
-    tests: [
-      { name:'八(3)班·二次函数周测卷.pdf', icon:'file', source:'张老师', time:'今天 09:18', size:'1.8 MB', wiki:'二次函数核心考点' },
-      { name:'海淀 2026 一模卷·数学.pdf', icon:'file', source:'网络资料', time:'昨天 21:30', size:'3.2 MB', wiki:null },
+    teaching: [
+      { name:'二次函数对称轴·板书图.jpg', icon:'image', source:'张老师', time:'今天 09:18', size:'2.1 MB', wiki:'二次函数图像与性质' },
+      { name:'圆的切线性质·教学动画.mp4', icon:'video', source:'张老师', time:'12-05 14:22', size:'34 MB', wiki:'圆与三角形综合' },
+      { name:'课堂追问记录·相似三角形.docx', icon:'file-text', source:'张老师', time:'12-03 18:20', size:'160 KB', wiki:'相似三角形判定与应用' },
+      { name:'函数图像平移·课堂活动照片.jpg', icon:'image', source:'张老师', time:'11-30 10:25', size:'3.4 MB', wiki:'函数图像变换' },
+      { name:'公开课评课记录·二次函数.docx', icon:'file-text', source:'张老师', time:'11-28 16:10', size:'220 KB', wiki:'二次函数图像与性质' },
+      { name:'课堂提问 4 类问句.docx', icon:'file-text', source:'张老师', time:'11-15 22:30', size:'95 KB', wiki:'课堂提问 4 类问句' },
+      { name:'图像法导入·教学反思.docx', icon:'file-text', source:'张老师', time:'11-12 21:00', size:'110 KB', wiki:null },
+    ],
+    assessment: [
+      { name:'八(3)班·二次函数周测卷.pdf', icon:'file', source:'张老师', time:'今天 09:18', size:'1.8 MB', wiki:'二次函数图像与性质' },
       { name:'相似三角形·专项练习 30 题.docx', icon:'file-text', source:'张老师', time:'12-10 14:00', size:'1.1 MB', wiki:'相似三角形判定与应用' },
       { name:'一元二次方程·根的判别式分层练习.docx', icon:'file-text', source:'张老师', time:'12-07 19:42', size:'780 KB', wiki:'一元二次方程根的判别式' },
-      { name:'圆·中考真题汇编 2020-2025.pdf', icon:'file', source:'网络资料', time:'12-04 10:15', size:'5.6 MB', wiki:'圆与三角形综合' },
-      { name:'函数综合·压轴模拟 10 套.pdf', icon:'file', source:'网络资料', time:'11-30 16:48', size:'4.4 MB', wiki:null },
-      { name:'二次函数·配套习题汇编.pdf', icon:'file', source:'张老师', time:'11-25 11:30', size:'2.9 MB', wiki:'二次函数核心考点' },
+      { name:'二次函数·配套习题汇编.pdf', icon:'file', source:'张老师', time:'11-25 11:30', size:'2.9 MB', wiki:'二次函数图像与性质' },
       { name:'相似三角形·错题精选.docx', icon:'file-text', source:'张老师', time:'11-19 17:55', size:'520 KB', wiki:'相似三角形判定与应用' },
       { name:'八(3)班·期中数学卷及答案.pdf', icon:'file', source:'教研组', time:'11-10 08:20', size:'2.3 MB', wiki:null },
-    ],
-    class: [
       { name:'八(3)班·作业完成情况周表.xlsx', icon:'sheet', source:'飞象自动汇总', time:'今天 07:15', size:'180 KB', wiki:'本学期作业完成质量趋势' },
       { name:'八(3)班·二次函数单元错题集.pdf', icon:'file', source:'张老师', time:'昨天 22:08', size:'1.2 MB', wiki:'八(3)班数学薄弱点画像' },
       { name:'张明·上周周测错题分析.docx', icon:'file-text', source:'张老师', time:'12-08 18:25', size:'340 KB', wiki:'八(3)班数学薄弱点画像' },
       { name:'李婷·学情访谈记录.docx', icon:'file-text', source:'张老师', time:'12-02 14:50', size:'180 KB', wiki:'八(3)班数学薄弱点画像' },
       { name:'班级学情·月度趋势图.png', icon:'image', source:'飞象自动生成', time:'11-30 23:00', size:'920 KB', wiki:'本学期作业完成质量趋势' },
-      { name:'八(3)班·相似三角形错因统计.xlsx', icon:'sheet', source:'飞象自动汇总', time:'11-26 16:33', size:'120 KB', wiki:'八(3)班数学薄弱点画像' },
-      { name:'家长会·学情汇报材料.pptx', icon:'presentation', source:'张老师', time:'11-18 09:40', size:'4.2 MB', wiki:null },
-      { name:'八(3)班·上学期总评分析.docx', icon:'file-text', source:'张老师', time:'10-28 11:15', size:'420 KB', wiki:'本学期作业完成质量趋势' },
+    ],
+    exam: [
+      { name:'海淀 2026 一模卷·数学.pdf', icon:'file', source:'网络资料', time:'昨天 21:30', size:'3.2 MB', wiki:'中考压轴 · 函数综合' },
+      { name:'圆·中考真题汇编 2020-2025.pdf', icon:'file', source:'网络资料', time:'12-04 10:15', size:'5.6 MB', wiki:'圆与三角形综合' },
+      { name:'函数综合·压轴模拟 10 套.pdf', icon:'file', source:'网络资料', time:'11-30 16:48', size:'4.4 MB', wiki:'中考压轴 · 函数综合' },
+      { name:'动点问题与变化规律·专题练习.docx', icon:'file-text', source:'张老师', time:'11-26 16:33', size:'760 KB', wiki:'动点问题与变化规律' },
+      { name:'一模二模试卷讲评模板.docx', icon:'file-text', source:'张老师', time:'11-18 09:40', size:'420 KB', wiki:'中考压轴 · 函数综合' },
+      { name:'新定义题型训练.pdf', icon:'file', source:'网络资料', time:'11-10 08:20', size:'1.9 MB', wiki:null },
+      { name:'命题趋势·近 5 年中考分析.docx', icon:'file-text', source:'张老师', time:'10-30 14:20', size:'520 KB', wiki:null },
+      { name:'中考考纲·2026 版.pdf', icon:'file', source:'官方文件', time:'09-15 10:30', size:'2.4 MB', wiki:null },
     ],
     notes: [
-      { name:'王老师·公开课听课记录.docx', icon:'file-text', source:'张老师', time:'12-11 15:42', size:'160 KB', wiki:null },
-      { name:'教研组·二次函数研讨纪要.docx', icon:'file-text', source:'教研组', time:'12-06 17:10', size:'220 KB', wiki:'二次函数核心考点' },
       { name:'分层练习设计法·学习笔记.docx', icon:'file-text', source:'张老师', time:'11-29 21:50', size:'140 KB', wiki:'分层练习设计法' },
       { name:'错题归因·四类错误分类法.docx', icon:'file-text', source:'张老师', time:'11-23 19:08', size:'180 KB', wiki:'错题归因模板' },
-      { name:'课堂提问技巧·心得整理.docx', icon:'file-text', source:'张老师', time:'11-15 22:30', size:'95 KB', wiki:null },
-      { name:'数学组教研周报·11月.pdf', icon:'file', source:'教研组', time:'11-30 12:00', size:'380 KB', wiki:null },
-      { name:'相似三角形·教学反思.docx', icon:'file-text', source:'张老师', time:'11-12 21:00', size:'110 KB', wiki:'相似三角形判定与应用' },
-      { name:'命题趋势·近 5 年中考分析.docx', icon:'file-text', source:'张老师', time:'10-30 14:20', size:'520 KB', wiki:null },
+      { name:'飞象使用指南.pdf', icon:'file', source:'飞象官方', time:'你加入飞象时', size:'1.2 MB', wiki:null, isGuide:true },
     ],
     other: [
       { name:'课程标准·初中数学.pdf', icon:'file', source:'官方文件', time:'09-01 09:00', size:'1.8 MB', wiki:null },
-      { name:'中考考纲·2026 版.pdf', icon:'file', source:'官方文件', time:'09-15 10:30', size:'2.4 MB', wiki:null },
       { name:'教学计划·本学期数学.docx', icon:'file-text', source:'张老师', time:'09-08 08:20', size:'180 KB', wiki:null },
       { name:'本学期教学反思·上半.docx', icon:'file-text', source:'张老师', time:'10-30 22:00', size:'320 KB', wiki:null },
-      { name:'飞象使用指南.pdf', icon:'file', source:'飞象官方', time:'你加入飞象时', size:'1.2 MB', wiki:null, isGuide:true },
       { name:'校历·2025-2026 学年.pdf', icon:'file', source:'学校', time:'08-25 11:00', size:'180 KB', wiki:null },
       { name:'安全教育材料.pdf', icon:'file', source:'学校', time:'08-30 14:00', size:'420 KB', wiki:null },
     ],
@@ -1216,10 +1239,11 @@ const PERSONAL_KB_DEFAULT = {
   },
   /* 每个文件夹关联的 wiki（演示给文件夹视图顶部 chips） */
   wikiByFolder: {
-    lessons: ['二次函数核心考点', '相似三角形判定与应用', '圆与三角形综合'],
-    tests:   ['二次函数核心考点', '相似三角形判定与应用', '一元二次方程根的判别式'],
-    class:   ['八(3)班数学薄弱点画像', '本学期作业完成质量趋势'],
-    notes:   ['分层练习设计法', '错题归因模板'],
+    prep: ['二次函数图像与性质', '相似三角形判定与应用', '圆与三角形综合', '函数图像变换'],
+    teaching: ['二次函数图像与性质', '课堂提问 4 类问句'],
+    assessment: ['作业与测评', '八(3)班数学薄弱点画像', '本学期作业完成质量趋势'],
+    exam: ['中考压轴 · 函数综合', '动点问题与变化规律'],
+    notes: ['分层练习设计法', '错题归因模板'],
     other:   [],
   },
 };
@@ -1589,7 +1613,7 @@ function personalOpenFolder(folderId){
    · 清空文件夹视图的所有文件
    · Hero 数字归零 + 文案换成"已清空" */
 function clearDemoData(){
-  if(!confirmDemo('这会清空所有演示数据（87 份资料 + 16 个 Wiki），仅在本次演示中生效。继续吗？')) return;
+  if(!confirmDemo('这会清空所有演示数据（41 份资料 + 16 个主题），仅在本次演示中生效。继续吗？')) return;
 
   PERSONAL_KB_DATA.folders.forEach(f => { f.count = 0; });
   Object.keys(PERSONAL_KB_DATA.files).forEach(k => { PERSONAL_KB_DATA.files[k] = []; });
@@ -1702,9 +1726,9 @@ function syncPersonalHeroCounts(){
   if(heroMeta){
     const folderCount = PERSONAL_KB_DATA.folders.length;
     heroMeta.innerHTML = `
-      <span class="item"><b>${getPersonalTotalCount()}</b> 份资料</span>
+      <span class="item"><b>${getPersonalTotalCount()}</b> 份演示资料</span>
       <span class="sep">·</span>
-      <span class="item"><b>16</b> 个 Wiki 页</span>
+      <span class="item"><b>16</b> 个主题</span>
       <span class="sep">·</span>
       <span class="item"><b>${folderCount}</b> 个文件夹</span>
       <span class="sep">·</span>

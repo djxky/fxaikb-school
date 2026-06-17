@@ -859,6 +859,15 @@ body[data-page="wiki-entry"] .app[data-view="folder"] .bottom-bar{
   background:var(--surface-3);
   border-color:var(--text-4);
 }
+.top-search-scope-trigger.is-fixed{
+  cursor:default;
+  background:var(--gold-bg);
+  border-color:rgba(168,126,44,.18);
+}
+.top-search-scope-trigger.is-fixed:hover{
+  background:var(--gold-bg);
+  border-color:rgba(168,126,44,.18);
+}
 .top-search-scope-trigger [data-lucide]{
   width:13px; height:13px;
   color:var(--text-3);

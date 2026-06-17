@@ -1628,18 +1628,20 @@
 <script src="./assets/shared/pin-comments.js?v=20260615f"></script>
 <template id="review-template">
 {
-  "title": "Wiki 词条 · 可追溯的知识页",
-  "summary": "Wiki 词条页是学校或个人知识库中最核心的内容页，强调正文、可追溯来源、关联词条、基于词条继续对话和快速创作。",
+  "title": "Wiki 页面 · 目录与内容两类",
+  "summary": "Wiki 页面分为目录 Wiki 和内容 Wiki。目录 Wiki 用来组织资料，例如九年级数学和备课资源；内容 Wiki 用来解释具体教学主题，例如二次函数图像与性质。两类页面都保留来源关系，右侧 AI 解读统一展示关联文件和相关 Wiki。",
   "sections": [
     {
       "id": "wiki-entry-body",
-      "title": "1. 词条正文",
-      "body": "词条正文展示 AI 整理后的结构化知识，包括摘要、要点、来源引用、关联词条和可继续使用的教学动作。",
+      "title": "1. Wiki 页面结构",
+      "body": "同一个 Wiki 页面承载两种内容形态：目录 Wiki 负责组织和进入，内容 Wiki 负责解释具体主题。页面通过 URL 或数据类型判断渲染哪一种结构。",
       "blocks": [
         {
-          "title": "功能说明",
+          "title": "页面类型",
           "body": [
-            "词条正文展示 AI 整理后的结构化知识，包括摘要、要点、来源引用、关联词条和可继续使用的教学动作。"
+            "目录 Wiki：顶部概览、主目录、近期更新。年级学科目录按单元与专题组织，教学场景目录按学科与年级组织。",
+            "内容 Wiki：正文、来源引用、关联文件、相关 Wiki 和基于本页继续提问。",
+            "文件页不是 Wiki 页面；点击来源文件进入文件预览。"
           ]
         },
         {
@@ -1647,12 +1649,12 @@
           "ordered": true,
           "items": [
             {
-              "label": "打开词条",
-              "text": "老师从学校知识库、个人知识库、图谱节点或搜索结果进入词条。"
+              "label": "进入 Wiki",
+              "text": "老师从学校知识库首页、搜索结果、近期更新或相关 Wiki 进入。"
             },
             {
-              "label": "阅读正文",
-              "text": "查看摘要、关键概念、教学建议和来源引用。"
+              "label": "判断页面类型",
+              "text": "目录 Wiki 展示目录和更新；内容 Wiki 展示正文和引用。"
             },
             {
               "label": "查看 AI 解读",
@@ -1667,7 +1669,8 @@
         {
           "title": "业务规则",
           "items": [
-            "词条必须保留来源引用，AI 整理内容不能脱离原文。",
+            "内容 Wiki 必须保留来源引用，AI 整理内容不能脱离原文。",
+            "目录 Wiki 必须展示可进入的具体 Wiki 或文件，不展示不可点击的伪入口。",
             "学校词条和个人词条需要明确归属。",
             "关联内容只展示当前老师有权限访问的资料。",
             "AI 解读的 tab 结构固定；文件名称、引用位置、贡献说明和关联原因由 AI 生成。"
@@ -1676,7 +1679,9 @@
         {
           "title": "数据说明",
           "items": [
-            "词条数据包含标题、正文、摘要、关联文件、引用位置、贡献说明、相关 Wiki、关联原因、归属知识库和更新时间。"
+            "directoryWiki 包含 title、type、summary、groups、recentUpdates、sourceIds、updatedAt。",
+            "contentWiki 包含 title、summary、bodySections、citations、relatedFiles、relatedWikis、updatedAt。",
+            "AI 解读数据包含关联文件、引用位置、贡献说明、相关 Wiki 和关联原因。"
           ]
         },
         {

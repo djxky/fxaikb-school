@@ -573,17 +573,17 @@
         <nav class="ph-crumb knowledge-header-crumb" aria-label="面包屑" data-root-name="学校知识库" data-root-icon="library">
           <span class="ph-crumb-current"><i data-lucide="library"></i><span>学校知识库</span></span>
           <span class="ph-crumb-sep" aria-hidden="true"><i data-lucide="chevron-right"></i></span>
-          <span class="ph-crumb-current"><span>目录首页</span></span>
+          <span class="ph-crumb-current"><span>Wiki 首页</span></span>
         </nav>
       </div>
       <div class="ph-right">
         <div class="ph-view-switcher" role="tablist" aria-label="视图切换">
-          <button class="ph-vs-btn vs-btn active" data-view="wiki" onclick="switchView('wiki')" role="tab" aria-selected="true"><i data-lucide="book-open"></i><span>目录</span></button>
+          <button class="ph-vs-btn vs-btn active" data-view="wiki" onclick="switchView('wiki')" role="tab" aria-selected="true"><i data-lucide="book-open"></i><span>Wiki</span></button>
           <button class="ph-vs-btn vs-btn" data-view="graph" onclick="switchView('graph')" role="tab" aria-selected="false"><i data-lucide="git-branch"></i><span>知识图谱</span></button>
           <button class="ph-vs-btn vs-btn" data-view="folder" onclick="switchView('folder')" role="tab" aria-selected="false"><i data-lucide="folder"></i><span>文件夹</span></button>
         </div>
         <div class="knowledge-header-actions wiki-header-actions">
-          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索主题、文件" aria-expanded="false">
+          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索学校知识库" aria-expanded="false">
             <i data-lucide="search"></i>
           </button>
           <span class="ph-action-sep" aria-hidden="true"></span>
@@ -595,7 +595,7 @@
           </button>
         </div>
         <div class="knowledge-header-actions folder-header-actions">
-          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索文件" aria-expanded="false">
+          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索学校知识库文件" aria-expanded="false">
             <i data-lucide="search"></i>
           </button>
           <span class="ph-action-sep" aria-hidden="true"></span>
@@ -1542,18 +1542,81 @@
 <script src="./assets/shared/pin-comments.js?v=20260615f"></script>
 <template id="review-template">
 {
-  "title": "学校知识库首页 · 最终方案",
-  "summary": "学校知识库首页定位为教学资料导航页：先呈现资料范围，再展示教学主题和教学场景入口。具体提问和检索由页面下方输入框承接。教学主题不是上传文件夹，不依赖老师是否手动建过文件夹；零散文件也会按学科、年级和专题归入主题。近期更新保留为回访入口，但不抢主路径。",
+  "title": "学校知识库 · 页面体系与 Wiki 逻辑",
+  "summary": "学校知识库由首页、目录 Wiki、内容 Wiki 和文件页组成。首页负责呈现全局覆盖和主要入口；目录 Wiki 负责按年级学科或教学场景组织资料；内容 Wiki 负责解释具体教学主题；文件页负责查看原始资料和 AI 对文件的理解。所有页面都围绕当前学校知识库工作，不跳到上传文件夹，也不跨知识库问答。",
   "sections": [
     {
+      "id": "school-wiki-page-system",
+      "title": "1. 页面体系",
+      "body": "这套知识库需要先让老师知道自己在哪一类页面、能看什么、点击后去哪里。第一版只保留四类页面：学校知识库首页、目录 Wiki、内容 Wiki 和文件页。",
+      "blocks": [
+        {
+          "title": "页面类型",
+          "type": "table",
+          "columns": [
+            "页面",
+            "作用",
+            "示例"
+          ],
+          "rows": [
+            {
+              "页面": "学校知识库首页",
+              "作用": "看学校知识库的整体覆盖范围，并进入知识目录、教学场景和近期更新。",
+              "示例": "school-wiki.html"
+            },
+            {
+              "页面": "目录 Wiki",
+              "作用": "按年级学科或教学场景组织资料，帮助老师从目录进入具体 Wiki 或文件。",
+              "示例": "九年级数学、备课资源"
+            },
+            {
+              "页面": "内容 Wiki",
+              "作用": "围绕一个具体教学主题生成正文、引用和相关内容。",
+              "示例": "二次函数图像与性质"
+            },
+            {
+              "页面": "文件页",
+              "作用": "预览原始资料，并展示 AI 摘要和该文件关联到哪些 Wiki。",
+              "示例": "二次函数·导入课件.pptx"
+            }
+          ]
+        },
+        {
+          "title": "顶部视图",
+          "body": [
+            "我的知识库和学校知识库使用同一组三视图：Wiki、知识图谱、文件夹。",
+            "Wiki 是默认视图，承接首页、目录 Wiki 和内容 Wiki。",
+            "知识图谱和文件夹是与 Wiki 并列的顶部视图，不放进 Wiki 正文或右侧 AI 解读。"
+          ]
+        },
+        {
+          "title": "Wiki 类型",
+          "body": [
+            "目录 Wiki 分为两类：年级学科目录 Wiki 和教学场景目录 Wiki。",
+            "年级学科目录 Wiki 采用：顶部概览、单元与专题目录、近期更新。",
+            "教学场景目录 Wiki 采用：顶部概览、按学科与年级、近期更新。",
+            "内容 Wiki 的正文结构由 AI 根据资料生成，但必须保留来源引用和相关内容。"
+          ]
+        },
+        {
+          "title": "AI 解读",
+          "body": [
+            "Wiki 页的 AI 解读固定为：关联文件、相关 Wiki。",
+            "文件页的 AI 解读固定为：AI 摘要、相关 Wiki。",
+            "实体、反向链接不作为老师端一级入口；知识图谱只作为顶部视图进入，不作为 AI 解读 tab。"
+          ]
+        }
+      ]
+    },
+    {
       "id": "school-wiki-overview",
-        "title": "1. 知识库概览",
+        "title": "2. 知识库概览",
         "body": "概览回答老师第一眼的问题：本知识库覆盖哪些教学资料。它只做全局范围说明，不承载复杂操作。",
       "blocks": [
         {
           "title": "页面展示",
           "body": [
-	            "学校名称、资料总量、主题数量、目录分组、最近更新时间。",
+	              "学校名称、文件数、主题数量、目录分组、最近更新时间。",
               "用一句话说明知识库覆盖范围，例如九年级数学复习、函数与几何专题、课堂教学、作业评价和中考压轴题。",
               "概览不再放按工作看、按主题看、按资料看三张卡，避免和下面的知识目录/教学场景入口重复。",
               "概览文案提示：可按教学主题和教学场景浏览资料。"
@@ -1574,20 +1637,22 @@
         {
           "title": "数据字段",
           "items": [
-            "overview 包含 title、summary、totalFiles、wikiPages、directoryGroups、updatedAt、coverageGroups、sourceIds。"
+              "overview 包含 title、summary、fileCount、wikiPages、directoryGroups、updatedAt、coverageGroups、sourceIds；fileCount 在学校知识库页面明确展示为文件数。"
           ]
         }
       ]
     },
     {
       "id": "school-wiki-bottom-composer",
-      "title": "2. 页面下方输入框",
-      "body": "提问、检索和继续追问统一由页面下方输入框承接，首页不再额外放一个搜索与提问模块。",
+      "title": "3. 搜索与提问入口",
+      "body": "顶部搜索用于快速找当前学校知识库内的主题标题和文件名；提问、正文检索和继续追问由页面下方输入框承接。",
       "blocks": [
         {
           "title": "页面职责",
           "body": [
-	            "老师想找课件、题单、教学设计或直接提问时，使用页面下方输入框。",
+	            "老师想按标题快速找主题或文件时，使用顶部搜索按钮。",
+	            "顶部搜索按钮固定搜索当前学校知识库，不展示全部/我的知识库/学校知识库范围切换。",
+	            "老师想按正文语义找资料、找题目、找课件或直接提问时，使用页面下方输入框。",
 	            "不在输入框上方展示常见问题按钮；问题建议只以输入框灰色 placeholder 轮播呈现。",
 	            "输入框前置标签固定展示“学校知识库”，表达当前回答范围，不展示“知识库问答”。",
 	            "学校知识库页的输入框范围固定为当前学校知识库，不能跨知识库问答。"
@@ -1601,6 +1666,8 @@
 	            "学校知识库问答不支持上传附件，输入框不展示附件按钮。",
 	            "输入问题后进入知识库问答或当前页面的对话态。",
 		            "回答必须只基于当前学校知识库，并展示引用来源、相关主题和相关文件。",
+	            "顶部搜索只匹配主题标题和文件名，不做正文命中、题目内容检索或复杂相关性排序。",
+	            "顶部搜索无结果时不提示其他知识库结果，也不提供切到全部，可引导老师用 AI 帮忙找。",
 	            "学校知识库页不展示知识库范围选择器，也不再展示额外范围注释文案。",
             "首页不要同时出现多个提问入口，避免老师分不清在哪里问。"
           ]
@@ -1608,6 +1675,10 @@
         {
           "title": "数据字段",
           "items": [
+	            "topSearchContext 包含 kbScope、allowedTypes、placeholder、matchFields。",
+	            "topSearchContext.kbScope 固定为 school/current，不允许切换为 all 或 personal。",
+	            "topSearchContext.allowedTypes 固定为 topic/file。",
+	            "topSearchContext.matchFields 固定为 title/name。",
 	            "composerContext 包含 kbScope、placeholderExamples、allowAttachments。",
 	            "kbScope 在学校知识库页固定为 school/current，不允许切换为 all。",
 	            "allowAttachments 固定为 false。",
@@ -1618,7 +1689,7 @@
     },
     {
       "id": "school-wiki-directory",
-      "title": "3. 教学主题",
+      "title": "4. 知识目录",
       "body": "教学主题回答老师想先看全貌的需求。首页直接展示按学科、年级和专题形成的主题目录，不再用不可点击的概览标签。",
       "blocks": [
         {
@@ -1656,14 +1727,15 @@
             "directoryPreview 包含 name、summary、topicCount、sourceIds。",
             "fullWikiDirectory 包含 groups、items、sourceIds、uncategorizedItems。",
             "每个 item 包含 title、topicCount 或 sourceCount、targetUrl。",
-            "gradeSubjectWiki 包含 name、grade、subject、summary、toc、topicGroups、recentUpdates。"
+            "gradeSubjectWiki 包含 name、grade、subject、summary、topicGroups、recentUpdates。",
+            "contentWiki 包含 title、summary、bodySections、citations、relatedFiles、relatedWikis、updatedAt。"
           ]
         }
       ]
     },
     {
       "id": "school-wiki-workflows",
-      "title": "4. 教学场景",
+      "title": "5. 教学场景",
       "body": "教学场景服务老师带着具体任务进入资料，例如备课、授课、作业评价和中考复习。首页展示为卡片入口，点击后进入对应场景主题。",
       "blocks": [
         {
@@ -1704,7 +1776,7 @@
     },
     {
       "id": "school-wiki-recent-updates",
-      "title": "5. 近期更新",
+      "title": "6. 近期更新",
       "body": "近期更新服务回访老师，让他们快速了解本周新增资料、主题更新和题型归类情况。",
       "blocks": [
         {
@@ -1740,7 +1812,7 @@
     },
     {
       "id": "school-wiki-governance-status",
-      "title": "6. 资料治理状态",
+      "title": "7. 资料治理状态",
       "body": "待确认资料属于资料治理状态，不作为老师端学校知识库首页模块展示；仅在管理员工作动态、资料管理页和上传结果页中提示和处理。",
       "blocks": [
         {
@@ -1771,8 +1843,8 @@
     },
     {
       "id": "school-wiki-implementation",
-      "title": "7. 实现方案",
-      "body": "实现采用固定前端组件和结构化 homepage JSON。模型负责理解资料和生成字段，前端负责校验、排序和稳定渲染。",
+      "title": "8. 实现方案",
+      "body": "实现采用固定页面类型和结构化 JSON。模型负责理解资料、生成目录和关联关系，前端负责校验、排序和稳定渲染。",
       "blocks": [
         {
           "title": "生成流程",
@@ -1784,7 +1856,7 @@
             },
             {
               "label": "结构生成",
-              "text": "生成 overview、directoryPreview、fullWikiDirectory、teachingSceneCards、sceneWiki、recentUpdates、organizationStatus，并把提问上下文交给页面下方输入框。"
+              "text": "生成 homepage、directoryWiki、contentWiki、fileInsight、recentUpdates，并把提问上下文交给页面下方输入框。"
             },
             {
               "label": "程序校验",
@@ -1801,6 +1873,9 @@
           "items": [
               "首页给地图，教学主题给全量，输入框给当前知识库提问，教学场景给任务视角，近期更新给回访。",
               "首页主入口只有两类：教学主题、教学场景；提问由统一输入框承接。",
+              "目录 Wiki 只负责组织和进入，不承担内容正文解释。",
+              "内容 Wiki 负责解释具体主题，并通过 AI 解读展示关联文件和相关 Wiki。",
+              "文件页不是文件 Wiki，负责原文预览、AI 摘要和相关 Wiki。",
               "目录区直接展示可点击主题，不使用不能点的胶囊或伪入口。",
               "目录展示更多必须发生在分组内部，按钮文案说明本组主题数量。",
               "教学主题是按内容生成的主题目录，不是文件夹页面；文件夹只用于来源文件管理。",

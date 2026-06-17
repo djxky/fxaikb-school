@@ -175,6 +175,106 @@
     display:flex;
     gap:6px;
   }
+  .kb-home-section{ animation:fade-up .55s .14s var(--ease) both; }
+  .kb-section-intro{
+    margin:-4px 0 14px;
+    color:var(--text-2);
+    font-size:13px;
+    line-height:1.65;
+  }
+  .kb-card-grid{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:10px;
+  }
+  .kb-entry-card{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:flex-start;
+    row-gap:5px;
+    min-height:92px;
+    padding:13px 14px;
+    border:1px solid var(--border);
+    border-radius:8px;
+    background:#fff;
+    color:var(--text-2);
+    cursor:pointer;
+    text-align:left;
+    transition:border-color .15s var(--ease), box-shadow .15s var(--ease), transform .15s var(--ease);
+  }
+  .kb-entry-card:hover{
+    border-color:rgba(168,126,44,.32);
+    box-shadow:0 4px 14px rgba(30,24,14,.06);
+    transform:translateY(-1px);
+  }
+  .kb-entry-title{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    width:100%;
+    min-width:0;
+    font-size:14px;
+    font-weight:700;
+    color:var(--text);
+  }
+  .kb-entry-title [data-lucide]{
+    width:15px;
+    height:15px;
+    color:var(--gold);
+    flex-shrink:0;
+  }
+  .kb-entry-card p{
+    margin:0;
+    width:100%;
+    font-size:12.5px;
+    line-height:1.45;
+    color:var(--text-2);
+  }
+  .kb-update-list{
+    list-style:none;
+    padding:0;
+    margin:0;
+  }
+  .kb-update-row{
+    width:100%;
+    display:grid;
+    grid-template-columns:minmax(0, 1fr) auto;
+    gap:12px;
+    align-items:center;
+    padding:11px 0;
+    border:0;
+    border-bottom:1px dashed var(--border-3);
+    background:transparent;
+    text-align:left;
+    cursor:pointer;
+  }
+  .kb-update-list li:last-child .kb-update-row{ border-bottom:0; }
+  .kb-update-row:hover .kb-update-title{ color:var(--gold-deep); }
+  .kb-update-row:hover .kb-update-desc{ color:var(--text); }
+  .kb-update-title{
+    color:var(--text);
+    font-size:13px;
+    font-weight:700;
+  }
+  .kb-update-desc{
+    margin-top:3px;
+    color:var(--text-2);
+    font-size:12.5px;
+    line-height:1.55;
+  }
+  .kb-update-time{
+    color:var(--text-3);
+    font-size:11.5px;
+    white-space:nowrap;
+  }
+  @media (max-width:1180px){
+    .kb-card-grid{ grid-template-columns:repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width:860px){
+    .kb-card-grid{ grid-template-columns:1fr; }
+    .kb-update-row{ grid-template-columns:1fr; }
+  }
 </style>
 <link rel="stylesheet" href="assets/review.css" />
 </head>
@@ -204,7 +304,7 @@
           <button class="ph-vs-btn vs-btn" data-view="folder" onclick="switchView('folder')" role="tab" aria-selected="false"><i data-lucide="folder"></i><span>文件夹</span></button>
         </div>
         <div class="knowledge-header-actions wiki-header-actions">
-          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索 Wiki、文件" aria-expanded="false">
+          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索我的知识库" aria-expanded="false">
             <i data-lucide="search"></i>
           </button>
           <span class="ph-action-sep" aria-hidden="true"></span>
@@ -216,7 +316,7 @@
           </button>
         </div>
         <div class="knowledge-header-actions folder-header-actions">
-          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索文件" aria-expanded="false">
+          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索我的知识库文件" aria-expanded="false">
             <i data-lucide="search"></i>
           </button>
           <span class="ph-action-sep" aria-hidden="true"></span>
@@ -248,8 +348,7 @@
               </div>
               <h1 class="wiki-hero-title" id="hero-title">张老师 · <em>个人知识库</em></h1>
               <p class="wiki-hero-sub" id="hero-sub">
-                你的私人 AI 工作台 · 演示用，可清空。
-                你目前有 <b>87 份资料</b>，AI 整理成了 <b>16 个 Wiki 页</b>。
+                个人教学资料会在这里沉淀为可检索、可追溯的 Wiki。
               </p>
             </div>
             <div class="wiki-hero-actions">
@@ -260,9 +359,9 @@
             </div>
           </div>
           <div class="wiki-hero-meta" id="hero-meta-counts">
-            <span class="item"><b id="hero-count">87</b> 份资料</span>
+            <span class="item"><b id="hero-count">41</b> 份演示资料</span>
             <span class="sep">·</span>
-            <span class="item"><b>16</b> 个 Wiki 页</span>
+            <span class="item"><b>16</b> 个主题</span>
             <span class="sep">·</span>
             <span class="item"><b>5</b> 个文件夹</span>
             <span class="sep">·</span>
@@ -275,7 +374,7 @@
           <header class="demo-zone-head">
             <div class="dz-head-left">
               <i data-lucide="sparkles"></i>
-              <span>你看到的 Wiki 和资料都是 <b>飞象演示数据</b>，让你看看产品的样子</span>
+              <span>以下为演示数据</span>
             </div>
             <button class="dz-clear" onclick="clearDemoData()">
               <i data-lucide="trash-2"></i>
@@ -283,219 +382,133 @@
             </button>
           </header>
 
-          <!-- ───── 飞象 AI 整理纪要 · wiki 主体（可阅读，不只是目录） ───── -->
-          <article class="ai-digest">
-            <h1 class="ad-title">飞象 AI 整理纪要</h1>
-            <div class="ad-meta">
-              覆盖周期 <b>2025-12-04 至 12-11</b>
-              <span class="sep">·</span>
-              整理时间 <b>今天 10:42</b>
-              <span class="sep">·</span>
-              数据源 <b>87 份资料</b>
-            </div>
-
-            <p class="ad-lead">
-              本周飞象 AI 共处理新增资料 <b>17 份</b>，从中提取核心知识点 <b>4 个</b>；
-              新建 Wiki <b>1 篇</b>，更新已有 Wiki <b>3 篇</b>。
-              引用次数最高的 Wiki 仍为
-              <a class="wlink" onclick="openWiki('二次函数核心考点')">二次函数核心考点</a>，
-              本周新增板书图解 4 段。
-            </p>
-
-            <h2 class="wiki-h2">本周新增 Wiki</h2>
-            <table class="ad-table">
-              <thead>
-                <tr>
-                  <th>Wiki 名称</th>
-                  <th>来源资料</th>
-                  <th>关键概念</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><a class="wlink" onclick="openWiki('圆与三角形综合')">圆与三角形综合</a></td>
-                  <td>「圆」主题资料 6 份</td>
-                  <td>切线性质、内切外接、辅助线套路</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <h2 class="wiki-h2">本周更新 Wiki</h2>
-            <table class="ad-table">
-              <thead>
-                <tr>
-                  <th>原资料</th>
-                  <th>归入 Wiki</th>
-                  <th>更新内容</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="fname">相似三角形 · 公开课设计.docx</span></td>
-                  <td><a class="wlink" onclick="openWiki('相似三角形判定与应用')">相似三角形判定与应用</a></td>
-                  <td>新增实例分析 3 段</td>
-                </tr>
-                <tr>
-                  <td><span class="fname">八(3)班 · 二次函数周测卷.pdf</span></td>
-                  <td><a class="wlink" onclick="openWiki('八(3)班数学薄弱点画像')">八(3)班数学薄弱点画像</a></td>
-                  <td>错题统计更新</td>
-                </tr>
-                <tr>
-                  <td><span class="fname">教研组 · 二次函数研讨纪要.docx</span></td>
-                  <td><a class="wlink" onclick="openWiki('二次函数核心考点')">二次函数核心考点</a></td>
-                  <td>新增「组里经验」1 节</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <h2 class="wiki-h2">本学期主题分布</h2>
-            <p class="ad-para">
-              截至本周，知识库累计资料 <b>87 份</b>，飞象 AI 整理成 Wiki <b>16 篇</b>，分布如下：
-            </p>
-            <table class="ad-table">
-              <thead>
-                <tr>
-                  <th>主题</th>
-                  <th class="num">Wiki 数</th>
-                  <th class="num">资料数</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr><td>数学知识点</td><td class="num">7</td><td class="num">38</td></tr>
-                <tr><td>中考专题</td><td class="num">2</td><td class="num">12</td></tr>
-                <tr><td>教学方法 · 我的笔记</td><td class="num">3</td><td class="num">14</td></tr>
-                <tr><td>学情分析 · 八(3)班</td><td class="num">3</td><td class="num">16</td></tr>
-                <tr><td>飞象推荐</td><td class="num">1</td><td class="num">1</td></tr>
-                <tr><td class="muted">未归类</td><td class="num muted">—</td><td class="num muted">6</td></tr>
-              </tbody>
-            </table>
-            <p class="ad-para muted">
-              <a class="wlink" onclick="showToast('（演示）未归类资料 · 6 份')">未归类资料 6 份</a> 为近期上传、主题归属待确认的资料。
-            </p>
-
-            <h2 class="wiki-h2">高频引用 Wiki</h2>
-            <table class="ad-table">
-              <thead>
-                <tr>
-                  <th>Wiki</th>
-                  <th class="num">资料数</th>
-                  <th class="num">本学期引用次数</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><a class="wlink" onclick="openWiki('二次函数核心考点')">二次函数核心考点</a></td>
-                  <td class="num">12</td>
-                  <td class="num">8</td>
-                </tr>
-                <tr>
-                  <td><a class="wlink" onclick="openWiki('相似三角形判定与应用')">相似三角形判定与应用</a></td>
-                  <td class="num">8</td>
-                  <td class="num">5</td>
-                </tr>
-                <tr>
-                  <td><a class="wlink" onclick="openWiki('八(3)班数学薄弱点画像')">八(3)班数学薄弱点画像</a></td>
-                  <td class="num">13</td>
-                  <td class="num">4</td>
-                </tr>
-              </tbody>
-            </table>
-          </article>
-
-          <section class="subject-section">
+          <section class="subject-section kb-home-section">
             <h2 class="wiki-h2">
-              按主题浏览
-              <span class="h2-count">· 共 16 个</span>
-              <span class="h2-note">完整目录</span>
+              教学主题
             </h2>
+            <p class="kb-section-intro">按教材、知识点和专题组织演示资料，点击主题可进入对应 Wiki。</p>
 
             <h3 class="wiki-h3">
-              飞象推荐
-              <span class="h3-count">1 个</span>
+              九年级数学
             </h3>
             <p class="subject-para">
-              <a class="wlink" onclick="openWiki('飞象使用指南')">飞象使用指南</a>
-              <span class="fv-tag-guide">官方</span>
-            </p>
-
-            <h3 class="wiki-h3">
-              数学知识点
-              <span class="h3-count">7 个</span>
-            </h3>
-            <p class="subject-para">
-              <a class="wlink wlink-active" onclick="openWiki('二次函数核心考点')">二次函数核心考点</a>
-              <span class="wcount">12</span>
+              <a class="wlink wlink-active" onclick="openWiki('二次函数图像与性质')">二次函数图像与性质</a>
+              <span class="sep">·</span>
+              <a class="wlink" onclick="openWiki('函数图像变换')">函数图像变换</a>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('相似三角形判定与应用')">相似三角形判定与应用</a>
-              <span class="wcount">8</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('圆与三角形综合')">圆与三角形综合</a>
-              <span class="wcount">6</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('一元二次方程根的判别式')">一元二次方程根的判别式</a>
-              <span class="wcount">5</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('锐角三角函数应用')">锐角三角函数应用</a>
-              <span class="wcount">6</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('平面直角坐标系综合')">平面直角坐标系综合</a>
-              <span class="wcount">4</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('反比例函数')">反比例函数</a>
-              <span class="wcount">5</span>
             </p>
 
             <h3 class="wiki-h3">
               中考专题
-              <span class="h3-count">2 个</span>
             </h3>
             <p class="subject-para">
               <a class="wlink" onclick="openWiki('中考压轴 · 函数综合')">中考压轴 · 函数综合</a>
-              <span class="wcount">9</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('动点问题与变化规律')">动点问题与变化规律</a>
-              <span class="wcount">7</span>
             </p>
 
             <h3 class="wiki-h3">
               教学方法 · 我的笔记
-              <span class="h3-count">3 个</span>
             </h3>
             <p class="subject-para">
               <a class="wlink" onclick="openWiki('分层练习设计法')">分层练习设计法</a>
-              <span class="wcount">9</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('错题归因模板')">错题归因模板</a>
-              <span class="wcount">7</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('课堂提问 4 类问句')">课堂提问 4 类问句</a>
-              <span class="wcount">4</span>
             </p>
 
             <h3 class="wiki-h3">
               学情分析 · 八(3)班
-              <span class="h3-count">3 个</span>
             </h3>
             <p class="subject-para">
               <a class="wlink" onclick="openWiki('八(3)班数学薄弱点画像')">八(3)班数学薄弱点画像</a>
-              <span class="wcount">13</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('本学期作业完成质量趋势')">本学期作业完成质量趋势</a>
-              <span class="wcount">11</span>
               <span class="sep">·</span>
               <a class="wlink" onclick="openWiki('学困生跟进档案')">学困生跟进档案</a>
-              <span class="wcount">6</span>
             </p>
           </section>
-        </section>
 
-        <!-- ───── 底部说明 ───── -->
-        <div class="wiki-foot">
-          以上 16 个 Wiki 都是 <b>AI 基于你上传的 87 份资料</b> 自动整理生成的——
-          每段内容都能追溯到原文件，可以一键跳回原文第几页。你新传资料、删资料，
-          AI 都会重新整理 Wiki，下次打开就是最新版本。
-          <a onclick="openLearnedPanel('work')">飞象怎么工作 + 已学到你的 23 条 →</a>
-        </div>
+          <section class="kb-home-section" id="personal-workflows">
+            <h2 class="wiki-h2">教学场景</h2>
+            <p class="kb-section-intro">和学校知识库保持同一套入口，只是这里展示的是个人演示资料。</p>
+            <div class="kb-card-grid">
+              <button class="kb-entry-card" onclick="openWiki('备课资源')">
+                <span class="kb-entry-title"><i data-lucide="book-open"></i>备课资源</span>
+                <p>教案、课件、导入活动</p>
+              </button>
+              <button class="kb-entry-card" onclick="openWiki('课堂教学')">
+                <span class="kb-entry-title"><i data-lucide="presentation"></i>课堂教学</span>
+                <p>板书、追问、课堂案例</p>
+              </button>
+              <button class="kb-entry-card" onclick="openWiki('作业与测评')">
+                <span class="kb-entry-title"><i data-lucide="clipboard-check"></i>作业与测评</span>
+                <p>练习、测验、错题分析</p>
+              </button>
+              <button class="kb-entry-card" onclick="openWiki('复习备考')">
+                <span class="kb-entry-title"><i data-lucide="target"></i>复习备考</span>
+                <p>中考专题、一模二模、讲评资料</p>
+              </button>
+            </div>
+          </section>
+
+          <section class="kb-home-section">
+            <h2 class="wiki-h2">
+              近期更新
+            </h2>
+            <p class="kb-section-intro">这里展示演示资料如何被 AI 归入主题、更新 Wiki，并能追溯到文件夹里的原文件。</p>
+            <ul class="kb-update-list">
+              <li>
+                <button class="kb-update-row" onclick="openWiki('圆与三角形综合')">
+                  <div>
+                    <div class="kb-update-title">圆与三角形综合已生成 Wiki</div>
+                    <div class="kb-update-desc">由切线性质、内切外接、辅助线套路等 6 份资料整理而来。</div>
+                  </div>
+                  <span class="kb-update-time">今天 10:42</span>
+                </button>
+              </li>
+              <li>
+                <button class="kb-update-row" onclick="openWiki('二次函数图像与性质')">
+                  <div>
+                    <div class="kb-update-title">二次函数图像与性质补充板书图解</div>
+                    <div class="kb-update-desc">新增图像平移、对称轴和顶点坐标的课堂板书素材。</div>
+                  </div>
+                  <span class="kb-update-time">今天 09:18</span>
+                </button>
+              </li>
+              <li>
+                <button class="kb-update-row" onclick="openWiki('八(3)班数学薄弱点画像')">
+                  <div>
+                    <div class="kb-update-title">八(3)班周测卷已归入学情主题</div>
+                    <div class="kb-update-desc">错题统计更新，关联二次函数和相似三角形两个薄弱点。</div>
+                  </div>
+                  <span class="kb-update-time">昨天</span>
+                </button>
+              </li>
+              <li>
+                <button class="kb-update-row" onclick="openWiki('相似三角形判定与应用')">
+                  <div>
+                    <div class="kb-update-title">相似三角形公开课设计已归入主题</div>
+                    <div class="kb-update-desc">补充课堂追问、例题迁移和学生易错提醒。</div>
+                  </div>
+                  <span class="kb-update-time">本周</span>
+                </button>
+              </li>
+            </ul>
+          </section>
+        </section>
 
       </article>
     </div>
@@ -855,7 +868,7 @@
       <div class="learned-rule" data-rule-group="personal">
         <div class="learned-rule-main"><i data-lucide="sparkles"></i><span>课件喜欢图像法导入而非定义法</span></div>
         <div class="learned-rule-meta">
-          <span>4/28 · 在《二次函数核心考点》对话中学到</span>
+          <span>4/28 · 在《二次函数图像与性质》对话中学到</span>
           <div class="learned-rule-actions">
             <button class="mem-btn" onclick="showToast('（演示）编辑这条规则')">改一下</button>
             <button class="mem-btn" onclick="showToast('（演示）已关闭这条规则')">关掉</button>
@@ -973,7 +986,7 @@
         {
           "title": "功能说明",
           "body": [
-            "个人 Wiki 首页展示老师上传、整理和生成的个人资料，默认仅本人可见。"
+              "个人 Wiki 首页展示老师上传、整理和生成的个人资料；当老师刚进入且个人资料为空时，先展示一份可体验的演示 Wiki 数据。"
           ]
         },
         {
@@ -986,7 +999,7 @@
             },
             {
               "label": "浏览资料",
-              "text": "按文件夹、标签或最近更新查看个人资料。"
+              "text": "按教学主题、教学场景、近期更新或文件夹查看个人资料。"
             },
             {
               "label": "查看详情",
@@ -1022,7 +1035,7 @@
           "rows": [
             {
               "场景": "资料为空",
-              "处理方式": "展示上传资料和从学校资料复制的入口。"
+              "处理方式": "展示一份可体验、可追溯、可一键清空的演示 Wiki 数据；演示资料也同步出现在文件夹视图。"
             },
             {
               "场景": "资料解析中",
@@ -1060,7 +1073,9 @@
           "title": "QA 检查点",
           "items": [
             "个人资料默认不公开。",
-            "空状态有上传入口。",
+            "空状态展示演示 Wiki 数据，并保留上传入口。",
+            "演示数据在 Wiki 首页和文件夹视图中保持一致。",
+            "一键清空后演示 Wiki 和文件夹演示资料同时消失。",
             "解析中资料有状态提示。"
           ]
         }

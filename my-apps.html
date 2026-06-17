@@ -129,18 +129,6 @@
   }
   .app-cover-icon svg { width: 38px; height: 38px; }
 
-  .app-stats {
-    position: absolute; top: 12px; right: 12px;
-    background: rgba(0,0,0,0.45);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    color: #fff;
-    padding: 3px 8px; border-radius: 6px;
-    font-size: 10.5px; font-weight: 600;
-    display: flex; align-items: center; gap: 4px;
-  }
-  .app-stats svg { width: 11px; height: 11px; }
-
   .app-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
   .app-title {
     font-size: 14px; font-weight: 600; line-height: 1.4;
@@ -467,12 +455,6 @@
         <button class="subject-tab" data-cat="apps">我的应用</button>
         <button class="subject-tab" data-cat="favorites">我的收藏</button>
       </div>
-      <div class="head-actions">
-        <label class="ph-search">
-          <i data-lucide="search"></i>
-          <input type="text" placeholder="在我的作品里搜索…" oninput="onSearch(event)">
-        </label>
-      </div>
     </div>
 
     <div class="grid-wrap">
@@ -674,13 +656,9 @@
     if (filter === 'apps') list = allApps.filter(a => a.type === 'apps' && a.source !== 'favorite');
     if (filter === 'favorites') list = allApps.filter(a => a.source === 'favorite');
 
-    const search = (document.getElementById('app-search-input')?.value || '').trim();
-    if (search) list = list.filter(a => a.title.includes(search) || a.desc.includes(search));
-
     const renderKey = JSON.stringify({
       filter,
-      search,
-      items: list.map(app => [app.title, app.type, app.source, app.status, app.views, app.favorites])
+      items: list.map(app => [app.title, app.type, app.source, app.status, app.favorites])
     });
     if (renderKey === lastCardsRenderKey) return;
     lastCardsRenderKey = renderKey;
@@ -688,7 +666,7 @@
     if (list.length === 0) {
       grid.innerHTML = `<div class="empty">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-        <div class="empty-title">${search ? '没找到匹配的内容' : '这里还没有内容'}</div>
+        <div class="empty-title">这里还没有内容</div>
         <button class="empty-cta" onclick="window.location.href='chat.html'">+ 新建任务</button>
       </div>`;
       return;
@@ -697,7 +675,6 @@
     grid.innerHTML = list.map(app => {
       const isDraftClass = app.status === 'draft' ? 'is-draft' : '';
       const escapedTitle = app.title.replace(/'/g, "\\'");
-      const viewCount = Number.isFinite(app.views) ? app.views : 0;
       const favCount = Number.isFinite(app.favorites) ? app.favorites : 0;
       const clickAction = app.source === 'created' 
         ? `showToast('（演示）打开：${escapedTitle}')`
@@ -719,10 +696,6 @@
         <a class="app-card ${isDraftClass}" onclick="${clickAction}">
           <div class="app-cover bg-grad-${app.grad}">
             <div class="app-cover-icon">${ICON_SVG[app.icon] || ''}</div>
-            <div class="app-stats" title="浏览量">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>
-              <span>${viewCount}</span>
-            </div>
           </div>
           <div class="app-body">
             <div class="app-title" title="${app.title}">${app.title}</div>
@@ -743,11 +716,6 @@
     }).join('');
 
     if (window.lucide) lucide.createIcons();
-  }
-
-  function onSearch(e) {
-    const active = document.querySelector('.subject-tab.active')?.dataset.cat || 'all';
-    renderCards(active);
   }
 
   document.querySelectorAll('.subject-tab').forEach(tab => {
@@ -928,7 +896,6 @@
   }
 
   // 初始渲染
-  document.querySelector('.ph-search input')?.setAttribute('id', 'app-search-input');
   renderCards('all');
 </script>
 
@@ -939,13 +906,13 @@
   "sections": [
     {
       "id": "my-apps-tabs",
-      "title": "1. 分类与搜索",
-      "body": "页面保持个人版的轻量作品入口，用分类和搜索帮助老师快速回到自己的课件、应用和收藏内容。",
+      "title": "1. 分类",
+      "body": "页面保持个人版的轻量作品入口，用分类帮助老师快速回到自己的课件、应用和收藏内容；当前版本不提供搜索。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "页面保持个人版的轻量作品入口，用分类和搜索帮助老师快速回到自己的课件、应用和收藏内容。"
+            "页面保持个人版的轻量作品入口，用分类帮助老师快速回到自己的课件、应用和收藏内容；当前版本不提供搜索入口。"
           ]
         },
         {
@@ -965,10 +932,6 @@
             {
               "label": "切换分类",
               "text": "点击全部作品、我的课件、我的应用、我的收藏，列表即时切换。"
-            },
-            {
-              "label": "搜索作品",
-              "text": "输入作品名称或描述关键词，在当前分类下收敛结果。"
             }
           ]
         },
@@ -977,7 +940,7 @@
           "items": [
             "我的作品只处理作品内容；我的知识库在校园版中作为独立入口承载资料沉淀。",
             "分类只改变当前列表展示，不改变作品归属。",
-            "搜索和当前分类共同生效。"
+            "我的作品当前版本不提供搜索框、搜索入口或搜索流程。"
           ]
         },
         {
@@ -997,10 +960,6 @@
             {
               "场景": "分类为空",
               "处理方式": "展示空态，并保留新建任务入口。"
-            },
-            {
-              "场景": "搜索无结果",
-              "处理方式": "展示未找到匹配内容。"
             }
           ]
         },
@@ -1026,7 +985,7 @@
           "title": "QA 检查点",
           "items": [
             "切换 tab 不误删内容。",
-            "搜索只影响当前列表展示。",
+            "页面不展示搜索框或搜索入口。",
             "页面名称和个人版“我的空间”的作品心智保持一致。"
           ]
         }
@@ -1035,12 +994,12 @@
     {
       "id": "my-apps-grid",
       "title": "2. 内容卡片",
-      "body": "内容卡片以作品为中心展示名称、来源和使用热度，老师可以打开作品，或对自己创建和收藏的内容做轻量管理。",
+      "body": "内容卡片以作品为中心展示名称、来源和收藏量，老师可以打开作品，或对自己创建和收藏的内容做轻量管理。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "内容卡片以作品为中心展示名称、来源和使用热度，老师可以打开作品，或对自己创建和收藏的内容做轻量管理。"
+            "内容卡片以作品为中心展示名称、来源和收藏量，老师可以打开作品，或对自己创建和收藏的内容做轻量管理。"
           ]
         },
         {
@@ -1049,7 +1008,7 @@
           "items": [
             {
               "label": "浏览卡片",
-              "text": "老师查看作品名称、作者来源、浏览量和收藏量。"
+              "text": "老师查看作品名称、作者来源和收藏量；卡片不展示浏览数。"
             },
             {
               "label": "打开内容",
@@ -1076,7 +1035,7 @@
         {
           "title": "数据说明",
           "items": [
-            "卡片数据包含作品标题、描述、类型、来源、作者、状态、浏览量、收藏量和跳转地址。"
+            "卡片数据包含作品标题、描述、类型、来源、作者、状态、收藏量和跳转地址；不展示浏览数。"
           ]
         },
         {
@@ -1128,7 +1087,8 @@
           "items": [
             "取消收藏不影响广场原内容。",
             "删除自己创建的作品有确认。",
-            "自己创建和收藏来源的可见操作不同。"
+            "自己创建和收藏来源的可见操作不同。",
+            "卡片不出现浏览数。"
           ]
         }
       ]
