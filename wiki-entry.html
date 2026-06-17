@@ -342,9 +342,6 @@
           <i data-lucide="panel-right-open"></i><span>AI 解读</span>
         </button>
         <span class="ph-action-sep" aria-hidden="true"></span>
-        <button class="ph-action" data-doc="download-btn-wiki-entry" onclick="V28DownloadDialog.open({ context:'wiki-entry', subject:'二次函数图像与性质' })" title="下载">
-          <i data-lucide="download"></i><span>下载</span>
-        </button>
         <button class="ph-action" data-doc="share-btn-wiki-entry" onclick="V28ShareDialog.open({ context:'wiki-entry', subject:'二次函数图像与性质' })" title="分享">
           <i data-lucide="share-2"></i><span>分享</span>
         </button>
@@ -1108,7 +1105,7 @@
 <script>renderFeixiangSidebar('school-wiki');</script>
 <script src="assets/v28-shell.js?v=20260522b"></script>
 <script src="assets/v28.js?v=20260522e"></script>
-<script src="assets/shared/v28-modals.js?v=20260521g"></script>
+<script src="assets/shared/v28-modals.js?v=20260617a"></script>
 <script src="assets/v28-folder.js?v=20260518gh"></script>
 <script src="assets/page-header.js"></script>
 <script>
@@ -1455,7 +1452,7 @@
       if(crumbItems[1]) crumbItems[1].textContent = data.crumbParent || 'Wiki 目录';
       const crumbCurrent = document.querySelector('.ph-crumb-current span:last-child');
       if(crumbCurrent) crumbCurrent.textContent = entryName;
-      document.querySelectorAll('[data-doc="download-btn-wiki-entry"], [data-doc="share-btn-wiki-entry"]').forEach(btn => {
+      document.querySelectorAll('[data-doc="share-btn-wiki-entry"]').forEach(btn => {
         btn.setAttribute('onclick', btn.getAttribute('onclick')?.replace(/subject:'[^']*'/, `subject:'${entryName}'`) || '');
       });
 
@@ -1671,6 +1668,7 @@
           "items": [
             "内容 Wiki 必须保留来源引用，AI 整理内容不能脱离原文。",
             "目录 Wiki 必须展示可进入的具体 Wiki 或文件，不展示不可点击的伪入口。",
+            "Wiki 页面不提供下载按钮；需要下载原始资料时，从关联文件进入文件页下载。",
             "学校词条和个人词条需要明确归属。",
             "关联内容只展示当前老师有权限访问的资料。",
             "AI 解读的 tab 结构固定；文件名称、引用位置、贡献说明和关联原因由 AI 生成。"
@@ -1743,101 +1741,8 @@
       ]
     },
     {
-      "id": "download-btn-wiki-entry",
-      "title": "2. 下载词条",
-      "body": "下载词条用于把当前词条正文、引用和相关材料导出，便于备课或离线使用。",
-      "blocks": [
-        {
-          "title": "功能说明",
-          "body": [
-            "下载词条用于把当前词条正文、引用和相关材料导出，便于备课或离线使用。"
-          ]
-        },
-        {
-          "title": "交互流程",
-          "ordered": true,
-          "items": [
-            {
-              "label": "点击下载",
-              "text": "老师点击词条下载按钮。"
-            },
-            {
-              "label": "选择内容",
-              "text": "按当前词条正文、是否包含来源和相关词条生成。"
-            },
-            {
-              "label": "生成文件",
-              "text": "下载文件名包含词条标题和日期。"
-            }
-          ]
-        },
-        {
-          "title": "业务规则",
-          "items": [
-            "下载范围不能超过老师可见权限。",
-            "来源文件不可见时不应被打包导出。",
-            "下载不改变词条归属或分享状态。"
-          ]
-        },
-        {
-          "title": "数据说明",
-          "items": [
-            "下载数据包含词条 id、导出范围、引用清单、下载人、下载时间。"
-          ]
-        },
-        {
-          "title": "异常场景",
-          "type": "table",
-          "columns": [
-            "场景",
-            "处理方式"
-          ],
-          "rows": [
-            {
-              "场景": "无下载权限",
-              "处理方式": "按钮置灰或提示不可下载。"
-            },
-            {
-              "场景": "词条为空",
-              "处理方式": "提示暂无内容可下载。"
-            },
-            {
-              "场景": "部分来源不可见",
-              "处理方式": "提示已跳过不可见来源。"
-            }
-          ]
-        },
-        {
-          "title": "关联模块",
-          "type": "table",
-          "columns": [
-            "关联对象",
-            "说明"
-          ],
-          "rows": [
-            {
-              "关联对象": "wiki-entry-body",
-              "说明": "下载读取当前词条内容。"
-            },
-            {
-              "关联对象": "file-preview.html",
-              "说明": "来源附件受文件权限影响。"
-            }
-          ]
-        },
-        {
-          "title": "QA 检查点",
-          "items": [
-            "不可见来源不会被导出。",
-            "文件名能识别词条。",
-            "下载不改变分享状态。"
-          ]
-        }
-      ]
-    },
-    {
       "id": "share-btn-wiki-entry",
-      "title": "3. 分享词条",
+      "title": "2. 分享词条",
       "body": "分享词条让老师把当前知识页发给同事或指定对象，并保留权限边界。",
       "blocks": [
         {
