@@ -403,6 +403,128 @@
     border-color: #000;
   }
 
+  /* 删除确认弹窗 */
+  .delete-confirm-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1100;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    background: rgba(25, 30, 28, 0.32);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease;
+  }
+  .delete-confirm-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .delete-confirm-card {
+    width: min(840px, calc(100vw - 48px));
+    min-height: 300px;
+    border-radius: 30px;
+    background: #fff;
+    box-shadow: 0 24px 60px rgba(23, 33, 31, 0.2);
+    display: flex;
+    flex-direction: column;
+    padding: 52px 48px 46px;
+    transform: translateY(14px) scale(0.98);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .delete-confirm-overlay.active .delete-confirm-card {
+    transform: translateY(0) scale(1);
+  }
+  .delete-confirm-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+  }
+  .delete-confirm-title {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: #17312d;
+    font-size: 30px;
+    line-height: 1.2;
+    font-weight: 700;
+  }
+  .delete-confirm-mark {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #ff5b22;
+    color: #fff;
+    display: grid;
+    place-items: center;
+    font-size: 29px;
+    line-height: 1;
+    font-weight: 700;
+    flex: 0 0 auto;
+  }
+  .delete-confirm-close {
+    width: 46px;
+    height: 46px;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: #8c9296;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+  }
+  .delete-confirm-close:hover {
+    background: #f4f5f5;
+    color: #263331;
+  }
+  .delete-confirm-close svg {
+    width: 34px;
+    height: 34px;
+  }
+  .delete-confirm-body {
+    margin: 38px 0 50px;
+    padding-left: 0;
+    color: #1f2d3a;
+    font-size: 28px;
+    line-height: 1.4;
+    font-weight: 400;
+  }
+  .delete-confirm-actions {
+    margin-top: auto;
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+  .delete-confirm-btn {
+    min-width: 180px;
+    height: 72px;
+    border-radius: 36px;
+    border: 1.5px solid #006346;
+    background: #fff;
+    color: #006346;
+    font-size: 26px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  }
+  .delete-confirm-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 18px rgba(0, 99, 70, 0.12);
+  }
+  .delete-confirm-btn.danger {
+    border-color: #ff5b22;
+    background: #ff5b22;
+    color: #fff;
+  }
+  .delete-confirm-btn.danger:hover {
+    background: #f14f19;
+    box-shadow: 0 8px 18px rgba(255, 91, 34, 0.22);
+  }
+
   /* 空态 */
   .empty {
     grid-column: 1 / -1;
@@ -431,6 +553,37 @@
   @media (max-width: 760px) {
     .content-grid { grid-template-columns: 1fr; }
     .app-meta-grid { grid-template-columns: 1fr; }
+    .delete-confirm-card {
+      min-height: auto;
+      border-radius: 22px;
+      padding: 28px 24px 24px;
+    }
+    .delete-confirm-title {
+      gap: 12px;
+      font-size: 22px;
+    }
+    .delete-confirm-mark {
+      width: 32px;
+      height: 32px;
+      font-size: 23px;
+    }
+    .delete-confirm-close {
+      width: 38px;
+      height: 38px;
+    }
+    .delete-confirm-body {
+      margin: 24px 0 34px;
+      font-size: 18px;
+    }
+    .delete-confirm-actions {
+      gap: 10px;
+    }
+    .delete-confirm-btn {
+      min-width: 0;
+      flex: 1;
+      height: 52px;
+      font-size: 17px;
+    }
   }
 </style>
 <link rel="stylesheet" href="assets/review.css" />
@@ -504,6 +657,26 @@
   </div>
 </div>
 
+<!-- ===== 删除确认弹窗 ===== -->
+<div class="delete-confirm-overlay" id="delete-confirm-modal" aria-hidden="true" onclick="handleDeleteOverlayClick(event)">
+  <section class="delete-confirm-card" role="dialog" aria-modal="true" aria-labelledby="delete-confirm-title">
+    <header class="delete-confirm-head">
+      <div class="delete-confirm-title" id="delete-confirm-title">
+        <span class="delete-confirm-mark" aria-hidden="true">!</span>
+        <span>确认删除内容？</span>
+      </div>
+      <button class="delete-confirm-close" type="button" aria-label="关闭" onclick="closeDeleteConfirm()">
+        <i data-lucide="x"></i>
+      </button>
+    </header>
+    <div class="delete-confirm-body">删除后，该内容将不可恢复</div>
+    <footer class="delete-confirm-actions">
+      <button class="delete-confirm-btn" type="button" onclick="closeDeleteConfirm()">取消</button>
+      <button class="delete-confirm-btn danger" type="button" onclick="confirmDeleteApp()">确认删除</button>
+    </footer>
+  </section>
+</div>
+
 <script src="assets/feixiang-shell.js"></script>
 <script>renderFeixiangSidebar('my-apps');</script>
 <script src="assets/page-header.js"></script>
@@ -515,7 +688,7 @@
     { title: '《荷塘月色》画面捕捉法', desc: 'AI 生成的散文课堂活动课件', type: 'courseware', source: 'created', origin: '张老师', icon: 'feather', grad: 9, lastUsed: '昨天 21:08', status: 'published', views: 358, favorites: 345, href: '#' },
     { title: '错题归因分析器', desc: '扫描错题图片，自动归类知识点', type: 'apps', source: 'created', origin: '张老师', icon: 'scan-search', grad: 10, lastUsed: '今天 11:02', status: 'published', views: 312, favorites: 267, href: '#' },
     { title: '高一(3) 班会签到 H5', desc: '草稿 · 家长会签到与统计页面', type: 'apps', source: 'created', origin: '张老师', icon: 'qr-code', grad: 11, lastUsed: '今天 09:55', status: 'draft', views: 96, favorites: 31, href: '#' },
-    { title: '二次函数图像与性质 · 分层课件', desc: 'AI 基于校本资料生成的数学课件', type: 'courseware', source: 'created', origin: '张老师', icon: 'presentation', grad: 3, lastUsed: '今天 10:32', views: 286, favorites: 221, href: 'file-preview.html' },
+    { title: '二次函数图像与性质 · 分层课件', desc: 'AI 基于校本资料生成的数学课件', type: 'courseware', source: 'created', origin: '张老师', icon: 'presentation', grad: 3, lastUsed: '今天 10:32', views: 286, favorites: 221, href: '#' },
     { title: 'AI 校本题库', desc: '把知识库里的题目结构化展示，支持查看、筛选与组题', type: 'apps', source: 'favorite', origin: '飞象星球', icon: 'sparkles', grad: 4, lastUsed: '今天 14:35', views: 1860, favorites: 942, href: 'ai-qbank.html' },
     { title: 'AI 录题', desc: '上传 PDF / Word 自动解析题目，校对后入库', type: 'apps', source: 'favorite', origin: '飞象星球', icon: 'scan-search', grad: 10, lastUsed: '今天 14:40', views: 980, favorites: 420, href: 'ai-record-jobs.html' },
     { title: '作业讲评生成器', desc: '基于学情自动生成讲评课件', type: 'apps', source: 'favorite', origin: '飞象星球', icon: 'presentation', grad: 5, lastUsed: '昨天 16:45', views: 358, favorites: 345, href: 'ai-review.html' },
@@ -523,6 +696,25 @@
     { title: '板书提纲生成器', desc: '根据课文自动整理课堂板书结构', type: 'apps', source: 'favorite', origin: '飞象星球', icon: 'pencil', grad: 1, lastUsed: '昨天 18:06', views: 329, favorites: 276, href: '#' },
     { title: '《赤壁赋》课堂导入', desc: 'AI 生成的导入页与问题链', type: 'courseware', source: 'created', origin: '张老师', icon: 'book-open', grad: 2, lastUsed: '本周二', views: 274, favorites: 203, href: '#' },
   ];
+
+  const MY_SPACE_STORAGE_KEY = 'FEIXIANG_MY_SPACE';
+  const MY_SPACE_DELETED_KEY = 'FEIXIANG_MY_SPACE_DELETED';
+
+  function getDeletedAppTitles() {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(MY_SPACE_DELETED_KEY) || '[]'));
+    } catch (e) {
+      console.error('Failed to parse FEIXIANG_MY_SPACE_DELETED', e);
+      localStorage.removeItem(MY_SPACE_DELETED_KEY);
+      return new Set();
+    }
+  }
+
+  function rememberDeletedApp(title) {
+    const deletedTitles = getDeletedAppTitles();
+    deletedTitles.add(title);
+    localStorage.setItem(MY_SPACE_DELETED_KEY, JSON.stringify([...deletedTitles]));
+  }
 
   const ICON_SVG = {
     'list-checks': '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8"/><path d="M13 12h8"/><path d="M13 18h8"/></svg>',
@@ -547,7 +739,8 @@
   };
 
   function getStoredApps() {
-    const stored = localStorage.getItem('FEIXIANG_MY_SPACE');
+    const stored = localStorage.getItem(MY_SPACE_STORAGE_KEY);
+    const deletedTitles = getDeletedAppTitles();
     if (stored) {
       try {
         const defaultByTitle = new Map(DEFAULT_APPS.map(app => [app.title, app]));
@@ -571,14 +764,14 @@
             return normalized;
           });
         const existingTitles = new Set(apps.map(app => app.title));
-        const missingDefaults = DEFAULT_APPS.filter(app => !existingTitles.has(app.title));
+        const missingDefaults = DEFAULT_APPS.filter(app => !existingTitles.has(app.title) && !deletedTitles.has(app.title));
         if (missingDefaults.length) {
           const mergedApps = [...apps, ...missingDefaults];
-          localStorage.setItem('FEIXIANG_MY_SPACE', JSON.stringify(mergedApps));
+          localStorage.setItem(MY_SPACE_STORAGE_KEY, JSON.stringify(mergedApps));
           return mergedApps;
         }
         if (shouldPersist) {
-          localStorage.setItem('FEIXIANG_MY_SPACE', JSON.stringify(apps));
+          localStorage.setItem(MY_SPACE_STORAGE_KEY, JSON.stringify(apps));
         }
         return apps;
       } catch (e) {
@@ -586,12 +779,13 @@
       }
     }
     // Initialize storage with DEFAULT_APPS
-    localStorage.setItem('FEIXIANG_MY_SPACE', JSON.stringify(DEFAULT_APPS));
-    return DEFAULT_APPS;
+    const visibleDefaults = DEFAULT_APPS.filter(app => !deletedTitles.has(app.title));
+    localStorage.setItem(MY_SPACE_STORAGE_KEY, JSON.stringify(visibleDefaults));
+    return visibleDefaults;
   }
 
   function saveStoredApps(apps) {
-    localStorage.setItem('FEIXIANG_MY_SPACE', JSON.stringify(apps));
+    localStorage.setItem(MY_SPACE_STORAGE_KEY, JSON.stringify(apps));
   }
 
   function hoverActionsHtml(app) {
@@ -735,6 +929,7 @@
   let selectedIcon = 'sparkles';
   let selectedGrad = 1;
   let editingAppTitle = null;
+  let pendingDeleteTitle = null;
 
   function initModalSelectors() {
     const iconGrid = document.getElementById('icon-selector');
@@ -868,14 +1063,40 @@
   }
 
   function deleteApp(title) {
-    if (!confirm(`确定要删除内容「${title}」吗？`)) return;
+    pendingDeleteTitle = title;
+    const modal = document.getElementById('delete-confirm-modal');
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function closeDeleteConfirm() {
+    pendingDeleteTitle = null;
+    const modal = document.getElementById('delete-confirm-modal');
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+  }
+
+  function handleDeleteOverlayClick(event) {
+    if (event.target.id === 'delete-confirm-modal') closeDeleteConfirm();
+  }
+
+  function confirmDeleteApp() {
+    if (!pendingDeleteTitle) return;
+    const title = pendingDeleteTitle;
     let apps = getStoredApps();
+    rememberDeletedApp(title);
     apps = apps.filter(a => a.title !== title);
     saveStoredApps(apps);
     showToast(`已删除内容「${title}」`);
+    closeDeleteConfirm();
     const active = document.querySelector('.subject-tab.active')?.dataset.cat || 'all';
     renderCards(active);
   }
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeDeleteConfirm();
+  });
 
   function removeAddedApp(title) {
     let apps = getStoredApps();
@@ -1056,7 +1277,7 @@
             },
             {
               "场景": "删除需确认",
-              "处理方式": "删除自己创建的作品前弹出确认。"
+              "处理方式": "删除自己创建的作品前弹出确认弹窗，标题为“确认删除内容？”，说明为“删除后，该内容将不可恢复”，按钮为“取消”和“确认删除”。"
             }
           ]
         },
@@ -1086,7 +1307,7 @@
           "title": "QA 检查点",
           "items": [
             "取消收藏不影响广场原内容。",
-            "删除自己创建的作品有确认。",
+            "删除自己创建的作品时展示确认删除内容弹窗，取消不删除，确认删除后内容从列表移除。",
             "自己创建和收藏来源的可见操作不同。",
             "卡片不出现浏览数。"
           ]

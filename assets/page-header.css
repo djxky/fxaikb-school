@@ -212,6 +212,14 @@
   background:rgba(0,0,0,0.04);
   color:var(--text-1, #111110);
 }
+.ph-action:disabled{
+  opacity:.42;
+  cursor:not-allowed;
+}
+.ph-action:disabled:hover{
+  background:transparent;
+  color:var(--text-2, #6b6a65);
+}
 .ph-action.is-meta{
   background:var(--gold-bg);
   border-color:rgba(192,142,79,.28);
@@ -229,6 +237,19 @@
   color:#fff;
 }
 .ph-action.is-primary [data-lucide]{ color:#fff; }
+.ph-action.is-danger{
+  color:#B0413E;
+}
+.ph-action.is-danger [data-lucide]{ color:#B0413E; }
+.ph-action.is-danger:hover{
+  background:rgba(176,65,62,.07);
+  border-color:rgba(176,65,62,.18);
+  color:#B0413E;
+}
+.ph-action.is-danger:disabled:hover{
+  background:transparent;
+  border-color:transparent;
+}
 
 /* 图标按钮模式（无文字，只显示图标，用于搜索/更多等 utility 操作） */
 .ph-action.ph-action-icon{

@@ -78,11 +78,11 @@ const TOP_SEARCH_POOL = [
   { type:'wiki', label:'主题', icon:'book-open', kb:'school',   main:'相似三角形的判定方法', sub:'学校知识库', href:'wiki-entry.html' },
   { type:'wiki', label:'主题', icon:'book-open', kb:'school',   main:'圆与切线的位置关系', sub:'学校知识库', href:'wiki-entry.html' },
   { type:'wiki', label:'主题', icon:'book-open', kb:'school',   main:'勾股定理及其逆定理', sub:'学校知识库', href:'wiki-entry.html' },
-  /* 文件 */
-  { type:'file', label:'文件', icon:'presentation',     kb:'personal', main:'二次函数·导入课件.pptx', sub:'我的知识库 · 4.2 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'file-text',        kb:'school',   main:'二次函数公开课教案.docx', sub:'学校知识库 · 1.8 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'image',            kb:'school',   main:'相似三角形板书照片.jpg', sub:'学校知识库 · 2.1 MB', href:'file-preview.html' },
-  { type:'file', label:'文件', icon:'file-spreadsheet', kb:'personal', main:'八年级期中成绩单.xlsx', sub:'我的知识库 · 38 KB', href:'file-preview.html' }
+  /* 资料：全局搜索不把原文件预览页作为独立入口，先回到知识库上下文 */
+  { type:'resource', label:'资料', icon:'presentation',     kb:'personal', main:'二次函数·导入课件.pptx', sub:'我的知识库 · 4.2 MB', href:'my-wiki.html' },
+  { type:'resource', label:'资料', icon:'file-text',        kb:'school',   main:'二次函数公开课教案.docx', sub:'学校知识库 · 1.8 MB', href:'wiki-entry.html' },
+  { type:'resource', label:'资料', icon:'image',            kb:'school',   main:'相似三角形板书照片.jpg', sub:'学校知识库 · 2.1 MB', href:'wiki-entry.html' },
+  { type:'resource', label:'资料', icon:'file-spreadsheet', kb:'personal', main:'八年级期中成绩单.xlsx', sub:'我的知识库 · 38 KB', href:'my-wiki.html' }
 ];
 
 let _topSearchDebounce = null;
@@ -882,6 +882,64 @@ function renderKnowledgeHeaderFolder(rootName, rootIcon, trail){
   if(window.lucide) lucide.createIcons();
 }
 
+function renderFolderHeaderActions(state = {}){
+  const wrap = document.querySelector('.folder-header-actions');
+  if(!wrap) return;
+  const canWrite = state.canWrite !== false;
+  const inFolder = !!state.inFolder;
+  const selectedCount = state.selectedCount || 0;
+  const selectableCount = state.selectableCount || 0;
+  const allSelected = !!state.allSelected;
+  const rootLabel = getKbRootLabel();
+  const searchTitle = `搜索${rootLabel}文件`;
+
+  if(!canWrite){
+    wrap.innerHTML = `
+      <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="${escHtml(searchTitle)}" aria-expanded="false">
+        <i data-lucide="search"></i>
+      </button>
+      ${inFolder ? `
+      <span class="ph-action-sep" aria-hidden="true"></span>
+      <button class="ph-action folder-sort-action" onclick="showToast('按上传时间 / 名称 / 大小排序')" title="排序">
+        <i data-lucide="arrow-up-down"></i><span>排序</span>
+      </button>` : ''}
+    `;
+  } else if(_folderManageMode){
+    wrap.innerHTML = `
+      <button class="ph-action" onclick="toggleSelectAllInFolder(${allSelected ? 'false' : 'true'})" ${selectableCount ? '' : 'disabled'}>
+        <i data-lucide="${allSelected ? 'square' : 'check-square'}"></i><span>${allSelected ? '取消全选' : '全选'}</span>
+      </button>
+      <button class="ph-action" onclick="openBatchMovePop(event)" ${selectedCount ? '' : 'disabled'}>
+        <i data-lucide="folder-input"></i><span>移动到…</span>
+      </button>
+      <button class="ph-action is-danger" onclick="deleteSelectedFolderItems()" ${selectedCount ? '' : 'disabled'}>
+        <i data-lucide="trash-2"></i><span>删除</span>
+      </button>
+      <button class="ph-action is-meta" onclick="setFolderManageMode(false)">
+        <i data-lucide="check"></i><span>完成</span>
+      </button>
+    `;
+  } else {
+    wrap.innerHTML = `
+      <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="${escHtml(searchTitle)}" aria-expanded="false">
+        <i data-lucide="search"></i>
+      </button>
+      <span class="ph-action-sep" aria-hidden="true"></span>
+      <button class="ph-action" onclick="setFolderManageMode(true)" title="批量管理">
+        <i data-lucide="list-checks"></i><span>管理</span>
+      </button>
+      <button class="ph-action" onclick="openCreateFolderPop(event)" title="新建文件夹">
+        <i data-lucide="folder-plus"></i><span>新建文件夹</span>
+      </button>
+      ${inFolder ? `
+      <button class="ph-action folder-sort-action" onclick="showToast('按上传时间 / 名称 / 大小排序')" title="排序">
+        <i data-lucide="arrow-up-down"></i><span>排序</span>
+      </button>` : ''}
+    `;
+  }
+  if(window.lucide) lucide.createIcons();
+}
+
 function switchView(v, entryName){
   /* 图谱 = 研发独立 SPA，直接新窗口打开。不动当前视图，保持上下文 */
   if(v === 'graph'){
@@ -1423,6 +1481,8 @@ window.setCurrentKbScope = setCurrentKbScope;
 
 let CURRENT_KB_SCOPE = 'personal';
 ensureKbFolderState('personal');
+let _folderManageMode = false;
+const _folderSelection = {};
 
 /* 当前数据。所有 helper / 渲染都用这个，跟当前 scope 联动 */
 function kbData(){
@@ -1891,6 +1951,8 @@ function renderPersonalFolderView(){
   const currentId = _personalCurrentFolder; // null 表示根
   const inFolder = currentId != null;
   const currentFolder = inFolder ? getPersonalFolder(currentId) : null;
+  const selectionKey = getFolderSelectionKey(currentId);
+  const selection = ensureFolderSelection(selectionKey);
 
   /* 当前层的子文件夹（按名称） */
   const childFolders = getPersonalChildFolders(currentId)
@@ -1899,12 +1961,22 @@ function renderPersonalFolderView(){
   /* 当前层的文件（根目录散文件 / 子文件夹直接文件） */
   const currentFiles = getPersonalFiles(currentId);
 
+  const manageColumnHead = _folderManageMode ? '<th class="col-select"></th>' : '';
+  const selectedCount = selection.folders.size + selection.files.size;
+  const selectableCount = childFolders.length + currentFiles.length;
+  const allSelected = selectableCount > 0 && selectedCount === selectableCount;
+
   const folderRows = childFolders.map(folder => `
     <tr class="fv-row-folder"
         data-folder-id="${escHtml(folder.id)}"
-        onclick="personalEnterFolder('${escHtml(folder.id)}')"
+        onclick="${_folderManageMode ? `toggleFolderSelection('folder','${escHtml(folder.id)}')` : `personalEnterFolder('${escHtml(folder.id)}')`}"
         ondblclick="personalEnterFolder('${escHtml(folder.id)}')"
         title="进入「${escHtml(folder.name)}」">
+      ${_folderManageMode ? `
+      <td class="col-select" onclick="event.stopPropagation()">
+        <input type="checkbox" class="fv-check" ${selection.folders.has(folder.id) ? 'checked' : ''}
+               onchange="toggleFolderSelection('folder','${escHtml(folder.id)}')" aria-label="选择文件夹 ${escHtml(folder.name)}">
+      </td>` : ''}
       <td class="col-name">
         <div class="col-name-inner">
           <i data-lucide="folder"></i>
@@ -1915,7 +1987,7 @@ function renderPersonalFolderView(){
       <td class="col-time">—</td>
       <td class="col-size">—</td>
       <td class="col-actions">
-        ${canWrite ? `
+        ${canWrite && !_folderManageMode ? `
         <button class="fv-row-action" title="管理文件夹"
                 onclick="event.stopPropagation();openFolderRowMenu(event,'${escHtml(folder.id)}')">
           <i data-lucide="ellipsis"></i>
@@ -1926,8 +1998,13 @@ function renderPersonalFolderView(){
 
   const fileRows = currentFiles.map((file, index) => `
     <tr data-file-index="${index}"
-        onclick="window.location.href='file-preview.html'"
-        title="预览原文件 · 左原件 / 右 AI 解读">
+        onclick="${_folderManageMode ? `toggleFolderSelection('file','${index}')` : `window.location.href='wiki-entry.html'`}"
+        title="查看关联主题与资料说明">
+      ${_folderManageMode ? `
+      <td class="col-select" onclick="event.stopPropagation()">
+        <input type="checkbox" class="fv-check" ${selection.files.has(index) ? 'checked' : ''}
+               onchange="toggleFolderSelection('file','${index}')" aria-label="选择文件 ${escHtml(file.name)}">
+      </td>` : ''}
       <td class="col-name">
         <div class="col-name-inner">
           <i data-lucide="${escHtml(FILE_ICON_MAP[file.icon] || 'file')}"></i>
@@ -1939,7 +2016,7 @@ function renderPersonalFolderView(){
       <td class="col-time">${escHtml(file.time || '')}</td>
       <td class="col-size">${escHtml(file.size || '')}</td>
       <td class="col-actions">
-        ${canWrite ? `
+        ${canWrite && !_folderManageMode ? `
         <button class="fv-row-action" title="管理文件"
                 onclick="event.stopPropagation();openFileRowMenu(event,${index})">
           <i data-lucide="ellipsis"></i>
@@ -1951,14 +2028,14 @@ function renderPersonalFolderView(){
   /* 完全空的层级（既无子文件夹也无文件） */
   const emptyText = canWrite
     ? (inFolder
-        ? '这个文件夹还是空的 · 上传资料或新建子文件夹'
-        : '还没有任何内容 · 新建文件夹或上传资料开始')
+        ? '这个文件夹还是空的 · 可新建子文件夹整理资料'
+        : '还没有任何内容 · 可新建文件夹整理资料')
     : (inFolder
         ? '这个文件夹还是空的'
         : '这个知识库还没有内容');
   const emptyHint = (!childFolders.length && !currentFiles.length) ? `
     <tr class="more">
-      <td class="col-name" colspan="5">
+      <td class="col-name" colspan="${_folderManageMode ? 6 : 5}">
         <div class="col-name-inner" style="justify-content:center">
           <i data-lucide="${inFolder ? 'inbox' : 'folder-plus'}"></i>
           <span>${emptyText}</span>
@@ -2005,24 +2082,45 @@ function renderPersonalFolderView(){
     </button>
   ` : '';
 
-  /* 工具按钮：admin 显示「新建文件夹 / 上传资料」；非 admin 完全隐藏写操作 */
-  const tools = canWrite ? `
-    <button class="fv-tool" onclick="openCreateFolderPop(event)">
-      <i data-lucide="folder-plus"></i> 新建文件夹
-    </button>
-    ${inFolder ? `
-      <button class="fv-tool" onclick="showToast('（演示）按上传时间 / 名称 / 大小排序')">
-        <i data-lucide="arrow-up-down"></i> 排序
+  /* 工具按钮：admin 显示管理和新建；文件夹视图不提供上传入口 */
+  const tools = canWrite ? (
+    _folderManageMode ? `
+      <button class="fv-tool" onclick="toggleSelectAllInFolder(${allSelected ? 'false' : 'true'})" ${selectableCount ? '' : 'disabled'}>
+        <i data-lucide="${allSelected ? 'square' : 'check-square'}"></i> ${allSelected ? '取消全选' : '全选'}
       </button>
-    ` : ''}
-    <button class="fv-tool primary" onclick="personalUploadToCurrentFolder()">
-      <i data-lucide="upload"></i> 上传资料
-    </button>
-  ` : (inFolder ? `
+      <button class="fv-tool" onclick="openBatchMovePop(event)" ${selectedCount ? '' : 'disabled'}>
+        <i data-lucide="folder-input"></i> 移动到…
+      </button>
+      <button class="fv-tool danger" onclick="deleteSelectedFolderItems()" ${selectedCount ? '' : 'disabled'}>
+        <i data-lucide="trash-2"></i> 删除
+      </button>
+      <button class="fv-tool" onclick="setFolderManageMode(false)">
+        <i data-lucide="x"></i> 完成
+      </button>
+    ` : `
+      <button class="fv-tool" onclick="setFolderManageMode(true)">
+        <i data-lucide="list-checks"></i> 管理
+      </button>
+      <button class="fv-tool" onclick="openCreateFolderPop(event)">
+        <i data-lucide="folder-plus"></i> 新建文件夹
+      </button>
+      ${inFolder ? `
+        <button class="fv-tool" onclick="showToast('（演示）按上传时间 / 名称 / 大小排序')">
+          <i data-lucide="arrow-up-down"></i> 排序
+        </button>
+      ` : ''}
+    `
+  ) : (inFolder ? `
     <button class="fv-tool" onclick="showToast('（演示）按上传时间 / 名称 / 大小排序')">
       <i data-lucide="arrow-up-down"></i> 排序
     </button>
   ` : '');
+  const manageBar = _folderManageMode ? `
+    <div class="fv-manage-bar">
+      <span>${selectedCount ? `已选择 ${selectedCount} 项` : '选择文件夹或文件后可批量移动、删除'}</span>
+    </div>
+  ` : '';
+  renderFolderHeaderActions({ canWrite, inFolder, selectedCount, selectableCount, allSelected });
 
   root.innerHTML = `
     <div class="fv-list personal-folder-view">
@@ -2036,11 +2134,13 @@ function renderPersonalFolderView(){
         </div>
       </div>
 
+      ${manageBar}
       ${wikiChips}
 
       <table class="fv-table" id="personal-fv-table">
         <thead>
           <tr>
+            ${manageColumnHead}
             <th class="col-name">名称</th>
             <th class="col-by">上传者</th>
             <th class="col-time">上传时间</th>
@@ -2062,6 +2162,7 @@ function renderPersonalFolderView(){
 
 function personalEnterFolder(id){
   if(!getPersonalFolder(id)) return;
+  _folderManageMode = false;
   _personalCurrentFolder = id;
   renderPersonalFolderView();
 }
@@ -2072,23 +2173,566 @@ function personalEnterFolderId(id){
     _personalCurrentFolder = null;
   } else {
     if(!getPersonalFolder(id)) return;
+    _folderManageMode = false;
     _personalCurrentFolder = id;
   }
   renderPersonalFolderView();
 }
 
 function personalBackToRoot(){
+  _folderManageMode = false;
   _personalCurrentFolder = null;
   renderPersonalFolderView();
 }
 
-function personalUploadToCurrentFolder(){
-  const folderQs = _personalCurrentFolder ? `&folder=${encodeURIComponent(_personalCurrentFolder)}` : '';
-  if(CURRENT_KB_SCOPE === 'personal'){
-    window.location.href = `upload-onboarding.html?from=personal${folderQs}`;
-  } else {
-    window.location.href = `upload-onboarding.html?from=team&kb=${encodeURIComponent(CURRENT_KB_SCOPE)}${folderQs}`;
+const KB_UPLOAD_MAX_FILE_SIZE = 100 * 1024 * 1024;
+const KB_UPLOAD_ALLOWED_EXTS = new Set(['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png']);
+const KB_UPLOAD_DEMO_FILES = [
+  { name:'一年级', ext:'docx', size:26700, path:'编辑题目/一年级.docx' },
+  { name:'二年级', ext:'pptx', size:13000, path:'编辑题目/二年级.pptx' },
+  { name:'二年级', ext:'docx', size:13000, path:'编辑题目/二年级.docx' },
+  { name:'二年级', ext:'docx', size:13000, path:'编辑题目/二年级-复习.docx' },
+  { name:'单元录音', ext:'mp3', size:8000, path:'编辑题目/单元录音.mp3' },
+  { name:'课堂视频', ext:'mp4', size:18000, path:'编辑题目/课堂视频.mp4' },
+  { name:'资料压缩包', ext:'zip', size:42000, path:'编辑题目/资料压缩包.zip' },
+  { name:'整册资料包', ext:'pptx', size:128 * 1024 * 1024, path:'编辑题目/整册资料包.pptx' },
+  { name:'一年级', ext:'docx', size:26700, path:'编辑题目/一年级-补充.docx' },
+  { name:'二年级', ext:'pptx', size:13000, path:'编辑题目/二年级-拓展.pptx' },
+];
+const KB_UPLOAD_FIXED_UNSUPPORTED_FILES = [
+  { name:'单元录音', ext:'mp3', size:8000, path:'编辑题目/单元录音.mp3', reason:'格式不支持' },
+  { name:'课堂视频', ext:'mp4', size:18000, path:'编辑题目/课堂视频.mp4', reason:'格式不支持' },
+  { name:'资料压缩包', ext:'zip', size:42000, path:'编辑题目/资料压缩包.zip', reason:'格式不支持' },
+  { name:'整册资料包', ext:'pptx', size:128 * 1024 * 1024, path:'编辑题目/整册资料包.pptx', reason:'超过 100M' },
+];
+let _kbUploadState = null;
+let _kbUploadTimer = null;
+let _kbUploadHasSelection = false;
+
+function getUploadFileExt(name){
+  const parts = String(name || '').split('.');
+  return parts.length > 1 ? parts.pop().toLowerCase() : '';
+}
+
+function getUploadFileIcon(ext, isFolder){
+  if(isFolder) return 'folder';
+  if(['ppt', 'pptx'].includes(ext)) return 'presentation';
+  if(['xls', 'xlsx'].includes(ext)) return 'file-spreadsheet';
+  if(['jpg', 'jpeg', 'png'].includes(ext)) return 'image';
+  if(ext === 'pdf') return 'file-text';
+  return 'file';
+}
+
+function formatUploadSize(bytes){
+  const value = Number(bytes || 0);
+  if(value >= 1024 * 1024) return `${(value / 1024 / 1024).toFixed(value >= 10 * 1024 * 1024 ? 0 : 1)}MB`;
+  if(value >= 1024) return `${(value / 1024).toFixed(value >= 10 * 1024 ? 0 : 1)} kB`;
+  return value ? `${value} B` : '-';
+}
+
+function getUnsupportedReason(file){
+  if(!KB_UPLOAD_ALLOWED_EXTS.has(file.ext)) return '格式不支持';
+  if((file.size || 0) > KB_UPLOAD_MAX_FILE_SIZE) return '超过 100M';
+  return '';
+}
+
+function getVisibleUnsupportedFiles(){
+  return KB_UPLOAD_FIXED_UNSUPPORTED_FILES;
+}
+
+function buildUploadPayload(fileList){
+  const files = Array.from(fileList || []);
+  const isDemo = files.length === 0;
+  const source = files.length ? files.map(file => ({
+    name: file.name,
+    ext: getUploadFileExt(file.name),
+    size: file.size || 0,
+    path: file.webkitRelativePath || file.name,
+  })) : KB_UPLOAD_DEMO_FILES;
+
+  const supported = source.filter(file => !getUnsupportedReason(file));
+  const unsupported = source
+    .filter(file => getUnsupportedReason(file))
+    .map(file => ({ ...file, reason: getUnsupportedReason(file) }));
+  const folders = new Set();
+  source.forEach(file => {
+    const parts = String(file.path || '').split('/').filter(Boolean);
+    parts.slice(0, -1).forEach((_, idx) => folders.add(parts.slice(0, idx + 1).join('/')));
+  });
+
+  return {
+    isDemo,
+    files: supported,
+    unsupported,
+    totalFiles: supported.length,
+    folderCount: folders.size || 3,
+    size: supported.reduce((sum, file) => sum + (file.size || 0), 0) || 6.3 * 1024 * 1024,
+  };
+}
+
+function ensureKbUploadModal(){
+  let overlay = document.getElementById('kb-upload-overlay');
+  if(overlay) return overlay;
+
+  overlay = document.createElement('div');
+  overlay.id = 'kb-upload-overlay';
+  overlay.className = 'kb-upload-overlay';
+  overlay.innerHTML = `
+    <div class="kb-upload-modal" role="dialog" aria-modal="true" aria-labelledby="kb-upload-title">
+      <button class="kb-upload-close" type="button" onclick="closeKbUploadModal()" aria-label="关闭">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="kb-upload-head">
+        <h2 id="kb-upload-title">上传文件</h2>
+        <p>上传后，AI 会自动整理并生成 Wiki 内容。</p>
+      </div>
+      <div class="kb-upload-body" id="kb-upload-body"></div>
+      <input class="kb-upload-input" id="kb-upload-file-input" type="file" multiple
+        accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png"
+        onchange="handleKbUploadInput(this.files)" />
+      <input class="kb-upload-input" id="kb-upload-folder-input" type="file" multiple webkitdirectory directory
+        onchange="handleKbUploadInput(this.files)" />
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  if(window.lucide) lucide.createIcons();
+  return overlay;
+}
+
+function ensureKbUnsupportedModal(){
+  let overlay = document.getElementById('kb-unsupported-overlay');
+  if(overlay) return overlay;
+
+  overlay = document.createElement('div');
+  overlay.id = 'kb-unsupported-overlay';
+  overlay.className = 'kb-upload-overlay kb-unsupported-overlay';
+  overlay.innerHTML = `
+    <div class="kb-upload-modal kb-unsupported-modal" role="dialog" aria-modal="true" aria-labelledby="kb-unsupported-title">
+      <button class="kb-upload-close" type="button" onclick="closeKbUnsupportedList()" aria-label="关闭">
+        <i data-lucide="x"></i>
+      </button>
+      <div class="kb-upload-head">
+        <h2 id="kb-unsupported-title">4 个不支持的文件</h2>
+      </div>
+      <div class="kb-upload-body" id="kb-unsupported-body"></div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  if(window.lucide) lucide.createIcons();
+  return overlay;
+}
+
+function openKbUploadModal(){
+  const overlay = ensureKbUploadModal();
+  const title = document.getElementById('kb-upload-title');
+  if(title) title.textContent = '上传文件';
+  _kbUploadState = buildUploadPayload([]);
+  _kbUploadHasSelection = false;
+  overlay.classList.add('open');
+  renderKbUploadDrop();
+}
+
+function closeKbUploadModal(){
+  const overlay = document.getElementById('kb-upload-overlay');
+  closeKbUnsupportedList();
+  if(_kbUploadTimer){
+    clearInterval(_kbUploadTimer);
+    _kbUploadTimer = null;
   }
+  if(overlay) overlay.classList.remove('open');
+}
+
+function renderKbUploadDrop(){
+  const body = document.getElementById('kb-upload-body');
+  if(!body) return;
+  const selectedCount = _kbUploadHasSelection
+    ? (_kbUploadState.files.length + _kbUploadState.unsupported.length)
+    : 0;
+  const selectedText = selectedCount
+    ? `已选择 ${selectedCount} 个文件，点击下一步预览`
+    : '可一次选择多个文件，也可以选择整个文件夹';
+  body.innerHTML = `
+    <div class="kb-upload-drop" ondragover="event.preventDefault()" ondrop="handleKbUploadDrop(event)">
+      <div class="kb-upload-folder-art"><i data-lucide="folder-open"></i></div>
+      <div class="kb-upload-main-copy">拖入文件，或点击下方按钮选择</div>
+      <div class="kb-upload-sub-copy">仅支持 PDF、DOC、DOCX、XLS、XLSX、PPT、PPTX、JPG、PNG 格式文件，单个文件不超过 100M</div>
+      <div class="kb-upload-selected ${selectedCount ? 'ready' : ''}">${selectedText}</div>
+      <div class="kb-upload-actions">
+        <button class="kb-upload-pick" type="button" onclick="triggerKbUploadInput('file')">
+          <i data-lucide="upload"></i><span>选择文件</span>
+        </button>
+        <button class="kb-upload-pick" type="button" onclick="triggerKbUploadInput('folder')">
+          <i data-lucide="folder-plus"></i><span>选择文件夹</span>
+        </button>
+      </div>
+      <button class="kb-upload-next" type="button" onclick="goKbUploadNext()" ${selectedCount ? '' : 'disabled'}>下一步</button>
+    </div>
+  `;
+  if(window.lucide) lucide.createIcons();
+}
+
+function renderKbUploadTree(files, unsupportedOnly){
+  const rootCount = unsupportedOnly ? files.length : Math.max(26, files.length);
+  const rows = files.map(file => `
+    <div class="kb-upload-tree-file">
+      <i data-lucide="${getUploadFileIcon(file.ext)}"></i>
+      <span>${escHtml(file.name.replace(/\.[^.]+$/, ''))}</span>
+      ${unsupportedOnly ? `<strong class="kb-upload-reason">${escHtml(file.reason || getUnsupportedReason(file))}</strong>` : ''}
+      <em>${formatUploadSize(file.size)}</em>
+    </div>
+  `).join('');
+
+  return `
+    <div class="kb-upload-tree">
+      ${unsupportedOnly ? '<div class="kb-upload-tree-note">以下文件不会上传，可调整后重新选择</div>' : ''}
+      <div class="kb-upload-tree-folder is-open">
+        <i data-lucide="chevron-down"></i>
+        <i data-lucide="folder"></i>
+        <b>编辑题目</b>
+        <span>${rootCount} 个</span>
+      </div>
+      ${rows}
+      <div class="kb-upload-tree-folder">
+        <i data-lucide="chevron-right"></i>
+        <i data-lucide="folder"></i>
+        <b>编辑题目</b>
+        <span>26 个</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderKbUploadPreview(){
+  const body = document.getElementById('kb-upload-body');
+  if(!body || !_kbUploadState) return;
+  const unsupportedCount = getVisibleUnsupportedFiles().length;
+  const totalFiles = _kbUploadState.totalFiles;
+  const canStart = totalFiles > 0;
+  body.innerHTML = `
+    <div class="kb-upload-preview">
+      <div class="kb-upload-stats">
+        <div class="kb-upload-stat-main">
+          <span>文件 <b>${totalFiles}</b></span>
+          <span>文件夹 <b>${_kbUploadState.folderCount || 3}</b></span>
+          <span>大小 <b>${formatUploadSize(_kbUploadState.size)}</b></span>
+        </div>
+        <button class="kb-upload-unsupported-link" type="button" onclick="openKbUnsupportedList()">
+          <span>不支持文件 <b>${unsupportedCount}</b> 个</span>
+          <i data-lucide="chevron-right"></i>
+        </button>
+      </div>
+      ${renderKbUploadTree(_kbUploadState.files.length ? _kbUploadState.files : KB_UPLOAD_DEMO_FILES.filter(file => !getUnsupportedReason(file)), false)}
+    </div>
+    <button class="kb-upload-start" type="button" onclick="startKbUploadImport()" ${canStart ? '' : 'disabled'}>${canStart ? '开始上传' : '没有可上传文件'}</button>
+  `;
+  if(window.lucide) lucide.createIcons();
+}
+
+function openKbUnsupportedList(){
+  if(!_kbUploadState) return;
+  const overlay = ensureKbUnsupportedModal();
+  const body = document.getElementById('kb-unsupported-body');
+  const title = document.getElementById('kb-unsupported-title');
+  if(!body) return;
+  const unsupported = getVisibleUnsupportedFiles();
+  const count = unsupported.length;
+  if(title) title.textContent = `${count} 个不支持的文件`;
+  body.innerHTML = renderKbUploadTree(unsupported, true);
+  overlay.classList.add('open');
+  if(window.lucide) lucide.createIcons();
+}
+
+function closeKbUnsupportedList(){
+  const overlay = document.getElementById('kb-unsupported-overlay');
+  if(overlay) overlay.classList.remove('open');
+}
+
+function triggerKbUploadInput(type){
+  const input = document.getElementById(type === 'folder' ? 'kb-upload-folder-input' : 'kb-upload-file-input');
+  if(input){
+    input.value = '';
+    input.click();
+  }
+}
+
+function handleKbUploadInput(files){
+  const selected = Array.from(files || []);
+  if(!selected.length) return;
+  _kbUploadState = buildUploadPayload(selected);
+  _kbUploadHasSelection = true;
+  const title = document.getElementById('kb-upload-title');
+  if(title) title.textContent = '上传文件';
+  renderKbUploadDrop();
+}
+
+function handleKbUploadDrop(event){
+  event.preventDefault();
+  handleKbUploadInput(event.dataTransfer?.files);
+}
+
+function goKbUploadNext(){
+  if(!_kbUploadHasSelection){
+    if(typeof showToast === 'function') showToast('请先选择文件或文件夹');
+    return;
+  }
+  renderKbUploadPreview();
+}
+
+function startKbUploadImport(){
+  const body = document.getElementById('kb-upload-body');
+  if(!body) return;
+  if(_kbUploadTimer){
+    clearInterval(_kbUploadTimer);
+    _kbUploadTimer = null;
+  }
+  const total = _kbUploadState?.totalFiles || 157;
+  body.innerHTML = `
+    <div class="kb-upload-progress">
+      <div class="kb-upload-percent"><span id="kb-upload-pct">0</span>%</div>
+      <div class="kb-upload-bar"><span id="kb-upload-fill"></span></div>
+      <div class="kb-upload-steps">
+        <div class="kb-upload-step doing" id="kb-up-step-1">
+          <span>01</span>
+          <div><b>读取文件并保留原结构</b><p id="kb-up-step-1-copy">已读取 0/${total} 个文件</p></div>
+          <em>进行中</em>
+        </div>
+        <div class="kb-upload-step" id="kb-up-step-2">
+          <span>02</span>
+          <div><b>AI 自动打标签</b><p>识别学科、章节和资料类型</p></div>
+          <em>等待中</em>
+        </div>
+        <div class="kb-upload-step" id="kb-up-step-3">
+          <span>03</span>
+          <div><b>抽取知识点，生成摘要</b><p>PDF/PPT 抽目录，图片做 OCR</p></div>
+          <em>等待中</em>
+        </div>
+        <div class="kb-upload-step" id="kb-up-step-4">
+          <span>04</span>
+          <div><b>建立关联与图谱</b><p>同主题资料自动关联</p></div>
+          <em>等待中</em>
+        </div>
+      </div>
+    </div>
+  `;
+  if(window.lucide) lucide.createIcons();
+
+  let pct = 0;
+  _kbUploadTimer = setInterval(() => {
+    pct = Math.min(100, pct + 5 + Math.floor(Math.random() * 6));
+    const pctEl = document.getElementById('kb-upload-pct');
+    const fill = document.getElementById('kb-upload-fill');
+    const stepCopy = document.getElementById('kb-up-step-1-copy');
+    if(pctEl) pctEl.textContent = pct;
+    if(fill) fill.style.width = pct + '%';
+    if(stepCopy) stepCopy.textContent = `已读取 ${Math.floor(total * pct / 100)}/${total} 个文件`;
+    updateKbUploadStep(2, pct >= 35, pct >= 58);
+    updateKbUploadStep(3, pct >= 58, pct >= 80);
+    updateKbUploadStep(4, pct >= 80, pct >= 100);
+    if(pct >= 100){
+      clearInterval(_kbUploadTimer);
+      _kbUploadTimer = null;
+      setTimeout(() => {
+        closeKbUploadModal();
+        showToast('上传完成，资料已加入知识库', 2600);
+      }, 520);
+    }
+  }, 360);
+}
+
+function updateKbUploadStep(step, active, done){
+  const el = document.getElementById(`kb-up-step-${step}`);
+  if(!el) return;
+  el.classList.toggle('doing', active && !done);
+  el.classList.toggle('done', done);
+  const status = el.querySelector('em');
+  if(status) status.textContent = done ? '已完成' : (active ? '进行中' : '等待中');
+}
+
+function personalUploadToCurrentFolder(){
+  openKbUploadModal();
+}
+
+function getFolderSelectionKey(folderId){
+  return `${CURRENT_KB_SCOPE}:${folderId ?? ROOT_FOLDER_ID}`;
+}
+
+function ensureFolderSelection(key){
+  if(!_folderSelection[key]){
+    _folderSelection[key] = { folders: new Set(), files: new Set() };
+  }
+  return _folderSelection[key];
+}
+
+function clearCurrentFolderSelection(){
+  delete _folderSelection[getFolderSelectionKey(_personalCurrentFolder ?? null)];
+}
+
+function setFolderManageMode(enabled){
+  _folderManageMode = !!enabled;
+  closeRowMenu();
+  if(!_folderManageMode) clearCurrentFolderSelection();
+  renderPersonalFolderView();
+}
+
+function toggleFolderSelection(type, idRaw){
+  const key = getFolderSelectionKey(_personalCurrentFolder ?? null);
+  const selection = ensureFolderSelection(key);
+  const bucket = type === 'folder' ? selection.folders : selection.files;
+  const id = type === 'file' ? Number(idRaw) : String(idRaw);
+  if(bucket.has(id)) bucket.delete(id);
+  else bucket.add(id);
+  renderPersonalFolderView();
+}
+
+function toggleSelectAllInFolder(shouldSelect){
+  const selection = ensureFolderSelection(getFolderSelectionKey(_personalCurrentFolder ?? null));
+  selection.folders.clear();
+  selection.files.clear();
+  if(shouldSelect){
+    getPersonalChildFolders(_personalCurrentFolder ?? null).forEach(folder => selection.folders.add(folder.id));
+    getPersonalFiles(_personalCurrentFolder ?? null).forEach((_, index) => selection.files.add(index));
+  }
+  renderPersonalFolderView();
+}
+
+function getSelectedFolderItems(){
+  const folderId = _personalCurrentFolder ?? null;
+  const selection = ensureFolderSelection(getFolderSelectionKey(folderId));
+  const files = getPersonalFiles(folderId);
+  return {
+    folderId,
+    folderIds: Array.from(selection.folders).filter(id => !!getPersonalFolder(id)),
+    fileIndexes: Array.from(selection.files)
+      .map(Number)
+      .filter(index => Number.isInteger(index) && index >= 0 && index < files.length)
+      .sort((a, b) => b - a),
+  };
+}
+
+function getKbRootLabel(){
+  if(CURRENT_KB_SCOPE === 'personal') return '我的知识库';
+  if(CURRENT_KB_SCOPE === 'school') return '学校知识库';
+  return getCurrentTeamKbName() || '团队知识库';
+}
+
+function openBatchMovePop(event){
+  if(event){
+    event.preventDefault && event.preventDefault();
+    event.stopPropagation && event.stopPropagation();
+  }
+  const selected = getSelectedFolderItems();
+  const total = selected.folderIds.length + selected.fileIndexes.length;
+  if(!total){
+    showToast('先选择要移动的文件夹或文件');
+    return;
+  }
+  const pop = ensureFvPopMounted();
+  const excludeIds = new Set();
+  selected.folderIds.forEach(id => collectPersonalDescendants(id).forEach(childId => excludeIds.add(childId)));
+  const disabledIds = new Set([selected.folderId]);
+  const targetsHtml = renderFolderTreePicker('confirmBatchMoveSelected(__ID__)', { excludeIds, disabledIds });
+  pop.innerHTML = `
+    <div class="fv-pop-title">移动所选内容到…</div>
+    <div class="fv-pop-sub">已选择 ${total} 项：${selected.folderIds.length} 个文件夹，${selected.fileIndexes.length} 个文件</div>
+    <div class="fv-pop-list">${targetsHtml}</div>
+    <div class="fv-pop-foot">
+      <button class="fv-pop-btn" onclick="closeFvPop()">取消</button>
+    </div>
+  `;
+  openFvPop();
+  if(window.lucide) lucide.createIcons();
+}
+
+function confirmBatchMoveSelected(toFolderId){
+  const selected = getSelectedFolderItems();
+  const total = selected.folderIds.length + selected.fileIndexes.length;
+  if(!total){
+    closeFvPop();
+    return;
+  }
+
+  const targetParent = toFolderId ?? null;
+  const foldersToMove = selected.folderIds
+    .map(id => getPersonalFolder(id))
+    .filter(Boolean);
+  const conflict = foldersToMove.some(folder => PERSONAL_KB_DATA.folders.some(
+    item => item.id !== folder.id && (item.parentId ?? null) === targetParent && item.name === folder.name
+  ));
+  if(conflict){
+    showToast('目标位置已有同名文件夹');
+    closeFvPop();
+    return;
+  }
+
+  foldersToMove.forEach(folder => { folder.parentId = targetParent; });
+
+  const fromKey = fileBucketKey(selected.folderId);
+  const toKey = fileBucketKey(targetParent);
+  if(!Array.isArray(PERSONAL_KB_DATA.files[toKey])) PERSONAL_KB_DATA.files[toKey] = [];
+  selected.fileIndexes.forEach(index => {
+    const file = PERSONAL_KB_DATA.files[fromKey]?.[index];
+    if(file){
+      PERSONAL_KB_DATA.files[fromKey].splice(index, 1);
+      PERSONAL_KB_DATA.files[toKey].unshift(file);
+    }
+  });
+
+  clearCurrentFolderSelection();
+  _folderManageMode = false;
+  recountPersonalFolders();
+  savePersonalKbState();
+  closeFvPop();
+  renderPersonalFolderView();
+  renderPersonalFolderTree && renderPersonalFolderTree();
+  syncPersonalHeroCounts();
+  const targetName = targetParent == null
+    ? `${getKbRootLabel()}（根目录）`
+    : (getPersonalFolder(targetParent)?.name || '其它位置');
+  showToast(`已将 ${total} 项移到「${targetName}」`);
+}
+
+function deleteSelectedFolderItems(){
+  const selected = getSelectedFolderItems();
+  const total = selected.folderIds.length + selected.fileIndexes.length;
+  if(!total){
+    showToast('先选择要删除的文件夹或文件');
+    return;
+  }
+
+  let affectedFiles = selected.fileIndexes.length;
+  const deleteIds = new Set();
+  selected.folderIds.forEach(id => {
+    collectPersonalDescendants(id).forEach(childId => deleteIds.add(childId));
+  });
+  deleteIds.forEach(id => { affectedFiles += (PERSONAL_KB_DATA.files[id] || []).length; });
+
+  const ok = confirmDemo(
+    `确认删除所选 ${total} 项？\n包含 ${selected.folderIds.length} 个文件夹、${selected.fileIndexes.length} 个文件；文件夹内共 ${affectedFiles - selected.fileIndexes.length} 份资料将一并删除。\n（演示）此操作仅在本次演示中生效。`
+  );
+  if(!ok) return;
+
+  PERSONAL_KB_DATA.folders = PERSONAL_KB_DATA.folders.filter(folder => !deleteIds.has(folder.id));
+  deleteIds.forEach(id => {
+    delete PERSONAL_KB_DATA.files[id];
+    delete PERSONAL_KB_DATA.wikiByFolder[id];
+  });
+
+  const fromKey = fileBucketKey(selected.folderId);
+  selected.fileIndexes.forEach(index => {
+    if(PERSONAL_KB_DATA.files[fromKey]) PERSONAL_KB_DATA.files[fromKey].splice(index, 1);
+  });
+
+  if(deleteIds.has(_personalCurrentFolder)){
+    _personalCurrentFolder = null;
+  }
+  clearCurrentFolderSelection();
+  _folderManageMode = false;
+  recountPersonalFolders();
+  savePersonalKbState();
+  renderPersonalFolderView();
+  renderPersonalFolderTree && renderPersonalFolderTree();
+  syncPersonalHeroCounts();
+  showToast(`已删除 ${total} 项`);
 }
 
 /* ────── 行级 · 菜单（文件夹 / 文件） ────── */
@@ -2360,6 +3004,8 @@ function fileBucketKey(folderIdOrNull){
 function renderFolderTreePicker(onPickAttr, options = {}){
   const excludeIds = options.excludeIds || new Set();
   const disabledIds = options.disabledIds || new Set();
+  const rootLabel = getKbRootLabel();
+  const rootIcon = CURRENT_KB_SCOPE === 'personal' ? 'bookmark' : 'library';
 
   const lines = [];
   /* 根目录入口（始终显示，跟下方文件夹列表用 divider 分开，强调它是"特殊目标"） */
@@ -2368,8 +3014,8 @@ function renderFolderTreePicker(onPickAttr, options = {}){
     <button class="fv-pop-list-item is-root ${rootDisabled ? 'disabled' : ''}"
             style="padding-left:9px"
             ${rootDisabled ? 'disabled' : `onclick="${onPickAttr.replace('__ID__', 'null')}"`}>
-      <i data-lucide="bookmark"></i>
-      <span>我的知识库（根目录）</span>
+      <i data-lucide="${rootIcon}"></i>
+      <span>${escHtml(rootLabel)}（根目录）</span>
     </button>
     <div class="fv-pop-list-divider"></div>
   `);
@@ -2461,7 +3107,7 @@ function confirmMovePersonalFile(fileIndex, toFolderId){
   renderPersonalFolderView();
   renderPersonalFolderTree && renderPersonalFolderTree();
   const targetName = toFolderId == null
-    ? '我的知识库（根目录）'
+    ? `${getKbRootLabel()}（根目录）`
     : (getPersonalFolder(toFolderId)?.name || '其它文件夹');
   showToast(`已移到「${targetName}」`);
 }
@@ -2600,6 +3246,12 @@ window.personalEnterFolder = personalEnterFolder;
 window.personalEnterFolderId = personalEnterFolderId;
 window.personalBackToRoot = personalBackToRoot;
 window.personalUploadToCurrentFolder = personalUploadToCurrentFolder;
+window.setFolderManageMode = setFolderManageMode;
+window.toggleFolderSelection = toggleFolderSelection;
+window.toggleSelectAllInFolder = toggleSelectAllInFolder;
+window.openBatchMovePop = openBatchMovePop;
+window.confirmBatchMoveSelected = confirmBatchMoveSelected;
+window.deleteSelectedFolderItems = deleteSelectedFolderItems;
 window.openFolderRowMenu = openFolderRowMenu;
 window.openFileRowMenu = openFileRowMenu;
 window.closeRowMenu = closeRowMenu;

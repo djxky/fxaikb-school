@@ -417,7 +417,7 @@
           <p class="entry-cite">
             <i data-lucide="quote"></i>
             来源：
-            <a class="flink" onclick="window.location.href='file-preview.html'" title="点击打开文件预览页">导入课件.pptx · P3</a>
+            <a class="flink" onclick="showToast('（演示）展示来源资料贡献说明')" title="查看来源资料贡献说明">导入课件.pptx · P3</a>
             <span class="sep">·</span>
             <a class="flink" onclick="showToast('（演示）打开《教学设计·二次函数.docx》第 2 页')">教学设计 · P2</a>
           </p>
@@ -783,13 +783,13 @@
           <header class="cm-head">
             <div class="cm-head-title">关联文件 · 12 份</div>
             <div class="cm-head-sub">
-              支撑本页内容的校内资料，可查看文件、页码和贡献内容
+              支撑本页内容的校内资料，可查看页码和贡献内容
             </div>
           </header>
 
           <ul class="cm-source-list">
             <li class="cm-source">
-              <a class="cm-src-name" onclick="window.location.href='file-preview.html'" title="点击打开文件预览（1:1 看原文件 + AI 摘要）">
+              <a class="cm-src-name" onclick="showToast('（演示）展示来源资料贡献说明')" title="查看来源资料贡献说明">
                 <i data-lucide="file"></i>
                 导入课件.pptx
               </a>
@@ -1659,7 +1659,7 @@
             },
             {
               "label": "追溯来源",
-              "text": "点击关联文件可打开原文件，查看文件类型、引用位置和贡献说明。"
+              "text": "点击来源资料可查看资料类型、引用位置和贡献说明。"
             }
           ]
         },
@@ -1761,7 +1761,7 @@
             },
             {
               "label": "选择范围",
-              "text": "选择学校内、指定老师或链接有效期。"
+              "text": "确认学校内或指定老师可见，不设置链接有效期。"
             },
             {
               "label": "复制链接",
@@ -1778,13 +1778,14 @@
           "items": [
             "分享不能突破词条和来源文件权限。",
             "个人词条默认不分享给学校。",
-            "取消分享后链接失效。"
+            "知识库分享链接生成后永久有效，不设置过期时间。",
+            "链接访问仍受当前知识库权限、词条状态和来源文件权限约束。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "分享数据包含词条 id、分享范围、有效期、分享人、访问权限。"
+            "分享数据包含词条 id、分享范围、分享人、访问权限、isPermanent。"
           ]
         },
         {
@@ -1804,8 +1805,8 @@
               "处理方式": "展示无权限说明。"
             },
             {
-              "场景": "链接失效",
-              "处理方式": "提示链接已失效。"
+              "场景": "词条删除或权限收回",
+              "处理方式": "展示无权限或内容不可用说明。"
             },
             {
               "场景": "复制失败",
@@ -1835,6 +1836,7 @@
           "title": "QA 检查点",
           "items": [
             "分享范围明确。",
+            "分享链接不展示有效期。",
             "个人词条不会默认公开。",
             "无权限访问不展示正文。"
           ]

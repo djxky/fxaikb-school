@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>飞象老师校园版 · 我的知识库</title>
 <script src="assets/lucide-loader.js"></script>
-<link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+<link rel="stylesheet" href="assets/v28.css?v=20260617upload" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/page-header.css" />
@@ -308,9 +308,6 @@
             <i data-lucide="search"></i>
           </button>
           <span class="ph-action-sep" aria-hidden="true"></span>
-          <button class="ph-action" data-doc="download-btn-personal-home" onclick="V28DownloadDialog.open({ context:'personal-home' })" title="下载">
-            <i data-lucide="download"></i><span>下载</span>
-          </button>
           <button class="ph-action" data-doc="share-btn-personal-home" onclick="V28ShareDialog.open({ context:'personal-home', kbName:'张老师的知识库' })" title="分享">
             <i data-lucide="share-2"></i><span>分享</span>
           </button>
@@ -325,9 +322,6 @@
           </button>
           <button class="ph-action folder-sort-action" onclick="showToast('（演示）按上传时间 / 名称 / 大小排序')" title="排序">
             <i data-lucide="arrow-up-down"></i><span>排序</span>
-          </button>
-          <button class="ph-action is-meta" onclick="personalUploadToCurrentFolder()" title="上传资料">
-            <i data-lucide="upload"></i><span>上传资料</span>
           </button>
         </div>
       </div>
@@ -352,7 +346,7 @@
               </p>
             </div>
             <div class="wiki-hero-actions">
-              <button class="hero-upload-btn" onclick="window.location.href='upload-onboarding.html?from=personal'">
+              <button class="hero-upload-btn" onclick="personalUploadToCurrentFolder()">
                 <i data-lucide="upload"></i>
                 上传资料
               </button>
@@ -535,7 +529,7 @@
         <div class="ch-spacer"></div>
         <button class="ch-ctx" data-kb-picker-trigger onclick="openKbPicker(this)" title="选择飞象基于哪些知识库回答">
           <i data-lucide="library"></i>
-          <span class="ctx-name">学校知识库</span>
+          <span class="ctx-name">我的知识库</span>
           <i data-lucide="chevron-down"></i>
         </button>
       </div>
@@ -587,7 +581,7 @@
               <span class="ce-divider"></span>
               <button class="ce-kb-attach" data-kb-picker-trigger onclick="openKbPicker(this)" title="选择飞象基于哪些知识库回答">
                 <i data-lucide="library"></i>
-                <span id="ce-kb-label">学校知识库</span>
+                <span id="ce-kb-label">我的知识库</span>
                 <i data-lucide="chevron-down" class="chev"></i>
               </button>
             </div>
@@ -904,8 +898,8 @@
 
 <script src="assets/feixiang-shell.js"></script>
 <script>renderFeixiangSidebar('my-wiki');</script>
-<script src="assets/v28-shell.js?v=20260522b"></script>
-<script src="assets/v28.js?v=20260522e"></script>
+<script src="assets/v28-shell.js?v=20260617upload"></script>
+<script src="assets/v28.js?v=20260617upload"></script>
 <script src="assets/shared/v28-modals.js?v=20260617a"></script>
 <script src="assets/page-header.js"></script>
 <script>
@@ -1015,6 +1009,7 @@
           "title": "业务规则",
           "items": [
             "个人知识库默认私有，不自动进入学校知识库。",
+            "我的知识库页的对话态和底部输入框默认范围都是我的知识库，不默认切到学校知识库。",
             "老师可以选择分享或迁移，但需要明确动作。",
             "删除个人资料不影响学校资料。"
           ]
@@ -1057,7 +1052,7 @@
           "rows": [
             {
               "关联对象": "upload-onboarding.html",
-              "说明": "新增资料上传导入。"
+              "说明": "新增资料上传。"
             },
             {
               "关联对象": "file-preview.html",
@@ -1082,101 +1077,8 @@
       ]
     },
     {
-      "id": "download-btn-personal-home",
-      "title": "2. 下载个人 Wiki",
-      "body": "下载个人 Wiki 用于导出老师自己的资料集合或当前筛选结果。",
-      "blocks": [
-        {
-          "title": "功能说明",
-          "body": [
-            "下载个人 Wiki 用于导出老师自己的资料集合或当前筛选结果。"
-          ]
-        },
-        {
-          "title": "交互流程",
-          "ordered": true,
-          "items": [
-            {
-              "label": "点击下载",
-              "text": "老师点击下载按钮。"
-            },
-            {
-              "label": "选择范围",
-              "text": "按当前文件夹、当前筛选或全部个人资料导出。"
-            },
-            {
-              "label": "生成文件",
-              "text": "页面提示下载开始或生成中。"
-            }
-          ]
-        },
-        {
-          "title": "业务规则",
-          "items": [
-            "只能下载老师有权访问的个人资料。",
-            "下载范围需要和当前页面筛选对应。",
-            "下载不改变资料归属或分享状态。"
-          ]
-        },
-        {
-          "title": "数据说明",
-          "items": [
-            "下载数据包含资料范围、文件数量、生成时间、导出格式。"
-          ]
-        },
-        {
-          "title": "异常场景",
-          "type": "table",
-          "columns": [
-            "场景",
-            "处理方式"
-          ],
-          "rows": [
-            {
-              "场景": "没有可下载资料",
-              "处理方式": "提示暂无内容可下载。"
-            },
-            {
-              "场景": "部分资料不可下载",
-              "处理方式": "提示已跳过不可下载内容。"
-            },
-            {
-              "场景": "生成失败",
-              "处理方式": "提示稍后重试。"
-            }
-          ]
-        },
-        {
-          "title": "关联模块",
-          "type": "table",
-          "columns": [
-            "关联对象",
-            "说明"
-          ],
-          "rows": [
-            {
-              "关联对象": "personal-wiki-home",
-              "说明": "下载读取当前个人知识库范围。"
-            },
-            {
-              "关联对象": "share-btn-personal-home",
-              "说明": "下载和分享都受可见范围控制。"
-            }
-          ]
-        },
-        {
-          "title": "QA 检查点",
-          "items": [
-            "空资料不能生成空文件。",
-            "当前筛选范围和下载范围一致。",
-            "下载不改变资料可见性。"
-          ]
-        }
-      ]
-    },
-    {
       "id": "share-btn-personal-home",
-      "title": "3. 分享个人 Wiki",
+      "title": "2. 分享个人 Wiki",
       "body": "分享个人 Wiki 让老师主动把个人资料开放给指定同事或学校范围。",
       "blocks": [
         {
@@ -1203,7 +1105,7 @@
             },
             {
               "label": "复制链接",
-              "text": "生成分享链接并展示有效范围。"
+              "text": "生成永久有效的分享链接，并展示访问范围。"
             }
           ]
         },
@@ -1212,13 +1114,14 @@
           "items": [
             "个人资料默认不分享。",
             "分享范围不能超过老师对资料的拥有权限。",
-            "取消分享后链接失效。"
+            "知识库分享链接生成后永久有效，不设置过期时间。",
+            "链接访问仍受当前资料状态和访问权限约束。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "分享数据包含分享范围、分享对象、有效期、资料范围、访问权限。"
+            "分享数据包含分享范围、分享对象、资料范围、访问权限、isPermanent。"
           ]
         },
         {
@@ -1242,8 +1145,8 @@
               "处理方式": "展示无权限说明。"
             },
             {
-              "场景": "分享被取消",
-              "处理方式": "链接访问提示已失效。"
+              "场景": "资料删除或权限收回",
+              "处理方式": "展示无权限或内容不可用说明。"
             }
           ]
         },
@@ -1269,7 +1172,7 @@
           "title": "QA 检查点",
           "items": [
             "分享前有范围确认。",
-            "取消分享后链接失效。",
+            "分享链接不展示有效期。",
             "个人资料不会默认公开。"
           ]
         }

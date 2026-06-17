@@ -5,98 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>飞象 AI · 学校知识库</title>
 <script src="assets/lucide-loader.js"></script>
-<link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+<link rel="stylesheet" href="assets/v28.css?v=20260617upload" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
 <link rel="stylesheet" href="assets/page-header.css" />
 <style>
-  /* ────── 抽屉 · 飞象怎么工作 + 已学到的 N 条 ────── */
-  .mem-btn{
-    height:24px; padding:0 10px;
-    border-radius:6px; border:1px solid var(--border);
-    background:var(--surface); color:var(--text-2);
-    font-size:11.5px; line-height:22px;
-    cursor:pointer; transition:all .15s var(--ease);
-  }
-  .mem-btn:hover{
-    border-color:var(--gold-light);
-    color:var(--gold-deep);
-    background:var(--surface-2);
-  }
-  .learned-overlay{
-    position:fixed; inset:0;
-    background:rgba(23, 19, 12, .24);
-    opacity:0; pointer-events:none;
-    transition:opacity .2s var(--ease);
-    z-index:115;
-  }
-  .learned-panel{
-    position:fixed; top:0; right:0; bottom:0;
-    width:min(460px, calc(100vw - 20px));
-    background:var(--surface);
-    border-left:1px solid var(--border);
-    box-shadow:-12px 0 36px rgba(30,24,14,.12);
-    transform:translateX(102%);
-    transition:transform .22s var(--ease);
-    z-index:116; display:flex; flex-direction:column;
-  }
-  body[data-learned-panel="open"] .learned-overlay{ opacity:1; pointer-events:auto; }
-  body[data-learned-panel="open"] .learned-panel{ transform:translateX(0); }
-  .learned-head{
-    height:54px; padding:0 14px;
-    border-bottom:1px solid var(--border);
-    display:flex; align-items:center; gap:8px; flex-shrink:0;
-  }
-  .learned-title{ font-size:14px; font-weight:700; color:var(--text); }
-  .learned-close{
-    margin-left:auto; width:28px; height:28px; border-radius:8px;
-    display:grid; place-items:center; color:var(--text-3);
-    transition:all .15s; cursor:pointer; border:none; background:transparent;
-  }
-  .learned-close:hover{ background:var(--surface-2); color:var(--text-2); }
-  .learned-close [data-lucide]{ width:14px; height:14px; }
-  .learned-tabs-wrap{ padding:10px 12px 0; border-bottom:1px solid var(--border); }
-  .learned-panel .canvas-tabs{ gap:6px; width:100%; display:flex; }
-  .learned-panel .cv-tab{ flex:1; justify-content:center; }
-  .learned-body{ padding:12px; overflow:auto; min-height:0; }
-  .learned-pane{ display:none; }
-  .learned-pane.active{ display:block; }
-  .learned-step{
-    padding:10px 11px; background:var(--surface-2);
-    border:1px solid var(--border); border-radius:10px;
-    margin-bottom:8px; font-size:12.8px; line-height:1.65; color:var(--text-2);
-  }
-  .learned-step b{ color:var(--text); }
-  .learned-groups{ display:flex; gap:7px; margin-bottom:10px; }
-  .learned-chip{
-    height:28px; padding:0 11px; border-radius:999px;
-    border:1px solid var(--border); background:var(--surface);
-    color:var(--text-3); font-size:12px; cursor:pointer;
-    transition:all .15s;
-  }
-  .learned-chip.active{
-    border-color:rgba(168,126,44,.36);
-    background:var(--gold-bg); color:var(--gold-deep); font-weight:600;
-  }
-  .learned-rule{
-    border:1px solid var(--border); background:var(--surface-2);
-    border-radius:10px; padding:10px 11px; margin-bottom:8px;
-    transition:transform .15s, box-shadow .15s;
-  }
-  .learned-rule:hover{ transform:translateY(-1px); box-shadow:0 6px 18px rgba(30,24,14,.09); }
-  .learned-rule-main{
-    display:flex; align-items:flex-start; gap:8px;
-    font-size:12.8px; line-height:1.55; color:var(--text-2);
-  }
-  .learned-rule-main [data-lucide]{
-    width:14px; height:14px; color:var(--gold);
-    margin-top:2px; flex-shrink:0;
-  }
-  .learned-rule-meta{
-    margin-top:6px; display:flex; align-items:center; gap:8px;
-    font-size:11.5px; color:var(--text-4);
-  }
-	  .learned-rule-actions{ margin-left:auto; display:flex; gap:6px; }
 	  .kb-home-section{ animation:fade-up .55s .14s var(--ease) both; }
 	  .kb-section-intro{
 	    margin:-4px 0 14px;
@@ -587,9 +500,6 @@
             <i data-lucide="search"></i>
           </button>
           <span class="ph-action-sep" aria-hidden="true"></span>
-          <button class="ph-action" data-doc="download-btn-wiki-home" onclick="V28DownloadDialog.open({ context:'wiki-home', kbName:'学校知识库' })" title="下载">
-            <i data-lucide="download"></i><span>下载</span>
-          </button>
           <button class="ph-action" data-doc="share-btn-wiki-home" onclick="V28ShareDialog.open({ context:'wiki-home', kbName:'学校知识库' })" title="分享">
             <i data-lucide="share-2"></i><span>分享</span>
           </button>
@@ -604,9 +514,6 @@
           </button>
           <button class="ph-action folder-sort-action" onclick="showToast('按上传时间 / 名称 / 大小排序')" title="排序">
             <i data-lucide="arrow-up-down"></i><span>排序</span>
-          </button>
-          <button class="ph-action is-meta" onclick="personalUploadToCurrentFolder()" title="上传资料">
-            <i data-lucide="upload"></i><span>上传资料</span>
           </button>
         </div>
       </div>
@@ -962,9 +869,6 @@
             <button class="fv-tool" onclick="showToast('按上传时间 / 名称 / 大小排序')">
               <i data-lucide="arrow-up-down"></i> 排序
             </button>
-            <button class="fv-tool" onclick="window.location.href='upload-onboarding.html?from=school'">
-              <i data-lucide="upload"></i> 上传
-            </button>
             <button class="fv-tool primary" onclick="openWiki('二次函数图像与性质')">
               <i data-lucide="book-open"></i> 查看整理结果
             </button>
@@ -999,56 +903,56 @@
             </tr>
           </thead>
           <tbody>
-            <tr onclick="showToast('预览《二次函数·导入课件.pptx》')">
+            <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="presentation"></i> 二次函数·导入课件.pptx</td>
               <td>张老师</td>
               <td>5 天前</td>
               <td>2.1 MB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数图像与性质</a></td>
             </tr>
-            <tr onclick="showToast('预览《教学设计·二次函数.docx》')">
+            <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="file-text"></i> 教学设计·二次函数.docx</td>
               <td>张老师</td>
               <td>5 天前</td>
               <td>340 KB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数图像与性质</a></td>
             </tr>
-            <tr onclick="showToast('预览《八下函数·配套习题汇编.pdf》')">
+            <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="book"></i> 八下函数·配套习题汇编.pdf</td>
               <td>全校共建</td>
               <td>1 个月前</td>
               <td>8.4 MB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数 · 一次函数</a></td>
             </tr>
-            <tr onclick="showToast('预览《海淀区 2026 一模卷·数学.pdf》')">
+            <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="file-text"></i> 海淀区 2026 一模卷·数学.pdf</td>
               <td>李素芬</td>
               <td>1 周前</td>
               <td>1.2 MB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数 · 圆 · 相似</a></td>
             </tr>
-            <tr onclick="showToast('预览《王建华·公开课板书.jpg》')">
+            <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="image"></i> 王建华·公开课板书（4 张）</td>
               <td>王建华</td>
               <td>2 周前</td>
               <td>3.6 MB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数图像与性质</a></td>
             </tr>
-            <tr onclick="showToast('预览《赵明杰·错题剖析.docx》')">
+            <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="file-text"></i> 赵明杰·错题剖析.docx</td>
               <td>赵明杰</td>
               <td>2 周前</td>
               <td>220 KB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数 · 一元二次方程</a></td>
             </tr>
-            <tr onclick="showToast('预览《八(3)班·错题精选.xlsx》')">
+            <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="clipboard-list"></i> 八(3)班·错题精选.xlsx</td>
               <td>张老师</td>
               <td>3 周前</td>
               <td>180 KB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数图像与性质</a></td>
             </tr>
-            <tr onclick="showToast('打开《北京中考真题 2021-2025》汇编')">
+            <tr onclick="openWiki('中考压轴·函数综合')">
               <td class="col-name"><i data-lucide="folder-archive"></i> 北京中考真题 2021-2025（5 份）</td>
               <td>学校公共库</td>
               <td>3 周前</td>
@@ -1345,107 +1249,12 @@
 
 </div>
 
-<div class="learned-overlay" id="learned-overlay" onclick="closeLearnedPanel()"></div>
-<aside class="learned-panel" id="learned-panel" aria-hidden="true">
-  <div class="learned-head">
-    <h3 class="learned-title">飞象怎么工作 + 已学到你们组的 18 条</h3>
-    <button class="learned-close" onclick="closeLearnedPanel()" title="关闭">
-      <i data-lucide="x"></i>
-    </button>
-  </div>
-  <div class="learned-tabs-wrap">
-    <div class="canvas-tabs">
-      <button class="cv-tab" data-learned-tab="work" onclick="switchLearnedTab('work')">
-        <i data-lucide="workflow"></i>
-        飞象怎么工作
-      </button>
-      <button class="cv-tab active" data-learned-tab="learned" onclick="switchLearnedTab('learned')">
-        <i data-lucide="sparkles"></i>
-        飞象学到了你们组的 18 条
-      </button>
-    </div>
-  </div>
-  <div class="learned-body">
-    <section class="learned-pane" data-pane="work">
-      <div class="learned-step"><b>1.</b> 你们组上传的资料 → AI 整理 → 主题（每段都可追溯到原文出处）</div>
-      <div class="learned-step"><b>2.</b> 组里 9 位老师跟飞象对话越多 → AI 越懂学校的偏好</div>
-      <div class="learned-step"><b>3.</b> 任何老师改 / 删资料 → AI 重新整理 → 全组拿到的永远是最新版</div>
-    </section>
-    <section class="learned-pane active" data-pane="learned">
-      <div class="learned-groups">
-        <button class="learned-chip active" data-group="team" onclick="switchLearnedGroup('team')">学校共识（12 条）</button>
-        <button class="learned-chip" data-group="school" onclick="switchLearnedGroup('school')">学校公共标准（6 条）</button>
-      </div>
-
-      <div class="learned-rule" data-rule-group="team">
-        <div class="learned-rule-main"><i data-lucide="sparkles"></i><span>错题归因模板使用王老师 v2 版</span></div>
-        <div class="learned-rule-meta">
-          <span>5/3 · 王老师确认</span>
-          <div class="learned-rule-actions">
-            <button class="mem-btn" onclick="showToast('编辑这条规则')">改一下</button>
-            <button class="mem-btn" onclick="showToast('已关闭这条规则')">关掉</button>
-          </div>
-        </div>
-      </div>
-      <div class="learned-rule" data-rule-group="team">
-        <div class="learned-rule-main"><i data-lucide="sparkles"></i><span>中考压轴题统一命名"函数综合"</span></div>
-        <div class="learned-rule-meta">
-          <span>4/20 · 全校共建</span>
-          <div class="learned-rule-actions">
-            <button class="mem-btn" onclick="showToast('编辑这条规则')">改一下</button>
-            <button class="mem-btn" onclick="showToast('已关闭这条规则')">关掉</button>
-          </div>
-        </div>
-      </div>
-      <div class="learned-rule" data-rule-group="team">
-        <div class="learned-rule-main"><i data-lucide="sparkles"></i><span>公开课课件优先选图像导入风格</span></div>
-        <div class="learned-rule-meta">
-          <span>4/15 · 多次对话累积</span>
-          <div class="learned-rule-actions">
-            <button class="mem-btn" onclick="showToast('编辑这条规则')">改一下</button>
-            <button class="mem-btn" onclick="showToast('已关闭这条规则')">关掉</button>
-          </div>
-        </div>
-      </div>
-      <div class="learned-rule" data-rule-group="team">
-        <div class="learned-rule-main"><i data-lucide="sparkles"></i><span>新内容自动并入对应主题，不打扰主路径</span></div>
-        <div class="learned-rule-meta">
-          <span>5/1 · 默认设置</span>
-          <div class="learned-rule-actions">
-            <button class="mem-btn" onclick="showToast('编辑这条规则')">改一下</button>
-            <button class="mem-btn" onclick="showToast('已关闭这条规则')">关掉</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="learned-rule" data-rule-group="school" style="display:none;">
-        <div class="learned-rule-main"><i data-lucide="sparkles"></i><span>年级试卷难度梯度统一 4:4:2 分配 A/B/C</span></div>
-        <div class="learned-rule-meta">
-          <span>4/8 · 学校教研处</span>
-          <div class="learned-rule-actions">
-            <button class="mem-btn" onclick="showToast('这是学校公共标准，不可关闭')">查看</button>
-          </div>
-        </div>
-      </div>
-      <div class="learned-rule" data-rule-group="school" style="display:none;">
-        <div class="learned-rule-main"><i data-lucide="sparkles"></i><span>教案模板使用 2024 修订版</span></div>
-        <div class="learned-rule-meta">
-          <span>3/22 · 学校教研处</span>
-          <div class="learned-rule-actions">
-            <button class="mem-btn" onclick="showToast('这是学校公共标准，不可关闭')">查看</button>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-</aside>
-
 <div id="toast"></div>
 
 <script src="assets/feixiang-shell.js"></script>
 <script>renderFeixiangSidebar('school-wiki');</script>
-<script src="assets/v28-shell.js?v=20260522b"></script>
-<script src="assets/v28.js?v=20260522e"></script>
+<script src="assets/v28-shell.js?v=20260617upload"></script>
+<script src="assets/v28.js?v=20260617upload"></script>
 <script src="assets/shared/v28-modals.js?v=20260617a"></script>
 <script src="assets/page-header.js"></script>
 <script>
@@ -1489,44 +1298,6 @@
 	  }
 	  window.setInterval(rotateSchoolQuestionPlaceholder, 3600);
 
-	  function switchLearnedTab(tab){
-    document.querySelectorAll('[data-learned-tab]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.learnedTab === tab);
-    });
-    document.querySelectorAll('.learned-pane').forEach(pane => {
-      pane.classList.toggle('active', pane.dataset.pane === tab);
-    });
-  }
-
-  function switchLearnedGroup(group){
-    document.querySelectorAll('.learned-chip').forEach(chip => {
-      chip.classList.toggle('active', chip.dataset.group === group);
-    });
-    document.querySelectorAll('[data-rule-group]').forEach(row => {
-      row.style.display = row.dataset.ruleGroup === group ? '' : 'none';
-    });
-  }
-
-  function openLearnedPanel(defaultTab = 'learned'){
-    document.body.dataset.learnedPanel = 'open';
-    const panel = document.getElementById('learned-panel');
-    if(panel) panel.setAttribute('aria-hidden', 'false');
-    switchLearnedTab(defaultTab);
-    if(defaultTab === 'learned') switchLearnedGroup('team');
-  }
-
-  function closeLearnedPanel(){
-    delete document.body.dataset.learnedPanel;
-    const panel = document.getElementById('learned-panel');
-    if(panel) panel.setAttribute('aria-hidden', 'true');
-  }
-
-	  document.addEventListener('keydown', (event) => {
-	    if(event.key === 'Escape' && document.body.dataset.learnedPanel === 'open'){
-	      closeLearnedPanel();
-	    }
-	  });
-
 	</script>
 
 <!-- pin-comments: 多人评论 -->
@@ -1543,7 +1314,7 @@
 <template id="review-template">
 {
   "title": "学校知识库 · 页面体系与 Wiki 逻辑",
-  "summary": "学校知识库由首页、目录 Wiki、内容 Wiki 和文件页组成。首页负责呈现全局覆盖和主要入口；目录 Wiki 负责按年级学科或教学场景组织资料；内容 Wiki 负责解释具体教学主题；文件页负责查看原始资料和 AI 对文件的理解。所有页面都围绕当前学校知识库工作，不跳到上传文件夹，也不跨知识库问答。",
+  "summary": "学校知识库由首页、目录 Wiki、内容 Wiki 和文件页组成。首页负责呈现全局覆盖和主要入口；目录 Wiki 负责按年级学科或教学场景组织资料；内容 Wiki 负责解释具体教学主题；文件页负责查看原始资料和 AI 对文件的理解。所有页面都围绕当前学校知识库工作，不跳到来源资料文件夹，也不跨知识库问答。",
   "sections": [
     {
       "id": "school-wiki-page-system",
@@ -1584,9 +1355,28 @@
         {
           "title": "顶部视图",
           "body": [
-            "知识库顶部固定三视图：Wiki、知识图谱、文件夹。",
-            "Wiki 是默认视图，承接知识库首页、目录 Wiki 和内容 Wiki。",
-            "知识图谱和文件夹是与 Wiki 并列的顶部视图，不放进 Wiki 正文或右侧 AI 解读。"
+              "知识库顶部固定三视图：Wiki、知识图谱、文件夹。",
+              "Wiki 是默认视图，承接知识库首页、目录 Wiki 和内容 Wiki。",
+              "知识图谱和文件夹是与 Wiki 并列的顶部视图，不放进 Wiki 正文或右侧 AI 解读。"
+          ]
+        },
+        {
+          "title": "文件夹视图管理",
+          "body": [
+            "文件夹视图用于查看和管理学校知识库的来源资料结构，顶部展示管理、新建文件夹、排序等操作。",
+            "点击管理后进入批量选择模式，老师可勾选当前层级的文件夹和文件，并批量移动到其他文件夹或批量删除。",
+            "批量删除文件夹时，该文件夹内的子文件夹和文件会一并删除；批量移动文件夹时不能移动到自身或自己的子文件夹内。",
+            "退出管理模式后恢复行级操作，单个文件夹或文件仍可通过行尾菜单移动、重命名或删除。"
+          ]
+        },
+        {
+          "title": "知识库入口状态",
+          "body": [
+            "侧边栏知识库入口展示当前知识库内的文件数量，不展示 Wiki 数量、主题数量或未读数量。",
+            "每个老师、每个知识库单独记录上次打开时间 lastOpenedAt；老师进入该知识库首页时更新该时间。",
+            "当知识库最近更新时间 latestUpdatedAt 晚于该老师的 lastOpenedAt，本次打开前在入口展示红点，表示该知识库有新内容。",
+            "老师打开知识库后，本次红点消失；后续只有再次产生晚于 lastOpenedAt 的内容更新，才重新展示红点。",
+            "红点只表达内容更新，不表达待办、审批、待确认资料或系统通知。"
           ]
         },
         {
@@ -1637,7 +1427,9 @@
         {
           "title": "数据字段",
           "items": [
-              "overview 包含 title、summary、fileCount、wikiPages、directoryGroups、updatedAt、coverageGroups、sourceIds；fileCount 在学校知识库页面明确展示为文件数。"
+            "overview 包含 title、summary、fileCount、wikiPages、directoryGroups、updatedAt、coverageGroups、sourceIds；fileCount 在学校知识库页面明确展示为文件数。",
+            "knowledgeBaseNavState 包含 kbId、fileCount、latestUpdatedAt、lastOpenedAt、hasUnreadUpdate。",
+            "hasUnreadUpdate = latestUpdatedAt > lastOpenedAt；进入知识库首页后更新 lastOpenedAt。"
           ]
         }
       ]
@@ -1699,7 +1491,7 @@
 		            "示例结构为：数学 → 九年级数学、中考数学专题、九年级数学作业与评价。",
 		            "目录区标题旁只展示系统计算的主题总数；解释性说明只保留一行弱提示，不使用常驻说明图标。",
 		            "固定弱提示建议为：按学科、年级和专题组织资料，点击主题查看相关资料和说明。",
-	            "目录和上传文件夹的关系属于产品规则和内部过稿说明，不在老师首页正文展开解释。",
+	            "目录和来源资料结构的关系属于产品规则和内部过稿说明，不在老师首页正文展开解释。",
 		            "每个目录型主题和具体主题都必须可点击，不能展示不可点击的胶囊标签。",
 		            "每个分组默认展示 5-6 个代表主题；8 个以内的主题默认全部展示，超过部分在本组内提供“展开全部 / 收起”。",
             "目录规模不大时默认全部展开；目录较长时按学科和主题分组折叠，不使用全局“查看全部目录”按钮。",
@@ -1709,14 +1501,14 @@
         {
           "title": "交互规则",
           "items": [
-            "教学主题不跳文件夹页面，也不等同于用户上传时的文件夹结构。",
+            "教学主题不跳文件夹页面，也不等同于来源资料结构。",
 		            "即使资料都是零散文件，系统也要优先识别学科，再结合年级、教学主题、教学场景或资料类型生成主题目录。",
 		            "第一版目录型主题包含两类：年级学科目录和教学场景目录。",
 		            "年级学科目录以“九年级数学、七年级语文”这类粒度呈现，不单独拆学科页或年级页。",
 	              "每个目录型主题点击后进入对应主题页。",
 		            "AI 只生成主题分组、主题名称、摘要和来源关系；栏目标题、弱提示和展开按钮由产品固定。",
             "暂时无法判断主题的资料不强行编入正式目录，也不在老师端学校知识库首页展示为模块。",
-            "原始文件夹视图只用于查看和管理来源文件，不承担“教学主题”的职责。",
+            "原始文件夹视图只用于查看和管理来源资料结构，不承担“教学主题”的职责。",
             "这一区块只承担看全貌，不承担具体任务入口。",
             "默认是否全部展开由目录长度决定：30 个主题以内可全部展示；30-60 个按学科和主题展示更多；超过 60 个时分组折叠并可进入完整目录页。"
           ]
@@ -1757,7 +1549,7 @@
             "目录型主题统一为顶部概览 + 主目录 + 近期更新；场景主题的主目录按学科与年级组织。",
             "《备课资源》这类高阶场景主题必须先按学科组织，再在学科下按年级、课型或教学主题展开。",
             "备课资源页不能只写泛泛摘要，必须让老师能按学科、年级和主题逐层定位。",
-            "AI 根据资料内容识别学科、年级、教学任务和资料类型，不依赖上传文件夹。",
+            "AI 根据资料内容识别学科、年级、教学任务和资料类型，不依赖来源资料结构。",
             "资料不足的教学场景少展示或不展示，不用空模块补版面。"
           ]
         },

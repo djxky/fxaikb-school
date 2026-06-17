@@ -33,6 +33,60 @@
     panel: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/><path d="m15 9-3 3 3 3"/></svg>',
   };
 
+  const KB_SIDEBAR_STATE = {
+    personal: {
+      fileCount: 87,
+      updatedAt: 'today-09:14',
+      storageKey: 'fx_kb_last_opened_at_personal'
+    },
+    school: {
+      fileCount: 925,
+      updatedAt: 'today-09:14',
+      storageKey: 'fx_kb_last_opened_at_school'
+    }
+  };
+
+  function getDemoTodayTime(hour, minute){
+    const d = new Date();
+    d.setHours(hour, minute, 0, 0);
+    return d.getTime();
+  }
+
+  function resolveKbUpdatedAt(value){
+    if(value === 'today-09:14') return getDemoTodayTime(9, 14);
+    const parsed = Date.parse(value || '');
+    return Number.isFinite(parsed) ? parsed : 0;
+  }
+
+  function getKbLastOpenedAt(meta){
+    try{
+      const raw = localStorage.getItem(meta.storageKey);
+      const n = Number(raw);
+      return Number.isFinite(n) ? n : 0;
+    }catch(e){
+      return 0;
+    }
+  }
+
+  function getKbSidebarState(kbId){
+    const meta = KB_SIDEBAR_STATE[kbId];
+    if(!meta) return { fileCount: '', hasUpdate: false };
+    const updatedAt = resolveKbUpdatedAt(meta.updatedAt);
+    const lastOpenedAt = getKbLastOpenedAt(meta);
+    return {
+      fileCount: meta.fileCount,
+      hasUpdate: updatedAt > lastOpenedAt
+    };
+  }
+
+  function recordKbOpened(kbId){
+    const meta = KB_SIDEBAR_STATE[kbId];
+    if(!meta) return;
+    try{
+      localStorage.setItem(meta.storageKey, String(Date.now()));
+    }catch(e){}
+  }
+
   /* ---- toast 兜底：如果页面没有 showToast，提供一个 ---- */
   function ensureToastFallback() {
     if (typeof window.showToast === 'function') return;

@@ -1184,7 +1184,11 @@
     closeKbAdminMenu();
     closeKbVisibilityEditor();
     closeKbEditor();
-    window.location.href = `upload-onboarding.html?from=team&kb=${encodeURIComponent(kbVisibilityCurrentId)}`;
+    if(typeof window.personalUploadToCurrentFolder === 'function'){
+      window.personalUploadToCurrentFolder();
+      return;
+    }
+    window.location.href = 'school-wiki.html?view=folder';
   }
 
   function openKbEditor(mode, anchorRect){

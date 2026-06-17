@@ -75,7 +75,7 @@
         `;
       }
       return `
-        <tr onclick="window.location.href='file-preview.html'" title="${esc(row.title || '演示：所有文件都进同一个 1:1 双栏预览页')}">
+        <tr onclick="window.location.href='wiki-entry.html'" title="${esc(row.title || '查看关联主题与资料说明')}">
           <td class="col-name"><i data-lucide="${esc(row.icon || 'file-text')}"></i> ${esc(row.name)}</td>
           <td>${esc(row.by)}</td>
           <td>${esc(row.time)}</td>
@@ -128,9 +128,6 @@
           <div class="fv-tools">
             <button class="fv-tool" onclick="showToast('（演示）按上传时间 / 名称 / 大小排序')">
               <i data-lucide="arrow-up-down"></i> 排序
-            </button>
-            <button class="fv-tool" onclick="window.location.href='upload-onboarding.html?from=folder'">
-              <i data-lucide="upload"></i> 上传
             </button>
           </div>
         </div>

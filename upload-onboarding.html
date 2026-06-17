@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>飞象 AI · 上传导入</title>
+  <title>飞象 AI · 上传文件</title>
   <script src="assets/lucide-loader.js"></script>
-  <link rel="stylesheet" href="assets/v28.css?v=20260521d" />
+  <link rel="stylesheet" href="assets/v28.css?v=20260617upload" />
   <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
   <link rel="stylesheet" href="assets/feixiang-shell.css" />
   <link rel="stylesheet" href="assets/page-header.css" />
@@ -133,7 +133,7 @@
       <div class="ph-left">
         <i class="ph-icon" data-lucide="upload-cloud"></i>
         <h1 class="ph-title">上传文件</h1>
-        <span class="ph-subtitle">保留原结构导入知识库，完成后回到工作台继续使用</span>
+        <span class="ph-subtitle">上传后，AI 会自动整理并生成 Wiki 内容。</span>
       </div>
       <div class="ph-right">
         <button class="ph-action" onclick="goBack()">
@@ -164,7 +164,7 @@
             <div class="scan-notice"><i data-lucide="info"></i><span>3 个 .mp4 自动跳过 · 5 个重名文件全部保留 · 学生姓名仅你可见</span></div>
             <div class="onb-actions">
               <button class="onb-btn ghost" onclick="goBack()">取消</button>
-              <button class="onb-btn primary" onclick="startImport()">开始导入<i data-lucide="arrow-right"></i></button>
+              <button class="onb-btn primary" onclick="startImport()">开始上传<i data-lucide="arrow-right"></i></button>
             </div>
           </div>
 
@@ -177,14 +177,14 @@
             <div class="prog-bar"><div class="prog-bar-fill" id="prog-fill"></div></div>
             <div class="step doing"><span class="no">1</span><div class="tx"><b>读取文件并保留原结构</b><span id="step-1-detail">已读取 0 / 247 个文件…</span></div><span class="st">进行中</span></div>
             <div class="step" id="step-2"><span class="no">2</span><div class="tx"><b>AI 自动打标签</b><span>基于文件名、内容关键词识别学科/章节</span></div><span class="st">等待中</span></div>
-            <div class="step" id="step-3"><span class="no">3</span><div class="tx"><b>抽取知识点 + 生成摘要</b><span>PDF / PPT 抽目录，图片做 OCR</span></div><span class="st">等待中</span></div>
+            <div class="step" id="step-3"><span class="no">3</span><div class="tx"><b>抽取知识点 + 生成摘要</b><span>PDF/PPT 抽目录，图片做 OCR</span></div><span class="st">等待中</span></div>
             <div class="step" id="step-4"><span class="no">4</span><div class="tx"><b>建立关联与图谱</b><span>同主题文件互相关联，准备好关联推荐</span></div><span class="st">等待中</span></div>
           </div>
 
           <div class="onb-state" id="state-done">
             <div class="done-wrap">
               <div class="done-icon"><i data-lucide="check-circle-2"></i></div>
-              <h2>导入完成，文件已入库</h2>
+              <h2>上传完成，文件已入库</h2>
               <p><b>247</b> 份素材已按原结构归位。AI 正在后台整理标签和题库，完成后右上角会通知你。</p>
               <div class="onb-actions">
                 <button class="onb-btn primary" onclick="finishImport()">返回工作台<i data-lucide="arrow-right"></i></button>
@@ -203,8 +203,8 @@
 
 <script src="assets/feixiang-shell.js"></script>
 <script>renderFeixiangSidebar('');</script>
-<script src="assets/v28-shell.js?v=20260522b"></script>
-<script src="assets/v28.js?v=20260522e"></script>
+<script src="assets/v28-shell.js?v=20260617upload"></script>
+<script src="assets/v28.js?v=20260617upload"></script>
 <script src="assets/page-header.js"></script>
 <script>
   const _from = new URLSearchParams(location.search).get('from') || 'team';
@@ -278,8 +278,8 @@
 <script src="./assets/shared/pin-comments.js?v=20260615f"></script>
 <template id="review-template">
 {
-  "title": "上传导入 · 把资料交给飞象整理",
-  "summary": "上传导入页让老师把资料交给飞象整理，说明上传、归属、解析中、成功反馈和返回知识库的完整链路。",
+  "title": "上传文件 · 把资料交给飞象整理",
+  "summary": "上传文件页让老师把资料交给飞象整理，说明上传、归属、解析中、成功反馈和返回知识库的完整链路。",
   "sections": [
     {
       "id": "upload-dropzone",
@@ -301,12 +301,12 @@
               "text": "老师点击上传区或拖拽文件进入页面。"
             },
             {
-              "label": "确认归属",
-              "text": "根据入口默认选择个人或学校知识库，老师有权限时可调整。"
+              "label": "下一步预览",
+              "text": "选择一个或多个文件后，点击下一步查看可上传文件和不支持文件。"
             },
             {
-              "label": "开始导入",
-              "text": "点击开始导入后进入上传/整理中状态。"
+              "label": "开始上传",
+              "text": "点击开始上传后进入上传/整理中状态。"
             },
             {
               "label": "取消上传",
@@ -319,13 +319,18 @@
           "items": [
             "资料归属必须明确，不能默认把个人资料公开到学校。",
             "学校知识库上传受角色权限限制。",
+            "仅支持 PDF、DOC、DOCX、XLS、XLSX、PPT、PPTX、JPG、PNG 格式文件。",
+            "单个文件不超过 100M，超过后不进入上传队列。",
+            "不支持压缩包、音频、视频等格式。",
             "上传成功不等于 AI 整理完成，需要展示后续状态。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "上传数据包含文件名、类型、大小、归属知识库、上传人、上传状态、整理状态。"
+            "上传数据包含文件名、类型、大小、归属知识库、上传人、上传状态、整理状态。",
+            "上传校验包含 maxFileSizeMB、allowedFileTypes、blockedFileTypes；maxFileSizeMB 固定为 100。",
+            "allowedFileTypes 包含 pdf、doc、docx、xls、xlsx、ppt、pptx、jpg、jpeg、png；blockedFileTypes 包含 archive、audio、video。"
           ]
         },
         {
@@ -338,11 +343,11 @@
           "rows": [
             {
               "场景": "格式不支持",
-              "处理方式": "提示支持格式，不进入上传队列。"
+              "处理方式": "提示仅支持 PDF、DOC、DOCX、XLS、XLSX、PPT、PPTX、JPG、PNG 格式文件，单个文件不超过 100M。"
             },
             {
               "场景": "文件过大",
-              "处理方式": "提示压缩或分批上传。"
+              "处理方式": "提示单个文件不超过 100M，不进入上传队列。"
             },
             {
               "场景": "无学校上传权限",
@@ -376,6 +381,8 @@
           "title": "QA 检查点",
           "items": [
             "归属选择清楚。",
+            "超过 100M 的文件不能上传。",
+            "压缩包、音频和视频格式不能上传。",
             "无权限不能上传到学校。",
             "上传前取消不产生资料。"
           ]
@@ -384,13 +391,13 @@
     },
     {
       "id": "upload-result",
-      "title": "2. 导入完成反馈",
-      "body": "导入完成反馈告诉老师资料已接收、正在整理或已整理完成，并提供返回知识库、查看文件或继续上传。",
+      "title": "2. 上传完成反馈",
+      "body": "上传完成反馈告诉老师资料已接收、正在整理或已整理完成，并提供返回知识库或继续上传。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "导入完成反馈告诉老师资料已接收、正在整理或已整理完成，并提供返回知识库、查看文件或继续上传。"
+              "上传完成反馈告诉老师资料已接收、正在整理或已整理完成，并提供返回知识库或继续上传。"
           ]
         },
         {
@@ -402,8 +409,8 @@
               "text": "展示成功状态、文件数量和整理进度。"
             },
             {
-              "label": "查看结果",
-              "text": "整理完成后可进入文件预览或知识库词条。"
+                "label": "返回知识库",
+                "text": "整理完成后回到对应个人/学校知识库，在知识库中查看整理状态和生成内容。"
             },
             {
               "label": "返回知识库",
@@ -420,13 +427,13 @@
           "items": [
             "上传成功但整理未完成时，知识库中应显示解析中状态。",
             "返回入口必须按资料归属进入正确知识库。",
-            "失败文件需要逐项展示原因。"
+            "不支持文件需要逐项展示原因标签，如格式不支持、超过 100M。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "结果数据包含成功文件数、失败文件数、整理状态、归属知识库、下一步入口。"
+              "结果数据包含成功文件数、失败文件数、整理状态、归属知识库、返回入口。"
           ]
         },
         {
@@ -459,10 +466,6 @@
             "说明"
           ],
           "rows": [
-            {
-              "关联对象": "file-preview.html",
-              "说明": "整理完成后打开文件。"
-            },
             {
               "关联对象": "school-wiki.html",
               "说明": "学校资料返回学校知识库。"
