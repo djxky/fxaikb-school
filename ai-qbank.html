@@ -336,18 +336,6 @@
   }
   .qitem-src-line [data-lucide]{ width:12px;height:12px;color:#9A968F; }
   .qitem-src-line b{ color:#3A3A3A;font-weight:500; }
-  .qitem-source-badge{
-    display:inline-flex;
-    align-items:center;
-    height:18px;
-    padding:0 6px;
-    border-radius:4px;
-    font-size:10.5px;
-    font-weight:600;
-    line-height:1;
-  }
-  .qitem-source-badge.is-school{ background:#EEF3EC;color:#3F6B4F; }
-  .qitem-source-badge.is-personal{ background:#EEF2FA;color:#4D6794; }
   .qitem-head{ display:flex;align-items:center;gap:6px;flex-wrap:wrap; }
   .qitem-tag{
     font-size:11px;
@@ -476,7 +464,7 @@
             </div>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-school">学校知识库</span><b>AI 自动识别 · 初中数学教研组 · 2024 杭州中考真题.pdf</b> · 第 17 题 · 引用 2</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><b>AI 自动识别 · 初中数学教研组 · 2024 杭州中考真题.pdf</b> · 第 17 题 · 引用 2</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">选择题</span>
                 <span class="qitem-tag diff-mid">中等</span>
@@ -495,7 +483,7 @@
             </article>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-school">学校知识库</span><b>AI 自动识别 · 初中数学教研组 · 二次函数图像与性质·教案.docx</b> · 第 9 页</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><b>AI 自动识别 · 初中数学教研组 · 二次函数图像与性质·教案.docx</b> · 第 9 页</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">解答题</span>
                 <span class="qitem-tag diff-hard">难</span>
@@ -508,7 +496,7 @@
             </article>
 
             <article class="qitem">
-              <div class="qitem-src-line"><i data-lucide="file-text"></i><span class="qitem-source-badge is-personal">我的知识库</span><b>AI 录题入库 · 二次函数图像与性质·教案.docx</b> · 第 11 页</div>
+              <div class="qitem-src-line"><i data-lucide="file-text"></i><b>AI 录题入库 · 二次函数图像与性质·教案.docx</b> · 第 11 页</div>
               <div class="qitem-head">
                 <span class="qitem-tag t-type">应用题</span>
                 <span class="qitem-tag diff-mid">中等</span>
@@ -767,15 +755,15 @@
           "items": [
             "第一期题库不支持把题目添加到题目篮，也不提供去组题入口。",
             "第一期题目卡片操作只保留解析，不展示收藏、纠错或相似题。",
-            "学校来源题需保留来源标识，便于老师判断可追溯性。",
-            "题目卡片需要展示原始来源信息，包括来源知识库、来源文件、页码或位置、录入方式。",
+            "第一期题目卡片不展示“学校知识库 / 我的知识库”来源标签。",
+            "题目卡片需要展示原始来源信息，包括来源文件、页码或位置、录入方式。",
             "录入方式可区分为 AI 录题入库、文件识别入库、飞象练习册/试卷来源；若无法确定，不应强行标成 AI 自动识别。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "题目数据包含题干、题型、难度、知识点、答案、解析、来源、所属知识库、来源文件、页码/位置、录入方式。"
+            "题目数据包含题干、题型、难度、知识点、答案、解析、来源、所属知识库、来源文件、页码/位置、录入方式；所属知识库第一期不在题卡上展示为标签。"
           ]
         },
         {
