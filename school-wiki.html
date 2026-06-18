@@ -17,6 +17,22 @@
 	    font-size:13px;
 	    line-height:1.65;
 	  }
+	  .kb-overview-brief{
+	    display:grid;
+	    gap:10px;
+	    margin-top:12px;
+	    padding:2px 0 4px;
+	  }
+	  .kb-overview-brief p{
+	    margin:0;
+	    color:var(--text-2);
+	    font-size:13.5px;
+	    line-height:1.8;
+	  }
+	  .kb-overview-brief b{
+	    color:var(--text);
+	    font-weight:700;
+	  }
 	  .kb-overview-groups{
 	    display:grid;
 	    grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
@@ -301,6 +317,38 @@
 	    font-size:12px;
 	    white-space:nowrap;
 	  }
+	  .kb-subject-block{
+	    padding:14px 0 18px;
+	    border-bottom:1px solid var(--border-3);
+	  }
+	  .kb-subject-block:last-child{
+	    border-bottom:0;
+	  }
+	  .kb-subject-summary{
+	    margin:8px 0 10px;
+	    color:var(--text-2);
+	    font-size:13px;
+	    line-height:1.65;
+	  }
+	  .kb-directory-line{
+	    display:grid;
+	    grid-template-columns:72px minmax(0, 1fr);
+	    gap:12px;
+	    align-items:start;
+	    margin-top:8px;
+	  }
+	  .kb-directory-label{
+	    color:var(--text-3);
+	    font-size:12px;
+	    line-height:1.8;
+	    white-space:nowrap;
+	  }
+	  .kb-directory-links{
+	    margin:0;
+	    color:var(--text-3);
+	    font-size:13px;
+	    line-height:1.8;
+	  }
 	  .kb-directory-note{
 	    margin:0 0 16px;
 	    color:var(--text-2);
@@ -466,6 +514,7 @@
 	    .kb-card-grid{ grid-template-columns:1fr; }
 	    .kb-topic-list li,
 	    .kb-source-list li{ grid-template-columns:1fr; }
+	    .kb-directory-line{ grid-template-columns:1fr;gap:2px; }
 	  }
 	</style>
 <link rel="stylesheet" href="assets/review.css" />
@@ -531,98 +580,179 @@
 	          </div>
 	          <h1 class="wiki-hero-title" id="hero-title">北京市实验中学 · <em>学校知识库</em></h1>
 	          <p class="wiki-hero-sub" id="hero-sub">
-	            本知识库汇总学校上传的 <b>925 份教学资料</b>，并整理为 <b>42 个主题</b>。
-	            当前重点覆盖 <b>九年级数学复习、函数与几何专题、课堂教学、作业评价和中考压轴题</b>。
-	            可按教学主题和教学场景浏览资料。
+	            本知识库汇总学校上传的 <b>925 份教学资料</b>，并整理为 <b>64 个主题</b>。
+	            当前覆盖 <b>数学、语文、英语、物理、化学</b> 等学科，以及七至九年级的备课、授课、作业评价和复习备考资料。
 	          </p>
 		          <div class="wiki-hero-meta">
 		            <span class="item"><b id="hero-count">925</b> 份资料</span>
 		            <span class="sep">·</span>
-		            <span class="item"><b>42</b> 个主题</span>
+		            <span class="item"><b>64</b> 个主题</span>
 		            <span class="sep">·</span>
 		            <span class="item">上次更新 <b>今天 09:14</b></span>
 		          </div>
 	        </header>
 
 	        <section class="kb-home-section">
+	          <h2 class="wiki-h2">资料概览</h2>
+	          <div class="kb-overview-brief">
+	            <p>本知识库已覆盖初中阶段多个学科，数学、语文、英语资料相对完整，物理和化学已形成实验探究、单元复习等稳定主题。</p>
+	            <p>从年级看，七年级资料以新授课和单元教学为主，八年级资料集中在阅读、函数、电学等承上启下内容，九年级资料更多用于中考复习、试卷讲评和专题训练。</p>
+	            <p>老师可以先从知识目录了解各学科和年级覆盖情况，也可以按备课、授课、作业评价和复习备考等教学场景查找资料。</p>
+	          </div>
+	        </section>
+
+	        <section class="kb-home-section">
 	          <h2 class="wiki-h2">
-		            教学主题
-		            <span class="h2-note">42 个主题</span>
+		            知识目录
+		            <span class="h2-note">64 个主题</span>
 	          </h2>
-			          <p class="kb-section-intro">按学科、年级和专题组织资料，点击主题查看相关资料和说明。</p>
+			          <p class="kb-section-intro">按学科与年级概览资料覆盖，点击目录入口或重点主题查看相关资料和说明。</p>
 	          <div class="kb-full-directory" id="kb-full-directory">
-	            <div class="kb-subject-head">
-	              <h3 class="kb-subject-title">数学</h3>
-	              <span class="kb-subject-meta">以九年级复习资料为主</span>
+	            <div class="kb-subject-block">
+	              <div class="kb-subject-head">
+	                <h3 class="kb-subject-title">数学</h3>
+	                <span class="kb-subject-meta">24 个主题</span>
+	              </div>
+	              <p class="kb-subject-summary">覆盖七至九年级数学资料，九年级复习、函数与几何专题和中考压轴资料较完整。</p>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">目录入口</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('七年级数学')">七年级数学</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('八年级数学')">八年级数学</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('九年级数学')">九年级数学</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('中考数学专题')">中考数学专题</a>
+	                </p>
+	              </div>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">重点主题</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('二次函数图像与性质')">二次函数图像与性质</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('函数图像变换')">函数图像变换</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('相似三角形判定与性质')">相似三角形判定与性质</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('中考压轴·函数综合')">中考压轴 · 函数综合</a>
+	                </p>
+	              </div>
 	            </div>
-	            <h3 class="wiki-h3"><a class="wlink" onclick="openWiki('九年级数学')">九年级数学</a> <span class="h3-count">18 个主题</span></h3>
-	            <p class="subject-para">
-	              <a class="wlink" onclick="openWiki('二次函数图像与性质')">二次函数图像与性质</a>
-	              <span class="sep">·</span>
-		              <a class="wlink" onclick="openWiki('函数图像变换')">函数图像变换</a>
-	              <span class="sep">·</span>
-		              <a class="wlink" onclick="openWiki('函数解析式求法')">函数解析式求法</a>
-	              <span class="sep">·</span>
-		              <a class="wlink" onclick="openWiki('一次函数与二次函数综合')">一次函数与二次函数综合</a>
-	              <span class="sep">·</span>
-		              <a class="wlink" onclick="openWiki('相似三角形判定与性质')">相似三角形判定与性质</a>
-	              <span class="kb-directory-more" data-directory-group="grade9" hidden>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('全等三角形判定')">全等三角形判定</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('辅助线策略')">辅助线策略</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('圆的综合问题')">圆的综合问题</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('几何证明方法')">几何证明方法</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('函数图像与性质归纳')">函数图像与性质归纳</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('函数单元复习')">函数单元复习</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('函数易错点')">函数易错点</a>
-	              </span>
-	            </p>
-	            <button class="kb-directory-toggle" data-directory-toggle="grade9" data-collapsed-label="展开全部" data-expanded-label="收起" onclick="toggleDirectoryGroup(this)">展开全部 <i data-lucide="chevron-down"></i></button>
-			            <h3 class="wiki-h3"><a class="wlink" onclick="openWiki('中考数学专题')">中考数学专题</a> <span class="h3-count">11 个主题</span></h3>
-	            <p class="subject-para">
-		              <a class="wlink" onclick="openWiki('中考压轴·函数综合')">中考压轴 · 函数综合</a>
-	              <span class="sep">·</span>
-		              <a class="wlink" onclick="openWiki('几何压轴专题')">几何压轴专题</a>
-	              <span class="sep">·</span>
-		              <a class="wlink" onclick="openWiki('海淀一模函数题型')">海淀一模函数题型</a>
-	              <span class="sep">·</span>
-		              <a class="wlink" onclick="openWiki('一模二模试卷讲评')">一模二模试卷讲评</a>
-	              <span class="sep">·</span>
-		              <a class="wlink" onclick="openWiki('新定义题型训练')">新定义题型训练</a>
-	              <span class="kb-directory-more" data-directory-group="functions" hidden>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('函数与几何综合')">函数与几何综合</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('压轴题分层练习')">压轴题分层练习</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('中考考点梳理')">中考考点梳理</a>
-	                <span class="sep">·</span>
-		                <a class="wlink" onclick="openWiki('二次函数综合复习')">二次函数综合复习</a>
-	              </span>
-	            </p>
-	            <button class="kb-directory-toggle" data-directory-toggle="functions" data-collapsed-label="展开全部" data-expanded-label="收起" onclick="toggleDirectoryGroup(this)">展开全部 <i data-lucide="chevron-down"></i></button>
-			            <h3 class="wiki-h3"><a class="wlink" onclick="openWiki('九年级数学作业与评价')">九年级数学作业与评价</a> <span class="h3-count">7 个主题</span></h3>
-	            <p class="subject-para">
-	              <a class="wlink" onclick="openWiki('错题归因模板')">错题归因模板</a>
-	              <span class="sep">·</span>
-	              <a class="wlink" onclick="openWiki('测验卷讲评')">测验卷讲评</a>
-	              <span class="sep">·</span>
-	              <a class="wlink" onclick="openWiki('分层练习设计')">分层练习设计</a>
-	              <span class="sep">·</span>
-	              <a class="wlink" onclick="openWiki('单元作业设计')">单元作业设计</a>
-	              <span class="sep">·</span>
-	              <a class="wlink" onclick="openWiki('评价标准与量规')">评价标准与量规</a>
-	              <span class="sep">·</span>
-	              <a class="wlink" onclick="openWiki('学情诊断')">学情诊断</a>
-	              <span class="sep">·</span>
-	              <a class="wlink" onclick="openWiki('讲评课设计')">讲评课设计</a>
-	            </p>
+
+	            <div class="kb-subject-block">
+	              <div class="kb-subject-head">
+	                <h3 class="kb-subject-title">语文</h3>
+	                <span class="kb-subject-meta">14 个主题</span>
+	              </div>
+	              <p class="kb-subject-summary">覆盖七至九年级阅读、作文、古诗文和单元教学资料，九年级阅读复习和作文讲评资料较多。</p>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">目录入口</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('七年级语文')">七年级语文</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('八年级语文')">八年级语文</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('九年级语文')">九年级语文</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('作文教学')">作文教学</a>
+	                </p>
+	              </div>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">重点主题</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('记叙文写作')">记叙文写作</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('古诗文阅读')">古诗文阅读</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('名著导读')">名著导读</a>
+	                </p>
+	              </div>
+	            </div>
+
+	            <div class="kb-subject-block">
+	              <div class="kb-subject-head">
+	                <h3 class="kb-subject-title">英语</h3>
+	                <span class="kb-subject-meta">12 个主题</span>
+	              </div>
+	              <p class="kb-subject-summary">覆盖七至九年级词汇、阅读、听说和单元复习资料，九年级阅读理解和语法复习资料较集中。</p>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">目录入口</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('七年级英语')">七年级英语</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('八年级英语')">八年级英语</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('九年级英语')">九年级英语</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('中考英语复习')">中考英语复习</a>
+	                </p>
+	              </div>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">重点主题</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('阅读理解')">阅读理解</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('完形填空')">完形填空</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('语法复习')">语法复习</a>
+	                </p>
+	              </div>
+	            </div>
+
+	            <div class="kb-subject-block">
+	              <div class="kb-subject-head">
+	                <h3 class="kb-subject-title">物理</h3>
+	                <span class="kb-subject-meta">8 个主题</span>
+	              </div>
+	              <p class="kb-subject-summary">覆盖八至九年级物理资料，电学、力学和实验探究内容较完整，适合新课导入、实验课和单元复习。</p>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">目录入口</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('八年级物理')">八年级物理</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('九年级物理')">九年级物理</a>
+	                </p>
+	              </div>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">重点主题</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('电学实验')">电学实验</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('力学复习')">力学复习</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('实验探究题')">实验探究题</a>
+	                </p>
+	              </div>
+	            </div>
+
+	            <div class="kb-subject-block">
+	              <div class="kb-subject-head">
+	                <h3 class="kb-subject-title">化学</h3>
+	                <span class="kb-subject-meta">6 个主题</span>
+	              </div>
+	              <p class="kb-subject-summary">以九年级化学资料为主，覆盖实验基础、物质性质、方程式和单元复习。</p>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">目录入口</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('九年级化学')">九年级化学</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('化学实验')">化学实验</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('中考化学复习')">中考化学复习</a>
+	                </p>
+	              </div>
+	              <div class="kb-directory-line">
+	                <span class="kb-directory-label">重点主题</span>
+	                <p class="kb-directory-links">
+	                  <a class="wlink" onclick="openWiki('化学方程式')">化学方程式</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('酸碱盐复习')">酸碱盐复习</a>
+	                  <span class="sep">·</span>
+	                  <a class="wlink" onclick="openWiki('实验现象与结论')">实验现象与结论</a>
+	                </p>
+	              </div>
+	            </div>
 	          </div>
 	        </section>
 
@@ -1434,8 +1564,21 @@
           "title": "功能说明",
           "body": [
             "对象：需要浏览学校沉淀资料的老师。",
-            "用途：展示学校知识库覆盖范围，并提供教学主题、教学场景和近期更新入口。",
+            "用途：把学校上传的多学科、多年级资料整理成可浏览、可追问、可追溯来源的 Wiki 首页。",
             "产出：老师能从首页进入目录 Wiki、内容 Wiki、文件页或在当前学校知识库内提问。"
+          ]
+        },
+        {
+          "title": "首页逻辑",
+          "body": [
+            "首页不是完整目录树，也不是文件夹页；它是 AI 基于当前学校知识库生成的导读页。",
+            "页面固定采用“顶部概览 → 资料概览 → 知识目录 → 教学场景 → 近期更新 → 当前知识库提问”的顺序。",
+            "顶部概览回答规模和范围：学校名称、资料数、主题数、覆盖学科年级和上次更新时间。",
+            "资料概览回答内容判断：AI 用短文字说明整体覆盖、资料较集中的方向和老师可以怎么浏览。",
+            "知识目录回答全局结构：首页只展示学科级概览、代表目录入口和重点主题；完整年级学科目录进入目录 Wiki 后查看。",
+            "教学场景回答任务入口：老师可以按备课、授课、作业评价、复习备考等场景进入对应目录 Wiki。",
+            "近期更新回答变化：老师回访时可以看到近期新增资料、主题更新和题型归类情况。",
+            "页面下方输入框回答具体问题：老师不需要先理解目录结构，也可以直接在当前学校知识库范围内提问。"
           ]
         },
         {
@@ -1447,8 +1590,12 @@
               "text": "老师进入首页后查看学校名称、文件数、主题数量、目录分组和最近更新时间。"
             },
             {
+              "label": "阅读资料概览",
+              "text": "老师通过 AI 生成的资料概览了解当前知识库覆盖的学科、教学场景和资料较集中的方向。"
+            },
+            {
               "label": "进入目录",
-              "text": "点击知识目录中的学科、年级或专题主题，进入对应目录 Wiki 或内容 Wiki。"
+              "text": "点击知识目录中的学科目录入口或重点主题，进入对应目录 Wiki 或内容 Wiki。"
             },
             {
               "label": "进入教学场景",
@@ -1466,6 +1613,12 @@
             "首页只展示已经形成主题、能够被老师直接阅读或继续使用的内容。",
             "首页不展示待确认资料、待归类资料、JSON、schema、调试入口或实现说明。",
             "概览不再放多个重复分类卡，主入口收束为知识目录、教学场景、近期更新和底部提问入口。",
+            "资料概览由 AI 基于当前学校知识库生成，用 2-3 段短文字说明整体覆盖、资料较集中的方向和浏览建议。",
+            "资料概览不能只围绕单一年级或单一学科写成专题页；即使某一方向资料最多，也应先说明全校知识库已覆盖的学科和教学场景。",
+            "多学科知识库首页应同时呈现多个学科和多个年级的覆盖情况，避免看起来像某一个学科的专题首页。",
+            "知识目录在首页只展示学科级概览，不展开完整年级学科树，避免多学科资料铺满首页。",
+            "每个学科展示一句覆盖说明、3-5 个目录入口和 3-5 个重点主题；完整目录进入对应目录 Wiki 后查看。",
+            "首页不展示三级以上目录结构；学科过多时优先展示资料最多或最近更新最多的学科，其余通过展开更多学科承接。",
             "顶部搜索固定搜索当前学校知识库内的主题标题和文件名；底部输入框固定在当前学校知识库范围内提问。",
             "学校知识库首页的输入框不支持上传附件，不跨到全部知识库或我的知识库。"
           ]
@@ -1474,7 +1627,10 @@
           "title": "数据说明",
           "items": [
             "概览展示学校名称、文件数、主题数量、目录分组和最近更新时间。",
-            "知识目录展示主题名称、摘要、主题数量或资料数量和可点击目标。",
+            "资料概览包含 overviewParagraphs、coverageSubjects、coverageScenes、concentratedAreas 和 browseSuggestion。",
+            "资料概览可包含少量重点名称，但不把全文做成词条链接列表。",
+            "知识目录包含 subjectGroups；每个 subjectGroup 包含 subjectName、summary、topicCount、directoryEntries、highlightTopics、targetUrl。",
+            "directoryEntries 用于进入年级学科目录 Wiki 或专题目录 Wiki；highlightTopics 用于进入内容 Wiki。",
             "近期更新展示标题、摘要、更新时间和跳转目标，目标只指向主题或文件。"
           ]
         },
@@ -1526,6 +1682,9 @@
           "title": "QA 检查点",
           "items": [
             "首页首屏能看出学校知识库覆盖范围。",
+            "资料概览应像 AI 导读，不应像网址导航或单一学科专题说明。",
+            "知识目录不应把数学、语文、英语等所有年级目录完整铺开。",
+            "每个学科都应能看出覆盖说明、目录入口和重点主题的区别。",
             "顶部搜索不出现全部/我的知识库/学校知识库范围切换。",
             "底部输入框前置标签为学校知识库，范围不跨库。",
             "近期更新整行可点击，且不跳到文件夹页。"
