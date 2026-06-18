@@ -67,6 +67,111 @@
   </main>
   <aside class="sidebar-right"></aside>
 </div>
+<template id="review-template">
+{
+  "title": "班级作业学情 · 提交与薄弱点",
+  "summary": "班级作业学情页从工作动态进入，展示指定班级在一次作业中的提交情况、正确率和主要薄弱点。",
+  "sections": [
+    {
+      "id": "homework-progress",
+      "title": "1. 作业提交与薄弱点",
+      "body": "页面展示作业标题、班级提交进度、待确认、正确率和主要薄弱点。",
+      "blocks": [
+        {
+          "title": "功能说明",
+          "body": [
+            "对象：从工作动态进入作业事项的老师。",
+            "用途：快速判断一个班级本次作业的提交情况和讲评重点。",
+            "产出：提交人数、待确认、正确率和薄弱点列表。"
+          ]
+        },
+        {
+          "title": "交互流程",
+          "ordered": true,
+          "items": [
+            {
+              "label": "进入页面",
+              "text": "老师从工作动态点击作业学情事项进入页面。"
+            },
+            {
+              "label": "查看指标",
+              "text": "页面展示提交人数、待确认数量和正确率。"
+            },
+            {
+              "label": "查看薄弱点",
+              "text": "老师查看需要讲评或订正的知识点。"
+            }
+          ]
+        },
+        {
+          "title": "业务规则",
+          "items": [
+            "当前页面定位到工作动态对应班级和作业，不跨班级合并。",
+            "薄弱点用于讲评参考，不在本页直接布置新作业。",
+            "提交人数按已提交/应提交展示。"
+          ]
+        },
+        {
+          "title": "数据说明",
+          "items": [
+            "页面展示作业标题、班级、提交人数、待确认、正确率和薄弱点人数。"
+          ]
+        },
+        {
+          "title": "异常场景",
+          "type": "table",
+          "columns": [
+            "场景",
+            "处理方式"
+          ],
+          "rows": [
+            {
+              "场景": "作业任务不存在",
+              "处理方式": "提示任务不可用，并引导返回工作动态。"
+            },
+            {
+              "场景": "暂无提交数据",
+              "处理方式": "展示暂无提交，并保留作业标题。"
+            },
+            {
+              "场景": "薄弱点计算失败",
+              "处理方式": "隐藏薄弱点列表，保留基础提交指标。"
+            }
+          ]
+        },
+        {
+          "title": "关联模块",
+          "type": "table",
+          "columns": [
+            "关联对象",
+            "说明"
+          ],
+          "rows": [
+            {
+              "关联对象": "work-feed.html",
+              "说明": "工作动态进入作业学情。"
+            },
+            {
+              "关联对象": "compose-sheet.html",
+              "说明": "题单编辑和作业相关能力承接作业内容。"
+            }
+          ]
+        },
+        {
+          "title": "QA 检查点",
+          "items": [
+            "从工作动态进入后班级、作业标题和指标一致。",
+            "提交人数按已提交/应提交展示。",
+            "无薄弱点数据时不展示错误结论。"
+          ]
+        }
+      ]
+    }
+  ]
+}
+</template>
+<script src="assets/review-content.js"></script>
+<script src="assets/review.js"></script>
 <script src="assets/feixiang-shell.js"></script>
 <script>renderFeixiangSidebar('home');</script>
 <script src="assets/page-header.js"></script>
