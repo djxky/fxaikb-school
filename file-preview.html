@@ -365,10 +365,10 @@
           <i data-lucide="panel-right-open"></i><span>AI 解读</span>
         </button>
         <span class="ph-action-sep" aria-hidden="true"></span>
-        <button class="ph-action" data-doc="download-btn-file-preview" onclick="V28DownloadDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="下载">
+        <button class="ph-action" data-doc="download-btn-file-preview" onclick="V28DownloadDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="下载" data-track="/click/feixiangCampusFilePreviewPage/download | 下载文件 | fileType#STRING">
           <i data-lucide="download"></i><span>下载</span>
         </button>
-        <button class="ph-action" data-doc="share-btn-file-preview" onclick="V28ShareDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="分享">
+        <button class="ph-action" data-doc="share-btn-file-preview" onclick="V28ShareDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="分享" data-track="/click/feixiangCampusFilePreviewPage/share | 分享文件 | fileType#STRING">
           <i data-lucide="share-2"></i><span>分享</span>
         </button>
       </div>
@@ -1260,8 +1260,9 @@
         {
           "title": "功能说明",
           "body": [
-            "原文件预览区展示资料正文、页码和基础信息，是 AI 摘要、内容 Wiki 和题目追溯的依据。",
-            "文件页保留原始资料视角，不把文件包装成 Wiki 正文。"
+            "对象：查看资料原文的老师。",
+            "用途：阅读资料，并追溯 AI 摘要、内容 Wiki 或题目来源。",
+            "展示项：资料正文、页码和基础信息。"
           ]
         },
         {
@@ -1288,13 +1289,14 @@
             "原文预览必须保留资料来源和权限说明。",
             "无权限老师不能查看学校私有文件内容。",
             "文件预览不改变知识库资料本身。",
-            "文件页不展示关联文件 tab；它自身就是来源文件。"
+            "文件页不展示关联文件标签页；它自身就是来源文件。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "文件数据包含文件名、类型、页数、所属知识库、上传人、更新时间、权限范围、关联 Wiki。"
+            "文件预览展示文件标题、正文、页码、来源和资料归属。",
+            "页码和位置用于 AI 摘要、内容 Wiki 和题目追溯。"
           ]
         },
         {
@@ -1344,9 +1346,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "无权限不能看到正文。",
-            "文件不存在不白屏。",
-            "来源信息在页面可见。"
+            "原文页码和正文展示正确。",
+            "无权限文件不能预览正文。",
+            "大文件加载中有状态反馈。"
           ]
         }
       ]
@@ -1387,13 +1389,14 @@
             "AI 解读必须能追溯到原文位置。",
             "摘要是辅助理解，不替代原文。",
             "继续提问应限定在当前文件或明确展示上下文范围。",
-            "同主题资料、题目集不作为文件页 AI 解读的一级 tab；如需展示，可作为 AI 摘要中的建议内容。"
+            "同主题资料、题目集不作为文件页 AI 解读的一级标签页；如需展示，可作为 AI 摘要中的建议内容。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "解读数据包含文件摘要、适用范围、关键页码、使用建议、相关 Wiki、引用位置、贡献说明和对话上下文范围。"
+            "AI 解读展示摘要、关键点、引用页码和生成状态。",
+            "解读结果需要关联当前文件版本。"
           ]
         },
         {
@@ -1439,9 +1442,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "摘要引用可定位。",
-            "摘要失败不影响原文查看。",
-            "继续提问上下文明确。"
+            "摘要不脱离当前文件来源。",
+            "引用页码可追溯到原文。",
+            "解读失败时可重试或提示稍后查看。"
           ]
         }
       ]
@@ -1454,7 +1457,9 @@
         {
           "title": "功能说明",
           "body": [
-            "下载原文件用于老师保留或线下使用资料，受文件权限和来源约束。"
+            "对象：有文件访问权限的老师。",
+            "用途：保留或线下使用当前资料。",
+            "产出：原文件下载结果和权限反馈。"
           ]
         },
         {
@@ -1486,7 +1491,8 @@
         {
           "title": "数据说明",
           "items": [
-            "下载数据包含文件 id、文件名、下载人、下载时间、权限结果。"
+            "下载动作需要当前文件、文件名称、文件格式和访问权限。",
+            "下载结果需要反馈成功、失败或无权限。"
           ]
         },
         {
@@ -1532,9 +1538,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "无权限下载被阻止。",
-            "下载失败有反馈。",
-            "下载不影响文件状态。"
+            "无权限时不能下载。",
+            "文件不存在时提示不可用。",
+            "下载的是当前预览文件。"
           ]
         }
       ]
@@ -1547,7 +1553,9 @@
         {
           "title": "功能说明",
           "body": [
-            "分享文件视图让老师把资料预览链接发给同事，但必须保留可见范围控制。"
+            "对象：有分享权限的老师。",
+            "用途：把资料预览链接发给同事。",
+            "产出：分享链接、可见范围和权限提示。"
           ]
         },
         {
@@ -1584,7 +1592,8 @@
         {
           "title": "数据说明",
           "items": [
-            "分享数据包含分享人、分享对象、权限范围、访问状态、isPermanent。"
+            "分享信息展示当前文件、分享对象、可见范围和链接状态。",
+            "分享范围不能超过文件本身权限。"
           ]
         },
         {
@@ -1634,9 +1643,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "分享范围明确展示。",
-            "分享链接不展示有效期。",
-            "个人资料不会默认公开。"
+            "无分享权限时不展示或禁用。",
+            "分享链接保留可见范围控制。",
+            "取消分享后链接不可访问。"
           ]
         }
       ]

@@ -37,9 +37,10 @@
   .sheet-nav{
     display:flex;
     align-items:center;
+    gap:10px;
     flex:0 0 auto;
   }
-  .sheet-back-btn{
+  .sheet-home-btn{
     width:30px;
     height:30px;
     border-radius:7px;
@@ -48,9 +49,16 @@
     place-items:center;
     cursor:pointer;
   }
-  .sheet-back-btn:hover{ background:var(--surface-3); }
-  .sheet-back-btn [data-lucide]{ width:16px;height:16px;stroke-width:2; }
-  .sheet-title{ display:none; }
+  .sheet-home-btn:hover{ background:var(--surface-3); }
+  .sheet-home-btn [data-lucide]{ width:16px;height:16px;stroke-width:2; }
+  .sheet-title{
+    display:block;
+    color:var(--text);
+    font-size:15px;
+    font-weight:800;
+    line-height:1;
+    white-space:nowrap;
+  }
   .sheet-actions{
     display:flex;
     align-items:center;
@@ -687,17 +695,17 @@
       <section class="sheet-page">
         <div class="sheet-topbar">
           <div class="sheet-nav">
-            <button class="sheet-back-btn" onclick="goToQbank()" title="返回 AI 题库">
-              <i data-lucide="chevron-left"></i>
+            <button class="sheet-home-btn" onclick="goToHome()" title="首页">
+              <i data-lucide="home"></i>
             </button>
-            <b class="sheet-title" id="sheet-title">新建题单</b>
+            <b class="sheet-title" id="sheet-title">编辑题单</b>
           </div>
           <div class="sheet-actions">
             <button class="sheet-btn is-muted" onclick="showHomeworkLocked()"><i data-lucide="plus-circle"></i>添加题目</button>
             <button class="sheet-btn is-locked" onclick="showHomeworkLocked()"><i data-lucide="send"></i>布置</button>
             <button class="sheet-btn" onclick="showToast('（演示）打开题单预览')"><i data-lucide="eye"></i>预览</button>
-            <button class="sheet-btn" id="sheet-save-btn" onclick="toggleSavePop(event)"><i data-lucide="save"></i>保存</button>
-            <button class="sheet-btn" data-doc="download-btn-compose-sheet" onclick="V28DownloadDialog.open({ context:'compose-sheet', source:'ai', subject:'2026.06.11题单' })"><i data-lucide="download"></i>下载</button>
+            <button class="sheet-btn" id="sheet-save-btn" onclick="toggleSavePop(event)" data-track="/click/feixiangCampusComposeSheetPage/save | 保存题单 | saveType#STRING"><i data-lucide="save"></i>保存</button>
+            <button class="sheet-btn" data-doc="download-btn-compose-sheet" onclick="V28DownloadDialog.open({ context:'compose-sheet', source:'ai', subject:'2026.06.11题单' })" data-track="/click/feixiangCampusComposeSheetPage/download | 下载题单 | questionCount#INT32"><i data-lucide="download"></i>下载</button>
             <button class="sheet-btn" onclick="showToast('（演示）打开打印设置')"><i data-lucide="printer"></i>打印</button>
           </div>
         </div>
@@ -791,7 +799,7 @@
 <script src="assets/shared/v28-modals.js?v=20260521g"></script>
 <script>
   function goToHome(){
-    window.location.href = 'school-wiki.html';
+    window.location.href = 'index.html';
   }
 
   function goToQbank(){
@@ -933,7 +941,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           新建文件夹
         </button>
-        <button class="save-pop-submit" id="save-submit" onclick="doSave()">保存到所选位置</button>
+        <button class="save-pop-submit" id="save-submit" onclick="doSave()" data-track="/click/feixiangCampusComposeSheetPage/save | 保存题单 | saveType#STRING">保存到所选位置</button>
       </div>
     `;
     document.body.appendChild(pop);
@@ -1035,7 +1043,7 @@
 <template id="review-template">
 {
   "title": "题单编辑 · 统一编辑器与作业权限",
-  "summary": "题单编辑页承接 AI 组题或题目篮结果，进入统一编辑器。页面按钮状态由校园版、高扫作业、墨水屏作业三类权限共同决定：校园版决定是否隐藏返回题库新建，高扫作业解锁全量能力，墨水屏作业解锁主流程、卷参设置和题单分析。预览只能查看高扫作业或墨水屏作业效果，没有这两类作业权限时置灰。未开通能力保持可见但置灰，点击后说明开通后可使用作业布置、AI辅助批改等功能。",
+  "summary": "题单编辑页承接 AI 组题或题目篮结果，进入统一编辑器。页面以新页面打开，顶部导航固定展示首页 icon 和“编辑题单”标题，不展示返回按钮。页面按钮状态由校园版、高扫作业、墨水屏作业三类权限共同决定：高扫作业解锁全量能力，墨水屏作业解锁主流程、卷参设置和题单分析。预览只能查看高扫作业或墨水屏作业效果，没有这两类作业权限时置灰。未开通能力保持可见但置灰，点击后说明开通后可使用作业布置、AI辅助批改等功能。",
   "sections": [
     {
       "id": "compose-sheet-body",
@@ -1046,6 +1054,7 @@
           "title": "功能说明",
           "body": [
             "题单正文展示已选题目、题号、题型、答案和解析状态，老师可以调整顺序、删除或补充题目。",
+            "顶部导航左侧固定展示首页 icon，右侧展示页面标题“编辑题单”；该页以新页面打开，不提供返回上一级按钮。",
             "权限用三个布尔能力判断：是否开通校园版、是否开通高扫作业、是否开通墨水屏作业；不要按两个编辑器拆入口。",
             "只有校园版时，保存、下载、字号、行间距、题间距和题单分析可用；添加题目、预览、布置、打印、作答区行高、版面、AI辅助批改、卷参设置和题目框置灰。",
             "开通高扫作业后解锁全部能力；只开通墨水屏作业时解锁添加题目、预览、保存、下载、布置、打印、卷参设置和题单分析，其他编辑工具置灰。",
@@ -1061,6 +1070,10 @@
             {
               "label": "进入组题",
               "text": "从 AI 组题结果点击编辑，或从题目篮点击去组题后进入统一编辑器，按加入顺序生成题号。"
+            },
+            {
+              "label": "返回首页",
+              "text": "点击顶部首页 icon，回到校园版首页 index.html。"
             },
             {
               "label": "查看题目",
@@ -1085,6 +1098,7 @@
           "items": [
             "题号应随排序和删除实时更新。",
             "权限只影响工具是否可用，不改变进入编辑器的路径。",
+            "顶部导航固定为首页 icon + 编辑题单标题；不得展示返回按钮或返回题库按钮。",
             "受限功能保持可见但不可直接执行，点击需给出明确说明。",
             "顶部操作区顺序为添加题目、布置、预览、保存、下载、打印；各按钮是否可用以权限矩阵为准。",
             "预览按钮依赖高扫作业或墨水屏作业权限；两个作业权限都没有时，即使有校园版也不可预览。",
@@ -1097,7 +1111,8 @@
         {
           "title": "数据说明",
           "items": [
-            "题单数据包含题单标题、题目列表、题号、题型、答案解析展示设置、删除状态、作业系统权限状态和知识库保存位置。"
+            "题单编辑器展示题目、选项、答案、解析、来源和排序。",
+            "编辑状态需要记录新增、删除、调整顺序和修改内容。"
           ]
         },
         {
@@ -1110,7 +1125,7 @@
           "rows": [
             {
               "场景": "题目篮为空",
-              "处理方式": "展示空题单提示，并引导返回 AI 题库添加。"
+              "处理方式": "展示空题单提示；页面顶部仍只保留首页入口，补充题目通过添加题目能力处理。"
             },
             {
               "场景": "题目失效",
@@ -1147,13 +1162,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "只有校园版时只开放保存、下载、字号、行间距、题间距和题单分析；预览、打印和作业相关能力按权限矩阵置灰。",
-            "未开通作业系统时添加题目、布置和作业系统工具栏能力应为灰色受限态，且可点击查看开通说明。",
-            "已开通作业系统时同一页面解锁全部功能。",
-            "保存按钮应打开保存到我的知识库弹层，而不是仅 toast 提示。",
-            "题号随删除/恢复正确更新。",
-            "题库原题不因题单删除而消失。",
-            "空题单有返回添加入口。"
+            "题目编辑后内容即时保留。",
+            "题目顺序调整后下载和保存一致。",
+            "缺少必要内容时有提示。"
           ]
         },
         {
@@ -1166,7 +1177,7 @@
           "rows": [
             {
               "编号": "A",
-              "按钮": "返回题库新建"
+              "按钮": "首页"
             },
             {
               "编号": "B",
@@ -1249,9 +1260,9 @@
           "rows": [
             {
               "能力类型": "入口控制",
-              "按钮": "A 返回题库新建",
-              "权限规则": "有校园版时删除；没有校园版的临时入口保留可用。",
-              "说明": "A 不属于编辑能力，只控制从哪里返回。"
+              "按钮": "A 首页",
+              "权限规则": "固定展示，不参与作业权限控制。",
+              "说明": "A 不属于编辑能力；点击回到校园版首页。"
             },
             {
               "能力类型": "通用交付能力",
@@ -1499,7 +1510,8 @@
         {
           "title": "数据说明",
           "items": [
-            "下载数据包含题单标题、题目正文、答案解析、生成时间、导出格式和是否作业系统输出。"
+            "下载信息包含题单标题、文件格式、纸张样式、题目范围和答案解析设置。",
+            "打印视图使用当前题单内容。"
           ]
         },
         {
@@ -1545,10 +1557,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "空题单不能下载。",
-            "未开通作业系统时不应出现可批改输出已生成的暗示。",
-            "下载后题单仍可编辑。",
-            "文件名能区分题单和日期。"
+            "下载内容与当前编辑器一致。",
+            "打印和下载入口可区分。",
+            "没有题目时不能生成空文件。"
           ]
         }
       ]
@@ -1600,7 +1611,8 @@
         {
           "title": "数据说明",
           "items": [
-            "保存数据包含题单 id、内容名称、题目列表、保存位置、保存人、保存时间和作业系统权限状态。"
+            "保存信息包含题单名称、保存目标、知识库归属和受限能力状态。",
+            "受限能力需要展示可用或不可用原因。"
           ]
         },
         {
@@ -1646,10 +1658,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "点击保存必须打开保存到我的知识库弹层。",
-            "保存到所选位置后 toast 说明保存名称和文件夹路径。",
-            "添加题目和布置在未开通状态下视觉为灰色受限态。",
-            "受限按钮点击后展示统一开通说明。"
+            "保存到我的知识库入口符合当前版本边界。",
+            "受限能力不可用时有明确提示。",
+            "保存成功后能在对应位置找到题单。"
           ]
         }
       ]

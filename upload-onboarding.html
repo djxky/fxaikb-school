@@ -164,7 +164,7 @@
             <div class="scan-notice"><i data-lucide="info"></i><span>3 个 .mp4 自动跳过 · 5 个重名文件全部保留 · 学生姓名仅你可见</span></div>
             <div class="onb-actions">
               <button class="onb-btn ghost" onclick="goBack()">取消</button>
-              <button class="onb-btn primary" onclick="startImport()">开始上传<i data-lucide="arrow-right"></i></button>
+              <button class="onb-btn primary" onclick="startImport()" data-track="/click/feixiangCampusUploadPage/startUpload | 开始上传文件 | kbScope#STRING,fileCount#INT32">开始上传<i data-lucide="arrow-right"></i></button>
             </div>
           </div>
 
@@ -289,7 +289,9 @@
         {
           "title": "功能说明",
           "body": [
-            "上传入口支持老师拖拽或选择文件，并确认资料进入个人知识库还是学校知识库。"
+            "对象：需要上传资料的老师。",
+            "用途：选择文件，并确认资料进入个人知识库还是学校知识库。",
+            "产出：上传任务、资料归属和处理状态。"
           ]
         },
         {
@@ -328,9 +330,8 @@
         {
           "title": "数据说明",
           "items": [
-            "上传数据包含文件名、类型、大小、归属知识库、上传人、上传状态、整理状态。",
-            "上传校验包含 maxFileSizeMB、allowedFileTypes、blockedFileTypes；maxFileSizeMB 固定为 100。",
-            "allowedFileTypes 包含 pdf、doc、docx、xls、xlsx、ppt、pptx、jpg、jpeg、png；blockedFileTypes 包含 archive、audio、video。"
+            "上传项包含文件名、类型、大小、上传进度和目标知识库范围。",
+            "目标范围区分个人知识库和学校知识库。"
           ]
         },
         {
@@ -380,11 +381,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "归属选择清楚。",
-            "超过 100M 的文件不能上传。",
-            "压缩包、音频和视频格式不能上传。",
-            "无权限不能上传到学校。",
-            "上传前取消不产生资料。"
+            "可拖拽或选择文件。",
+            "上传前能确认资料归属范围。",
+            "无学校权限时不能选择学校知识库。"
           ]
         }
       ]
@@ -397,7 +396,9 @@
         {
           "title": "功能说明",
           "body": [
-            "上传完成反馈告诉老师资料已接收、正在整理或已整理完成，并提供返回知识库或继续上传。"
+            "对象：完成上传后的老师。",
+            "用途：反馈资料已接收、整理中或整理完成。",
+            "产出：处理状态、返回知识库入口和继续上传入口。"
           ]
         },
         {
@@ -433,7 +434,8 @@
         {
           "title": "数据说明",
           "items": [
-            "结果数据包含成功文件数、失败文件数、整理状态、归属知识库、返回入口。"
+            "完成反馈展示文件名、处理状态、整理结果和下一步入口。",
+            "处理状态包括已接收、整理中、整理完成和失败。"
           ]
         },
         {
@@ -479,9 +481,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "部分失败能看明细。",
-            "返回知识库归属正确。",
-            "整理中状态不会被误认为完成。"
+            "上传完成后有明确反馈。",
+            "整理中状态可返回知识库或继续上传。",
+            "失败时允许重试或重新选择文件。"
           ]
         }
       ]

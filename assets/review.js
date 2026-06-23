@@ -163,7 +163,6 @@
             <span class="review-section-chevron" aria-hidden="true">⌄</span>
           </button>
           <div class="review-section-body" id="${bodyId}" ${isOpen ? '' : 'hidden'}>
-            ${section.body ? `<p>${escapeHtml(section.body)}</p>` : ''}
             ${body}
           </div>
         </section>

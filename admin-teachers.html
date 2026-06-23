@@ -588,7 +588,7 @@
           <i data-lucide="download"></i>
           导出
         </button>
-        <button class="ph-action is-primary" onclick="openInviteModal()">
+        <button class="ph-action is-primary" onclick="openInviteModal()" data-track="/click/feixiangCampusAdminTeachersPage/inviteTeacher | 邀请老师 | 无">
           <i data-lucide="link"></i>
           邀请老师
         </button>
@@ -628,7 +628,7 @@
                 <td><div class="role-list"><span class="role-tag">学科老师</span></div></td>
                 <td><span class="subject-text">语文</span></td>
                 <td><span class="date-text">2026-06-01 10:24</span></td>
-                <td><div class="row-actions"><button class="more-btn edit" title="编辑老师" onclick="openEditTeacherModal(this)"><i data-lucide="pencil"></i></button><button class="more-btn danger" title="移除老师" onclick="removeTeacher(this)"><i data-lucide="user-minus"></i></button></div></td>
+                <td><div class="row-actions"><button class="more-btn edit" title="编辑老师" onclick="openEditTeacherModal(this)"><i data-lucide="pencil"></i></button><button class="more-btn danger" title="移除老师" onclick="removeTeacher(this)" data-track="/click/feixiangCampusAdminTeachersPage/removeTeacher | 移除老师 | 无"><i data-lucide="user-minus"></i></button></div></td>
               </tr>
               <tr data-search="王洁 13900139045 数学">
                 <td>
@@ -640,7 +640,7 @@
                 <td><div class="role-list"><span class="role-tag">学科老师</span></div></td>
                 <td><span class="subject-text">数学</span></td>
                 <td><span class="date-text">2026-05-31 16:42</span></td>
-                <td><div class="row-actions"><button class="more-btn edit" title="编辑老师" onclick="openEditTeacherModal(this)"><i data-lucide="pencil"></i></button><button class="more-btn danger" title="移除老师" onclick="removeTeacher(this)"><i data-lucide="user-minus"></i></button></div></td>
+                <td><div class="row-actions"><button class="more-btn edit" title="编辑老师" onclick="openEditTeacherModal(this)"><i data-lucide="pencil"></i></button><button class="more-btn danger" title="移除老师" onclick="removeTeacher(this)" data-track="/click/feixiangCampusAdminTeachersPage/removeTeacher | 移除老师 | 无"><i data-lucide="user-minus"></i></button></div></td>
               </tr>
               <tr data-search="李蕾 13600136088 英语">
                 <td>
@@ -652,7 +652,7 @@
                 <td><div class="role-list"><span class="role-tag">学科老师</span></div></td>
                 <td><span class="subject-text">英语</span></td>
                 <td><span class="date-text">2026-05-30 09:13</span></td>
-                <td><div class="row-actions"><button class="more-btn edit" title="编辑老师" onclick="openEditTeacherModal(this)"><i data-lucide="pencil"></i></button><button class="more-btn danger" title="移除老师" onclick="removeTeacher(this)"><i data-lucide="user-minus"></i></button></div></td>
+                <td><div class="row-actions"><button class="more-btn edit" title="编辑老师" onclick="openEditTeacherModal(this)"><i data-lucide="pencil"></i></button><button class="more-btn danger" title="移除老师" onclick="removeTeacher(this)" data-track="/click/feixiangCampusAdminTeachersPage/removeTeacher | 移除老师 | 无"><i data-lucide="user-minus"></i></button></div></td>
               </tr>
               <tr data-search="陈舟 13700137022 物理">
                 <td>
@@ -664,7 +664,7 @@
                 <td><div class="role-list"><span class="role-tag">学科老师</span></div></td>
                 <td><span class="subject-text">物理</span></td>
                 <td><span class="date-text">2026-05-28 14:05</span></td>
-                <td><div class="row-actions"><button class="more-btn edit" title="编辑老师" onclick="openEditTeacherModal(this)"><i data-lucide="pencil"></i></button><button class="more-btn danger" title="移除老师" onclick="removeTeacher(this)"><i data-lucide="user-minus"></i></button></div></td>
+                <td><div class="row-actions"><button class="more-btn edit" title="编辑老师" onclick="openEditTeacherModal(this)"><i data-lucide="pencil"></i></button><button class="more-btn danger" title="移除老师" onclick="removeTeacher(this)" data-track="/click/feixiangCampusAdminTeachersPage/removeTeacher | 移除老师 | 无"><i data-lucide="user-minus"></i></button></div></td>
               </tr>
             </tbody>
           </table>
@@ -693,7 +693,7 @@
           </select>
         </div>
         <div class="modal-tool-actions">
-          <button class="btn primary" onclick="resetInviteLink()"><i data-lucide="link"></i>生成新链接</button>
+          <button class="btn primary" onclick="resetInviteLink()" data-track="/click/feixiangCampusAdminTeachersPage/generateInviteLink | 生成邀请链接 | 无"><i data-lucide="link"></i>生成新链接</button>
         </div>
       </div>
       <div class="history-title-row">
@@ -800,7 +800,7 @@
     </div>
     <div class="modal-foot">
       <button class="btn" onclick="closeEditTeacherModal()">取消</button>
-      <button class="btn primary" onclick="saveTeacherProfile()">保存</button>
+      <button class="btn primary" onclick="saveTeacherProfile()" data-track="/click/feixiangCampusAdminTeachersPage/saveTeacherProfile | 保存老师信息 | 无">保存</button>
     </div>
   </div>
 </div>
@@ -992,7 +992,9 @@
         {
           "title": "功能说明",
           "body": [
-            "列表展示学校内老师的姓名、手机号、角色、学科、状态、加入时间和最近活跃，帮助管理员判断成员是否仍在校内工作。"
+            "对象：学校管理员。",
+            "用途：查看老师成员身份、状态和最近活跃情况。",
+            "产出：成员列表、状态标识和后续管理入口。"
           ]
         },
         {
@@ -1028,8 +1030,8 @@
         {
           "title": "数据说明",
           "items": [
-            "成员数据至少包含老师姓名、手机号、角色、学科、状态、加入方式、加入时间、最近活跃时间。",
-            "状态包括待加入、已加入、已停用；角色包括管理员、普通老师等。"
+            "成员列表展示姓名、手机号脱敏信息、角色、学科、状态、加入时间和最近活跃。",
+            "停用状态和权限范围需要在成员行内可识别。"
           ]
         },
         {
@@ -1083,9 +1085,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "非管理员不能看到可编辑入口。",
-            "停用成员后该成员不再出现在活跃成员统计中。",
-            "搜索无结果时不能清空页面主操作。"
+            "普通老师看不到学校管理入口。",
+            "成员状态、角色和最近活跃展示正确。",
+            "停用老师不能继续访问学校空间。"
           ]
         }
       ]
@@ -1098,7 +1100,9 @@
         {
           "title": "功能说明",
           "body": [
-            "邀请模块用于生成学校专属邀请方式，管理员可以复制链接或查看待加入老师状态。"
+            "对象：学校管理员。",
+            "用途：生成学校邀请方式，并跟踪待加入老师。",
+            "产出：邀请链接、邀请状态和待加入记录。"
           ]
         },
         {
@@ -1134,7 +1138,8 @@
         {
           "title": "数据说明",
           "items": [
-            "邀请数据包含学校、创建人、创建时间、过期时间、使用状态和已加入手机号。"
+            "邀请信息包含邀请链接、邀请人、学校名称、有效期和待加入状态。",
+            "待加入记录需要关联手机号或老师身份，避免重复创建成员。"
           ]
         },
         {
@@ -1184,9 +1189,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "复制邀请链接后有明确反馈。",
-            "过期/撤销链接不能进入成功态。",
-            "重复手机号不会生成两个成员。"
+            "邀请链接只绑定当前学校。",
+            "链接失效后不能继续加入。",
+            "老师已在学校时不重复创建成员。"
           ]
         }
       ]
@@ -1199,7 +1204,9 @@
         {
           "title": "功能说明",
           "body": [
-            "角色与范围用于控制老师在学校空间中的可见入口、资料访问和管理动作。"
+            "对象：学校管理员。",
+            "用途：调整老师在学校空间内的角色和可见范围。",
+            "产出：角色、学科范围、管理权限和保护提示。"
           ]
         },
         {
@@ -1235,7 +1242,8 @@
         {
           "title": "数据说明",
           "items": [
-            "角色数据包含角色名称、权限范围、变更人、变更时间。"
+            "权限展示信息包括老师角色、管理范围、学科范围和状态。",
+            "最后管理员保护需要识别当前管理员数量。"
           ]
         },
         {
@@ -1281,9 +1289,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "最后管理员保护必须生效。",
-            "取消编辑不应改变列表数据。",
-            "角色更新后相关入口可见性同步变化。"
+            "最后一个管理员不能被停用或降权。",
+            "角色调整后可见入口同步变化。",
+            "无权限老师不能访问管理动作。"
           ]
         }
       ]

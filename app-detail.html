@@ -503,11 +503,11 @@
     <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg><b id="pview">3.4w</b> 浏览</span>
     <span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:-1px;margin-right:3px"><polygon points="12 2 15 9 22 9 17 14 19 21 12 17 5 21 7 14 2 9 9 9 12 2"/></svg><b id="pstar">345</b> 收藏</span>
   </div>
-  <button class="btn ghost" onclick="showToast('（演示）已添加到我的')">
+  <button class="btn ghost" onclick="showToast('（演示）已添加到我的')" data-track="/click/feixiangCampusAppDetailPage/addToMyWorks | 添加到我的作品 | appSource#STRING">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
     添加到我的
   </button>
-  <button class="btn primary" onclick="showToast('（演示）已生成分享链接')">
+  <button class="btn primary" onclick="showToast('（演示）已生成分享链接')" data-track="/click/feixiangCampusAppDetailPage/share | 分享应用 | appSource#STRING">
     <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
     分享
   </button>
@@ -838,7 +838,9 @@ renderApp();
         {
           "title": "功能说明",
           "body": [
-            "应用介绍区说明应用解决什么教学问题、适合谁用、来源是什么，以及当前老师是否可用。"
+            "对象：准备了解应用的老师。",
+            "用途：判断应用是否适合当前教学场景。",
+            "展示项：解决问题、适用对象、来源和可用状态。"
           ]
         },
         {
@@ -867,7 +869,7 @@ renderApp();
           "title": "业务规则",
           "items": [
             "详情页必须保留应用来源和可用范围。",
-            "通过校园版创建的应用，详情页作者/创建者展示校园版 user 信息，不展示个人版 user 信息。",
+            "通过校园版创建的应用，详情页作者/创建者展示校园版老师身份信息，不展示个人版创作者身份信息。",
             "不可用应用不展示可误触的主使用按钮。",
             "应用说明应面向老师任务，不写技术能力堆叠。"
           ]
@@ -875,7 +877,8 @@ renderApp();
         {
           "title": "数据说明",
           "items": [
-            "应用详情包含名称、简介、来源、作者、分类、适用学科、权限状态、收藏状态；校园版创建应用的作者字段使用校园版 user 信息。"
+            "应用介绍展示应用名称、简介、来源、作者、开通状态、适用场景、收藏状态和跳转地址。",
+            "飞象官方应用、本校应用和飞象老师精选应用的来源与作者口径需与应用广场一致。"
           ]
         },
         {
@@ -921,9 +924,10 @@ renderApp();
         {
           "title": "QA 检查点",
           "items": [
-            "来源和权限在首屏可见。",
-            "不可用状态下主按钮置灰。",
-            "从不同入口进入详情内容一致。"
+            "应用来源和作者展示正确。",
+            "未开通官方应用不能直接进入业务系统。",
+            "本校应用作者使用校园版老师身份信息。",
+            "返回来源页后筛选状态不丢失。"
           ]
         }
       ]
@@ -936,7 +940,9 @@ renderApp();
         {
           "title": "功能说明",
           "body": [
-            "应用预览展示示例输入、示例输出或运行效果，帮助老师判断是否符合自己的教学场景。"
+            "对象：使用前需要确认效果的老师。",
+            "用途：查看应用运行前后的示例。",
+            "展示项：示例输入、示例输出或运行效果。"
           ]
         },
         {
@@ -968,7 +974,8 @@ renderApp();
         {
           "title": "数据说明",
           "items": [
-            "预览数据包含样例输入、样例输出、适用场景、所需资料类型。"
+            "预览展示信息包括封面、示例输入、示例输出、能力说明、可用状态和预览交互反馈。",
+            "预览只用于判断应用能力，不在详情页写入真实业务数据。"
           ]
         },
         {
@@ -1014,9 +1021,9 @@ renderApp();
         {
           "title": "QA 检查点",
           "items": [
-            "预览失败不影响页面基本操作。",
-            "无权限时不泄露学校资料。",
-            "示例表达老师能理解的输入输出。"
+            "预览区能说明应用用途。",
+            "无权限或未开通时预览不误导老师认为已可使用。",
+            "预览失败有反馈并保留返回入口。"
           ]
         }
       ]
@@ -1029,7 +1036,9 @@ renderApp();
         {
           "title": "功能说明",
           "body": [
-            "操作区承接添加到我的应用、分享给同事、直接使用或返回广场等动作。"
+            "对象：当前应用的主态或客态老师。",
+            "用途：添加、分享、直接使用或返回应用广场。",
+            "产出：操作结果、权限反馈和目标页面跳转。"
           ]
         },
         {
@@ -1065,7 +1074,8 @@ renderApp();
         {
           "title": "数据说明",
           "items": [
-            "操作状态包含收藏状态、使用权限、分享范围、最近使用时间。"
+            "操作展示信息包括添加状态、收藏状态、分享权限、分享链接、可见范围和目标空间。",
+            "添加到我的作品只影响当前老师列表，不改变应用原归属。"
           ]
         },
         {
@@ -1119,9 +1129,10 @@ renderApp();
         {
           "title": "QA 检查点",
           "items": [
-            "添加后我的应用可见。",
-            "分享范围符合权限。",
-            "缺少资料时不会进入空白流程。"
+            "添加后可在我的作品查看。",
+            "分享失败时不显示已复制成功。",
+            "无权限应用不展示可执行分享。",
+            "取消收藏不影响原应用。"
           ]
         }
       ]

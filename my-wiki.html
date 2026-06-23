@@ -299,12 +299,12 @@
       </div>
       <div class="ph-right">
         <div class="ph-view-switcher" role="tablist" aria-label="视图切换">
-          <button class="ph-vs-btn vs-btn active" data-view="wiki" onclick="switchView('wiki')" role="tab" aria-selected="true"><i data-lucide="book-open"></i><span>Wiki</span></button>
-          <button class="ph-vs-btn vs-btn" data-view="graph" onclick="switchView('graph')" role="tab" aria-selected="false"><i data-lucide="git-branch"></i><span>知识图谱</span></button>
-          <button class="ph-vs-btn vs-btn" data-view="folder" onclick="switchView('folder')" role="tab" aria-selected="false"><i data-lucide="folder"></i><span>文件夹</span></button>
+          <button class="ph-vs-btn vs-btn active" data-view="wiki" onclick="switchView('wiki')" role="tab" aria-selected="true" data-track="/click/feixiangCampusSchoolWikiPage/switchView | 切换知识库视图 | viewType#STRING,kbScope#STRING"><i data-lucide="book-open"></i><span>Wiki</span></button>
+          <button class="ph-vs-btn vs-btn" data-view="graph" onclick="switchView('graph')" role="tab" aria-selected="false" data-track="/click/feixiangCampusSchoolWikiPage/switchView | 切换知识库视图 | viewType#STRING,kbScope#STRING"><i data-lucide="git-branch"></i><span>知识图谱</span></button>
+          <button class="ph-vs-btn vs-btn" data-view="folder" onclick="switchView('folder')" role="tab" aria-selected="false" data-track="/click/feixiangCampusSchoolWikiPage/switchView | 切换知识库视图 | viewType#STRING,kbScope#STRING"><i data-lucide="folder"></i><span>文件夹</span></button>
         </div>
         <div class="knowledge-header-actions wiki-header-actions">
-          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索我的知识库" aria-expanded="false">
+          <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索我的知识库" aria-expanded="false" data-track="/click/feixiangCampusSchoolWikiPage/search | 搜索知识库 | kbScope#STRING">
             <i data-lucide="search"></i>
           </button>
           <span class="ph-action-sep" aria-hidden="true"></span>
@@ -346,7 +346,7 @@
               </p>
             </div>
             <div class="wiki-hero-actions">
-              <button class="hero-upload-btn" onclick="personalUploadToCurrentFolder()">
+              <button class="hero-upload-btn" onclick="personalUploadToCurrentFolder()" data-track="/click/feixiangCampusSchoolWikiPage/uploadFile | 点击上传资料 | kbScope#STRING">
                 <i data-lucide="upload"></i>
                 上传资料
               </button>
@@ -585,7 +585,7 @@
                 <i data-lucide="chevron-down" class="chev"></i>
               </button>
             </div>
-            <button class="ce-send idle" id="ce-send" onclick="ceSend()" title="发送（Enter）">
+            <button class="ce-send idle" id="ce-send" onclick="ceSend()" title="发送（Enter）" data-track="/click/feixiangCampusChatPage/sendMessage | 发送对话消息 | mode#STRING,kbScope#STRING,attachmentCount#INT32">
               <i data-lucide="arrow-up"></i>
             </button>
           </div>
@@ -1017,7 +1017,8 @@
         {
           "title": "数据说明",
           "items": [
-            "个人知识库数据包含文件、词条、文件夹、标签、更新时间、可见范围。"
+            "个人 Wiki 展示资料、文件夹、知识图谱和个人沉淀内容。",
+            "资料归属为当前老师个人空间。"
           ]
         },
         {
@@ -1067,11 +1068,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "个人资料默认不公开。",
-            "空状态展示演示 Wiki 数据，并保留上传入口。",
-            "示例数据在 Wiki 首页和文件夹视图中保持一致。",
-            "一键清空后演示 Wiki 和文件夹演示资料同时消失。",
-            "解析中资料有状态提示。"
+            "默认进入个人 Wiki 范围。",
+            "个人资料不混入学校知识库。",
+            "文件夹和知识图谱入口可用。"
           ]
         }
       ]
@@ -1084,7 +1083,9 @@
         {
           "title": "功能说明",
           "body": [
-            "分享个人 Wiki 让老师主动把个人资料开放给指定同事或学校范围。"
+            "对象：个人 Wiki 所有者。",
+            "用途：把个人资料开放给指定同事或学校范围。",
+            "产出：分享对象、可见范围和分享结果。"
           ]
         },
         {
@@ -1121,7 +1122,8 @@
         {
           "title": "数据说明",
           "items": [
-            "分享数据包含分享范围、分享对象、资料范围、访问权限、isPermanent。"
+            "分享信息包含分享对象、可见范围、有效状态和当前 Wiki 标识。",
+            "分享结果需要记录发起人和接收范围。"
           ]
         },
         {
@@ -1171,9 +1173,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "分享前有范围确认。",
-            "分享链接不展示有效期。",
-            "个人资料不会默认公开。"
+            "无分享权限时不展示或禁用分享。",
+            "分享后接收人只能看到被授权范围。",
+            "取消分享后链接不可继续访问。"
           ]
         }
       ]
@@ -1186,7 +1188,9 @@
         {
           "title": "功能说明",
           "body": [
-            "“飞象学到的规则”展示老师在个人使用中沉淀的偏好，例如题型偏好、讲解风格、常用班级和资料处理习惯。"
+            "对象：希望复用个人偏好的老师。",
+            "用途：查看飞象从个人使用中沉淀的规则。",
+            "展示项：题型偏好、讲解风格、常用班级和资料处理习惯。"
           ]
         },
         {
@@ -1222,7 +1226,8 @@
         {
           "title": "数据说明",
           "items": [
-            "规则数据包含规则描述、来源行为、适用场景、启用状态、更新时间。"
+            "规则项展示规则名称、来源行为、适用场景和更新时间。",
+            "规则属于个人使用偏好，不默认进入学校知识库。"
           ]
         },
         {
@@ -1272,9 +1277,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "规则可编辑可关闭。",
-            "关闭后新生成不再应用。",
-            "个人规则不影响其他老师。"
+            "规则列表不展示他人个人偏好。",
+            "规则为空时有空状态。",
+            "删除或关闭规则后不再参与后续推荐。"
           ]
         }
       ]

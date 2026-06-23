@@ -67,12 +67,12 @@
           <i data-lucide="search"></i>
           <input id="search-input" type="text" autocomplete="off" placeholder="快速搜索应用">
         </label>
-        <button class="search-submit" id="search-submit" type="button">搜索</button>
+        <button class="search-submit" id="search-submit" type="button" data-track="/click/feixiangCampusAppSquarePage/search | 搜索应用 | appSource#STRING">搜索</button>
       </div>
       <div class="subject-tabs" id="subject-tabs">
-        <button class="subject-tab" data-tab="official">飞象官方</button>
-        <button class="subject-tab" data-tab="global">飞象老师精选</button>
-        <button class="subject-tab" data-tab="school">本校应用</button>
+        <button class="subject-tab" data-tab="official" data-track="/click/feixiangCampusAppSquarePage/selectSource | 切换应用来源 | appSource#STRING">飞象官方</button>
+        <button class="subject-tab" data-tab="global" data-track="/click/feixiangCampusAppSquarePage/selectSource | 切换应用来源 | appSource#STRING">飞象老师精选</button>
+        <button class="subject-tab" data-tab="school" data-track="/click/feixiangCampusAppSquarePage/selectSource | 切换应用来源 | appSource#STRING">本校应用</button>
       </div>
     </div>
     <div class="grid-wrap"><div class="content-grid" id="grid"></div></div>
@@ -130,7 +130,7 @@
       const href = isLocked ? app.landingUrl : (app.url || `app-detail.html?app=${encodeURIComponent(app.id)}`);
       const stats = isOfficial ? '' : `<span class="app-stats"><i data-lucide="eye"></i>${esc(app.usage)}</span>`;
       const tag = isLocked ? '<span class="app-tag locked">未开通</span>' : (isOfficial ? '' : `<span class="app-tag">${esc(app.badge)}</span>`);
-      return `<a class="app-card ${isLocked ? 'is-locked' : ''}" href="${esc(href)}" target="_blank" rel="noopener">
+      return `<a class="app-card ${isLocked ? 'is-locked' : ''}" href="${esc(href)}" target="_blank" rel="noopener" data-track="/click/feixiangCampusAppSquarePage/openApp | 打开应用 | appSource#STRING">
         <div class="app-cover bg-grad-${app.grad}">${tag}<div class="app-cover-icon">${ICONS[app.icon] || ''}</div>${stats}</div>
         <div class="app-body">
           <div class="app-title">${esc(app.title)}</div>
@@ -190,7 +190,7 @@
           "body": [
             "对象：从应用广场发起搜索或直接进入搜索页的老师。",
             "用途：按关键词和来源范围查找应用。",
-            "产出：当前来源范围内的应用结果列表和 URL 状态。"
+            "产出：当前来源范围内的应用结果列表和 链接状态。"
           ]
         },
         {
@@ -199,15 +199,19 @@
           "items": [
             {
               "label": "进入搜索页",
-              "text": "读取 URL 中的 q/tab 参数；搜索框回填关键词，来源 tab 高亮当前范围。"
+              "text": "读取链接中的关键词和来源范围；搜索框回填关键词，来源分类高亮当前范围。"
             },
             {
               "label": "提交搜索",
-              "text": "点击搜索按钮或按 Enter，按标题、描述、作者匹配当前范围内应用，并同步 URL。"
+              "text": "点击搜索按钮或按 Enter，按应用名称、说明和作者匹配当前来源范围内应用，并同步页面状态。"
             },
             {
               "label": "切换来源",
-              "text": "点击飞象官方、飞象老师精选、本校应用 tab，保留当前关键词并刷新结果。"
+              "text": "点击飞象官方、飞象老师精选、本校应用后，在同一关键词下刷新结果。"
+            },
+            {
+              "label": "清空搜索",
+              "text": "点击清空后保留当前来源范围，回到该来源的默认应用列表。"
             }
           ]
         },
@@ -215,17 +219,17 @@
           "title": "业务规则",
           "items": [
             "空关键词提交时不刷新结果，焦点回到搜索框。",
-            "搜索只在当前来源范围内生效，不跨 tab 混排。",
+            "搜索只在当前来源范围内生效，不跨标签页 混排。",
             "未开通官方应用展示未开通标识，点击进入官方应用落地页。",
-            "本校应用作者展示校园版 user 信息。"
+            "本校应用作者展示校园版老师身份信息。"
           ]
         },
         {
           "title": "数据说明",
           "items": [
-            "页面读取 q 和 tab 参数。",
-            "结果项展示应用名称、简介、来源、作者、开通状态、收藏状态和跳转地址。",
-            "来源范围包含飞象官方、飞象老师精选、本校应用。"
+            "搜索条件展示关键词、来源范围、应用类型和当前页。",
+            "从应用广场进入时需要保留来源范围。",
+            "结果列表展示匹配数量、无结果状态和清空入口。"
           ]
         },
         {
@@ -237,12 +241,12 @@
           ],
           "rows": [
             {
-              "场景": "URL 参数缺失",
+              "场景": "链接状态缺失",
               "处理方式": "使用默认来源范围并展示空关键词状态。"
             },
             {
-              "场景": "无匹配结果",
-              "处理方式": "展示空状态，保留关键词和来源 tab。"
+              "场景": "无搜索结果",
+              "处理方式": "展示空状态，保留关键词和来源范围。"
             },
             {
               "场景": "搜索框为空",
@@ -275,10 +279,10 @@
         {
           "title": "QA 检查点",
           "items": [
-            "URL 参数 q/tab 能还原页面状态。",
-            "切换 tab 后搜索框内容保持不丢失。",
-            "空关键词不刷新结果。",
-            "无匹配结果时展示空状态。"
+            "输入关键词后结果按关键词收敛。",
+            "切换来源后搜索条件不丢失。",
+            "无结果时展示清空筛选入口。",
+            "页面文案不出现技术参数名。"
           ]
         }
       ]
@@ -321,7 +325,8 @@
         {
           "title": "数据说明",
           "items": [
-            "卡片展示封面、标题、描述、作者、来源、收藏数据、开通状态和跳转地址。"
+            "应用结果卡片展示应用名称、来源、适用场景、可用状态和操作入口。",
+            "官方、学校和个人应用需要区分来源。"
           ]
         },
         {
@@ -371,9 +376,9 @@
         {
           "title": "QA 检查点",
           "items": [
-            "点击卡片和点击收藏不会互相误触。",
-            "未开通官方应用进入介绍页。",
-            "收藏失败时状态不应被错误改写。"
+            "结果卡片入口进入正确详情页。",
+            "无权限应用有明确状态。",
+            "收藏或添加状态展示正确。"
           ]
         }
       ]
