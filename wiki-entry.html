@@ -372,15 +372,11 @@
             的基础。
           </p>
           <div class="entry-meta">
-            <span class="em-item"><i data-lucide="files"></i> 来源 <b>12 份</b> 原文件</span>
+            <span class="em-item">来源 <b>12 份资料</b></span>
             <span class="em-sep">·</span>
-            <span class="em-item"><i data-lucide="hash"></i> 关联 <b>38 道</b> 题目</span>
+            <span class="em-item">相关词条 <b>5 个</b></span>
             <span class="em-sep">·</span>
-            <span class="em-item"><i data-lucide="users-round"></i> <b>4 位</b> 老师共建</span>
-            <span class="em-sep">·</span>
-            <span class="em-item"><i data-lucide="sparkles"></i> AI 整理于 <b>今天 09:14</b></span>
-            <span class="em-sep">·</span>
-            <span class="em-item"><i data-lucide="refresh-cw"></i> 上次更新 <b>2 小时前</b></span>
+            <span class="em-item">上次更新 <b>2 小时前</b></span>
           </div>
         </header>
 
@@ -417,7 +413,7 @@
           <p class="entry-cite">
             <i data-lucide="quote"></i>
             来源：
-            <a class="flink" onclick="showToast('（演示）展示来源资料贡献说明')" title="查看来源资料贡献说明">导入课件.pptx · P3</a>
+            <a class="flink" onclick="window.location.href='file-preview.html'" title="查看原文件">导入课件.pptx · P3</a>
             <span class="sep">·</span>
             <a class="flink" onclick="showToast('（演示）打开《教学设计·二次函数.docx》第 2 页')">教学设计 · P2</a>
           </p>
@@ -789,7 +785,7 @@
 
           <ul class="cm-source-list">
             <li class="cm-source">
-              <a class="cm-src-name" onclick="showToast('（演示）展示来源资料贡献说明')" title="查看来源资料贡献说明">
+              <a class="cm-src-name" onclick="window.location.href='file-preview.html'" title="查看原文件">
                 <i data-lucide="file"></i>
                 导入课件.pptx
               </a>
@@ -1934,9 +1930,31 @@
       const article = document.getElementById('view-wiki');
       if(!article) return;
 
-      const metaHtml = data.meta.map(([, label, value], index) => `
+      const normalizeCount = (value, unit) => {
+        const text = String(value || '');
+        const count = text.match(/\d+/)?.[0] || text;
+        return { count, unit };
+      };
+      const getMetaValue = (...labels) => {
+        const item = data.meta.find(([, label]) => labels.includes(label));
+        return item ? item[2] : '';
+      };
+      const fileValue = getMetaValue('资料', '来源');
+      const wikiValue = getMetaValue('Wiki', '关联');
+      const updateValue = getMetaValue('更新');
+      const firstUnit = data.type === '教学场景' ? '个主题' : '个词条';
+      const normalizedMeta = [
+        wikiValue ? { type: 'count', ...normalizeCount(wikiValue, firstUnit) } : null,
+        fileValue ? { type: 'count', ...normalizeCount(fileValue, '份资料') } : null,
+        updateValue ? { type: 'time', value: updateValue } : null
+      ].filter(Boolean);
+      const metaHtml = normalizedMeta.map((item, index) => `
         ${index ? '<span class="em-sep">·</span>' : ''}
-        <span class="item">${escapeHtml(label)} <b>${escapeHtml(value)}</b></span>
+        <span class="item">${
+          item.type === 'time'
+            ? `上次更新 <b>${escapeHtml(item.value)}</b>`
+            : `<b>${escapeHtml(item.count)}</b> ${escapeHtml(item.unit)}`
+        }</span>
       `).join('');
 
       const sectionHtml = data.sections.map(section => {
@@ -2153,6 +2171,12 @@
           "title": "数据说明",
           "items": [
             "Wiki 页面展示页面类型、标题、正文、目录关系和子页面列表。",
+            "目录 Wiki 页头基础信息固定展示词条/主题数、资料数和上次更新时间；内容 Wiki 页头基础信息固定展示来源资料数、相关词条数和上次更新时间。",
+            "词条/主题数指目录页下可继续点击进入的下一级 Wiki 数量；按目录类型显示为词条数或主题数。",
+            "资料数指目录页覆盖的来源资料数量，包含被目录下词条引用或归类的文件。",
+            "来源资料数指内容 Wiki 正文和结论实际引用或关联的原始资料数量。",
+            "相关词条数指可从当前内容 Wiki 继续浏览的相邻 Wiki 词条数量，不等同于关联题目数。",
+            "上次更新时间取当前目录、词条正文、来源引用或相关关系最近一次变化的时间。",
             "目录 Wiki 展示分组、子主题数量和进入入口；内容 Wiki 展示主题解释、正文和来源引用。"
           ]
         },

@@ -51,6 +51,26 @@
     return `<li>${label}${separator}${text}${children}</li>`;
   }
 
+  function getReviewStatus(value){
+    const text = String(value || '').trim();
+    if(text === '可用') return { key: 'available', label: text };
+    if(text === '置灰') return { key: 'disabled', label: text };
+    if(text === '删除') return { key: 'removed', label: text };
+    return null;
+  }
+
+  function renderTableCell(value){
+    const status = getReviewStatus(value);
+    if(status){
+      return `
+        <td class="review-table-status-cell">
+          <span class="review-status-badge is-${status.key}">${escapeHtml(status.label)}</span>
+        </td>
+      `;
+    }
+    return `<td>${escapeHtml(value)}</td>`;
+  }
+
   function renderReviewBlock(block){
     if(!block || typeof block !== 'object') return '';
     if(block.type === 'callout'){
@@ -85,7 +105,7 @@
             <table class="review-table">
               <thead><tr>${columns.map(col => `<th>${escapeHtml(col)}</th>`).join('')}</tr></thead>
               <tbody>
-                ${block.rows.map(row => `<tr>${columns.map(col => `<td>${escapeHtml(row[col])}</td>`).join('')}</tr>`).join('')}
+                ${block.rows.map(row => `<tr>${columns.map(col => renderTableCell(row[col])).join('')}</tr>`).join('')}
               </tbody>
             </table>
           </div>

@@ -2581,13 +2581,14 @@ body[data-page="file-preview"] .app[data-right="expanded"] .sidebar-right{
   padding:1px 6px;border-radius:4px;
 }
 .entry-meta{
-  display:flex;flex-wrap:wrap;align-items:center;gap:8px;
-  font-size:13px;color:var(--text-3);
+  display:flex;flex-wrap:wrap;align-items:center;gap:14px;
+  font-size:12px;color:var(--text-3);
+  font-variant-numeric:tabular-nums;
 }
 .em-item{
   display:inline-flex;align-items:center;gap:5px;
 }
-.em-item i{ width:13px;height:13px;color:var(--text-3); }
+.em-item i{ display:none; }
 .em-item b{ color:var(--text-2);font-weight:600; }
 .em-sep{ color:var(--text-3);opacity:.5; }
 
