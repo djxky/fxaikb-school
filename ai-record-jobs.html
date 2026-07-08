@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260522a" />
 <link rel="stylesheet" href="assets/page-header.css" />
 <style>
-  /* AI 录题进度页 · 老师主动上传文件，AI 解析后进入校对任务 */
+  /* AI 录题进度页 · 本地上传或知识库沉淀任务进入这里查看结果 */
   .recp-page{
     max-width:1080px;
     margin:0 auto;
@@ -346,6 +346,7 @@
   .recp-item-icon [data-lucide]{ width:16px; height:16px; }
   .recp-item-icon--pdf{ background:#D93D2A; }
   .recp-item-icon--docx{ background:#2B5BD7; }
+  .recp-item-icon--image{ background:#13966E; }
 
   .recp-item-main{
     flex:1; min-width:0;
@@ -531,7 +532,7 @@
         <div class="recp-hero">
           <div class="recp-hero-text">
             <h1 class="recp-hero-title"><span class="recp-brand">Ai</span>录题</h1>
-            <p class="recp-hero-sub">上传本地 PDF / Word，AI 自动解析题面 / 答案 / 知识点 / 难度。老师校对后入题库。<br/>知识库文件会自动识别入题库，无需在这里手动选择或审核。</p>
+            <p class="recp-hero-sub">上传本地 PDF / Word，或从学校知识库勾选沉淀后，AI 自动解析题面 / 答案 / 知识点 / 难度。<br/>老师在这里查看进度、校对结果，并确认入库。</p>
           </div>
           <div class="recp-hero-actions">
             <button class="recp-record-btn" id="recp-record-btn" data-doc="ai-record-entry" data-track="/click/feixiangCampusAiRecordPage/openRecordDialog | 打开 AI 录题弹窗 | 无">
@@ -759,7 +760,9 @@
     function renderItem(job){
       const meta = STATE_META[job.state];
       const ext = (job.fileType || '').toLowerCase();
-      const iconCls = ext === 'docx' || ext === 'doc' ? 'recp-item-icon--docx' : 'recp-item-icon--pdf';
+      const isImage = ['jpg', 'jpeg', 'png'].includes(ext);
+      const iconCls = isImage ? 'recp-item-icon--image' : (ext === 'docx' || ext === 'doc' ? 'recp-item-icon--docx' : 'recp-item-icon--pdf');
+      const itemIcon = isImage ? 'image' : 'file-text';
 
       /* 时间 */
       const timeStr =
@@ -816,7 +819,7 @@
 
       return `
         <div class="recp-item" data-jobid="${job.id}">
-          <span class="recp-item-icon ${iconCls}"><i data-lucide="file-text"></i></span>
+          <span class="recp-item-icon ${iconCls}"><i data-lucide="${itemIcon}"></i></span>
           <div class="recp-item-main">
             <div class="recp-item-name-line">
               <span class="recp-item-name" title="${escHtml(job.fileName)}">${escHtml(job.fileName)}</span>
@@ -828,7 +831,7 @@
             <div class="recp-item-sub">
               ${progressHtml}
               ${progressHtml ? '<span class="sep">·</span>' : ''}
-              <span class="recp-item-kb"><i data-lucide="library"></i>${escHtml(job.kbLabel || '')}</span>
+              <span class="recp-item-kb"><i data-lucide="library"></i>来源：${escHtml(job.kbLabel || '本地上传')}</span>
               <span class="sep">·</span>
               <span>${escHtml(job.fileSize || '')}</span>
               ${qInfo}
@@ -876,7 +879,7 @@
         <div class="v28m-head">
           <div class="v28m-title">
             AI 录题 · 上传要解析的文件
-            <div class="v28m-title-sub">仅支持 PDF / Word · 老师主动上传后，AI 解析为题目并进入校对任务</div>
+            <div class="v28m-title-sub">仅支持 PDF / Word · 本地上传后，AI 解析为题目并进入校对任务</div>
           </div>
           <button class="v28m-close" data-close aria-label="关闭"><i data-lucide="x"></i></button>
         </div>
@@ -885,7 +888,7 @@
             <span class="record-upload-icon"><i data-lucide="upload-cloud"></i></span>
             <span class="record-upload-main">
               <span class="record-upload-title">拖拽 PDF / Word 到这里，或选择本地文件</span>
-              <span class="record-upload-sub">支持 .pdf / .doc / .docx；上传后生成独立录题任务，需要老师校对后入题库。知识库文件会自动识别，无需在这里选择。</span>
+              <span class="record-upload-sub">支持 .pdf / .doc / .docx；上传后生成独立录题任务，需要老师校对后入题库。知识库资料请在知识库上传或文件列表中勾选沉淀。</span>
             </span>
             <span class="record-upload-action">选择文件</span>
             <input id="record-upload-input" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple hidden />
@@ -1090,19 +1093,19 @@
 <template id="review-template">
 {
   "title": "AI 录题 · 上传解析与任务列表",
-  "summary": "AI 录题页管理从上传资料到解析任务再到老师校对的全过程，核心是让老师知道每份资料当前处在哪个状态。",
+  "summary": "AI 录题页管理本地上传和知识库沉淀产生的录题任务，核心是让老师知道每份资料当前处在哪个状态。",
   "sections": [
     {
       "id": "ai-record-entry",
       "title": "1. 创建录题任务",
-      "body": "创建录题任务用于从本地选择试卷、练习册或图片，让 AI 提取题目草稿；当前版本不能从知识库选择资料。",
+      "body": "创建录题任务用于从本地选择 PDF / Word，让 AI 提取题目草稿；知识库资料不在本页手动选择，而是在知识库上传或文件列表中勾选沉淀后进入任务列表。",
       "blocks": [
         {
           "title": "功能说明",
           "body": [
-            "对象：需要把本地资料转成题库题目的老师。",
-            "用途：选择本地试卷、练习册或图片，创建 AI 解析任务。",
-            "边界：本版不提供从知识库选择资料。",
+            "对象：需要把资料转成题库题目的老师。",
+            "用途：本地上传 PDF / Word 创建 AI 解析任务；知识库沉淀任务在本页查看进度和结果。",
+            "边界：AI 录题页不提供从知识库手动选择文件；知识库文件需在知识库上传或文件列表中勾选沉淀。",
             "页面定位：AI 录题与 AI 校本题库同为独立产品页，从应用入口新页面打开；左侧不展示知识库导航，顶部提供首页按钮返回校园版首页。"
           ]
         },
@@ -1116,7 +1119,7 @@
             },
             {
               "label": "选择文件",
-              "text": "选择 PDF、Word、图片等资料，可一次选择多个文件。"
+              "text": "选择 PDF、Word 资料，可一次选择多个文件。"
             },
             {
               "label": "确认上传",
@@ -1132,7 +1135,7 @@
           "title": "业务规则",
           "items": [
             "上传后只创建待解析任务，不直接进入题库。",
-            "当前版本只能从本地选择资料/文件，不提供从知识库选择资料的入口或流程。",
+            "知识库资料不在本页选择；老师在知识库勾选沉淀后，系统自动创建 AI 录题任务。",
             "同一文件重复上传时需要提示可能重复。",
             "文件归属默认当前老师，可按学校规则进入个人或学校题库。"
           ]
@@ -1141,7 +1144,7 @@
           "title": "数据说明",
           "items": [
             "上传资料信息：文件名、文件类型、大小、来源方式、上传状态。",
-            "任务创建后记录解析状态、创建时间和校对入口；当前版本不记录知识库来源。"
+            "任务创建后记录解析状态、创建时间、校对入口和来源；知识库沉淀任务需记录知识库路径或文件来源。"
           ]
         },
         {
@@ -1154,7 +1157,7 @@
           "rows": [
             {
               "场景": "格式不支持",
-              "处理方式": "提示支持 PDF、Word、图片，不创建任务。"
+              "处理方式": "本地上传提示支持 PDF、Word；知识库沉淀仅处理 PDF、Word、单张图片。"
             },
             {
               "场景": "文件过大",
@@ -1188,7 +1191,7 @@
             },
             {
               "关联对象": "school-wiki.html",
-              "说明": "知识库资料不在本版 AI 录题页手动选择；如需入题库，应通过后续明确的题库/录题链路处理。"
+              "说明": "知识库资料不在 AI 录题页手动选择；老师在知识库勾选沉淀后，任务进入本页查看。"
             }
           ]
         },

@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>飞象 AI · 学校知识库</title>
 <script src="assets/lucide-loader.js"></script>
-<link rel="stylesheet" href="assets/v28.css?v=20260617upload" />
+<link rel="stylesheet" href="assets/v28.css?v=20260708uploadcheckbox" />
 <link rel="stylesheet" href="assets/shared/v28-modals.css?v=20260521g" />
 <link rel="stylesheet" href="assets/feixiang-shell.css" />
-<link rel="stylesheet" href="assets/page-header.css" />
+<link rel="stylesheet" href="assets/page-header.css?v=20260708uploadcheckbox" />
 <style>
 	  .kb-home-section{ animation:fade-up .55s .14s var(--ease) both; }
 	  .kb-section-intro{
@@ -545,6 +545,9 @@
           <button class="ph-action" onclick="openCreateFolderPop(event)" title="新建文件夹">
             <i data-lucide="folder-plus"></i><span>新建文件夹</span>
           </button>
+          <button class="ph-action is-primary" onclick="openKbUploadModal()" title="上传文件">
+            <i data-lucide="upload"></i><span>上传文件</span>
+          </button>
           <button class="ph-action folder-sort-action" onclick="showToast('按上传时间 / 名称 / 大小排序')" title="排序">
             <i data-lucide="arrow-up-down"></i><span>排序</span>
           </button>
@@ -975,7 +978,10 @@
             <button class="fv-tool" onclick="showToast('按上传时间 / 名称 / 大小排序')">
               <i data-lucide="arrow-up-down"></i> 排序
             </button>
-            <button class="fv-tool primary" onclick="openWiki('二次函数图像与性质')">
+            <button class="fv-tool primary" onclick="openKbUploadModal()">
+              <i data-lucide="upload"></i> 上传文件
+            </button>
+            <button class="fv-tool" onclick="openWiki('二次函数图像与性质')">
               <i data-lucide="book-open"></i> 查看整理结果
             </button>
           </div>
@@ -1006,6 +1012,7 @@
               <th class="col-time">上传时间</th>
               <th class="col-size">大小</th>
               <th class="col-wiki">关联主题</th>
+              <th class="col-qbank">校本题库</th>
             </tr>
           </thead>
           <tbody>
@@ -1015,6 +1022,7 @@
               <td>5 天前</td>
               <td>2.1 MB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数图像与性质</a></td>
+              <td class="col-qbank"><span class="kb-qbank-status is-muted">暂不支持</span></td>
             </tr>
             <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="file-text"></i> 教学设计·二次函数.docx</td>
@@ -1022,6 +1030,10 @@
               <td>5 天前</td>
               <td>340 KB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数图像与性质</a></td>
+              <td class="col-qbank">
+                <span class="kb-qbank-status is-none">未沉淀</span>
+                <button class="kb-qbank-action" onclick="createKbAutoRecordTask(event,{ name:'教学设计·二次函数.docx', type:'docx', size:'340 KB' })">沉淀</button>
+              </td>
             </tr>
             <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="book"></i> 八下函数·配套习题汇编.pdf</td>
@@ -1029,6 +1041,10 @@
               <td>1 个月前</td>
               <td>8.4 MB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数 · 一次函数</a></td>
+              <td class="col-qbank">
+                <span class="kb-qbank-status is-done">已沉淀 42 题</span>
+                <button class="kb-qbank-action" onclick="goAiRecordFromKb(event,'八下函数·配套习题汇编.pdf','committed',42)">查看结果</button>
+              </td>
             </tr>
             <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="file-text"></i> 海淀区 2026 一模卷·数学.pdf</td>
@@ -1036,13 +1052,21 @@
               <td>1 周前</td>
               <td>1.2 MB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数 · 圆 · 相似</a></td>
+              <td class="col-qbank">
+                <span class="kb-qbank-status is-doing">处理中</span>
+                <button class="kb-qbank-action" onclick="goAiRecordFromKb(event,'海淀区 2026 一模卷·数学.pdf','parsing',18)">去 AI 录题</button>
+              </td>
             </tr>
             <tr onclick="openWiki('二次函数图像与性质')">
-              <td class="col-name"><i data-lucide="image"></i> 王建华·公开课板书（4 张）</td>
+              <td class="col-name"><i data-lucide="image"></i> 王建华·公开课板书.jpg</td>
               <td>王建华</td>
               <td>2 周前</td>
-              <td>3.6 MB</td>
+              <td>820 KB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数图像与性质</a></td>
+              <td class="col-qbank">
+                <span class="kb-qbank-status is-failed">沉淀失败</span>
+                <button class="kb-qbank-action" onclick="createKbAutoRecordTask(event,{ name:'王建华·公开课板书.jpg', type:'jpg', size:'820 KB' })">重试</button>
+              </td>
             </tr>
             <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="file-text"></i> 赵明杰·错题剖析.docx</td>
@@ -1050,6 +1074,10 @@
               <td>2 周前</td>
               <td>220 KB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数 · 一元二次方程</a></td>
+              <td class="col-qbank">
+                <span class="kb-qbank-status is-none">未沉淀</span>
+                <button class="kb-qbank-action" onclick="createKbAutoRecordTask(event,{ name:'赵明杰·错题剖析.docx', type:'docx', size:'220 KB' })">沉淀</button>
+              </td>
             </tr>
             <tr onclick="openWiki('二次函数图像与性质')">
               <td class="col-name"><i data-lucide="clipboard-list"></i> 八(3)班·错题精选.xlsx</td>
@@ -1057,6 +1085,7 @@
               <td>3 周前</td>
               <td>180 KB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">二次函数图像与性质</a></td>
+              <td class="col-qbank"><span class="kb-qbank-status is-muted">暂不支持</span></td>
             </tr>
             <tr onclick="openWiki('中考压轴·函数综合')">
               <td class="col-name"><i data-lucide="folder-archive"></i> 北京中考真题 2021-2025（5 份）</td>
@@ -1064,9 +1093,10 @@
               <td>3 周前</td>
               <td>12 MB</td>
               <td><a class="wlink" onclick="event.stopPropagation();openWiki('二次函数图像与性质')">21 个主题</a></td>
+              <td class="col-qbank"><span class="kb-qbank-status is-muted">文件夹</span></td>
             </tr>
             <tr class="more" onclick="showToast('展开剩余 4 份资料')">
-              <td class="col-name" colspan="5"><i data-lucide="more-horizontal"></i> …还有 4 份资料</td>
+              <td class="col-name" colspan="6"><i data-lucide="more-horizontal"></i> …还有 4 份资料</td>
             </tr>
           </tbody>
         </table>
@@ -1360,7 +1390,7 @@
 <script src="assets/feixiang-shell.js"></script>
 <script>renderFeixiangSidebar('school-wiki');</script>
 <script src="assets/v28-shell.js?v=20260617upload"></script>
-<script src="assets/v28.js?v=20260617upload"></script>
+<script src="assets/v28.js?v=20260708uploadcheckbox"></script>
 <script src="assets/shared/v28-modals.js?v=20260617a"></script>
 <script src="assets/page-header.js"></script>
 <script>
@@ -1421,6 +1451,83 @@
 {
   "title": "学校知识库 · 页面体系与 Wiki 逻辑",
   "summary": "学校知识库负责把学校资料整理成老师可浏览、可提问、可追溯来源的 Wiki 体系。产品稿保留当前版本已确定的页面类型、顶部视图、Wiki 职责和文件页职责。",
+  "reviewVersions": [
+    {
+      "id": "v1.0",
+      "label": "v1.0 本次新增",
+      "default": true,
+      "title": "学校知识库 · v1.0 本次新增",
+      "summary": "本次只评审学校知识库文件夹视图、上传弹窗题目入库勾选项，以及文件进入文件页后的添加至校本题库链路。",
+      "sections": [
+        {
+          "id": "school-kb-v1-folder-upload",
+          "title": "1. 文件夹视图与上传入口",
+          "body": "聚焦学校知识库文件夹视图中的新增上传和文件进入文件页逻辑。",
+          "blocks": [
+            {
+              "title": "本次新增 / 调整",
+              "items": [
+                "【新增】文件夹视图保留 Wiki、知识图谱、文件夹三视图，文件夹只作为资料组织方式，不替代学校知识库首页、目录 Wiki、内容 Wiki 或文件页。",
+                "【新增】上传弹窗增加 checkbox，标题为“允许文件中的题目进入 AI 校本题库”，副标题为“勾选后，AI 会自动分析符合条件的图片、PDF、Word，进入 AI 录题处理。”，默认不勾选。",
+                "【新增】勾选后只对符合条件的图片、PDF、Word 进入 AI 录题处理；未勾选时文件只进入学校知识库，不展示 AI 录题进度提示。",
+                "【新增】勾选且存在符合条件文件时，导入完成提示追加文案“符合条件的题目录入进度，可在「应用广场 - AI 录题」页面查看”。",
+                "【新增】点击文件夹视图中的文件进入文件页，文件页承接后续添加至校本题库。"
+              ]
+            },
+            {
+              "title": "上传弹窗文案",
+              "type": "table",
+              "columns": [
+                "位置",
+                "文案 / 行为"
+              ],
+              "rows": [
+                {
+                  "位置": "弹窗标题",
+                  "文案 / 行为": "上传文件"
+                },
+                {
+                  "位置": "弹窗副标题",
+                  "文案 / 行为": "上传后，AI 会自动整理并生成 Wiki 内容。"
+                },
+                {
+                  "位置": "checkbox 标题",
+                  "文案 / 行为": "允许文件中的题目进入 AI 校本题库"
+                },
+                {
+                  "位置": "checkbox 副标题",
+                  "文案 / 行为": "勾选后，AI 会自动分析符合条件的图片、PDF、Word，进入 AI 录题处理。"
+                },
+                {
+                  "位置": "上传主按钮",
+                  "文案 / 行为": "开始上传"
+                },
+                {
+                  "位置": "导入完成追加提示",
+                  "文案 / 行为": "符合条件的题目录入进度，可在「应用广场 - AI 录题」页面查看。仅勾选且存在符合条件文件时展示。"
+                }
+              ]
+            },
+            {
+              "title": "本次不评审",
+              "items": [
+                "学校知识库页面体系、目录 Wiki、内容 Wiki、知识图谱和右侧 AI 解读沿用 v0.9，不作为本次新增评审重点。"
+              ]
+            },
+            {
+              "title": "QA 检查点",
+              "items": [
+                "学校知识库底部问答范围仍显示学校知识库。",
+                "上传弹窗 checkbox 默认不勾选，勾选态清晰可见，标题和副标题文案完整展示。",
+                "未勾选时完成反馈不展示 AI 录题进度提示。",
+                "文件夹中文件点击后进入文件页，且文件页仍能识别来源为学校知识库。"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "sections": [
     {
       "id": "school-kb-page-system",
@@ -1448,6 +1555,10 @@
               "text": "点击 Wiki、知识图谱、文件夹，在同一学校知识库范围内切换组织方式。"
             },
             {
+              "label": "查看文件夹",
+              "text": "点击文件夹视图后，以学校文件夹路径和文件列表查看资料，列表展示文件名、上传者、更新时间、大小和操作入口。"
+            },
+            {
               "label": "进入 Wiki 或文件",
               "text": "点击目录主题进入目录 Wiki 或内容 Wiki；点击资料文件进入文件页。"
             },
@@ -1462,6 +1573,8 @@
           "items": [
             "当前版本确定四类页面：学校知识库首页、目录 Wiki、内容 Wiki、文件页。",
             "顶部固定三视图：Wiki、知识图谱、文件夹；知识图谱和文件夹是与 Wiki 并列的顶部视图，不放进 Wiki 正文或右侧 AI 解读。",
+            "文件夹视图只负责展示学校资料的目录组织和文件管理入口，不替代学校知识库首页、目录 Wiki、内容 Wiki 或文件页。",
+            "上传弹窗中的题目入库勾选项只影响文件内题目是否进入 AI 录题处理，不改变原文件在学校知识库中的归属。",
             "目录 Wiki 负责组织和进入下一层主题或文件；内容 Wiki 负责解释具体教学主题并展示来源引用。",
             "文件页不是 Wiki 页，负责原文件预览、AI 摘要、相关 Wiki 和文件级操作。",
             "Wiki 页 AI 解读固定为关联文件、相关 Wiki；文件页 AI 解读固定为 AI 摘要、相关 Wiki。",
@@ -1472,6 +1585,8 @@
           "title": "数据说明",
           "items": [
             "页面类型使用老师可见名称：学校知识库首页、目录 Wiki、内容 Wiki、文件页。",
+            "文件夹视图固定展示文件名、上传者、更新时间、大小和操作列；路径栏展示当前学校文件夹层级。",
+            "AI 录题沉淀支持 PDF、Word 和图片文件；PPT、Excel 等资料仍可作为知识库文件整理，但不承诺自动切题入库。",
             "学校知识库入口展示文件数；红点依据当前老师上次打开时间和知识库最近更新时间判断。",
             "每个 Wiki 或文件需要保留来源资料关系，用于引用、相关推荐和继续提问。"
           ]
@@ -1524,6 +1639,9 @@
           "title": "QA 检查点",
           "items": [
             "顶部应稳定展示 Wiki、知识图谱、文件夹三视图。",
+            "文件夹视图与我的知识库保持同一套文件管理样式，但范围文案显示学校知识库。",
+            "上传弹窗中的 AI 校本题库 checkbox 默认不勾选，勾选态和未勾选态清晰可见。",
+            "仅当老师勾选 AI 校本题库 checkbox 时，导入完成提示才展示“符合条件的题目录入进度，可在「应用广场 - AI 录题」页面查看”。",
             "Wiki 页和文件页的右侧 AI 解读标签页 不应混用。",
             "文件页不应被写成文件 Wiki。",
             "学校知识库入口展示文件数，而不是主题数或调试信息。"

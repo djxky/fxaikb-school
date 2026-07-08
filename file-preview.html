@@ -69,6 +69,170 @@
   body[data-page="file-preview"] .fp-badge-pptx [data-lucide]{
     color:#C84A4A !important;
   }
+  body[data-page="file-preview"] .fp-badge-file{
+    background:var(--gold-bg) !important;
+    border-color:#EAD8B6 !important;
+    color:var(--gold-deep) !important;
+  }
+  body[data-page="file-preview"] .fp-badge-file [data-lucide]{
+    color:var(--gold) !important;
+  }
+  body[data-page="file-preview"] .fp-qbank-row{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:12px;
+    color:var(--text-3);
+    font-size:12.5px;
+  }
+  body[data-page="file-preview"] .fp-qbank-chip{
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    min-height:24px;
+    padding:2px 9px;
+    border-radius:999px;
+    border:1px solid #E4DED2;
+    background:#F4F3EF;
+    color:#8F877D;
+    font-weight:650;
+    white-space:nowrap;
+  }
+  body[data-page="file-preview"] .fp-qbank-chip [data-lucide]{
+    width:12px;
+    height:12px;
+  }
+  body[data-page="file-preview"] .fp-qbank-chip.is-none{
+    background:#F6F1E9;
+    border-color:#E7D8BE;
+    color:#8A6B3E;
+  }
+  body[data-page="file-preview"] .fp-qbank-chip.is-doing{
+    background:#FFF7E8;
+    border-color:#EAD4A7;
+    color:#A66B13;
+  }
+  body[data-page="file-preview"] .fp-qbank-chip.is-done{
+    background:#EEF7F0;
+    border-color:#CFE4D3;
+    color:#267A43;
+  }
+  body[data-page="file-preview"] .fp-qbank-chip.is-failed{
+    background:#FFF0ED;
+    border-color:#F1C8BE;
+    color:#C64032;
+  }
+  body[data-page="file-preview"] .fp-qbank-action{
+    height:26px;
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+    padding:0 10px;
+    border:1px solid #DCCAA8;
+    border-radius:999px;
+    background:#FFFEFB;
+    color:var(--gold-deep);
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background .15s, border-color .15s, transform .15s;
+  }
+  body[data-page="file-preview"] .fp-qbank-action:hover{
+    border-color:var(--gold-light);
+    background:var(--gold-bg);
+    transform:translateY(-1px);
+  }
+  body[data-page="file-preview"] .fp-qbank-action [data-lucide]{
+    width:13px;
+    height:13px;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-mask{
+    position:fixed;
+    inset:0;
+    z-index:230;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+    background:rgba(30, 25, 17, .36);
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-mask.open{ display:flex; }
+  body[data-page="file-preview"] .fp-qbank-modal{
+    position:relative;
+    width:min(420px, calc(100vw - 48px));
+    border:1px solid #E9DDCB;
+    border-radius:14px;
+    background:#fff;
+    box-shadow:0 24px 72px -28px rgba(0,0,0,.42);
+    padding:24px;
+    text-align:center;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-close{
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:30px;
+    height:30px;
+    display:grid;
+    place-items:center;
+    border:0;
+    border-radius:8px;
+    background:transparent;
+    color:#8E887F;
+    cursor:pointer;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-close:hover{
+    background:#F5F1EA;
+    color:#2B261D;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-close [data-lucide]{
+    width:17px;
+    height:17px;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-icon{
+    width:44px;
+    height:44px;
+    display:grid;
+    place-items:center;
+    margin:0 auto 14px;
+    border-radius:12px;
+    background:var(--gold-bg);
+    color:var(--gold);
+  }
+  body[data-page="file-preview"] .fp-qbank-modal h3{
+    margin:0;
+    color:#171512;
+    font-size:18px;
+    font-weight:750;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal p{
+    margin:8px 0 0;
+    color:#8E887F;
+    font-size:13px;
+    line-height:1.7;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-actions{
+    display:flex;
+    justify-content:center;
+    margin-top:18px;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-btn{
+    height:34px;
+    padding:0 14px;
+    border-radius:8px;
+    border:1px solid #DDD4C6;
+    background:#fff;
+    color:#2B261D;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+  }
+  body[data-page="file-preview"] .fp-qbank-modal-btn.primary{
+    border-color:#050501;
+    background:#050501;
+    color:#fff;
+  }
   body[data-page="file-preview"] .fp-viewer{
     margin:24px 0 8px;
     display:flex;flex-direction:column;gap:14px;
@@ -398,6 +562,10 @@
             <span class="em-item"><b>4.2 MB</b></span>
             <span class="em-sep">·</span>
             <span class="em-item">上传 <b>5 天前</b></span>
+          </div>
+          <div class="fp-qbank-row">
+            <span class="fp-qbank-chip"><i data-lucide="ban"></i>校本题库：暂不支持</span>
+            <span>PPT 暂不支持自动沉淀；支持 PDF / Word / 单张图片。</span>
           </div>
         </header>
 
@@ -1199,6 +1367,230 @@
 <script src="assets/shared/v28-modals.js?v=20260617a"></script>
 <script src="assets/page-header.js"></script>
 <script>
+  (function(){
+    const params = new URLSearchParams(location.search);
+    const fileName = params.get('file') || '二次函数·导入课件.pptx';
+    const extRaw = (params.get('type') || fileName.split('.').pop() || 'pptx').toLowerCase();
+    const ext = extRaw === fileName.toLowerCase() ? 'pptx' : extRaw;
+    const source = params.get('source') || '张明华';
+    const size = params.get('size') || '4.2 MB';
+    const time = params.get('time') || '5 天前';
+    const wiki = params.get('wiki') || '二次函数图像与性质';
+    const scope = params.get('scope') || 'school';
+    let qbankState = params.get('qbank') || inferFileQbankState(fileName, ext);
+
+    const typeMeta = getFileTypeMeta(ext);
+    const scopeLabel = scope === 'personal' ? '我的知识库' : '学校知识库';
+
+    document.title = `${fileName} · 飞象 AI`;
+
+    const rootCrumb = document.querySelector('.ph-crumb-item:first-child span');
+    const rootLink = document.querySelector('.ph-crumb-item:first-child');
+    if(rootCrumb) rootCrumb.textContent = scopeLabel;
+    if(rootLink) rootLink.setAttribute('href', scope === 'personal' ? 'my-wiki.html?view=folder' : 'school-wiki.html?view=folder');
+
+    const currentCrumb = document.querySelector('.ph-crumb-current span');
+    if(currentCrumb) currentCrumb.textContent = fileName;
+
+    const subject = document.querySelector('.entry-subj');
+    if(subject) subject.textContent = `${scopeLabel} · ${wiki || '来源资料'}`;
+
+    const badge = document.querySelector('.entry-badge');
+    if(badge){
+      badge.className = `entry-badge ${ext === 'pptx' || ext === 'ppt' ? 'fp-badge-pptx' : 'fp-badge-file'}`;
+      badge.innerHTML = `<i data-lucide="${typeMeta.icon}"></i> ${typeMeta.label} · 原文件`;
+    }
+
+    const title = document.querySelector('.entry-title');
+    if(title) title.textContent = fileName;
+
+    const lead = document.querySelector('.entry-lead');
+    if(lead){
+      lead.innerHTML = `${escapeHtml(source)}上传到<b>${escapeHtml(scopeLabel)}</b>的${escapeHtml(typeMeta.cn)}资料，飞象 AI 会基于原文件整理摘要、关联 Wiki 和可追溯来源。${wiki ? `当前资料已关联 <a class="wlink" onclick="window.location.href='wiki-entry.html?w=${encodeURIComponent(wiki)}'">《${escapeHtml(wiki)}》</a> Wiki。` : '当前资料尚未形成可读 Wiki 主题。'}`;
+    }
+
+    const meta = document.querySelector('.entry-meta');
+    if(meta){
+      meta.innerHTML = `
+        <span class="em-item">上传人 <b>${escapeHtml(source)}</b></span>
+        <span class="em-sep">·</span>
+        <span class="em-item"><b>${escapeHtml(size)}</b></span>
+        <span class="em-sep">·</span>
+        <span class="em-item">上传 <b>${escapeHtml(time)}</b></span>
+      `;
+    }
+
+    const downloadBtn = document.querySelector('[data-doc="download-btn-file-preview"]');
+    if(downloadBtn) downloadBtn.setAttribute('onclick', `V28DownloadDialog.open({ context:'file-preview', subject:'${escapeAttr(fileName)}' })`);
+    const shareBtn = document.querySelector('[data-doc="share-btn-file-preview"]');
+    if(shareBtn) shareBtn.setAttribute('onclick', `V28ShareDialog.open({ context:'file-preview', subject:'${escapeAttr(fileName)}' })`);
+
+    renderQbankState();
+    renderPreviewBody();
+    if(window.lucide) lucide.createIcons();
+
+    function getFileTypeMeta(type){
+      if(['doc', 'docx'].includes(type)) return { label:'WORD', cn:'Word', icon:'file-text' };
+      if(type === 'pdf') return { label:'PDF', cn:'PDF', icon:'file-text' };
+      if(['jpg', 'jpeg', 'png'].includes(type)) return { label:'图片', cn:'图片', icon:'image' };
+      if(type === 'folder') return { label:'资料包', cn:'集合资料', icon:'folder-archive' };
+      if(['xls', 'xlsx'].includes(type)) return { label:'表格', cn:'表格', icon:'file-spreadsheet' };
+      if(['mp4', 'mov'].includes(type)) return { label:'视频', cn:'视频', icon:'video' };
+      if(['ppt', 'pptx'].includes(type)) return { label:'PPTX', cn:'PPT', icon:'presentation' };
+      return { label:type.toUpperCase(), cn:'文件', icon:'file' };
+    }
+
+    function inferFileQbankState(name, type){
+      if(!['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png'].includes(type)) return 'unsupported';
+      if(['jpg', 'jpeg', 'png'].includes(type) && /[（(]\s*\d+\s*张/.test(name)) return 'unsupported';
+      if(name.includes('配套习题汇编') || name.includes('期中数学卷')) return 'done';
+      if(name.includes('一模卷') || name.includes('周测卷')) return 'processing';
+      if(name.includes('板书')) return 'failed';
+      return 'none';
+    }
+
+    function renderQbankState(){
+      const row = document.querySelector('.fp-qbank-row');
+      if(!row) return;
+      const status = getQbankStatus(qbankState);
+      row.innerHTML = `
+        ${status.label ? `<span class="fp-qbank-chip ${status.className}"><i data-lucide="${status.icon}"></i>${status.label}</span>` : ''}
+        <span>${status.copy}</span>
+        ${status.action ? `<button class="fp-qbank-action" type="button" onclick="${status.action}"><i data-lucide="${status.actionIcon}"></i>${status.actionText}</button>` : ''}
+      `;
+      if(window.lucide) lucide.createIcons();
+    }
+
+    function getQbankStatus(state){
+      if(state === 'done'){
+        return {
+          className:'is-done',
+          icon:'check-circle-2',
+          label:'已添加进入校本题库',
+          copy:'已识别并入库的题目可在 AI 校本题库中使用。'
+        };
+      }
+      if(state === 'processing'){
+        return {
+          className:'is-doing',
+          icon:'loader-2',
+          label:'AI 录题处理中',
+          copy:'正在识别、校验并准备入库，可稍后查看处理进度。',
+          action:`goAiRecordFromKb(event,'${escapeAttr(fileName)}','parsing',18)`,
+          actionIcon:'external-link',
+          actionText:'查看结果'
+        };
+      }
+      if(state === 'failed'){
+        return {
+          className:'is-failed',
+          icon:'alert-circle',
+          label:'AI 录题处理失败',
+          copy:'本次处理未完成，可到 AI 录题页面查看失败原因。',
+          action:`goAiRecordFromKb(event,'${escapeAttr(fileName)}','failed',0)`,
+          actionIcon:'external-link',
+          actionText:'查看结果'
+        };
+      }
+      if(state === 'unsupported'){
+        return {
+          className:'is-muted',
+          icon:'ban',
+          label:'校本题库：暂不支持',
+          copy:'仅支持 PDF、Word、单张图片；PPT、表格、视频、多图或集合资料只进入知识库。'
+        };
+      }
+      return {
+        className:'',
+        icon:'',
+        label:'',
+        copy:'该文件满足 AI 录题格式条件，可手动添加至校本题库。',
+        action:'startFileQbankRecord()',
+        actionIcon:'plus',
+        actionText:'添加至校本题库'
+      };
+    }
+
+    window.startFileQbankRecord = function(){
+      qbankState = 'processing';
+      renderQbankState();
+      const mask = ensureQbankModal();
+      mask.classList.add('open');
+      if(window.lucide) lucide.createIcons();
+    };
+
+    window.closeFileQbankModal = function(){
+      const mask = document.getElementById('fp-qbank-modal-mask');
+      if(mask) mask.classList.remove('open');
+    };
+
+    function ensureQbankModal(){
+      let mask = document.getElementById('fp-qbank-modal-mask');
+      if(mask) return mask;
+      mask = document.createElement('div');
+      mask.id = 'fp-qbank-modal-mask';
+      mask.className = 'fp-qbank-modal-mask';
+      mask.innerHTML = `
+        <div class="fp-qbank-modal" role="dialog" aria-modal="true" aria-labelledby="fp-qbank-modal-title">
+          <button class="fp-qbank-modal-close" type="button" onclick="closeFileQbankModal()" aria-label="关闭">
+            <i data-lucide="x"></i>
+          </button>
+          <div class="fp-qbank-modal-icon"><i data-lucide="loader-2"></i></div>
+          <h3 id="fp-qbank-modal-title">AI 录题处理中</h3>
+          <p>已开始分析符合条件的题目，稍后可以在「应用广场 - AI 录题」页面查看进度。</p>
+          <div class="fp-qbank-modal-actions">
+            <button class="fp-qbank-modal-btn primary" type="button" onclick="goAiRecordFromKb(event,'${escapeAttr(fileName)}','parsing',18)">查看进度</button>
+          </div>
+        </div>
+      `;
+      mask.addEventListener('click', event => {
+        if(event.target === mask) closeFileQbankModal();
+      });
+      document.body.appendChild(mask);
+      return mask;
+    }
+
+    function renderPreviewBody(){
+      if(['ppt', 'pptx'].includes(ext)) return;
+      const viewer = document.querySelector('.fp-viewer');
+      if(!viewer) return;
+      const previewTitle = ext === 'pdf'
+        ? 'PDF 原文预览'
+        : ['doc', 'docx'].includes(ext)
+          ? 'Word 原文预览'
+          : ['jpg', 'jpeg', 'png'].includes(ext)
+            ? '图片预览'
+            : '文件预览';
+      viewer.innerHTML = `
+        <div class="fp-slide-stage">
+          <div class="fp-stage-bar">
+            <span class="fp-page-no">${escapeHtml(previewTitle)}</span>
+            <div class="fp-stage-spacer"></div>
+            ${wiki ? `<span class="fp-stage-cite"><i data-lucide="link"></i> 已关联 Wiki：${escapeHtml(wiki)}</span>` : '<span class="fp-stage-cite"><i data-lucide="sparkles"></i> AI 正在整理来源</span>'}
+          </div>
+          <div class="fp-slide">
+            <div class="fp-slide-title">${escapeHtml(fileName)}</div>
+            <ul class="fp-slide-points">
+              <li><span class="fp-slide-num">①</span><span>文件已进入 <b>${escapeHtml(scopeLabel)}</b>，原文件归属不因录题沉淀而改变。</span></li>
+              <li><span class="fp-slide-num">②</span><span>AI 会优先提取可读文本、题号、选项、答案区和解析区等结构。</span></li>
+              <li><span class="fp-slide-num">③</span><span>如老师手动添加至校本题库，处理进度会进入 <b>AI 录题</b> 页面。</span></li>
+            </ul>
+            <div class="fp-slide-foot">${escapeHtml(typeMeta.label)} · ${escapeHtml(size)} · ${escapeHtml(source)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(value){
+      return String(value == null ? '' : value).replace(/[&<>"']/g, ch => ({
+        '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;',
+      }[ch]));
+    }
+    function escapeAttr(value){
+      return String(value == null ? '' : value).replace(/[\\'"]/g, ch => ch === "'" ? '\\&#39;' : '&quot;');
+    }
+  })();
+
   /* wiki-entry · 根据 URL ?w= 参数动态切换词条标题（共用模板） */
   (function(){
     const params = new URLSearchParams(location.search);
@@ -1247,6 +1639,122 @@
 {
   "title": "文件页 · 原文预览与 AI 解读",
   "summary": "文件页不是 Wiki，而是来源资料页。它负责展示原始文件、基础信息和 AI 对文件的理解；右侧 AI 解读固定为 AI 摘要和相关 Wiki，帮助老师判断这份资料讲什么、适合什么场景、进入了哪些 Wiki。",
+  "reviewVersions": [
+    {
+      "id": "v1.0",
+      "label": "v1.0 本次新增",
+      "default": true,
+      "title": "文件页 · v1.0 本次新增",
+      "summary": "本次只评审文件页中的添加至校本题库、AI 录题状态展示和跳转逻辑；原文预览和 AI 摘要沿用历史稿。",
+      "sections": [
+        {
+          "id": "file-preview-v1-qbank",
+          "title": "1. 添加至校本题库",
+          "body": "文件页承接从知识库文件夹进入后的单文件处理，支持老师后续把符合条件的文件加入 AI 校本题库。",
+          "blocks": [
+            {
+              "title": "本次新增 / 调整",
+              "items": [
+                "【新增】文件夹视图中的文件点击后进入文件页，并带入文件类型、来源、大小、所属知识库和 AI 录题状态。",
+                "【新增】未添加的支持文件不展示“未添加”状态标签；展示说明文案“该文件满足 AI 录题格式条件，可手动添加至校本题库。”和按钮“添加至校本题库”。",
+                "【新增】点击“添加至校本题库”后弹窗标题为“AI 录题处理中”，正文为“已开始分析符合条件的题目，稍后可以在「应用广场 - AI 录题」页面查看进度。”，保留右上角关闭按钮和“查看进度”主按钮。",
+                "【调整】AI 录题处理中和 AI 录题处理失败在文件页展示“查看结果”，点击进入 AI 录题页面。",
+                "【调整】已添加进入校本题库只展示状态，不展示“查看结果”按钮。",
+                "【不变】添加至校本题库不改变文件所属知识库和原文件权限。"
+              ]
+            },
+            {
+              "title": "状态口径",
+              "type": "table",
+              "columns": [
+                "状态",
+                "状态标签",
+                "说明文案",
+                "按钮",
+                "点击结果"
+              ],
+              "rows": [
+                {
+                  "状态": "未添加",
+                  "状态标签": "不展示",
+                  "说明文案": "该文件满足 AI 录题格式条件，可手动添加至校本题库。",
+                  "按钮": "添加至校本题库",
+                  "点击结果": "打开 AI 录题处理中弹窗，并把文件状态切到处理中。"
+                },
+                {
+                  "状态": "AI 录题处理中",
+                  "状态标签": "AI 录题处理中",
+                  "说明文案": "正在识别、校验并准备入库，可稍后查看处理进度。",
+                  "按钮": "查看结果",
+                  "点击结果": "进入「应用广场 - AI 录题」页面查看任务。"
+                },
+                {
+                  "状态": "已添加进入校本题库",
+                  "状态标签": "已添加进入校本题库",
+                  "说明文案": "已识别并入库的题目可在 AI 校本题库中使用。",
+                  "按钮": "不展示",
+                  "点击结果": "无操作。"
+                },
+                {
+                  "状态": "AI 录题处理失败",
+                  "状态标签": "AI 录题处理失败",
+                  "说明文案": "本次处理未完成，可到 AI 录题页面查看失败原因。",
+                  "按钮": "查看结果",
+                  "点击结果": "进入「应用广场 - AI 录题」页面查看失败原因。"
+                },
+                {
+                  "状态": "暂不支持 AI 录题",
+                  "状态标签": "校本题库：暂不支持",
+                  "说明文案": "仅支持 PDF、Word、单张图片；PPT、表格、视频、多图或集合资料只进入知识库。",
+                  "按钮": "不展示",
+                  "点击结果": "无操作。"
+                }
+              ]
+            },
+            {
+              "title": "处理中弹窗",
+              "type": "table",
+              "columns": [
+                "元素",
+                "文案 / 行为"
+              ],
+              "rows": [
+                {
+                  "元素": "标题",
+                  "文案 / 行为": "AI 录题处理中"
+                },
+                {
+                  "元素": "正文",
+                  "文案 / 行为": "已开始分析符合条件的题目，稍后可以在「应用广场 - AI 录题」页面查看进度。"
+                },
+                {
+                  "元素": "主按钮",
+                  "文案 / 行为": "查看进度；点击进入「应用广场 - AI 录题」页面。"
+                },
+                {
+                  "元素": "关闭",
+                  "文案 / 行为": "右上角关闭按钮；关闭弹窗，不中断 AI 录题任务。"
+                },
+                {
+                  "元素": "不展示",
+                  "文案 / 行为": "不展示“知道了”按钮。"
+                }
+              ]
+            },
+            {
+              "title": "QA 检查点",
+              "items": [
+                "PDF、Word、单张图片支持添加至校本题库。",
+                "PPT、表格、视频、多图或集合资料只展示暂不支持说明。",
+                "点击添加至校本题库后弹窗没有“知道了”按钮，只有关闭按钮和查看进度主按钮。",
+                "查看进度 / 查看结果均进入 AI 录题页面。"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
   "sections": [
     {
       "id": "file-viewer",
@@ -1258,7 +1766,18 @@
           "body": [
             "对象：查看资料原文的老师。",
             "用途：阅读资料，并追溯 AI 摘要、内容 Wiki 或题目来源。",
-            "展示项：资料正文、页码和基础信息。"
+            "展示项：资料正文、页码、基础信息和校本题库处理状态。"
+          ]
+        },
+        {
+          "title": "本次新增 / 调整",
+          "items": [
+            "【新增】文件夹视图中的文件点击后进入文件页，并带入文件类型、来源、大小、所属知识库和 AI 录题状态。",
+            "【新增】文件页支持添加至校本题库；未添加的支持文件只展示说明文案和添加至校本题库按钮，不展示未添加状态标签。",
+            "【新增】点击添加至校本题库后弹窗提示 AI 录题处理中，保留右上角关闭按钮和查看进度主按钮。",
+            "【调整】AI 录题处理中和 AI 录题处理失败在文件页展示查看结果，点击进入 AI 录题页面。",
+            "【调整】已添加进入校本题库只展示状态，不展示查看结果按钮。",
+            "【不变】添加至校本题库不改变文件所属知识库和原文件权限。"
           ]
         },
         {
@@ -1276,6 +1795,10 @@
             {
               "label": "查看来源",
               "text": "页头展示上传人全名、文件大小和上传/更新时间；权限范围在文件说明或操作反馈中体现。"
+            },
+            {
+              "label": "处理录题",
+              "text": "PDF、Word、单张图片等支持文件可手动添加至校本题库；处理中或处理失败时，可点击查看结果进入 AI 录题页面。"
             }
           ]
         },
@@ -1285,7 +1808,8 @@
             "原文预览必须保留资料来源和权限说明。",
             "无权限老师不能查看学校私有文件内容。",
             "文件预览不改变知识库资料本身。",
-            "文件页不展示关联文件标签页；它自身就是来源文件。"
+            "文件页不展示关联文件标签页；它自身就是来源文件。",
+            "添加至校本题库只发起 AI 录题处理，不改变文件所属知识库和原文件权限。"
           ]
         },
         {
@@ -1296,7 +1820,8 @@
             "文件大小指原文件在资料库中的存储大小。",
             "上传/更新时间优先展示文件最近更新时间；没有更新记录时展示上传时间。",
             "文件预览展示文件标题、正文、页码、来源和资料归属。",
-            "页码和位置用于 AI 摘要、内容 Wiki 和题目追溯。"
+            "页码和位置用于 AI 摘要、内容 Wiki 和题目追溯。",
+            "校本题库状态包括未添加、AI 录题处理中、已添加进入校本题库、AI 录题处理失败和暂不支持。"
           ]
         },
         {
@@ -1318,6 +1843,10 @@
             {
               "场景": "文件格式暂不可预览",
               "处理方式": "提供下载或返回入口。"
+            },
+            {
+              "场景": "文件不满足 AI 录题条件",
+              "处理方式": "展示暂不支持状态，不提供添加至校本题库按钮。"
             }
           ]
         },
@@ -1340,6 +1869,10 @@
             {
               "关联对象": "wiki-entry.html",
               "说明": "词条引用来源可定位到原文件。"
+            },
+            {
+              "关联对象": "ai-record-jobs.html",
+              "说明": "承接 AI 录题处理中、失败和已入库结果查看。"
             }
           ]
         },
@@ -1348,7 +1881,12 @@
           "items": [
             "原文页码和正文展示正确。",
             "无权限文件不能预览正文。",
-            "大文件加载中有状态反馈。"
+            "大文件加载中有状态反馈。",
+            "未添加的支持文件只展示说明文案和添加至校本题库按钮，不重复展示未添加状态标签。",
+            "AI 录题处理中和处理失败状态可点击查看结果进入 AI 录题页面。",
+            "已添加进入校本题库状态不再展示查看结果按钮。",
+            "手动添加后弹窗保留右上角关闭按钮和查看进度主按钮，不展示知道了按钮。",
+            "不支持文件只展示状态说明，不出现添加按钮。"
           ]
         }
       ]

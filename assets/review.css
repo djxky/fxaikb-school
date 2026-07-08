@@ -157,6 +157,37 @@ body.review-mode .review-panel {
   font-size: 12px;
   font-weight: 800;
 }
+.review-version-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 12px;
+  padding: 7px 8px;
+  border: 1px solid rgba(124, 58, 237, 0.16);
+  border-radius: 10px;
+  background: rgba(124, 58, 237, 0.06);
+}
+.review-version-label {
+  color: #64748b;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+}
+.review-version-select {
+  height: 28px;
+  padding: 0 28px 0 10px;
+  border: 1px solid rgba(124, 58, 237, 0.22);
+  border-radius: 8px;
+  background: #fff;
+  color: #4c1d95;
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+.review-version-select:focus {
+  outline: 2px solid rgba(124, 58, 237, 0.2);
+  outline-offset: 2px;
+}
 .review-title {
   margin: 0;
   color: #111827;

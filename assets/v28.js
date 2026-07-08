@@ -885,19 +885,24 @@ function renderKnowledgeHeaderFolder(rootName, rootIcon, trail){
 function renderFolderHeaderActions(state = {}){
   const wrap = document.querySelector('.folder-header-actions');
   if(!wrap) return;
-  const canWrite = state.canWrite !== false;
+  const allowSchoolHeaderWrite = document.body.dataset.page === 'wiki-home' && CURRENT_KB_SCOPE === 'school';
+  const canWrite = state.canWrite !== false || allowSchoolHeaderWrite;
   const inFolder = !!state.inFolder;
   const selectedCount = state.selectedCount || 0;
   const selectableCount = state.selectableCount || 0;
   const allSelected = !!state.allSelected;
   const rootLabel = getKbRootLabel();
   const searchTitle = `搜索${rootLabel}文件`;
+  const searchLabel = '搜索';
+  const searchButton = `
+    <button class="ph-action ph-folder-search tb-search" onclick="toggleTopSearch(event)" title="${escHtml(searchTitle)}" aria-expanded="false">
+      <i data-lucide="search"></i><span>${searchLabel}</span>
+    </button>
+  `;
 
   if(!canWrite){
     wrap.innerHTML = `
-      <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="${escHtml(searchTitle)}" aria-expanded="false">
-        <i data-lucide="search"></i>
-      </button>
+      ${searchButton}
       ${inFolder ? `
       <span class="ph-action-sep" aria-hidden="true"></span>
       <button class="ph-action folder-sort-action" onclick="showToast('按上传时间 / 名称 / 大小排序')" title="排序">
@@ -921,15 +926,15 @@ function renderFolderHeaderActions(state = {}){
     `;
   } else {
     wrap.innerHTML = `
-      <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="${escHtml(searchTitle)}" aria-expanded="false">
-        <i data-lucide="search"></i>
-      </button>
-      <span class="ph-action-sep" aria-hidden="true"></span>
+      ${searchButton}
       <button class="ph-action" onclick="setFolderManageMode(true)" title="批量管理">
         <i data-lucide="list-checks"></i><span>管理</span>
       </button>
       <button class="ph-action" onclick="openCreateFolderPop(event)" title="新建文件夹">
         <i data-lucide="folder-plus"></i><span>新建文件夹</span>
+      </button>
+      <button class="ph-action is-primary" onclick="openKbUploadModal()" title="上传文件">
+        <i data-lucide="upload"></i><span>上传文件</span>
       </button>
       ${inFolder ? `
       <button class="ph-action folder-sort-action" onclick="showToast('按上传时间 / 名称 / 大小排序')" title="排序">
@@ -1939,6 +1944,7 @@ function renderPersonalFolderView(){
     : CURRENT_KB_SCOPE === 'school'
       ? '学校知识库'
     : (getCurrentTeamKbName() || '团队知识库');
+  const folderRootName = rootName.replace('知识库', '文件夹');
   const rootIcon = CURRENT_KB_SCOPE === 'personal' ? 'bookmark' : 'library';
 
   recountPersonalFolders();
@@ -1998,8 +2004,8 @@ function renderPersonalFolderView(){
 
   const fileRows = currentFiles.map((file, index) => `
     <tr data-file-index="${index}"
-        onclick="${_folderManageMode ? `toggleFolderSelection('file','${index}')` : `window.location.href='wiki-entry.html'`}"
-        title="查看关联主题与资料说明">
+        onclick="${_folderManageMode ? `toggleFolderSelection('file','${index}')` : `openFolderFilePreview(${index})`}"
+        title="查看文件预览与 AI 解读">
       ${_folderManageMode ? `
       <td class="col-select" onclick="event.stopPropagation()">
         <input type="checkbox" class="fv-check" ${selection.files.has(index) ? 'checked' : ''}
@@ -2054,24 +2060,20 @@ function renderPersonalFolderView(){
     renderKnowledgeHeaderFolder(rootName, rootIcon, trail);
   }
   const breadcrumbInner = inFolder ? `
-    <a class="fv-bc-item" onclick="personalBackToRoot()" title="返回 ${escHtml(rootName)} 根目录">
-      <i data-lucide="${rootIcon}"></i>
-      ${escHtml(rootName)}
+    <a class="fv-bc-item" onclick="personalBackToRoot()" title="返回根目录">
+      ${escHtml(folderRootName)}
     </a>
     ${trail.map((folder, idx) => {
       const isLast = idx === trail.length - 1;
       return `
-        <span class="fv-bc-sep">/</span>
+        <span class="fv-bc-sep"><i data-lucide="chevron-right"></i></span>
         ${isLast
           ? `<span class="fv-bc-current">${escHtml(folder.name)}</span>`
           : `<a class="fv-bc-item" onclick="personalEnterFolder('${escHtml(folder.id)}')" title="跳到「${escHtml(folder.name)}」">${escHtml(folder.name)}</a>`}
       `;
     }).join('')}
   ` : `
-    <span class="fv-bc-current fv-bc-root">
-      <i data-lucide="folder-open"></i>
-      根目录
-    </span>
+    <span class="fv-bc-current fv-bc-root">${escHtml(folderRootName)}</span>
   `;
 
   /* 返回按钮：仅子层级显示，回到上一级（不是直接回根） */
@@ -2082,7 +2084,7 @@ function renderPersonalFolderView(){
     </button>
   ` : '';
 
-  /* 工具按钮：admin 显示管理和新建；文件夹视图不提供上传入口 */
+  /* 工具按钮：admin 显示上传、管理和新建 */
   const tools = canWrite ? (
     _folderManageMode ? `
       <button class="fv-tool" onclick="toggleSelectAllInFolder(${allSelected ? 'false' : 'true'})" ${selectableCount ? '' : 'disabled'}>
@@ -2103,6 +2105,9 @@ function renderPersonalFolderView(){
       </button>
       <button class="fv-tool" onclick="openCreateFolderPop(event)">
         <i data-lucide="folder-plus"></i> 新建文件夹
+      </button>
+      <button class="fv-tool primary" onclick="openKbUploadModal()">
+        <i data-lucide="upload"></i> 上传文件
       </button>
       ${inFolder ? `
         <button class="fv-tool" onclick="showToast('（演示）按上传时间 / 名称 / 大小排序')">
@@ -2141,11 +2146,11 @@ function renderPersonalFolderView(){
         <thead>
           <tr>
             ${manageColumnHead}
-            <th class="col-name">名称</th>
+            <th class="col-name">文件名</th>
             <th class="col-by">上传者</th>
-            <th class="col-time">上传时间</th>
+            <th class="col-time">更新时间</th>
             <th class="col-size">大小</th>
-            <th class="col-actions"></th>
+            <th class="col-actions">操作</th>
           </tr>
         </thead>
         <tbody>
@@ -2187,6 +2192,7 @@ function personalBackToRoot(){
 
 const KB_UPLOAD_MAX_FILE_SIZE = 100 * 1024 * 1024;
 const KB_UPLOAD_ALLOWED_EXTS = new Set(['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png']);
+const KB_AUTO_RECORD_EXTS = new Set(['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png']);
 const KB_UPLOAD_DEMO_FILES = [
   { name:'一年级', ext:'docx', size:26700, path:'编辑题目/一年级.docx' },
   { name:'二年级', ext:'pptx', size:13000, path:'编辑题目/二年级.pptx' },
@@ -2208,6 +2214,7 @@ const KB_UPLOAD_FIXED_UNSUPPORTED_FILES = [
 let _kbUploadState = null;
 let _kbUploadTimer = null;
 let _kbUploadHasSelection = false;
+let _kbUploadAutoRecord = false;
 
 function getUploadFileExt(name){
   const parts = String(name || '').split('.');
@@ -2221,6 +2228,49 @@ function getUploadFileIcon(ext, isFolder){
   if(['jpg', 'jpeg', 'png'].includes(ext)) return 'image';
   if(ext === 'pdf') return 'file-text';
   return 'file';
+}
+
+function getKbFileExt(file){
+  const byName = getUploadFileExt(file?.name || '');
+  if(byName) return byName;
+  const icon = String(file?.icon || '').toLowerCase();
+  if(icon === 'presentation') return 'pptx';
+  if(icon === 'file-text') return 'docx';
+  if(icon === 'image') return 'jpg';
+  if(icon === 'sheet') return 'xlsx';
+  if(icon === 'video') return 'mp4';
+  if(icon === 'folder-archive') return 'folder';
+  return 'pdf';
+}
+
+function getKbFileQbankState(file){
+  const ext = getKbFileExt(file);
+  const name = String(file?.name || '');
+  if(!KB_AUTO_RECORD_EXTS.has(ext)) return 'unsupported';
+  if(ext === 'jpg' || ext === 'jpeg' || ext === 'png'){
+    if(/[（(]\s*\d+\s*张/.test(name)) return 'unsupported';
+  }
+  if(name.includes('配套习题汇编') || name.includes('期中数学卷')) return 'done';
+  if(name.includes('一模卷') || name.includes('周测卷')) return 'processing';
+  if(name.includes('板书')) return 'failed';
+  return 'none';
+}
+
+function openFolderFilePreview(fileIndex){
+  const file = getPersonalFiles(_personalCurrentFolder ?? null)[fileIndex];
+  if(!file) return;
+  const ext = getKbFileExt(file);
+  const params = new URLSearchParams({
+    file: file.name || '知识库资料',
+    type: ext,
+    source: file.source || '',
+    time: file.time || '',
+    size: file.size || '',
+    scope: CURRENT_KB_SCOPE || 'school',
+    qbank: getKbFileQbankState(file),
+  });
+  if(file.wiki) params.set('wiki', file.wiki);
+  window.location.href = `file-preview.html?${params.toString()}`;
 }
 
 function formatUploadSize(bytes){
@@ -2268,6 +2318,106 @@ function buildUploadPayload(fileList){
     folderCount: folders.size || 3,
     size: supported.reduce((sum, file) => sum + (file.size || 0), 0) || 6.3 * 1024 * 1024,
   };
+}
+
+function getKbRecordableUploadFiles(){
+  if(!_kbUploadState) return [];
+  return (_kbUploadState.files || []).filter(file => KB_AUTO_RECORD_EXTS.has(file.ext));
+}
+
+function normalizeKbRecordFile(file, index){
+  const ext = (file.type || file.ext || getUploadFileExt(file.name) || 'pdf').toLowerCase();
+  const name = String(file.name || `知识库资料${index + 1}`);
+  const hasExt = new RegExp(`\\.${ext}$`, 'i').test(name);
+  return {
+    id: file.id || `kb-auto-${Date.now()}-${index}`,
+    name: hasExt ? name : `${name}.${ext}`,
+    type: ext,
+    size: typeof file.size === 'number' ? formatUploadSize(file.size) : (file.size || '-'),
+    kbLabel: file.kbLabel || '学校知识库 / 九年级 / 数学 / 二次函数'
+  };
+}
+
+function createKbRecordJobs(files){
+  const list = Array.isArray(files) ? files : [files];
+  const recordFiles = list.map(normalizeKbRecordFile).filter(file => KB_AUTO_RECORD_EXTS.has(file.type));
+  if(!recordFiles.length) return [];
+  if(window.V28RecordJobs && typeof V28RecordJobs.createBatch === 'function'){
+    return V28RecordJobs.createBatch(recordFiles);
+  }
+  return recordFiles;
+}
+
+function getKbDemoQuestionCount(name){
+  let h = 5381;
+  String(name || '').split('').forEach(ch => { h = ((h * 33) ^ ch.charCodeAt(0)) >>> 0; });
+  return 6 + (Math.abs(h) % 19);
+}
+
+function seedKbRecordDemoJob(fileName, state, questionCount){
+  const name = String(fileName || '知识库资料.pdf');
+  const type = getUploadFileExt(name) || 'pdf';
+  const recordableType = KB_AUTO_RECORD_EXTS.has(type) ? type : 'pdf';
+  const key = 'v28-ai-record-jobs';
+  let jobs = [];
+  try{
+    const raw = localStorage.getItem(key);
+    jobs = raw ? JSON.parse(raw) : [];
+    if(!Array.isArray(jobs)) jobs = [];
+  }catch(_){ jobs = []; }
+  const existing = jobs.find(job => job.fileName === name);
+  if(existing){
+    existing.state = state || existing.state || 'parsing';
+    existing.questionCount = questionCount || existing.questionCount || getKbDemoQuestionCount(name);
+    if(existing.state === 'committed'){
+      existing.parseDoneAt = existing.parseDoneAt || Date.now() - 60 * 60 * 1000;
+      existing.committedAt = existing.committedAt || Date.now() - 30 * 60 * 1000;
+    }
+  }else{
+    const now = Date.now();
+    const done = state === 'committed';
+    jobs.push({
+      id: `rec-kb-${Math.random().toString(36).slice(2, 10)}`,
+      fileId: `kb-${name}`,
+      fileName: name,
+      fileType: recordableType,
+      fileSize: type === 'docx' ? '340 KB' : '1.2 MB',
+      kbLabel: '学校知识库 / 九年级 / 数学 / 二次函数',
+      state: state || 'parsing',
+      createdAt: now - (done ? 24 * 60 * 60 * 1000 : 1200),
+      parseDoneAt: done ? now - 23 * 60 * 60 * 1000 : null,
+      committedAt: done ? now - 22 * 60 * 60 * 1000 : null,
+      questionCount: questionCount || getKbDemoQuestionCount(name),
+      _parseMs: 12000
+    });
+  }
+  try{ localStorage.setItem(key, JSON.stringify(jobs)); }catch(_){}
+}
+
+function createKbAutoRecordTask(event, file){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  const created = createKbRecordJobs([file]);
+  const fileName = file && file.name ? file.name : '当前文件';
+  const message = created.length
+    ? `已创建《${fileName}》AI 录题任务`
+    : `《${fileName}》暂不支持自动沉淀`;
+  if(typeof showToast === 'function') showToast(message, 2200);
+  if(created.length){
+    setTimeout(() => { window.location.href = 'ai-record-jobs.html'; }, 520);
+  }
+}
+
+function goAiRecordFromKb(event, fileName, state, questionCount){
+  if(event){
+    event.preventDefault();
+    event.stopPropagation();
+  }
+  seedKbRecordDemoJob(fileName, state || 'committed', questionCount);
+  if(typeof showToast === 'function') showToast(`打开《${fileName || '当前文件'}》的 AI 录题结果`, 1400);
+  setTimeout(() => { window.location.href = 'ai-record-jobs.html'; }, 360);
 }
 
 function ensureKbUploadModal(){
@@ -2328,6 +2478,7 @@ function openKbUploadModal(){
   if(title) title.textContent = '上传文件';
   _kbUploadState = buildUploadPayload([]);
   _kbUploadHasSelection = false;
+  _kbUploadAutoRecord = false;
   overlay.classList.add('open');
   renderKbUploadDrop();
 }
@@ -2345,18 +2496,12 @@ function closeKbUploadModal(){
 function renderKbUploadDrop(){
   const body = document.getElementById('kb-upload-body');
   if(!body) return;
-  const selectedCount = _kbUploadHasSelection
-    ? (_kbUploadState.files.length + _kbUploadState.unsupported.length)
-    : 0;
-  const selectedText = selectedCount
-    ? `已选择 ${selectedCount} 个文件，点击下一步预览`
-    : '可一次选择多个文件，也可以选择整个文件夹';
   body.innerHTML = `
     <div class="kb-upload-drop" ondragover="event.preventDefault()" ondrop="handleKbUploadDrop(event)">
       <div class="kb-upload-folder-art"><i data-lucide="folder-open"></i></div>
       <div class="kb-upload-main-copy">拖入文件，或点击下方按钮选择</div>
-      <div class="kb-upload-sub-copy">仅支持 PDF、DOC、DOCX、XLS、XLSX、PPT、PPTX、JPG、PNG 格式文件，单个文件不超过 100M</div>
-      <div class="kb-upload-selected ${selectedCount ? 'ready' : ''}">${selectedText}</div>
+      <div class="kb-upload-sub-copy">仅支持 PDF、DOC、DOCX、XLS、XLSX、PPT、PPTX、JPG、PNG 格式文件，<br>单个文件不超过 100M，可一次拖入或选择多个文件，也可拖入或选择整个文件夹</div>
+      <div class="kb-upload-selected"></div>
       <div class="kb-upload-actions">
         <button class="kb-upload-pick" type="button" onclick="triggerKbUploadInput('file')">
           <i data-lucide="upload"></i><span>选择文件</span>
@@ -2365,7 +2510,6 @@ function renderKbUploadDrop(){
           <i data-lucide="folder-plus"></i><span>选择文件夹</span>
         </button>
       </div>
-      <button class="kb-upload-next" type="button" onclick="goKbUploadNext()" ${selectedCount ? '' : 'disabled'}>下一步</button>
     </div>
   `;
   if(window.lucide) lucide.createIcons();
@@ -2408,8 +2552,9 @@ function renderKbUploadPreview(){
   const unsupportedCount = getVisibleUnsupportedFiles().length;
   const totalFiles = _kbUploadState.totalFiles;
   const canStart = totalFiles > 0;
+  const recordableCount = getKbRecordableUploadFiles().length;
   body.innerHTML = `
-    <div class="kb-upload-preview">
+    <div class="kb-upload-preview ${recordableCount ? '' : 'no-recordable'}">
       <div class="kb-upload-stats">
         <div class="kb-upload-stat-main">
           <span>文件 <b>${totalFiles}</b></span>
@@ -2422,6 +2567,14 @@ function renderKbUploadPreview(){
         </button>
       </div>
       ${renderKbUploadTree(_kbUploadState.files.length ? _kbUploadState.files : KB_UPLOAD_DEMO_FILES.filter(file => !getUnsupportedReason(file)), false)}
+      <label class="kb-upload-auto-record ${recordableCount ? '' : 'disabled'}" title="${recordableCount ? `本次有 ${recordableCount} 个 PDF / Word / 图片可进入 AI 录题` : '本次没有可进入 AI 录题的 PDF / Word / 图片'}">
+        <input id="kb-upload-auto-record" type="checkbox" ${_kbUploadAutoRecord ? 'checked' : ''} ${recordableCount ? '' : 'disabled'} onchange="_kbUploadAutoRecord = this.checked" />
+        <span class="kb-upload-checkmark" aria-hidden="true"></span>
+        <span class="kb-upload-auto-record-copy">
+          <b>允许文件中的题目进入 AI 校本题库</b>
+          <small>勾选后，AI 会自动分析符合条件的图片、PDF、Word，进入 AI 录题处理。</small>
+        </span>
+      </label>
     </div>
     <button class="kb-upload-start" type="button" onclick="startKbUploadImport()" ${canStart ? '' : 'disabled'}>${canStart ? '开始上传' : '没有可上传文件'}</button>
   `;
@@ -2462,7 +2615,7 @@ function handleKbUploadInput(files){
   _kbUploadHasSelection = true;
   const title = document.getElementById('kb-upload-title');
   if(title) title.textContent = '上传文件';
-  renderKbUploadDrop();
+  renderKbUploadPreview();
 }
 
 function handleKbUploadDrop(event){
@@ -2486,6 +2639,8 @@ function startKbUploadImport(){
     _kbUploadTimer = null;
   }
   const total = _kbUploadState?.totalFiles || 157;
+  const shouldAutoRecord = !!document.getElementById('kb-upload-auto-record')?.checked || _kbUploadAutoRecord;
+  const autoRecordFiles = shouldAutoRecord ? getKbRecordableUploadFiles() : [];
   body.innerHTML = `
     <div class="kb-upload-progress">
       <div class="kb-upload-percent"><span id="kb-upload-pct">0</span>%</div>
@@ -2508,7 +2663,7 @@ function startKbUploadImport(){
         </div>
         <div class="kb-upload-step" id="kb-up-step-4">
           <span>04</span>
-          <div><b>建立关联与图谱</b><p>同主题资料自动关联</p></div>
+          <div><b>建立关联与图谱</b><p>${shouldAutoRecord ? '同步创建 AI 录题任务' : '同主题资料自动关联'}</p></div>
           <em>等待中</em>
         </div>
       </div>
@@ -2532,11 +2687,29 @@ function startKbUploadImport(){
       clearInterval(_kbUploadTimer);
       _kbUploadTimer = null;
       setTimeout(() => {
-        closeKbUploadModal();
-        showToast('上传完成，资料已加入知识库', 2600);
+        const created = autoRecordFiles.length ? createKbRecordJobs(autoRecordFiles) : [];
+        renderKbUploadComplete(created.length);
       }, 520);
     }
   }, 360);
+}
+
+function renderKbUploadComplete(recordTaskCount = 0){
+  const body = document.getElementById('kb-upload-body');
+  const title = document.getElementById('kb-upload-title');
+  if(title) title.textContent = '';
+  if(!body) return;
+  body.innerHTML = `
+    <div class="kb-upload-complete">
+      <div class="kb-upload-complete-icon">
+        <i data-lucide="file-check-2"></i>
+      </div>
+      <h3>导入完成，文件已入库</h3>
+      <p>AI 正在后台整理内容，完成后知识库内容会自动更新。</p>
+      ${recordTaskCount ? '<p class="kb-upload-complete-note">符合条件的题目录入进度，可在「应用广场 - AI 录题」页面查看。</p>' : ''}
+    </div>
+  `;
+  if(window.lucide) lucide.createIcons();
 }
 
 function updateKbUploadStep(step, active, done){
@@ -3245,7 +3418,11 @@ window.renderPersonalFolderView = renderPersonalFolderView;
 window.personalEnterFolder = personalEnterFolder;
 window.personalEnterFolderId = personalEnterFolderId;
 window.personalBackToRoot = personalBackToRoot;
+window.openFolderFilePreview = openFolderFilePreview;
 window.personalUploadToCurrentFolder = personalUploadToCurrentFolder;
+window.openKbUploadModal = openKbUploadModal;
+window.createKbAutoRecordTask = createKbAutoRecordTask;
+window.goAiRecordFromKb = goAiRecordFromKb;
 window.setFolderManageMode = setFolderManageMode;
 window.toggleFolderSelection = toggleFolderSelection;
 window.toggleSelectAllInFolder = toggleSelectAllInFolder;

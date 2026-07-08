@@ -51,6 +51,61 @@
     return `<li>${label}${separator}${text}${children}</li>`;
   }
 
+  function getVersionOptions(data){
+    const versions = Array.isArray(data && data.reviewVersions) ? data.reviewVersions : [];
+    if(!versions.length) return [];
+    const base = {
+      id: 'v0.9',
+      label: 'v0.9 历史完整稿',
+      title: data.title,
+      summary: data.summary,
+      sections: data.sections || [],
+      source: 'base'
+    };
+    return versions.concat(base);
+  }
+
+  function getSelectedVersionId(data){
+    const versions = getVersionOptions(data);
+    if(!versions.length) return '';
+    const params = new URLSearchParams(window.location.search);
+    const fromUrl = params.get('reviewVersion');
+    if(fromUrl && versions.some(version => version.id === fromUrl)) return fromUrl;
+    const latest = versions.find(version => version.default) || versions[0];
+    return latest.id;
+  }
+
+  function resolveReviewData(data){
+    const versions = getVersionOptions(data);
+    if(!versions.length){
+      return { data, versions: [], selectedVersionId: '' };
+    }
+    const selectedVersionId = getSelectedVersionId(data);
+    const selected = versions.find(version => version.id === selectedVersionId) || versions[0];
+    return {
+      data: {
+        ...data,
+        title: selected.title || data.title,
+        summary: selected.summary || data.summary,
+        sections: selected.sections || []
+      },
+      versions,
+      selectedVersionId
+    };
+  }
+
+  function renderVersionSelector(versions, selectedVersionId){
+    if(!versions.length) return '';
+    return `
+      <div class="review-version-bar">
+        <label class="review-version-label" for="review-version-select">过稿版本</label>
+        <select class="review-version-select" id="review-version-select" aria-label="切换过稿版本">
+          ${versions.map(version => `<option value="${escapeHtml(version.id)}" ${version.id === selectedVersionId ? 'selected' : ''}>${escapeHtml(version.label || version.id)}</option>`).join('')}
+        </select>
+      </div>
+    `;
+  }
+
   function getReviewStatus(value){
     const text = String(value || '').trim();
     if(text === '可用') return { key: 'available', label: text };
@@ -155,6 +210,8 @@
   }
 
   function renderPanel(data){
+    const resolved = resolveReviewData(data);
+    data = resolved.data;
     let panel = document.getElementById('review-panel');
     if(!panel){
       panel = document.createElement('aside');
@@ -198,6 +255,7 @@
       <div class="review-scroll">
         <div class="review-inner">
           <div class="review-kicker">产品稿 · 过稿模式</div>
+          ${renderVersionSelector(resolved.versions, resolved.selectedVersionId)}
           <h2 class="review-title">${escapeHtml((data && data.title) || document.title)}</h2>
           <p class="review-summary">${escapeHtml((data && data.summary) || '')}</p>
           ${sections}
@@ -279,6 +337,19 @@
       event.stopPropagation();
       const section = toggle.closest('.review-section');
       setSectionOpen(section, !section.classList.contains('is-open'));
+    });
+  }
+
+  function bindVersionSelector(){
+    document.addEventListener('change', event => {
+      const select = event.target.closest('#review-version-select');
+      if(!select) return;
+      const url = new URL(window.location.href);
+      url.searchParams.set('reviewVersion', select.value);
+      window.history.replaceState({}, '', url);
+      renderPanel(getData());
+      bindClose();
+      bindDragAndResize();
     });
   }
 
@@ -399,6 +470,7 @@
     renderPanel(getData());
     renderSwitcher();
     bindSectionToggles();
+    bindVersionSelector();
     bindFocus();
     bindClose();
     bindDragAndResize();

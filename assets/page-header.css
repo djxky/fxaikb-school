@@ -194,6 +194,98 @@
   display:none;
 }
 
+/* 文件夹视图参考文件管理器布局：顶部只保留视图切换和当前操作 */
+.app[data-view="folder"] .page-header{
+  min-height:82px;
+  padding:26px 56px 12px;
+  background:#FAF9F5;
+  border-bottom:0;
+  backdrop-filter:none;
+  -webkit-backdrop-filter:none;
+}
+.app[data-view="folder"] .page-header .ph-left{
+  display:none;
+}
+.app[data-view="folder"] .page-header .ph-right{
+  width:100%;
+  margin-left:0;
+  display:flex;
+  justify-content:space-between;
+  gap:18px;
+}
+.app[data-view="folder"] .page-header .ph-view-switcher{
+  position:static;
+  left:auto;
+  transform:none;
+  height:42px;
+  padding:4px;
+  border-radius:999px;
+  border:0;
+  background:#F0EEE6;
+  box-shadow:none;
+}
+.app[data-view="folder"] .page-header .ph-vs-btn{
+  height:34px;
+  padding:0 18px;
+  border-radius:999px;
+  color:#37342E;
+  font-size:14px;
+  font-weight:520;
+}
+.app[data-view="folder"] .page-header .ph-vs-btn [data-lucide]{
+  width:16px;
+  height:16px;
+}
+.app[data-view="folder"] .page-header .ph-vs-btn.active{
+  background:#fff;
+  box-shadow:0 4px 14px rgba(31,28,22,.10);
+  font-weight:700;
+}
+.app[data-view="folder"] .folder-header-actions{
+  gap:8px;
+  margin-left:auto;
+}
+.app[data-view="folder"] .ph-action{
+  height:36px;
+  padding:0 13px;
+  border:1px solid #E1DBCF;
+  border-radius:9px;
+  background:#FAF9F5;
+  color:#1F1D19;
+  font-size:13px;
+  font-weight:560;
+}
+.app[data-view="folder"] .ph-action:hover{
+  background:#fff;
+  border-color:#D7D0C2;
+}
+.app[data-view="folder"] .ph-action.is-primary{
+  background:#050504;
+  border-color:#050504;
+  color:#fff;
+}
+.app[data-view="folder"] .ph-action.is-primary:hover{
+  background:#1A1916;
+  border-color:#1A1916;
+}
+.app[data-view="folder"] .ph-folder-search{
+  width:280px;
+  justify-content:flex-start;
+  padding:0 18px;
+  border:0;
+  border-radius:999px;
+  background:#F0EEE6;
+  color:#A8A39A;
+  font-weight:500;
+}
+.app[data-view="folder"] .ph-folder-search:hover{
+  background:#EDEAE2;
+  color:#827B70;
+}
+.app[data-view="folder"] .ph-action-sep{
+  display:none;
+}
+
 .ph-action{
   display:inline-flex;align-items:center;gap:5px;
   padding:6px 12px;
