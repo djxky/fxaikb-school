@@ -296,15 +296,33 @@
   </main>
 
   <aside class="ai-dock"
+         data-ai-panel="true"
          data-kind="应用"
          data-fixed-intent="create-app"
          data-placeholders="描述你想要的应用,例如:做一个班费记账小工具|做一个家长会签到页面|做一个课堂随机点名器|生成一个错题归因分析器|做一个运动会报名收集表">
-    <span class="ai-dock-tag" title="固定为创建应用">
-      <i data-lucide="sparkles"></i>
-      <span>创建应用</span>
-    </span>
     <div class="ai-dock-input-wrap">
-      <textarea class="ai-dock-input" rows="1" autocomplete="off" placeholder="描述你想创建的应用…"></textarea>
+      <div class="ai-dock-mode-row">
+        <button type="button" class="ai-dock-upload-card">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12"/><path d="m7 8 5-5 5 5"/><path d="M5 21h14"/></svg>
+          <span>上传文件</span>
+        </button>
+      </div>
+      <div class="ai-dock-input-line">
+        <span class="ai-dock-default-mode">
+          <i data-lucide="sparkles"></i>
+          <span>教育应用</span>
+        </span>
+        <span class="ai-dock-mode" style="display:none"></span>
+        <textarea class="ai-dock-input" rows="1" autocomplete="off" placeholder="描述你想创建的应用…"></textarea>
+      </div>
+      <div class="ai-dock-panel" aria-label="创建应用能力">
+        <div class="ai-dock-attach-actions" aria-label="添加附件">
+          <button class="ai-dock-attach-btn ai-dock-plus-btn" type="button" title="添加" data-dock-action="plus">
+            <i data-lucide="plus"></i>
+          </button>
+        </div>
+        <div class="ai-dock-chip-list"></div>
+      </div>
     </div>
     <div class="ai-dock-actions">
       <button class="ai-dock-btn" type="button" title="语音输入" onclick="alert('（演示）语音输入')">

@@ -806,6 +806,82 @@
     font-size: 10.5px; color: var(--muted); font-weight: 500;
     padding: 6px 10px 2px;
   }
+  .kb-content-picker {
+    position: fixed;
+    width: 420px;
+    max-height: 520px;
+    z-index: 100001;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--line-strong);
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 22px 58px rgba(0,0,0,.14);
+  }
+  .kb-content-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 16px 10px;
+    color: var(--ink); font-size: 15px; font-weight: 750;
+  }
+  .kb-content-head button { border: 0; background: transparent; cursor: pointer; color: var(--muted); width: 26px; height: 26px; border-radius: 7px; }
+  .kb-content-head button:hover { background: var(--side); color: var(--ink); }
+  .kb-content-tabs { display: flex; gap: 8px; padding: 0 16px 10px; }
+  .kb-content-tab {
+    height: 30px; padding: 0 12px; border-radius: 999px;
+    border: 1px solid var(--line); background: #fff; color: var(--text-1);
+    font-size: 12.5px; cursor: pointer; font-family: inherit;
+  }
+  .kb-content-tab.active { background: var(--ink); border-color: var(--ink); color: #fff; }
+  .kb-content-search { padding: 0 16px 10px; }
+  .kb-content-search input {
+    width: 100%; height: 34px; border: 1px solid var(--line);
+    border-radius: 9px; padding: 0 11px; font-family: inherit; outline: none;
+    background: var(--side); color: var(--ink);
+  }
+  .kb-content-list { overflow: auto; padding: 0 10px 10px; }
+  .kb-content-section { padding: 8px 8px 5px; color: var(--muted); font-size: 11px; font-weight: 700; }
+  .kb-content-back {
+    width: calc(100% - 16px); margin: 4px 8px 6px; display: flex; align-items: center; gap: 7px;
+    padding: 7px 8px; border: 0; border-radius: 8px; background: var(--side);
+    color: var(--text-1); font-family: inherit; font-size: 12.5px; cursor: pointer;
+  }
+  .kb-content-back:hover { background: #ECE7DD; }
+  .kb-content-back svg { width: 14px; height: 14px; }
+  .kb-content-item {
+    width: 100%; display: flex; align-items: center; gap: 10px;
+    padding: 9px 10px; border: 0; border-radius: 9px; background: transparent;
+    font-family: inherit; text-align: left; cursor: pointer; color: var(--ink);
+  }
+  .kb-content-item:hover { background: var(--side); }
+  .kb-content-item.disabled { opacity: .45; cursor: not-allowed; }
+  .kb-content-item.disabled:hover { background: transparent; }
+  .kb-content-icon { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; background: #F0ECE3; color: var(--text-1); flex-shrink: 0; }
+  .kb-content-icon svg { width: 16px; height: 16px; }
+  .kb-content-main { min-width: 0; flex: 1; display: grid; gap: 2px; }
+  .kb-content-name { font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .kb-content-meta { color: var(--muted); font-size: 11.5px; }
+  .kb-content-status { color: #9A6500; font-size: 11.5px; font-weight: 650; }
+  .kb-content-check {
+    width: 16px; height: 16px; border: 1.5px solid var(--line-strong);
+    border-radius: 4px; display: grid; place-items: center; flex-shrink: 0;
+    background: #fff;
+  }
+  .kb-content-check svg { width: 11px; height: 11px; color: #fff; opacity: 0; }
+  .kb-content-item.is-checked .kb-content-check {
+    background: var(--gold); border-color: var(--gold);
+  }
+  .kb-content-item.is-checked .kb-content-check svg { opacity: 1; }
+  .kb-content-picker.is-at-mode .kb-content-check {
+    border-radius: 999px;
+  }
+  .kb-content-picker.is-at-mode .kb-content-item.is-checked .kb-content-check {
+    background: #fff;
+    border-color: var(--line-strong);
+  }
+  .kb-content-picker.is-at-mode .kb-content-item.is-checked .kb-content-check svg {
+    opacity: 0;
+  }
   .kb-item {
     display: flex; align-items: center; gap: 9px;
     padding: 7px 10px;
@@ -2246,12 +2322,12 @@
           <div class="hero-title">张老师，今天想做什么？</div>
         </div>
         <div class="composer-pill" id="cc-composer">
-          <button class="pill-icon pill-plus" id="cc-plus-btn" type="button" title="添加文件或图片" onclick="togglePlusMenu(event)" data-track="/click/feixiangCampusChatPage/openAttachmentMenu | 打开对话页附件菜单 | mode#STRING">
+          <button class="pill-icon pill-plus" id="cc-plus-btn" type="button" title="上传文件" onclick="togglePlusMenu(event)" data-track="/click/feixiangCampusChatPage/openAttachmentMenu | 打开对话页附件菜单 | mode#STRING">
             <svg data-icon viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
           </button>
           <div class="input-wrap">
             <div class="attachment-row" id="cc-attachment-row"></div>
-            <textarea id="cc-input" rows="1" placeholder="继续追问 / 让 AI 调整结果……" onkeydown="onComposerKey(event)" oninput="autosize(this); refreshSend();"></textarea>
+            <textarea id="cc-input" rows="1" placeholder="继续追问 / 让 AI 调整结果……" onkeydown="onComposerKey(event)" oninput="handleCcInput(this)"></textarea>
           </div>
           <div class="chip-row" id="cc-chip-row">
             <span id="cc-mode" class="pill-mode" style="display:none"></span>
@@ -2511,7 +2587,9 @@ function autosize(el) {
 function refreshSend() {
   const ta = $('#cc-input');
   const btn = $('#pill-send');
-  btn.classList.toggle('idle', !isEmptyState() && !ta.value.trim());
+  const hasBlockingAttachment = ccAttachedItems.some(item => item.status === 'processing' || item.status === 'failed');
+  btn.classList.toggle('idle', hasBlockingAttachment || (!isEmptyState() && !ta.value.trim()));
+  btn.disabled = hasBlockingAttachment;
 }
 function onComposerKey(e) {
   if (e.key === 'Enter' && !e.shiftKey) {
@@ -2644,10 +2722,39 @@ const KB_REF_FOLDERS = [
   { id: 'mine',   name: '我的知识库',   count: 18 },
   { id: 'school', name: '学校知识库',   count: 348 },
 ];
-const CC_ATTACHMENT_LIMIT = 10;
+const CC_ATTACHMENT_LIMIT = 20;
 let selectedKbIds = ['school'];
 let ccAttachedItems = [];
 let ccCapabilityUploads = {};
+let ccKbContentTab = 'school';
+let ccKbContentQuery = '';
+let ccKbContentFolder = null;
+const CC_KB_CONTENT_ITEMS = {
+  school: [
+    { id:'sch-folder-lesson', type:'folder', name:'课堂教学', meta:'文件夹 · 12 个文件 · 学校知识库' },
+    { id:'sch-doc-quad', type:'file', name:'二次函数·导入课件.pptx', meta:'PPTX · 4.2MB · 5 天前' },
+    { id:'sch-doc-paper', type:'file', name:'海淀区 2026 一模卷·数学.pdf', meta:'PDF · 1.2MB · 1 周前' },
+    { id:'sch-audio-pending', type:'audio', name:'圆的切线性质·课堂录音.mp3', meta:'音频 · 审核中', disabled:true, status:'审核中' },
+  ],
+  mine: [
+    { id:'mine-folder-prep', type:'folder', name:'备课资源', meta:'文件夹 · 8 个文件 · 我的知识库' },
+    { id:'mine-doc-plan', type:'file', name:'相似三角形判定·公开课设计.docx', meta:'Word · 1.4MB · 昨天' },
+    { id:'mine-img-board', type:'image', name:'二次函数对称轴·板书图.jpg', meta:'图片 · 2.1MB · 今天' },
+    { id:'mine-video-pending', type:'video', name:'课堂实录片段.mp4', meta:'视频 · 审核中', disabled:true, status:'审核中' },
+  ],
+};
+const CC_KB_CONTENT_CHILDREN = {
+  'sch-folder-lesson': [
+    { id:'sch-folder-lesson-doc-1', type:'file', name:'圆的切线性质·教学动画.mp4', meta:'视频 · 34MB · 审核完成' },
+    { id:'sch-folder-lesson-doc-2', type:'file', name:'二次函数公开课教案.docx', meta:'Word · 1.8MB · 5 天前' },
+    { id:'sch-folder-lesson-doc-3', type:'audio', name:'圆的切线性质·课堂录音.mp3', meta:'音频 · 审核中', disabled:true, status:'审核中' },
+  ],
+  'mine-folder-prep': [
+    { id:'mine-folder-prep-doc-1', type:'file', name:'相似三角形判定·公开课设计.docx', meta:'Word · 1.4MB · 昨天' },
+    { id:'mine-folder-prep-doc-2', type:'image', name:'二次函数对称轴·板书图.jpg', meta:'图片 · 2.1MB · 今天' },
+    { id:'mine-folder-prep-doc-3', type:'video', name:'课堂实录片段.mp4', meta:'视频 · 审核中', disabled:true, status:'审核中' },
+  ],
+};
 
 function getCcUploadRequirement() {
   if (ccMode !== 'ai') return null;
@@ -2658,7 +2765,18 @@ function getCcUploadRequirement() {
 
 function ccAttachmentIcon(type) {
   if (type === 'image') return '<span class="attachment-thumb"></span>';
+  if (type === 'audio') return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10v4"/><path d="M6 7v10"/><path d="M10 4v16"/><path d="M14 8v8"/><path d="M18 5v14"/><path d="M22 11v2"/></svg>';
+  if (type === 'video') return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>';
+  if (type === 'kb-folder') return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/></svg>';
+  if (type === 'kb-file') return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>';
   return '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+}
+
+function ccAttachmentStatusLabel(status) {
+  if (status === 'processing') return '审核中';
+  if (status === 'failed') return '审核未通过';
+  if (status === 'done') return '处理完成';
+  return '';
 }
 
 function applyCcAttachmentState() {
@@ -2669,7 +2787,7 @@ function applyCcAttachmentState() {
       ${ccAttachmentIcon(item.type)}
       <span class="attachment-meta">
         <span class="attachment-name">${item.name}</span>
-        <span class="attachment-size">${item.size}</span>
+        <span class="attachment-size">${item.size}${item.status ? ' · ' + ccAttachmentStatusLabel(item.status) : ''}</span>
       </span>
       <span class="chip-del" title="移除" onclick="event.stopPropagation(); removeCcAttachment('${item.id}')">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
@@ -2682,21 +2800,166 @@ function applyCcAttachmentState() {
 function addCcAttachment(type) {
   if (ccAttachedItems.length >= CC_ATTACHMENT_LIMIT) {
     closePlusPop();
-    showToast(`最多上传 ${CC_ATTACHMENT_LIMIT} 个附件`);
+    showToast(`附件文件数量超过限制，最多只能上传${CC_ATTACHMENT_LIMIT}个`);
     return;
   }
-  const item = type === 'image'
+  const isUnifiedUpload = type === 'upload';
+  const item = isUnifiedUpload
+    ? { id: `video-${Date.now()}`, type: 'video', name: '课堂实录片段.mp4', size: '126MB', status: 'processing' }
+    : type === 'image'
     ? { id: `image-${Date.now()}`, type: 'image', name: '课堂板书.png', size: '433.92KB' }
     : { id: `file-${Date.now()}`, type: 'file', name: '教学资料.docx', size: '167KB' };
   ccAttachedItems.push(item);
   applyCcAttachmentState();
   closePlusPop();
-  showToast(type === 'image' ? '已添加图片' : '已添加文件');
+  showToast(isUnifiedUpload ? '音视频文件审核完成后可继续对话，请稍等' : '已添加文件');
+  if (isUnifiedUpload) {
+    refreshSend();
+    setTimeout(() => {
+      const target = ccAttachedItems.find(att => att.id === item.id);
+      if (!target) return;
+      target.status = 'done';
+      applyCcAttachmentState();
+      refreshSend();
+      showToast(`${target.name}处理完成`);
+    }, 3200);
+  }
 }
 
 function removeCcAttachment(id) {
   ccAttachedItems = ccAttachedItems.filter(item => item.id !== id);
   applyCcAttachmentState();
+}
+
+function handleCcInput(el) {
+  autosize(el);
+  refreshSend();
+  const value = el.value || '';
+  if (value.endsWith('@')) {
+    openCcKbContentPicker('at');
+  }
+}
+
+function getCcKbContentIcon(type) {
+  if (type === 'folder') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7l-2-2H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2Z"/></svg>';
+  if (type === 'image') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>';
+  if (type === 'audio') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 10v4"/><path d="M6 7v10"/><path d="M10 4v16"/><path d="M14 8v8"/><path d="M18 5v14"/><path d="M22 11v2"/></svg>';
+  if (type === 'video') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m22 8-6 4 6 4V8Z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>';
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg>';
+}
+
+function openCcKbContentPicker(mode = 'plus') {
+  document.getElementById('kb-content-picker')?.remove();
+  const anchor = mode === 'at' ? document.getElementById('cc-input') : (document.getElementById('plus-pop') || document.getElementById('cc-plus-btn'));
+  const rect = anchor.getBoundingClientRect();
+  const picker = document.createElement('div');
+  picker.id = 'kb-content-picker';
+  picker.className = `kb-content-picker ${mode === 'at' ? 'is-at-mode' : ''}`;
+  const left = mode === 'at' ? rect.left : Math.min(rect.right + 8, window.innerWidth - 436);
+  picker.style.left = Math.max(16, left) + 'px';
+  picker.style.top = Math.max(16, Math.min(mode === 'at' ? rect.top - 528 : rect.top, window.innerHeight - 536)) + 'px';
+  picker.dataset.mode = mode;
+  picker.addEventListener('click', event => event.stopPropagation());
+  document.body.appendChild(picker);
+  renderCcKbContentPicker();
+  setTimeout(() => document.addEventListener('click', closePlusPopHandler, { capture: true }), 50);
+}
+
+function isCcKbContentSelected(id) {
+  return ccAttachedItems.some(att => att.id === `kb-${id}`);
+}
+
+function findCcKbContentItem(id) {
+  return [
+    ...Object.values(CC_KB_CONTENT_ITEMS).flat(),
+    ...Object.values(CC_KB_CONTENT_CHILDREN).flat(),
+  ].find(entry => entry.id === id);
+}
+
+function renderCcKbContentPicker() {
+  const picker = document.getElementById('kb-content-picker');
+  if (!picker) return;
+  const isAtMode = picker.dataset.mode === 'at';
+  const baseList = ccKbContentFolder ? (CC_KB_CONTENT_CHILDREN[ccKbContentFolder] || []) : (CC_KB_CONTENT_ITEMS[ccKbContentTab] || []);
+  const list = baseList.filter(item => !ccKbContentQuery || item.name.includes(ccKbContentQuery));
+  const folderName = Object.values(CC_KB_CONTENT_ITEMS).flat().find(item => item.id === ccKbContentFolder)?.name;
+  picker.innerHTML = `
+    <div class="kb-content-head">
+      <span>知识库</span>
+      <button type="button" onclick="event.stopPropagation();document.getElementById('kb-content-picker')?.remove()">×</button>
+    </div>
+    <div class="kb-content-tabs">
+      <button type="button" class="kb-content-tab ${ccKbContentTab === 'school' ? 'active' : ''}" onclick="event.stopPropagation();switchCcKbContentTab('school')">学校知识库</button>
+      <button type="button" class="kb-content-tab ${ccKbContentTab === 'mine' ? 'active' : ''}" onclick="event.stopPropagation();switchCcKbContentTab('mine')">个人知识库</button>
+    </div>
+    <div class="kb-content-search">
+      <input placeholder="搜索当前知识库" value="${ccKbContentQuery}" oninput="ccKbContentQuery=this.value;renderCcKbContentPicker()" onclick="event.stopPropagation()">
+    </div>
+    <div class="kb-content-list">
+      ${ccKbContentFolder ? `
+        <button type="button" class="kb-content-back" onclick="event.stopPropagation();backCcKbContentFolder()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg>
+          返回上一级
+        </button>
+      ` : ''}
+      <div class="kb-content-section">${ccKbContentFolder ? `${folderName || '文件夹'} 内文件` : '按更新时间倒序'}</div>
+      ${list.map(item => `
+        <button type="button" class="kb-content-item ${item.disabled ? 'disabled' : ''} ${!isAtMode && isCcKbContentSelected(item.id) ? 'is-checked' : ''}" ${item.disabled ? '' : (item.type === 'folder' ? `onclick="event.stopPropagation();enterCcKbContentFolder('${item.id}')"` : `onclick="event.stopPropagation();addCcKbContentReference('${item.id}')"`)} >
+          <span class="kb-content-check" aria-hidden="true" onclick="event.stopPropagation();addCcKbContentReference('${item.id}')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M5 13l4 4L19 7"/></svg></span>
+          <span class="kb-content-icon">${getCcKbContentIcon(item.type)}</span>
+          <span class="kb-content-main">
+            <span class="kb-content-name">${item.name}</span>
+            <span class="kb-content-meta">${item.meta}</span>
+          </span>
+          ${item.status ? `<span class="kb-content-status">${item.status}</span>` : ''}
+        </button>
+      `).join('')}
+    </div>
+  `;
+}
+
+function enterCcKbContentFolder(id) {
+  ccKbContentFolder = id;
+  ccKbContentQuery = '';
+  renderCcKbContentPicker();
+}
+
+function backCcKbContentFolder() {
+  ccKbContentFolder = null;
+  ccKbContentQuery = '';
+  renderCcKbContentPicker();
+}
+
+function switchCcKbContentTab(tab) {
+  ccKbContentTab = tab;
+  ccKbContentQuery = '';
+  ccKbContentFolder = null;
+  renderCcKbContentPicker();
+}
+
+function addCcKbContentReference(id) {
+  const item = findCcKbContentItem(id);
+  if (!item || item.disabled) return;
+  if (ccAttachedItems.length >= CC_ATTACHMENT_LIMIT) {
+    showToast(`附件文件数量超过限制，最多只能上传${CC_ATTACHMENT_LIMIT}个`);
+    return;
+  }
+  if (!ccAttachedItems.some(att => att.id === `kb-${item.id}`)) {
+    ccAttachedItems.push({
+      id: `kb-${item.id}`,
+      type: item.type === 'folder' ? 'kb-folder' : 'kb-file',
+      name: item.name,
+      size: item.type === 'folder' ? '知识库文件夹' : '知识库文件',
+    });
+    applyCcAttachmentState();
+  }
+  const picker = document.getElementById('kb-content-picker');
+  if (picker?.dataset.mode === 'at') {
+    const ipt = $('#cc-input');
+    if (ipt) ipt.value = ipt.value.replace(/@$/, '');
+    picker.remove();
+  }
+  showToast(`已从知识库添加《${item.name}》`);
 }
 
 function renderCcCapabilityUploadCard(uploadCard, uploadReq) {
@@ -2804,10 +3067,12 @@ function togglePlusMenu(e, opts) {
 function closePlusPop() {
   document.getElementById('plus-pop')?.remove();
   document.getElementById('kb-submenu')?.remove();
+  document.getElementById('kb-content-picker')?.remove();
 }
 function closePlusPopHandler(e) {
   if (e.target.closest('#plus-pop')) return;
   if (e.target.closest('#kb-submenu')) return;
+  if (e.target.closest('#kb-content-picker')) return;
   if (e.target.closest('#cc-plus-btn')) return;
   document.removeEventListener('click', closePlusPopHandler, { capture: true });
   closePlusPop();
@@ -2815,13 +3080,14 @@ function closePlusPopHandler(e) {
 
 function renderPlusMenu(pop) {
   pop.innerHTML = `
-    <button class="plus-row" onclick="event.stopPropagation();addCcAttachment('file')" data-track="/click/feixiangCampusChatPage/addAttachment | 添加对话页附件 | attachmentType#STRING,mode#STRING">
+    <button class="plus-row" onclick="event.stopPropagation();addCcAttachment('upload')" data-track="/click/feixiangCampusChatPage/addAttachment | 上传对话页附件 | attachmentType#STRING,mode#STRING">
       <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>
-      <span class="row-label">添加文件</span>
+      <span class="row-label">上传文件</span>
     </button>
-    <button class="plus-row" onclick="event.stopPropagation();addCcAttachment('image')" data-track="/click/feixiangCampusChatPage/addAttachment | 添加对话页附件 | attachmentType#STRING,mode#STRING">
-      <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-      <span class="row-label">添加图片</span>
+    <button class="plus-row" onmouseenter="openCcKbContentPicker('plus')" onclick="event.stopPropagation();openCcKbContentPicker('plus')" data-track="/click/feixiangCampusChatPage/addKbContent | 从知识库添加 | mode#STRING">
+      <svg class="row-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
+      <span class="row-label">从知识库添加</span>
+      <svg class="row-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
     </button>
   `;
 }
@@ -4032,6 +4298,11 @@ let lastUserText = '';
 function sendInChat() {
   const ta = $('#cc-input');
   let text = ta.value.trim();
+  const blockingAttachment = ccAttachedItems.find(item => item.status === 'processing' || item.status === 'failed');
+  if (blockingAttachment) {
+    showToast(blockingAttachment.status === 'processing' ? '音视频文件审核完成后可继续对话，请稍等' : '存在审核未通过文件，无法发送');
+    return;
+  }
   if (!text) { showToast('请输入内容'); return; }
   if (isEmptyState() && ccMode && CC_CHIP_META[ccMode]) {
     const aiCap = ccMode === 'ai' && ccAiCapability
