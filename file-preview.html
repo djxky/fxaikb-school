@@ -593,7 +593,7 @@
 </head>
 <body data-page="file-preview">
 
-<div class="app" id="app" data-view="wiki" data-chat="closed">
+<div class="app" id="app" data-view="wiki" data-chat="closed" data-right="expanded">
 
   <!-- ════════════ 左栏 · 公共壳由 v28-shell.js 渲染 ════════════ -->
   <aside class="sidebar-left" id="feixiang-sidebar"></aside>
@@ -625,8 +625,15 @@
         <button class="ph-action ph-action-icon tb-search" onclick="toggleTopSearch(event)" title="搜索 Wiki、文件" aria-expanded="false">
           <i data-lucide="search"></i>
         </button>
+        <button class="ph-action is-meta" id="btn-toggle-right" onclick="toggleRight()" title="查看飞象对这份原文件的 AI 解读">
+          <i data-lucide="panel-right-open"></i><span>AI 解读</span>
+        </button>
+        <span class="ph-action-sep" aria-hidden="true"></span>
         <button class="ph-action" data-doc="download-btn-file-preview" onclick="V28DownloadDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="下载" data-track="/click/feixiangCampusFilePreviewPage/download | 下载文件 | fileType#STRING">
           <i data-lucide="download"></i><span>下载</span>
+        </button>
+        <button class="ph-action" data-doc="share-btn-file-preview" onclick="V28ShareDialog.open({ context:'file-preview', subject:'二次函数·导入课件.pptx' })" title="分享" data-track="/click/feixiangCampusFilePreviewPage/share | 分享文件 | fileType#STRING">
+          <i data-lucide="share-2"></i><span>分享</span>
         </button>
       </div>
     </header>
@@ -643,13 +650,22 @@
             <span class="entry-subj">数学 · 九年级 · 函数 · 第一课时</span>
           </div>
           <h1 class="entry-title">二次函数 · 导入课件.pptx</h1>
-          <p class="entry-lead">原文件预览，可在线翻页查看或下载到本地。</p>
+          <p class="entry-lead">
+            张明华为<b>八(3)班第一课时</b>准备的导入课件，覆盖 <b>开口方向、对称轴、顶点坐标</b> 三个核心考点。
+            飞象 AI 读完这份课件后，把第 <b>3、5、12 页</b> 的内容融进了
+            <a class="wlink" onclick="window.location.href='wiki-entry.html'">《二次函数图像与性质》</a> Wiki——
+            右侧看 AI 是怎么吸收这份资料的。
+          </p>
           <div class="entry-meta">
             <span class="em-item">上传人 <b>张明华</b></span>
             <span class="em-sep">·</span>
             <span class="em-item"><b>4.2 MB</b></span>
             <span class="em-sep">·</span>
             <span class="em-item">上传 <b>5 天前</b></span>
+          </div>
+          <div class="fp-qbank-row">
+            <span class="fp-qbank-chip"><i data-lucide="ban"></i>校本题库：暂不支持</span>
+            <span>PPT 暂不支持自动沉淀；支持 PDF / Word / 单张图片。</span>
           </div>
         </header>
 
@@ -667,6 +683,7 @@
                 <i data-lucide="chevron-right"></i>
               </button>
               <div class="fp-stage-spacer"></div>
+              <span class="fp-stage-cite"><i data-lucide="link"></i> 本页被 Wiki §1 开口方向 引用</span>
             </div>
 
             <div class="fp-slide">
@@ -1202,7 +1219,7 @@
     </div>
 
     <!-- ════════════ 底部 Command Bar ════════════ -->
-    <div class="bottom-bar" id="bottom-bar" data-mode="knowledge-qa" hidden>
+    <div class="bottom-bar" id="bottom-bar" data-mode="knowledge-qa">
 
       <div class="bb-wrap">
         <!-- 默认一行：知识库范围 + 问答输入 + 发送 -->
@@ -1225,7 +1242,7 @@
   </main>
 
   <!-- ════════════ 右栏 · Canvas（chat 态下 1:1） ════════════ -->
-  <aside class="sidebar-right" hidden>
+  <aside class="sidebar-right">
 
     <!-- Canvas 顶部 tab 切换 · 文件预览态的 AI 视图 -->
     <div class="canvas-head">
