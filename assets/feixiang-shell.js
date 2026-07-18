@@ -565,7 +565,7 @@
       ${navItem({ key: 'resources', icon: ICONS.resources, label: '资源广场', href: 'resource-square.html', activeKey })}
 
       <div class="fx-nav-section">管理</div>
-      ${navItem({ key: 'school-dashboard', icon: ICONS.dashboard, label: '学校看板', onclick: "showToast('（演示）学校看板')", activeKey })}
+      ${navItem({ key: 'school-dashboard', icon: ICONS.dashboard, label: '区域数据看板', href: '飞象老师区域AI教育指挥中枢.html', activeKey })}
       ${navItem({ key: 'admin-teachers', icon: ICONS.shield, label: '学校管理', href: 'admin-teachers.html', activeKey })}
 
       <div class="fx-spacer"></div>
