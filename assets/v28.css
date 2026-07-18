@@ -3837,57 +3837,6 @@ body[data-page="file-preview"] .app[data-right="expanded"] .sidebar-right{
   padding:0 8px 0 0;
   overflow:visible;
 }
-.fv-storage-bar{
-  width:calc(100% - 48px);
-  margin:4px 24px 0;
-  display:flex;
-  align-items:center;
-  gap:14px;
-  color:var(--text-3);
-  font-size:12px;
-}
-.fv-storage-copy{
-  min-width:132px;
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.fv-storage-copy b{
-  color:var(--text-2);
-  font-weight:650;
-}
-.fv-storage-track{
-  height:6px;
-  flex:1;
-  overflow:hidden;
-  border-radius:999px;
-  background:#ECE7DD;
-}
-.fv-storage-track span{
-  display:block;
-  height:100%;
-  border-radius:inherit;
-  background:#1B1A17;
-}
-.fv-audit-badge{
-  height:20px;
-  display:inline-flex;
-  align-items:center;
-  padding:0 7px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:650;
-  line-height:1;
-  white-space:nowrap;
-}
-.fv-audit-badge.is-processing{
-  background:#FFF3D6;
-  color:#9A6500;
-}
-.fv-audit-badge.is-failed{
-  background:#FFE8E5;
-  color:#B63A2D;
-}
 .fv-row-action{
   width:30px;height:30px;border-radius:8px;
   border:none;background:transparent;

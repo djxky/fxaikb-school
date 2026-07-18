@@ -237,106 +237,6 @@
     margin:24px 0 8px;
     display:flex;flex-direction:column;gap:14px;
   }
-  body[data-page="file-preview"][data-media-preview="true"] .sidebar-right{
-    display:none !important;
-  }
-  body[data-page="file-preview"][data-media-preview="true"] .app{
-    grid-template-columns:var(--left-w) minmax(0, 1fr) 0 !important;
-  }
-  body[data-page="file-preview"][data-media-preview="true"] #btn-toggle-right{
-    display:none !important;
-  }
-  body[data-page="file-preview"] .ph-action:disabled{
-    opacity:.42;
-    cursor:not-allowed;
-  }
-  body[data-page="file-preview"] .fp-media-card{
-    min-height:520px;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:center;
-    padding:48px;
-    border:1px solid #E8E0D3;
-    border-radius:14px;
-    background:#FFFDF9;
-    text-align:center;
-  }
-  body[data-page="file-preview"] .fp-media-status{
-    height:28px;
-    display:inline-flex;
-    align-items:center;
-    gap:7px;
-    padding:0 10px;
-    border-radius:999px;
-    font-size:12px;
-    font-weight:700;
-  }
-  body[data-page="file-preview"] .fp-media-status [data-lucide]{width:14px;height:14px}
-  body[data-page="file-preview"] .fp-media-status.is-processing{background:#FFF3D6;color:#9A6500}
-  body[data-page="file-preview"] .fp-media-status.is-failed{background:#FFE8E5;color:#B63A2D}
-  body[data-page="file-preview"] .fp-media-status.is-done{background:#E8F6EF;color:#24714A}
-  body[data-page="file-preview"] .fp-media-card h2{
-    margin:18px 0 10px;
-    color:#14120F;
-    font-size:26px;
-    letter-spacing:0;
-  }
-  body[data-page="file-preview"] .fp-media-meta{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex-wrap:wrap;
-    gap:8px 16px;
-    color:#8D867B;
-    font-size:13px;
-  }
-  body[data-page="file-preview"] .fp-media-wave{
-    width:min(520px, 86%);
-    height:120px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:12px;
-    margin:34px 0 22px;
-    border-radius:16px;
-    background:#F3EFE7;
-  }
-  body[data-page="file-preview"] .fp-media-wave span{
-    width:9px;
-    border-radius:999px;
-    background:#1B1A17;
-  }
-  body[data-page="file-preview"] .fp-media-wave span:nth-child(1){height:34px}
-  body[data-page="file-preview"] .fp-media-wave span:nth-child(2){height:64px}
-  body[data-page="file-preview"] .fp-media-wave span:nth-child(3){height:88px}
-  body[data-page="file-preview"] .fp-media-wave span:nth-child(4){height:52px}
-  body[data-page="file-preview"] .fp-media-wave span:nth-child(5){height:96px}
-  body[data-page="file-preview"] .fp-media-wave span:nth-child(6){height:58px}
-  body[data-page="file-preview"] .fp-media-wave span:nth-child(7){height:40px}
-  body[data-page="file-preview"] .fp-media-player{
-    width:min(560px, 88%);
-  }
-  body[data-page="file-preview"] .fp-media-blocked{
-    width:min(520px, 86%);
-    min-height:140px;
-    display:grid;
-    place-items:center;
-    gap:10px;
-    margin-top:34px;
-    padding:28px;
-    border:1px dashed #D8CEBE;
-    border-radius:14px;
-    color:#8D867B;
-    background:#F7F3EC;
-  }
-  body[data-page="file-preview"] .fp-media-blocked [data-lucide]{width:26px;height:26px}
-  body[data-page="file-preview"] .fp-media-blocked p{margin:0;font-size:13px}
-  body[data-page="file-preview"][data-media-preview="true"] .entry-lead,
-  body[data-page="file-preview"][data-media-preview="true"] .entry-meta,
-  body[data-page="file-preview"][data-media-preview="true"] .entry-foot{
-    display:none !important;
-  }
   body[data-page="file-preview"] .fp-slide-stage{
     background:#FBFAF7;
     border:1px solid var(--border);
@@ -741,6 +641,14 @@
               <span class="fp-thumb-title">全部 28 页</span>
             </button>
           </div>
+        </div>
+
+        <!-- ───── 底部说明（占位，下面所有旧 wiki 内容会被删掉） ───── -->
+        <div class="wiki-foot entry-foot" style="margin-top:32px">
+          这份原文件由 <b>张明华 5 天前上传</b>。飞象 AI 已读完 28 页，把第 <b>3、5、12 页</b> 的内容
+          融进了《二次函数图像与性质》Wiki——右边「AI 解读」面板里能看到 AI 怎么理解这份资料，以及它进入了哪些
+          相关 Wiki。
+          <a onclick="window.location.href='wiki-entry.html'">查看本文件参与的 Wiki →</a>
         </div>
 
         <!-- 以下是旧 wiki 词条内容，下面这段会被 CSS hide。保留为 fallback。 -->
@@ -1469,19 +1377,10 @@
     const time = params.get('time') || '5 天前';
     const wiki = params.get('wiki') || '二次函数图像与性质';
     const scope = params.get('scope') || 'school';
-    const auditState = params.get('audit') || 'done';
     let qbankState = params.get('qbank') || inferFileQbankState(fileName, ext);
 
     const typeMeta = getFileTypeMeta(ext);
     const scopeLabel = scope === 'personal' ? '我的知识库' : '学校知识库';
-    const isMedia = isAudioFile(ext) || isVideoFile(ext);
-    if(isMedia){
-      document.body.dataset.mediaPreview = 'true';
-      const app = document.getElementById('app');
-      if(app) app.dataset.right = 'collapsed';
-      const aiReadBtn = document.getElementById('btn-toggle-right');
-      if(aiReadBtn) aiReadBtn.remove();
-    }
 
     document.title = `${fileName} · 飞象 AI`;
 
@@ -1507,32 +1406,24 @@
 
     const lead = document.querySelector('.entry-lead');
     if(lead){
-      if(isMedia){
-        lead.remove();
-      }else{
-        lead.innerHTML = `${escapeHtml(source)}上传到<b>${escapeHtml(scopeLabel)}</b>的${escapeHtml(typeMeta.cn)}资料，飞象 AI 会基于原文件整理摘要、关联 Wiki 和可追溯来源。${wiki ? `当前资料已关联 <a class="wlink" onclick="window.location.href='wiki-entry.html?w=${encodeURIComponent(wiki)}'">《${escapeHtml(wiki)}》</a> Wiki。` : '当前资料尚未形成可读 Wiki 主题。'}`;
-      }
+      lead.innerHTML = `${escapeHtml(source)}上传到<b>${escapeHtml(scopeLabel)}</b>的${escapeHtml(typeMeta.cn)}资料，飞象 AI 会基于原文件整理摘要、关联 Wiki 和可追溯来源。${wiki ? `当前资料已关联 <a class="wlink" onclick="window.location.href='wiki-entry.html?w=${encodeURIComponent(wiki)}'">《${escapeHtml(wiki)}》</a> Wiki。` : '当前资料尚未形成可读 Wiki 主题。'}`;
     }
 
     const meta = document.querySelector('.entry-meta');
     if(meta){
-      if(isMedia){
-        meta.remove();
-      }else{
-        meta.innerHTML = `
-          <span class="em-item">上传人 <b>${escapeHtml(source)}</b></span>
-          <span class="em-sep">·</span>
-          <span class="em-item"><b>${escapeHtml(size)}</b></span>
-          <span class="em-sep">·</span>
-          <span class="em-item">上传 <b>${escapeHtml(time)}</b></span>
-        `;
-      }
+      meta.innerHTML = `
+        <span class="em-item">上传人 <b>${escapeHtml(source)}</b></span>
+        <span class="em-sep">·</span>
+        <span class="em-item"><b>${escapeHtml(size)}</b></span>
+        <span class="em-sep">·</span>
+        <span class="em-item">上传 <b>${escapeHtml(time)}</b></span>
+      `;
     }
 
     const downloadBtn = document.querySelector('[data-doc="download-btn-file-preview"]');
-    if(downloadBtn) setPreviewAction(downloadBtn, auditState === 'done', `V28DownloadDialog.open({ context:'file-preview', subject:'${escapeAttr(fileName)}' })`);
+    if(downloadBtn) downloadBtn.setAttribute('onclick', `V28DownloadDialog.open({ context:'file-preview', subject:'${escapeAttr(fileName)}' })`);
     const shareBtn = document.querySelector('[data-doc="share-btn-file-preview"]');
-    if(shareBtn) setPreviewAction(shareBtn, auditState === 'done', `V28ShareDialog.open({ context:'file-preview', subject:'${escapeAttr(fileName)}' })`);
+    if(shareBtn) shareBtn.setAttribute('onclick', `V28ShareDialog.open({ context:'file-preview', subject:'${escapeAttr(fileName)}' })`);
 
     renderQbankState();
     renderPreviewBody();
@@ -1541,37 +1432,12 @@
     function getFileTypeMeta(type){
       if(['doc', 'docx'].includes(type)) return { label:'WORD', cn:'Word', icon:'file-text' };
       if(type === 'pdf') return { label:'PDF', cn:'PDF', icon:'file-text' };
-      if(['jpg', 'jpeg', 'png', 'webp'].includes(type)) return { label:'图片', cn:'图片', icon:'image' };
+      if(['jpg', 'jpeg', 'png'].includes(type)) return { label:'图片', cn:'图片', icon:'image' };
       if(type === 'folder') return { label:'资料包', cn:'集合资料', icon:'folder-archive' };
       if(['xls', 'xlsx'].includes(type)) return { label:'表格', cn:'表格', icon:'file-spreadsheet' };
-      if(isAudioFile(type)) return { label:'音频', cn:'音频', icon:'audio-lines' };
-      if(isVideoFile(type)) return { label:'视频', cn:'视频', icon:'video' };
+      if(['mp4', 'mov'].includes(type)) return { label:'视频', cn:'视频', icon:'video' };
       if(['ppt', 'pptx'].includes(type)) return { label:'PPTX', cn:'PPT', icon:'presentation' };
       return { label:type.toUpperCase(), cn:'文件', icon:'file' };
-    }
-
-    function isAudioFile(type){
-      return ['mp3', 'm4a', 'wav', 'ogg', 'oga'].includes(type);
-    }
-
-    function isVideoFile(type){
-      return ['mp4', 'mov', 'webm'].includes(type);
-    }
-
-    function getAuditMeta(state){
-      if(state === 'processing') return { label:'审核中', cls:'is-processing', icon:'loader-2', copy:'' };
-      if(state === 'failed') return { label:'审核未通过', cls:'is-failed', icon:'alert-triangle', copy:'文件审核未通过，无法预览、分享或下载。' };
-      return { label:'完成', cls:'is-done', icon:'check-circle-2', copy:'文件审核已完成，可预览、分享和下载。' };
-    }
-
-    function setPreviewAction(btn, enabled, action){
-      if(enabled){
-        btn.removeAttribute('disabled');
-        btn.setAttribute('onclick', action);
-      }else{
-        btn.setAttribute('disabled', 'disabled');
-        btn.setAttribute('onclick', "showToast('文件审核完成后才可使用此操作')");
-      }
     }
 
     function inferFileQbankState(name, type){
@@ -1586,10 +1452,6 @@
     function renderQbankState(){
       const row = document.querySelector('.fp-qbank-row');
       if(!row) return;
-      if(isMedia){
-        row.style.display = 'none';
-        return;
-      }
       const status = getQbankStatus(qbankState);
       row.innerHTML = `
         ${status.label ? `<span class="fp-qbank-chip ${status.className}"><i data-lucide="${status.icon}"></i>${status.label}</span>` : ''}
@@ -1689,7 +1551,6 @@
     }
 
     function renderPreviewBody(){
-      if(isMedia) return renderMediaPreviewBody();
       if(['ppt', 'pptx'].includes(ext)) return;
       const viewer = document.querySelector('.fp-viewer');
       if(!viewer) return;
@@ -1716,30 +1577,6 @@
             </ul>
             <div class="fp-slide-foot">${escapeHtml(typeMeta.label)} · ${escapeHtml(size)} · ${escapeHtml(source)}</div>
           </div>
-        </div>
-      `;
-    }
-
-    function renderMediaPreviewBody(){
-      const viewer = document.querySelector('.fp-viewer');
-      if(!viewer) return;
-      const audit = getAuditMeta(auditState);
-      const canPreview = auditState === 'done';
-      const mediaControl = isVideoFile(ext)
-        ? `<video class="fp-media-player" controls ${canPreview ? '' : 'aria-hidden="true"'}></video>`
-        : `<audio class="fp-media-player" controls ${canPreview ? '' : 'aria-hidden="true"'}></audio>`;
-      viewer.innerHTML = `
-        <div class="fp-media-card">
-          <div class="fp-media-status ${audit.cls}">
-            <i data-lucide="${audit.icon}"></i>
-            <span>${audit.label}</span>
-          </div>
-          ${canPreview ? `
-            <div class="fp-media-wave" aria-hidden="true">
-              <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
-            </div>
-            ${mediaControl}
-          ` : ''}
         </div>
       `;
     }
