@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>上海市虹口区 AI+ 教育 智能体导航</title>
+  <script>window._AMapSecurityConfig={securityJsCode:'85cf89eaaf6f90d1b91b2ff9cd41c90e'}</script>
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
+  <style>
+    :root{
+      --canvas:#070a16; --panel:#101936; --panel-deep:#0a1129; --line:rgba(104,149,241,.23);
+      --line-bright:rgba(92,206,255,.66); --text:#edf3ff; --muted:rgba(220,232,255,.58);
+      --purple:#9e82ff; --cyan:#32c5f4; --mint:#2dd4b5; --yellow:#f8de58; --pink:#dc6cae;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-width:1280px;min-height:900px;background:var(--canvas);color:var(--text);font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+    body{overflow:auto;background-image:linear-gradient(rgba(71,106,179,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(71,106,179,.07) 1px,transparent 1px);background-size:28px 28px}
+    button,input{font:inherit}
+    .screen{width:1600px;height:900px;margin:0 auto;padding:24px 62px 28px}
+
+    .top{height:76px;position:relative;display:flex;justify-content:center;align-items:flex-start;border-bottom:1px solid var(--line)}
+    .title{padding-top:4px;text-align:center}
+    .title h1{margin:0;font-size:41px;letter-spacing:2px;line-height:1.1}
+    .title b{background:linear-gradient(90deg,#b39aff,#39cafa);-webkit-background-clip:text;background-clip:text;color:transparent}
+    .controls{position:absolute;left:0;top:7px;display:flex;align-items:center;height:40px;padding:3px;border:1px solid var(--line);background:rgba(8,13,30,.74)}
+    .range{height:32px;padding:0 11px;border:0;background:transparent;color:var(--muted);font-size:14px;cursor:pointer}
+    .range:hover,.range.on{color:#fff;background:rgba(126,95,245,.33)}
+    .fullscreen{position:absolute;right:0;top:5px;width:34px;height:34px;border:1px solid rgba(103,193,255,.38);background:rgba(8,13,30,.7);color:#b8d9ff;font-size:22px;cursor:pointer}
+    .fullscreen:hover{border-color:var(--cyan);color:#fff;box-shadow:0 0 14px rgba(50,197,244,.35)}
+
+    .metrics{height:110px;display:grid;grid-template-columns:repeat(4,1fr);padding:19px 0 11px}
+    .metric{position:relative;text-align:center;border-right:1px solid rgba(91,130,217,.14)}
+    .metric:last-child{border-right:0}
+    .metric::before{content:"";position:absolute;top:0;left:50%;width:31px;height:2px;transform:translateX(-50%);background:linear-gradient(90deg,transparent,var(--cyan),transparent)}
+    .metric strong{font:600 45px/1 "DIN Alternate","PingFang SC",sans-serif;letter-spacing:-1px}
+    .metric:nth-child(n+3) strong{color:#ad91ff;text-shadow:0 0 18px rgba(158,130,255,.3)}
+    .metric em{margin-left:4px;color:rgba(238,245,255,.76);font-size:15px;font-style:normal}
+    .metric span{display:block;margin-top:8px;color:var(--muted);font-size:13px}
+    .metric i{margin-left:5px;color:var(--mint);font-size:11px;font-style:normal}
+
+    .grid{height:646px;display:grid;grid-template-columns:294px minmax(0,1fr) 326px;gap:13px}
+    .side,.command{min-height:0}
+    .side{display:flex;flex-direction:column;gap:11px}
+    .panel{position:relative;overflow:hidden;border:1px solid var(--line);background:linear-gradient(135deg,rgba(18,26,58,.88),rgba(8,13,32,.87))}
+    .panel::before{content:"";position:absolute;z-index:1;top:0;left:0;width:45px;height:2px;background:linear-gradient(90deg,var(--cyan),transparent)}
+    .phead{height:45px;position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid rgba(93,127,220,.14)}
+    .phead h2{margin:0;font-size:16px;letter-spacing:.5px}
+    .phead label{color:rgba(161,205,255,.62);font-size:10px;letter-spacing:.8px}
+    .trend{height:225px}
+    .chart{height:180px}
+    .tabset{display:flex;gap:2px}
+    .tabset button{padding:5px 8px;border:0;background:transparent;color:var(--muted);font-size:12px;cursor:pointer}
+    .tabset button.on{color:#cbbcff;border-bottom:1px solid var(--purple)}
+
+    .capability{flex:1;display:flex;flex-direction:column}
+    .cap-list{display:grid;grid-template-rows:repeat(6,1fr);flex:1;padding:7px 14px 10px}
+    .cap-row{display:grid;grid-template-columns:24px minmax(0,1fr) auto;grid-template-rows:19px 8px;column-gap:8px;row-gap:3px;align-content:center;border-bottom:1px solid rgba(108,149,237,.13);cursor:default}
+    .cap-row:last-child{border-bottom:0}
+    .cap-order{grid-row:1 / 3;align-self:center;color:rgba(189,210,255,.52);font:700 13px monospace}
+    .cap-name{align-self:end;color:rgba(242,246,255,.9);font-size:14px;font-weight:600}
+    .cap-value{align-self:end;color:rgba(217,230,255,.68);font:600 11px/1.3 monospace;white-space:nowrap}
+    .cap-value b{color:#eff6ff;font-size:15px}
+    .cap-track{grid-column:2 / 4;grid-row:2;height:8px;overflow:hidden;border-radius:5px;background:linear-gradient(90deg,rgba(116,140,223,.18),rgba(116,140,223,.05))}
+    .cap-fill{display:block;width:0;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--color),color-mix(in srgb,var(--color),#fff 18%));box-shadow:0 0 12px color-mix(in srgb,var(--color),transparent 40%);transition:width .5s ease}
+
+    .command{display:flex;flex-direction:column;gap:10px}
+    .map-shell{height:420px;position:relative;overflow:hidden;background:#030713}
+    .map-shell::after{content:"";position:absolute;inset:15px 14px;z-index:4;border:1px solid rgba(101,185,255,.13);pointer-events:none}
+    .amap{position:absolute;inset:0}
+    .amap-logo,.amap-copyright{display:none!important}
+    #amap .amap-layers{filter:brightness(.74) saturate(.72) contrast(1.2)}
+    .map-label{position:absolute;z-index:5;top:19px;left:19px;color:#a7c8ff;font:600 12px/1 monospace;letter-spacing:1.8px}
+    .map-label::before{content:"";display:inline-block;width:6px;height:6px;margin-right:7px;background:var(--purple);box-shadow:0 0 9px var(--purple)}
+    .map-stats{position:absolute;z-index:5;right:15px;top:14px;display:grid;grid-template-columns:auto auto;grid-template-rows:1fr auto;column-gap:8px;align-items:center;padding:8px 12px 8px 15px;border-left:3px solid var(--cyan);background:linear-gradient(90deg,rgba(8,14,35,.9),rgba(8,14,35,.32));line-height:1}
+    .map-stats strong{grid-row:1 / 3;color:#f5f8ff;font:800 55px/.77 "DIN Alternate","PingFang SC",sans-serif;letter-spacing:-3px;text-shadow:0 0 25px rgba(89,196,255,.36)}
+    .map-stats b{font-size:16px;letter-spacing:1px}
+    .map-stats span{display:block;margin-top:7px;color:#85dff7;font:700 11px/1 monospace;letter-spacing:1.4px}
+    .map-panorama{position:absolute;z-index:7;right:16px;top:99px;display:inline-flex;align-items:center;gap:9px;padding:9px 13px;border:1px solid rgba(105,211,255,.62);background:rgba(5,14,36,.82);color:#dff8ff;text-decoration:none;font:700 12px/1 "PingFang SC","Microsoft YaHei",sans-serif;letter-spacing:1px;box-shadow:0 0 18px rgba(62,198,255,.15);transition:transform .2s ease,background .2s ease,border-color .2s ease,box-shadow .2s ease}
+    .map-panorama::before{content:"";width:7px;height:7px;border:1px solid #72e8ff;border-radius:50%;box-shadow:0 0 9px #45d7ff}
+    .map-panorama:hover{transform:translateY(-2px);border-color:#b5f4ff;background:rgba(24,74,133,.88);box-shadow:0 0 24px rgba(62,198,255,.3)}
+    .link-feed{position:absolute;z-index:6;left:17px;bottom:15px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;width:440px;height:142px;overflow:hidden;pointer-events:none}
+    .link-item{position:relative;display:flex;gap:7px;align-items:center;flex:0 0 22px;height:22px;padding:0 8px;border-left:2px solid #8b70ff;background:linear-gradient(90deg,rgba(11,17,43,.86),rgba(12,18,46,.44),transparent);color:rgba(219,233,255,.75);font-size:10px}
+    .link-item::before{content:"";width:4px;height:4px;flex:0 0 auto;border-radius:50%;background:#a88cff;box-shadow:0 0 7px #a88cff}
+    .link-item b{min-width:92px;color:#c7b8ff}
+    .link-item span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+    .ledger{display:grid;grid-template-columns:1fr 1fr;gap:10px;min-height:0;flex:1}
+    .rank{padding-bottom:8px}
+    .rank-list{padding:8px 13px}
+    .rank-row{height:24px;display:grid;grid-template-columns:22px minmax(0,1fr) 62px;gap:5px;align-items:center;font-size:11px;cursor:default}
+    .rank-row:hover{background:linear-gradient(90deg,rgba(126,90,243,.16),transparent)}
+    .rank-num{display:grid;place-items:center;width:18px;height:18px;color:#b49dff;background:rgba(139,105,244,.19);font:700 10px monospace}
+    .rank-name{overflow:hidden;color:rgba(237,243,255,.8);white-space:nowrap;text-overflow:ellipsis}
+    .rank-stars{display:flex;justify-content:flex-end;gap:1px;color:rgba(129,145,202,.25);font-size:13px}
+    .rank-stars .on{color:#ad91ff;text-shadow:0 0 8px rgba(159,129,255,.62)}
+    .rank-track{height:3px;background:rgba(157,188,255,.1)}
+    .rank-fill{display:block;height:100%;background:linear-gradient(90deg,#7e5af3,#32c5f4)}
+    .rank-value{color:#a990ff;font:700 12px monospace;text-align:right}
+
+    .usage{height:240px;display:flex;flex-direction:column}
+    .hot-apps{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:63px 1fr 1fr;flex:1;gap:6px;padding:9px 12px 12px}
+    .hot-app{position:relative;min-width:0;padding:10px 9px;border:1px solid rgba(106,150,243,.18);background:linear-gradient(135deg,rgba(25,38,81,.72),rgba(10,17,39,.52));cursor:default}
+    .hot-app:hover{border-color:rgba(89,211,255,.55);background:linear-gradient(135deg,rgba(43,61,125,.8),rgba(14,25,58,.68))}
+    .hot-main{grid-column:1 / 3;padding:10px 12px;border-color:rgba(135,112,255,.44);background:radial-gradient(circle at 90% 25%,rgba(109,79,243,.34),transparent 32%),linear-gradient(105deg,rgba(46,35,94,.9),rgba(13,23,53,.64))}
+    .hot-rank{display:block;margin-bottom:3px;color:rgba(172,197,255,.52);font:700 11px/1 monospace;letter-spacing:1px}
+    .hot-name{display:block;overflow:hidden;color:#eaf2ff;font-size:13px;font-weight:700;white-space:nowrap;text-overflow:ellipsis}
+    .hot-main .hot-name{font-size:16px}
+    .hot-value{position:absolute;top:9px;right:9px;color:#9a82ff;font:700 17px/1 "DIN Alternate","PingFang SC",sans-serif}
+    .hot-main .hot-value{top:12px;right:12px;color:#f4f6ff;font-size:28px;text-shadow:0 0 14px rgba(142,120,255,.5)}
+    .hot-value small{margin-left:2px;color:rgba(216,229,255,.58);font-size:10px}
+    .resource-panel{overflow:visible}
+    .subject{height:175px}
+    .subject-body{height:130px;display:grid;grid-template-columns:115px 1fr;align-items:center;padding:0 13px}
+    .subject-chart{height:115px}
+    .legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;color:rgba(237,243,255,.72);font-size:12px}
+    .legend span::before{content:"";display:inline-block;width:6px;height:6px;margin-right:5px;background:#9e82ff;box-shadow:0 0 5px #9e82ff}
+    .legend span:nth-child(2)::before{background:#32c5f4;box-shadow:0 0 5px #32c5f4}
+    .legend span:nth-child(3)::before{background:#f8de58;box-shadow:0 0 5px #f8de58}
+    .legend span:nth-child(4)::before{background:#d66ac5;box-shadow:0 0 5px #d66ac5}
+    .resource-subject{flex:1;min-height:0}
+    .resource-subject-chart{height:calc(100% - 39px);min-height:160px}
+
+    .school-signal{position:relative;display:block;width:12px;height:12px;overflow:visible}
+    .school-dot{position:absolute;z-index:1;bottom:0;left:1px;width:10px;height:10px;border:1px solid #fff;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff 0 18%,#e8dcff 30%,#9e82ff 68%,#714ed8);box-shadow:0 0 7px 2px rgba(238,225,255,.96),0 0 17px 6px rgba(158,130,255,.66);animation:pulse 2.3s ease-in-out infinite;animation-delay:var(--delay)}
+    .teacher-column{position:absolute;z-index:0;bottom:6px;left:4px;width:4px;height:var(--h);transform:scaleY(.1);transform-origin:bottom;border-radius:3px 3px 0 0;background:linear-gradient(0deg,#7652ec,#9e82ff 48%,#32c5f4);box-shadow:0 0 10px rgba(50,197,244,.84);opacity:0;transition:opacity .18s,transform .22s ease}
+    .teacher-column b{position:absolute;bottom:calc(100% + 4px);left:50%;padding:1px 3px;transform:translateX(-50%);border:1px solid rgba(114,208,255,.35);border-radius:3px;background:rgba(7,12,29,.82);color:#eaf5ff;font:700 9px/1 monospace;opacity:0}
+    .school-signal:hover .teacher-column{transform:scaleY(1);opacity:1}
+    .school-signal:hover .teacher-column b{opacity:1}
+    .school-label{color:#b59dff;font:600 10px "PingFang SC";text-shadow:0 0 8px rgba(158,130,255,.98),0 1px 3px #05060b}
+    .amap-marker-label{padding:0!important;border:0!important;background:transparent!important}
+    .school-tip{width:204px;padding:12px 13px;border:2px solid #9e82ff;border-radius:12px;background:linear-gradient(145deg,rgba(50,35,89,.98),rgba(18,18,43,.98));color:#fff;box-shadow:0 12px 30px rgba(0,0,0,.45)}
+    .school-tip h3{margin:0 0 9px;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .tip-main{padding:7px;text-align:center;border-radius:7px;background:rgba(155,123,255,.16);color:#d9ceff;font-size:10px}
+    .tip-main b{display:block;font-size:18px}
+    .tip-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:9px;font-size:10px;color:#d9dfff}
+    .tip-grid strong{color:#39caf7;font-size:14px}.tip-grid strong.p{color:#b69fff}
+    .school-enter{display:flex;align-items:center;justify-content:space-between;margin-top:11px;padding:8px 10px;border:1px solid rgba(99,211,255,.48);background:linear-gradient(90deg,rgba(84,65,194,.34),rgba(34,170,236,.12));color:#edf7ff;text-decoration:none;font-size:11px;font-weight:700}
+    .school-enter::after{content:"→";color:#70ddff;font-size:15px}
+
+    .floating{position:fixed;z-index:5000;width:318px;max-width:calc(100vw - 28px);padding:14px 16px;border:1px solid rgba(103,205,255,.72);border-left:3px solid #4ed1fb;background:radial-gradient(circle at 100% 0,rgba(55,119,211,.3),transparent 45%),linear-gradient(145deg,rgba(17,37,76,.99),rgba(8,14,34,.99));box-shadow:0 18px 42px rgba(0,0,0,.5);color:rgba(225,236,255,.86);font-size:12px;line-height:1.65;opacity:0;pointer-events:none;transform:translateY(5px);transition:.14s}
+    .floating.show{opacity:1;transform:translateY(0)}
+    .floating small{display:block;margin-bottom:7px;color:#83dcff;font:700 9px/1 monospace;letter-spacing:1.7px}
+    .floating b{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px;color:#f4f1ff;font-size:15px;line-height:1.2}
+    .floating b i{padding:3px 6px;border:1px solid rgba(140,120,255,.45);background:rgba(130,101,239,.16);color:#bdadff;font:700 10px/1 monospace}
+    .floating p{margin:0}.floating strong{color:#59d8ff;font-size:15px}
+    .resource-tip{width:340px!important;max-width:calc(100vw - 28px)!important;padding:16px 18px!important;border:1px solid rgba(103,205,255,.75)!important;border-left:3px solid #4ed1fb!important;background:linear-gradient(145deg,rgba(17,37,76,.99),rgba(8,14,34,.99))!important;box-shadow:0 16px 34px rgba(0,0,0,.44)!important;color:#e9f3ff!important;font:14px/1.65 "PingFang SC","Microsoft YaHei",sans-serif!important;white-space:normal!important;overflow-wrap:anywhere!important}
+    .resource-tip .tip-tag{display:block;margin-bottom:6px;color:#7fe6ff;font:700 9px/1 monospace;letter-spacing:1.7px}
+    .resource-tip .tip-title{display:flex;justify-content:space-between;gap:10px;margin-bottom:8px;color:#fff;font-size:15px;font-weight:700}
+    .resource-tip .tip-value{color:#75ddff;font:700 11px/1 monospace}.resource-tip strong{color:#bdaaff;font-size:15px}
+    .resource-tip:empty,.resource-tip[style*="visibility: hidden"],.resource-tip[style*="visibility:hidden"]{display:none!important}
+    .amap-toolbar,.amap-toolbar .amap-zoomcontrol,.amap-toolbar .amap-zoomcontrol-plus,.amap-toolbar .amap-zoomcontrol-minus,.amap-toolbar .amap-toolbar-control{border-color:rgba(207,217,232,.32)!important;background:#3a4250!important;box-shadow:0 8px 18px rgba(0,0,0,.32)!important;transition:background .16s,border-color .16s!important}
+    .amap-toolbar .amap-zoomcontrol-plus,.amap-toolbar .amap-zoomcontrol-minus{color:#f3f6fb!important}
+    .amap-toolbar .amap-zoomcontrol-plus:hover,.amap-toolbar .amap-zoomcontrol-minus:hover,.amap-toolbar .amap-toolbar-control:hover{border-color:rgba(255,255,255,.72)!important;background:#5a6575!important}
+    .amap-toolbar div:hover,.amap-toolbar a:hover{background:#5a6575!important;color:#f5f7fb!important}
+    .amap-toolbar img{filter:grayscale(1) contrast(1.15) brightness(2.25)!important}
+
+    @keyframes pulse{0%,100%{transform:scale(.82)}50%{transform:scale(1.28)}}
+    html.presentation-fullscreen,html.presentation-fullscreen body{min-width:0;min-height:0;overflow:hidden}
+    html.presentation-fullscreen .screen{position:absolute;top:50%;left:50%;margin:0;transform:translate(-50%,-50%) scale(var(--fit-scale,1));transform-origin:center}
+    @media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+  </style>
+</head>
+<body>
+  <main class="screen">
+    <header class="top">
+      <div class="controls">
+        <button class="range on" data-days="7">7 天</button><button class="range" data-days="30">30 天</button><button class="range" data-days="90">90 天</button>
+      </div>
+      <div class="title"><h1>上海市虹口区 <b>AI+ 教育</b> 智能体导航</h1></div>
+      <button id="fullscreen" class="fullscreen" aria-label="全屏展示" title="全屏展示">⛶</button>
+    </header>
+
+    <section class="metrics">
+      <div class="metric"><strong id="schools">153</strong><em>所</em><span>接入学校<i>↑ 8.5%</i></span></div>
+      <div class="metric"><strong id="teachers">752</strong><em>人</em><span>活跃教师<i>↑ 12.3%</i></span></div>
+      <div class="metric"><strong id="students">18,968</strong><em>人</em><span>服务学生<i>↑ 15.7%</i></span></div>
+      <div class="metric"><strong id="services">104,752</strong><em>次</em><span>AI 服务调用<i>↑ 23.4%</i></span></div>
+    </section>
+
+    <section class="grid">
+      <aside class="side">
+        <article class="panel trend">
+          <div class="phead"><h2>区域使用趋势</h2><div class="tabset"><button class="on" data-mode="student">学生</button><button data-mode="teacher">教师</button></div></div>
+          <div id="trend" class="chart"></div>
+        </article>
+        <article class="panel capability">
+          <div class="phead"><h2>高频 AI 能力</h2><label id="cap-period">近 7 天 · 次数 / 占比</label></div>
+          <div id="cap-list" class="cap-list"></div>
+        </article>
+      </aside>
+
+      <section class="command">
+        <div class="map-shell">
+          <div id="amap" class="amap"></div>
+          <div class="map-label">飞象老师校园版实时活跃</div>
+          <div class="map-stats"><strong>18</strong><div><b>所中学</b><span>实时活跃</span></div></div>
+          <a class="map-panorama" href="飞象老师区域教育未来城.html" aria-label="进入虹口区 AI 教育未来城全景">看全景 <span aria-hidden="true">↗</span></a>
+          <div id="link-feed" class="link-feed"></div>
+        </div>
+        <div class="ledger">
+          <article class="panel rank"><div class="phead"><h2>学校累计创作指数</h2></div><div id="school-rank" class="rank-list"></div></article>
+          <article class="panel rank"><div class="phead"><h2>教师资源贡献榜</h2></div><div id="teacher-rank" class="rank-list"></div></article>
+        </div>
+      </section>
+
+      <aside class="side">
+        <article class="panel usage"><div class="phead"><h2>区域热门 AI 应用</h2></div><div id="hot-apps" class="hot-apps"></div></article>
+        <article class="panel resource-panel subject"><div class="phead"><h2>区域资源类型雷达</h2><label id="type-total"></label></div><div class="subject-body"><div id="type-chart" class="subject-chart"></div><div id="type-legend" class="legend"></div></div></article>
+        <article class="panel resource-panel resource-subject"><div class="phead"><h2>区域资源学科雷达</h2><label>按学科分类 · 份</label></div><div id="subject-chart" class="resource-subject-chart"></div></article>
+      </aside>
+    </section>
+  </main>
+  <div id="floating" class="floating"></div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    const fmt = value => Math.round(value).toLocaleString();
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const data = Array.from({length: 90}, (_, index) => {
+      const date = new Date(today);
+      date.setDate(today.getDate() - 89 + index);
+      const student = Math.max(1300, 3000 + Math.round(Math.sin(index / 7) * 840 + index * 14 + (index % 7) * 170));
+      const teacher = Math.max(90, 205 + Math.round(Math.sin(index / 4.8) * 48 + Math.cos(index / 10) * 26 + index * 2.15 + (index % 6) * 11));
+      return {date, student, teacher, services: Math.round(student * 5.65)};
+    });
+    const capabilityBase = [
+      ['AI 生成题目', 386, '#2dd4b5'], ['AI 生成动画', 324, '#32c5f4'], ['知识库问答', 308, '#f8b840'],
+      ['AI 生成游戏', 268, '#e27090'], ['AI 生成课件', 256, '#9e82ff'], ['AI 分析作文', 228, '#2dd4b5']
+    ];
+    const appsBase = [
+      ['虹智 AI 作文陪练', 36146, '作文构思、分层陪练与表达提升使用最集中。'],
+      ['智能作业批改', 29229, '语文与数学作业是最主要场景。'],
+      ['几何助教', 10605, '几何图形推演、辅助作图与错题讲解最活跃。'],
+      ['拍照答疑', 9652, '晚间时段的错题提问更集中。'],
+      ['AI 视频讲解', 6946, '重点服务难题复盘和知识点巩固。']
+    ];
+    const schools = [
+      ['上海市钟山初级中学',121.4698,31.2915],['上海市江湾初级中学',121.4814,31.3022],['上海市复兴实验中学',121.4758,31.2724],['上海市虹口区教育学院实验中学',121.4959,31.2841],['上海市第五中学',121.5010,31.3090],['上海市曲阳第二中学',121.5008,31.2940],['上海市虹口区教育学院附属中学',121.4680,31.2740],['上海市北虹初级中学',121.4720,31.2940],['上海市海南中学',121.4924,31.2897],['上海市丰镇中学',121.4847,31.3096],['上海市澄衷初级中学',121.4996,31.2686],['上海市鲁迅初级中学',121.4818,31.2662],['上海市继光初级中学',121.4629,31.2741],['华东师范大学第一附属初级中学',121.4852,31.2778],['上海外国语大学附属外国语学校(初中)',121.4760,31.2740],['上海市第五十二中学(初中)',121.5070,31.2795],['上海外国语大学附属外国语学校东校',121.4790,31.2670],['上海市北郊学校(初中)',121.4999,31.3052],['上海市霍山学校(初中)',121.4750,31.2680],['上海市长青学校',121.4780,31.2590],['上海市培华学校',121.4640,31.2810],['上海市虹口实验学校',121.4860,31.2870],['上海市虹口区密云学校',121.4800,31.2840]
+    ];
+    let mode = 'student';
+    let activeDays = 7;
+    let trendChart, typeChart, subjectChart;
+
+    function selectedData() { return data.slice(-activeDays); }
+    function scaleFor(days) { return .5 + Math.min(1, days / 90) * .5; }
+    function animateNumber(id, target) {
+      const element = $(id);
+      const from = Number(element.dataset.value || 0);
+      const start = performance.now();
+      element.dataset.value = target;
+      const step = now => {
+        const progress = Math.min(1, (now - start) / 650);
+        element.textContent = fmt(from + (target - from) * (1 - Math.pow(1 - progress, 3)));
+        if (progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+    function floatingAt(event, title, value, body, tag = '数据洞察') {
+      const card = $('floating');
+      card.innerHTML = `<small>${tag}</small><b>${title}<i>${value}</i></b><p>${body}</p>`;
+      const width = 318;
+      card.style.left = `${Math.max(14, Math.min(event.clientX + 16, innerWidth - width - 14))}px`;
+      card.style.top = `${Math.max(14, Math.min(event.clientY - 20, innerHeight - 180))}px`;
+      card.classList.add('show');
+    }
+    function hideFloating() { $('floating').classList.remove('show'); }
+
+    function renderCapabilities(period, scale) {
+      const values = capabilityBase.map(([name, value, color], index) => [name, Math.round(value * scale * (1 + (index - 2) * .012)), color]);
+      const max = Math.max(...values.map(([, value]) => value));
+      const total = values.reduce((sum, [, value]) => sum + value, 0);
+      $('cap-period').textContent = `${period} · 次数 / 占比`;
+      $('cap-list').innerHTML = values.map(([name, value, color], index) => `
+        <div class="cap-row" data-index="${index}">
+          <span class="cap-order">0${index + 1}</span><span class="cap-name">${name}</span>
+          <i class="cap-track"><b class="cap-fill" style="--color:${color};width:${Math.round(value / max * 100)}%"></b></i>
+          <span class="cap-value"><b>${fmt(value)}</b>次 · ${Math.round(value / total * 100)}%</span>
+        </div>`).join('');
+      document.querySelectorAll('.cap-row').forEach((row, index) => {
+        row.onmouseenter = event => floatingAt(event, values[index][0], row.querySelector('.cap-value').textContent.trim(), `${period}累计数据；${['主要用于单元测评与分层练习。','课前导入与知识可视化使用最集中。','主要来自数学、语文与外语学科问答。','已有教学游戏进入学校资源广场。','已有课件进入学校资源广场。','作文批注与写作评价是主要场景。'][index]}`, '能力数据简报');
+        row.onmousemove = event => floatingAt(event, values[index][0], row.querySelector('.cap-value').textContent.trim(), `${period}累计数据`, '能力数据简报');
+        row.onmouseleave = hideFloating;
+      });
+    }
+    function renderApps(period, scale) {
+      const values = appsBase.map(([name, value, copy], index) => [name, Math.round(value * scale * (1 + (index - 2) * .018)), copy]);
+      $('hot-apps').innerHTML = values.map(([name, value], index) => `
+        <div class="hot-app ${index === 0 ? 'hot-main' : ''}" data-index="${index}">
+          <span class="hot-rank">${index === 0 ? '热门应用 01' : `0${index + 1}`}</span><span class="hot-name">${name}</span>
+          <b class="hot-value">${fmt(value)}<small>次</small></b>
+        </div>`).join('');
+      document.querySelectorAll('.hot-app').forEach((card, index) => {
+        const [name, value, copy] = values[index];
+        card.onmouseenter = event => floatingAt(event, name, `${fmt(value)} 次`, `${period}累计使用；${copy}`, '区域应用热度');
+        card.onmousemove = event => floatingAt(event, name, `${fmt(value)} 次`, `${period}累计使用；${copy}`, '区域应用热度');
+        card.onmouseleave = hideFloating;
+      });
+    }
+    function resourceTooltip(tag, title, value, copy) {
+      return `<span class="tip-tag">${tag}</span><div class="tip-title">${title}<i class="tip-value">${value}</i></div><div>${copy}</div>`;
+    }
+    function updateResources(days) {
+      const scale = .82 + Math.min(1, days / 90) * .18;
+      const typeNames = ['题单', 'WIKI', '文件', '应用', '课件'];
+      const typeColors = ['#9e82ff', '#32c5f4', '#f8de58', '#d66ac5', '#2dd4b5'];
+      const typeValues = [2860, 1840, 1360, 920, 780].map((value, index) => Math.round(value * scale * (1 + (index - 2) * .015)));
+      const typeTotal = typeValues.reduce((sum, value) => sum + value, 0);
+      $('type-total').textContent = `${fmt(typeTotal)} 份`;
+      $('type-legend').innerHTML = typeNames.map((name, index) => `<span>${name} ${fmt(typeValues[index])}</span>`).join('');
+      typeChart.setOption({
+        title: {text: fmt(typeTotal)},
+        series: [{data: typeNames.map((name, index) => ({name, value: typeValues[index], itemStyle: {color: typeColors[index]}}))}]
+      });
+      const profiles = {
+        7: [2080,2140,2010,1860,2820,2980,1740,1680],
+        30: [2360,2980,2440,2150,2090,2230,1810,1650],
+        90: [3000,2640,2520,2280,2200,2390,1940,1810]
+      };
+      const profile = days <= 18 ? 7 : days <= 60 ? 30 : 90;
+      const subjectNames = ['语文','数学','外语','物理','化学','跨学科案例分析','道德与法治','历史'];
+      const values = profiles[profile];
+      const total = values.reduce((sum, value) => sum + value, 0);
+      const leaderIndex = values.indexOf(Math.max(...values));
+      const conclusion = profile === 7 ? '跨学科案例分析与化学在短周期内活跃度最高。' : profile === 30 ? '数学在月度资源沉淀中占据主导。' : '语文在季度资源沉淀中占据主导。';
+      subjectChart.setOption({
+        tooltip: {formatter: () => resourceTooltip('学科资源洞察', '区域资源学科分布', `共 ${fmt(total)} 份`, `近 ${days} 天内，<strong>${subjectNames[leaderIndex]}</strong>资源沉淀最突出，为 <strong>${fmt(values[leaderIndex])}</strong> 份。<br/>${conclusion}`)},
+        series: [{data: [{value: values}]}]
+      });
+    }
+    function renderRanks(scale) {
+      const schoolRows = [
+        ['虹口区实验学校', '已累计沉淀 42 项资源：4 个教学应用、17 份题单、12 套课件及 9 份校本文件。'],
+        ['上海市鲁迅初级中学', '已累计沉淀 38 项资源，其中「错因追踪」应用被 7 所学校复用。'],
+        ['上海市北郊学校', '已累计沉淀 31 项跨学科资源包，覆盖课件、任务单与课堂活动。'],
+        ['教育学院实验中学', '已累计沉淀 29 项科学探究资源，「实验报告生成器」覆盖多个年级。'],
+        ['上海市继光初级中学', '已累计沉淀 26 项知识库问答与课堂讲解资源。'],
+        ['上海市丰镇中学', '已累计沉淀 22 项英语教学资源，含游戏、题单和评价量表。']
+      ];
+      const teachers = [
+        ['王红敏 · 虹口实验',42,'古诗文闯关','9.6 万','1.8 万'],['刘国顺 · 鲁迅初中',38,'错因追踪','6.5 万','1.2 万'],
+        ['陈欣 · 北郊学校',31,'项目式学习资源包','5.8 万','0.9 万'],['黄婷婷 · 继光初中',29,'课堂讲解知识库','4.9 万','0.8 万'],
+        ['廖钦尧 · 丰镇中学',26,'词汇大闯关','4.2 万','0.7 万'],['赵老师 · 江湾初中',22,'作文批注模板','3.8 万','0.6 万']
+      ];
+      $('school-rank').innerHTML = schoolRows.map(([name, note], index) => {
+        const stars = 5 - Math.floor(index / 2);
+        return `<div class="rank-row" data-note="${note}" data-name="${name}" data-value="${stars} 星资源沉淀"><span class="rank-num">${index + 1}</span><span class="rank-name">${name}</span><span class="rank-stars">${Array.from({length:5}, (_, star) => `<i class="${star < stars ? 'on' : ''}">★</i>`).join('')}</span></div>`;
+      }).join('');
+      $('teacher-rank').innerHTML = teachers.map(([name, amount, work, views, favorites], index) => {
+        const value = Math.round(amount * scale);
+        return `<div class="rank-row" data-name="${name}" data-value="${value} 份" data-note="累计沉淀 ${value} 份资源。" data-work="${work}" data-views="${views}" data-favorites="${favorites}"><span class="rank-num">${index + 1}</span><span class="rank-name">${name}</span><span class="rank-value">${value}份</span></div>`;
+      }).join('');
+      document.querySelectorAll('.rank-row').forEach(row => {
+        row.onmouseenter = event => {
+          const extra = row.dataset.work ? `<br/>最热门作品：<strong>${row.dataset.work}</strong><br/>浏览 ${row.dataset.views} · 收藏 ${row.dataset.favorites}` : '';
+          floatingAt(event, row.dataset.name, row.dataset.value, `${row.dataset.note}${extra}`, row.dataset.work ? '教师资源贡献画像' : '学校累计创作画像');
+        };
+        row.onmousemove = event => floatingAt(event, row.dataset.name, row.dataset.value, row.dataset.note, '资源画像');
+        row.onmouseleave = hideFloating;
+      });
+    }
+    function updateDashboard() {
+      const rows = selectedData();
+      if (!rows.length) return;
+      const days = rows.length;
+      const scale = scaleFor(days);
+      const period = `近 ${days} 天`;
+      animateNumber('schools', 153 * Math.max(.35, Math.min(1, days / 30)));
+      animateNumber('teachers', 752 * Math.max(.35, Math.min(1, days / 30)));
+      animateNumber('students', 18968 * Math.max(.35, Math.min(1, days / 30)));
+      animateNumber('services', rows.reduce((sum, row) => sum + row.services, 0));
+      trendChart.setOption({xAxis: {data: rows.map(row => `${row.date.getMonth()+1}.${row.date.getDate()}`)}, series: [{data: rows.map(row => row[mode])}]});
+      renderCapabilities(period, scale);
+      renderApps(period, scale);
+      updateResources(days);
+      renderRanks(scale);
+    }
+    function setRange(days) {
+      activeDays = days;
+      document.querySelectorAll('.range').forEach(button => button.classList.toggle('on', Number(button.dataset.days) === days));
+      updateDashboard();
+    }
+    function initCharts() {
+      trendChart = echarts.init($('trend'));
+      trendChart.setOption({
+        animationDuration: 450,
+        tooltip: {trigger:'axis', backgroundColor:'rgba(12,20,48,.96)', borderColor:'rgba(76,195,255,.62)', borderWidth:1, textStyle:{color:'#edf5ff',fontSize:10}, formatter: points => `<b>${points[0].axisValue}</b><br/>${mode === 'student' ? '学生' : '教师'}使用人数：<b>${fmt(points[0].data)} 人</b>`},
+        grid:{left:30,right:10,top:16,bottom:25},
+        xAxis:{type:'category',axisLabel:{color:'rgba(212,225,255,.43)',fontSize:9},axisTick:{show:false},axisLine:{lineStyle:{color:'rgba(107,152,232,.2)'}}},
+        yAxis:{type:'value',axisLabel:{color:'rgba(212,225,255,.35)',fontSize:9,formatter:value => value >= 1000 ? `${Math.round(value / 1000)}k` : value},splitLine:{lineStyle:{color:'rgba(107,152,232,.12)'}}},
+        series:[{type:'line',smooth:true,symbol:'none',lineStyle:{width:2,color:'#32c5f4'},areaStyle:{color:new echarts.graphic.LinearGradient(0,0,0,1,[{offset:0,color:'rgba(50,197,244,.3)'},{offset:1,color:'rgba(50,197,244,0)'}])},data:[]}]
+      });
+      typeChart = echarts.init($('type-chart'));
+      typeChart.setOption({
+        animationDuration: 420,
+        tooltip:{trigger:'item',appendToBody:false,confine:false,className:'resource-tip',backgroundColor:'transparent',borderWidth:0,padding:0,formatter: point => resourceTooltip('资源类型洞察', point.name, `${fmt(point.value)} 份`, `占区域资源总量的 <strong>${point.percent}%</strong><br/>${{题单:'面向分层练习与课堂测评，是区域沉淀最完整的资源形态。',WIKI:'沉淀教学知识与学科问答，支持教师快速复用。',文件:'包含校本资料、教案与评价量表等结构化文件。',应用:'由教师自主创作的互动工具，持续进入学校资源广场。',课件:'覆盖课堂导入、知识讲解与课后复习的教学课件。'}[point.name]}`)},
+        title:{text:'',subtext:'份资源',left:'center',top:'31%',textStyle:{color:'#f1f5ff',fontSize:19,fontWeight:700},subtextStyle:{color:'rgba(225,235,255,.52)',fontSize:9}},
+        series:[{type:'pie',radius:['56%','77%'],center:['50%','50%'],label:{show:false},data:[]}]
+      });
+      subjectChart = echarts.init($('subject-chart'));
+      subjectChart.setOption({
+        animationDuration: 500,
+        tooltip:{trigger:'item',appendToBody:false,confine:false,className:'resource-tip',backgroundColor:'transparent',borderWidth:0,padding:0},
+        radar:{center:['50%','54%'],radius:'57%',indicator:['语文','数学','外语','物理','化学','跨学科案例分析','道德与法治','历史'].map(name => ({name,max:3000})),axisName:{color:'rgba(220,235,255,.72)',fontSize:8},splitArea:{areaStyle:{color:['rgba(60,88,169,.04)','rgba(60,88,169,.08)']}},splitLine:{lineStyle:{color:'rgba(112,155,245,.2)'}},axisLine:{lineStyle:{color:'rgba(112,155,245,.2)'}}},
+        series:[{type:'radar',symbol:'circle',symbolSize:3,lineStyle:{color:'#45cffa',width:2},itemStyle:{color:'#b598ff'},areaStyle:{color:'rgba(124,91,242,.3)'},data:[]}]
+      });
+      addEventListener('resize', () => [trendChart,typeChart,subjectChart].forEach(chart => chart.resize()));
+    }
+    function initMap() {
+      const script = document.createElement('script');
+      script.src = 'https://webapi.amap.com/maps?v=2.0&key=3149dfa0e11ebc3c2bb7800ea8b3ff54&plugin=AMap.ToolBar,AMap.DistrictSearch';
+      script.onload = () => {
+        const map = new AMap.Map('amap', {viewMode:'2D',center:[121.486,31.281],zoom:13.2,mapStyle:'amap://styles/dark',scrollWheel:true,dragEnable:true,keyboardEnable:true,zoomEnable:true});
+        map.addControl(new AMap.ToolBar({position:{right:'14px',bottom:'17px'}}));
+        map.on('complete', () => {
+          map.setFeatures(['bg','road','building']);
+          AMap.plugin('AMap.DistrictSearch', () => {
+            const search = new AMap.DistrictSearch({extensions:'all',level:'district',subdistrict:0});
+            search.search('虹口区', (status, result) => {
+              const boundaries = result?.districtList?.[0]?.boundaries || [];
+              if (status !== 'complete' || !boundaries.length) return;
+              const polygons = boundaries.map(path => new AMap.Polygon({path,strokeColor:'#9e82ff',strokeWeight:2,strokeOpacity:.9,fillColor:'#9e82ff',fillOpacity:.14,zIndex:20}));
+              map.add(polygons);
+              map.setFitView(polygons, [40,40,40,40]);
+            });
+          });
+        });
+        const info = new AMap.InfoWindow({isCustom:true,autoMove:false,offset:new AMap.Pixel(0,-9)});
+        let closeTimer;
+        const keep = () => clearTimeout(closeTimer);
+        const close = () => { keep(); closeTimer = setTimeout(() => info.close(), 480); };
+        schools.forEach(([name,lng,lat], index) => {
+          const teachers = 20 + index * 3;
+          const marker = new AMap.Marker({
+            position:[lng,lat],
+            content:`<span class="school-signal" style="--h:${16+Math.round(teachers*.7)}px;--delay:-${(index%7*.32).toFixed(2)}s"><i class="teacher-column"><b>${teachers}</b></i><i class="school-dot"></i></span>`,
+            offset:new AMap.Pixel(-6,-6),zIndex:200
+          });
+          marker.setLabel({direction:'right',offset:new AMap.Pixel(7,-4),content:`<span class="school-label">${name.replace(/^上海市|^上海/,'')}</span>`});
+          marker.setMap(map);
+          const open = () => {
+            keep();
+            const reuses = 46 + index * 13;
+            const dialogues = 38 + index * 17;
+            const apps = 2 + index % 7;
+            info.setContent(`<div class="school-tip"><h3>${name}</h3><div class="tip-main"><b>${reuses}个</b>资源复用</div><div class="tip-grid"><span>使用老师 <strong class="p">${teachers}</strong>位</span><span>AI 对话 <strong>${dialogues}</strong>个</span><span>应用创作 <strong class="p">${apps}</strong>个</span></div><a class="school-enter" target="_blank" rel="noopener" href="飞象老师校园版学校驾驶舱.html?school=${encodeURIComponent(name)}">进入学校驾驶舱</a></div>`);
+            info.open(map,[lng,lat]);
+            setTimeout(() => { const card = document.querySelector('.school-tip'); if (card) { card.onmouseenter = keep; card.onmouseleave = close; } }, 0);
+          };
+          marker.on('mouseover', open);
+          marker.on('mouseout', close);
+          marker.on('click', () => window.open(`飞象老师校园版学校驾驶舱.html?school=${encodeURIComponent(name)}`, '_blank', 'noopener'));
+        });
+      };
+      document.head.appendChild(script);
+    }
+    function startFeed() {
+      const events = [
+        ['虹口区实验学校','王老师刚完成「语文」AI 教学设计，并同步至区域资源库'],
+        ['上海市鲁迅初级中学','八年级学生正在使用 AI 讲解完成错因复盘'],
+        ['教育学院实验中学','科学实验报告已发布，等待跨校教师引用'],
+        ['上海市北郊学校','新增 4 份互动课件，已进入区域资源沉淀池'],
+        ['上海市继光初级中学','李老师完成「英语」词汇闯关应用并发布'],
+        ['上海市丰镇中学','七年级正在使用几何助教完成图形推演'],
+        ['上海市钟山初级中学','陈老师将 2 份题单沉淀至校本资源库'],
+        ['上海市江湾初级中学','AI 作文陪练新增 18 次学生有效对话'],
+        ['上海市曲阳第二中学','教研组复用了「实验报告生成器」'],
+        ['上海市澄衷初级中学','物理错因讲解已被 3 位教师调用'],
+        ['上海市海南中学','刘老师发布跨学科案例分析资源包'],
+        ['华东师范大学第一附属初级中学','学生完成 AI 视频讲解的知识点复盘']
+      ];
+      let index = 0;
+      const push = (animate = true) => {
+        const feed = $('link-feed');
+        const previous = new Map([...feed.children].map(row => [row, row.getBoundingClientRect()]));
+        const [school, detail] = events[index++ % events.length];
+        const item = document.createElement('div');
+        item.className = 'link-item';
+        item.innerHTML = `<b>${school}</b><span>${detail}</span>`;
+        feed.appendChild(item);
+        while (feed.children.length > 5) feed.firstElementChild.remove();
+        if (!animate) return;
+        [...feed.children].forEach(row => {
+          const before = previous.get(row);
+          const after = row.getBoundingClientRect();
+          if (!before) {
+            row.animate([{opacity:0,transform:'translateY(14px)'},{opacity:1,transform:'translateY(0)'}], {duration:480,easing:'cubic-bezier(.2,.75,.25,1)',fill:'both'});
+            return;
+          }
+          const delta = before.top - after.top;
+          if (delta) row.animate([{transform:`translateY(${delta}px)`},{transform:'translateY(0)'}], {duration:680,easing:'cubic-bezier(.2,.72,.25,1)',fill:'both'});
+        });
+      };
+      Array.from({length:5}).forEach(() => push(false));
+      setInterval(() => push(true), 1700);
+    }
+    function fitFullscreen() {
+      const active = Boolean(document.fullscreenElement);
+      document.documentElement.classList.toggle('presentation-fullscreen', active);
+      if (active) document.documentElement.style.setProperty('--fit-scale', Math.min(innerWidth / 1600, innerHeight / 900).toFixed(4));
+      else document.documentElement.style.removeProperty('--fit-scale');
+    }
+    function boot() {
+      initCharts();
+      setRange(7);
+      startFeed();
+      initMap();
+      document.querySelectorAll('.range').forEach(button => button.onclick = () => setRange(Number(button.dataset.days)));
+      document.querySelectorAll('.tabset button').forEach(button => button.onclick = () => {
+        document.querySelectorAll('.tabset button').forEach(item => item.classList.remove('on'));
+        button.classList.add('on');
+        mode = button.dataset.mode;
+        updateDashboard();
+      });
+      $('fullscreen').onclick = () => document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen();
+      addEventListener('resize', fitFullscreen);
+      document.addEventListener('fullscreenchange', fitFullscreen);
+    }
+    boot();
+  </script>
+</body>
+</html>
