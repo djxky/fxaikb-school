@@ -537,7 +537,7 @@
         <a class="fx-workspace" href="${isHomePage ? '#' : 'index.html'}" ${isHomePage ? 'onclick="event.preventDefault()"' : ''} title="回到首页">
           <div class="fx-ws-main">
             <div class="fx-school-logo">实</div>
-            <div class="fx-school-name">北京市实验中学</div>
+          <div class="fx-school-name">虹口区教育局</div>
           </div>
           <div class="fx-ws-footer">
             <div class="fx-power-by">
@@ -566,7 +566,7 @@
 
       <div class="fx-nav-section">管理</div>
       ${navItem({ key: 'school-dashboard', icon: ICONS.dashboard, label: '区域数据看板', href: '飞象老师区域AI教育指挥中枢.html', activeKey })}
-      ${navItem({ key: 'admin-teachers', icon: ICONS.shield, label: '学校管理', href: 'admin-teachers.html', activeKey })}
+      ${navItem({ key: 'admin-teachers', icon: ICONS.shield, label: '区域学校管理', href: 'school-selector.html', activeKey })}
 
       <div class="fx-spacer"></div>
 
