@@ -2016,6 +2016,7 @@ function renderPersonalFolderView(){
           <i data-lucide="${escHtml(FILE_ICON_MAP[file.icon] || 'file')}"></i>
           <span class="fv-file-name">${escHtml(file.name)}</span>
           ${file.isGuide ? '<span class="fv-tag-guide">官方</span>' : ''}
+          ${renderKbAuditBadge(file)}
         </div>
       </td>
       <td class="col-by">${escHtml(file.source || '')}</td>
@@ -2140,6 +2141,7 @@ function renderPersonalFolderView(){
       </div>
 
       ${manageBar}
+      ${renderKbStorageBar()}
       ${wikiChips}
 
       <table class="fv-table" id="personal-fv-table">
@@ -2191,25 +2193,26 @@ function personalBackToRoot(){
 }
 
 const KB_UPLOAD_MAX_FILE_SIZE = 100 * 1024 * 1024;
-const KB_UPLOAD_ALLOWED_EXTS = new Set(['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'jpg', 'jpeg', 'png']);
+const KB_UPLOAD_MEDIA_MAX_FILE_SIZE = 300 * 1024 * 1024;
+const KB_UPLOAD_AUDIO_EXTS = new Set(['mp3', 'm4a', 'mp4', 'wav', 'webm', 'ogg', 'oga']);
+const KB_UPLOAD_VIDEO_EXTS = new Set(['mp4', 'mov', 'webm']);
+const KB_UPLOAD_ALLOWED_EXTS = new Set(['pdf', 'doc', 'docx', 'ppt', 'pptx', 'xls', 'xlsx', 'txt', 'csv', 'html', 'jpg', 'jpeg', 'png', 'webp', 'mp3', 'm4a', 'mp4', 'wav', 'webm', 'ogg', 'oga', 'mov']);
 const KB_AUTO_RECORD_EXTS = new Set(['pdf', 'doc', 'docx', 'jpg', 'jpeg', 'png']);
 const KB_UPLOAD_DEMO_FILES = [
   { name:'一年级', ext:'docx', size:26700, path:'编辑题目/一年级.docx' },
   { name:'二年级', ext:'pptx', size:13000, path:'编辑题目/二年级.pptx' },
   { name:'二年级', ext:'docx', size:13000, path:'编辑题目/二年级.docx' },
   { name:'二年级', ext:'docx', size:13000, path:'编辑题目/二年级-复习.docx' },
-  { name:'单元录音', ext:'mp3', size:8000, path:'编辑题目/单元录音.mp3' },
-  { name:'课堂视频', ext:'mp4', size:18000, path:'编辑题目/课堂视频.mp4' },
+  { name:'单元录音', ext:'mp3', size:8 * 1024 * 1024, path:'单元录音.mp3' },
+  { name:'课堂视频', ext:'mp4', size:180 * 1024 * 1024, path:'课堂视频.mp4' },
   { name:'资料压缩包', ext:'zip', size:42000, path:'编辑题目/资料压缩包.zip' },
   { name:'整册资料包', ext:'pptx', size:128 * 1024 * 1024, path:'编辑题目/整册资料包.pptx' },
   { name:'一年级', ext:'docx', size:26700, path:'编辑题目/一年级-补充.docx' },
   { name:'二年级', ext:'pptx', size:13000, path:'编辑题目/二年级-拓展.pptx' },
 ];
 const KB_UPLOAD_FIXED_UNSUPPORTED_FILES = [
-  { name:'单元录音', ext:'mp3', size:8000, path:'编辑题目/单元录音.mp3', reason:'格式不支持' },
-  { name:'课堂视频', ext:'mp4', size:18000, path:'编辑题目/课堂视频.mp4', reason:'格式不支持' },
   { name:'资料压缩包', ext:'zip', size:42000, path:'编辑题目/资料压缩包.zip', reason:'格式不支持' },
-  { name:'整册资料包', ext:'pptx', size:128 * 1024 * 1024, path:'编辑题目/整册资料包.pptx', reason:'超过 100M' },
+  { name:'整册资料包', ext:'pptx', size:128 * 1024 * 1024, path:'编辑题目/整册资料包.pptx', reason:'文件过大' },
 ];
 let _kbUploadState = null;
 let _kbUploadTimer = null;
@@ -2225,9 +2228,19 @@ function getUploadFileIcon(ext, isFolder){
   if(isFolder) return 'folder';
   if(['ppt', 'pptx'].includes(ext)) return 'presentation';
   if(['xls', 'xlsx'].includes(ext)) return 'file-spreadsheet';
-  if(['jpg', 'jpeg', 'png'].includes(ext)) return 'image';
+  if(['jpg', 'jpeg', 'png', 'webp'].includes(ext)) return 'image';
+  if(KB_UPLOAD_AUDIO_EXTS.has(ext) && !KB_UPLOAD_VIDEO_EXTS.has(ext)) return 'audio-lines';
+  if(KB_UPLOAD_VIDEO_EXTS.has(ext)) return 'video';
   if(ext === 'pdf') return 'file-text';
   return 'file';
+}
+
+function isKbMediaExt(ext){
+  return KB_UPLOAD_AUDIO_EXTS.has(ext) || KB_UPLOAD_VIDEO_EXTS.has(ext);
+}
+
+function getKbUploadMaxSize(ext){
+  return isKbMediaExt(ext) ? KB_UPLOAD_MEDIA_MAX_FILE_SIZE : KB_UPLOAD_MAX_FILE_SIZE;
 }
 
 function getKbFileExt(file){
@@ -2256,6 +2269,50 @@ function getKbFileQbankState(file){
   return 'none';
 }
 
+function getKbAuditStatus(file){
+  if(file?.auditStatus) return file.auditStatus;
+  const ext = getKbFileExt(file);
+  const name = String(file?.name || '');
+  if(isKbMediaExt(ext)){
+    if(name.includes('错题剖析') || name.includes('课堂录音')) return 'failed';
+    if(name.includes('教学动画') || name.includes('公开课')) return 'processing';
+    return 'done';
+  }
+  return 'done';
+}
+
+function renderKbStorageBar(){
+  const meta = CURRENT_KB_SCOPE === 'personal'
+    ? { used:'18.6G', total:'100G', pct:18.6 }
+    : { used:'1.8TB', total:'10TB', pct:18 };
+  return `
+    <div class="fv-storage-bar" aria-label="知识库容量">
+      <div class="fv-storage-copy">
+        <span>容量</span>
+        <b>${meta.used} / ${meta.total}</b>
+      </div>
+      <div class="fv-storage-track"><span style="width:${meta.pct}%"></span></div>
+    </div>
+  `;
+}
+
+function getKbRemainingStorageBytes(){
+  if(CURRENT_KB_SCOPE === 'personal') return 81.4 * 1024 * 1024 * 1024;
+  return 8.2 * 1024 * 1024 * 1024 * 1024;
+}
+
+function renderKbAuditBadge(file){
+  const status = getKbAuditStatus(file);
+  const map = {
+    processing: { label:'审核中', cls:'is-processing' },
+    failed: { label:'审核未通过', cls:'is-failed' },
+    done: { label:'完成', cls:'is-done' },
+  };
+  const meta = map[status];
+  if(!meta || status === 'done') return '';
+  return `<span class="fv-audit-badge ${meta.cls}">${meta.label}</span>`;
+}
+
 function openFolderFilePreview(fileIndex){
   const file = getPersonalFiles(_personalCurrentFolder ?? null)[fileIndex];
   if(!file) return;
@@ -2268,6 +2325,7 @@ function openFolderFilePreview(fileIndex){
     size: file.size || '',
     scope: CURRENT_KB_SCOPE || 'school',
     qbank: getKbFileQbankState(file),
+    audit: getKbAuditStatus(file),
   });
   if(file.wiki) params.set('wiki', file.wiki);
   window.location.href = `file-preview.html?${params.toString()}`;
@@ -2282,7 +2340,8 @@ function formatUploadSize(bytes){
 
 function getUnsupportedReason(file){
   if(!KB_UPLOAD_ALLOWED_EXTS.has(file.ext)) return '格式不支持';
-  if((file.size || 0) > KB_UPLOAD_MAX_FILE_SIZE) return '超过 100M';
+  const maxSize = getKbUploadMaxSize(file.ext);
+  if((file.size || 0) > maxSize) return '文件过大';
   return '';
 }
 
@@ -2438,7 +2497,7 @@ function ensureKbUploadModal(){
       </div>
       <div class="kb-upload-body" id="kb-upload-body"></div>
       <input class="kb-upload-input" id="kb-upload-file-input" type="file" multiple
-        accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.jpg,.jpeg,.png"
+        accept=".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.csv,.html,.jpg,.jpeg,.png,.webp,.mp3,.m4a,.mp4,.wav,.webm,.ogg,.oga,.mov"
         onchange="handleKbUploadInput(this.files)" />
       <input class="kb-upload-input" id="kb-upload-folder-input" type="file" multiple webkitdirectory directory
         onchange="handleKbUploadInput(this.files)" />
@@ -2500,7 +2559,7 @@ function renderKbUploadDrop(){
     <div class="kb-upload-drop" ondragover="event.preventDefault()" ondrop="handleKbUploadDrop(event)">
       <div class="kb-upload-folder-art"><i data-lucide="folder-open"></i></div>
       <div class="kb-upload-main-copy">拖入文件，或点击下方按钮选择</div>
-      <div class="kb-upload-sub-copy">仅支持 PDF、DOC、DOCX、XLS、XLSX、PPT、PPTX、JPG、PNG 格式文件，<br>单个文件不超过 100M，可一次拖入或选择多个文件，也可拖入或选择整个文件夹</div>
+      <div class="kb-upload-sub-copy">支持文档、图片、音频、视频等常见资料，可一次上传多个文件，也可以选择整个文件夹。</div>
       <div class="kb-upload-selected"></div>
       <div class="kb-upload-actions">
         <button class="kb-upload-pick" type="button" onclick="triggerKbUploadInput('file')">
@@ -2634,6 +2693,10 @@ function goKbUploadNext(){
 function startKbUploadImport(){
   const body = document.getElementById('kb-upload-body');
   if(!body) return;
+  if((_kbUploadState?.size || 0) > getKbRemainingStorageBytes()){
+    if(typeof showToast === 'function') showToast('空间不足，无法继续上传。请删除部分文件后重试');
+    return;
+  }
   if(_kbUploadTimer){
     clearInterval(_kbUploadTimer);
     _kbUploadTimer = null;
@@ -2704,8 +2767,8 @@ function renderKbUploadComplete(recordTaskCount = 0){
       <div class="kb-upload-complete-icon">
         <i data-lucide="file-check-2"></i>
       </div>
-      <h3>导入完成，文件已入库</h3>
-      <p>AI 正在后台整理内容，完成后知识库内容会自动更新。</p>
+      <h3>上传完成，审核中</h3>
+      <p>文件已进入内容安全审核。音视频审核完成后会在文件夹中更新状态，其他文件通过后自动进入知识库整理流程。</p>
       ${recordTaskCount ? '<p class="kb-upload-complete-note">符合条件的题目录入进度，可在「应用广场 - AI 录题」页面查看。</p>' : ''}
     </div>
   `;
