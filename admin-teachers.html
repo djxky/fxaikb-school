@@ -18,7 +18,7 @@
 <template id="review-template">
 {
   "title": "学校管理 · 老师成员与权限",
-  "summary": "学校管理页服务管理员维护老师成员、邀请方式和角色范围，重点说明老师入校、停用、权限调整与最后管理员保护。",
+  "summary": "学校管理页服务管理员维护老师成员和角色范围，重点说明老师入校、停用、权限调整与最后管理员保护。",
   "sections": [
     {
       "id": "admin-teacher-list",
@@ -47,11 +47,11 @@
             },
             {
               "label": "搜索定位",
-              "text": "按姓名、手机号或学科查找老师，结果为空时保留邀请入口。"
+            "text": "按姓名、手机号或学科查找老师，结果为空时允许清空筛选。"
             },
             {
               "label": "状态识别",
-              "text": "待加入、已加入、已停用使用不同状态标识，避免把离校老师误认为可用成员。"
+              "text": "在职、停用使用不同状态标识，避免把离校老师误认为可用成员。"
             }
           ]
         },
@@ -80,11 +80,11 @@
           "rows": [
             {
               "场景": "无管理员权限",
-              "处理方式": "隐藏入口；若通过链接进入，提示无权限并引导返回首页。"
+              "处理方式": "隐藏入口；若无权限访问，提示无权限并引导返回首页。"
             },
             {
               "场景": "成员为空",
-              "处理方式": "展示空状态和“邀请老师”主操作。"
+              "处理方式": "展示空状态和清空筛选操作。"
             },
             {
               "场景": "老师已离校",
@@ -105,10 +105,6 @@
           ],
           "rows": [
             {
-              "关联对象": "join-school.html",
-              "说明": "老师接受邀请后进入加入学校流程，成功后回写到成员列表。"
-            },
-            {
               "关联对象": "teacher-login.html",
               "说明": "未登录老师需要先完成手机号登录。"
             },
@@ -124,110 +120,6 @@
             "普通老师看不到学校管理入口。",
             "成员状态、角色和最近活跃展示正确。",
             "停用老师不能继续访问学校空间。"
-          ]
-        }
-      ]
-    },
-    {
-      "id": "admin-invite",
-      "title": "2. 邀请老师",
-      "body": "邀请模块用于生成学校专属邀请方式，管理员可以复制链接或查看待加入老师状态。",
-      "blocks": [
-        {
-          "title": "功能说明",
-          "body": [
-            "对象：学校管理员。",
-            "用途：生成学校邀请方式，并跟踪待加入老师。",
-            "产出：邀请链接、邀请状态和待加入记录。"
-          ]
-        },
-        {
-          "title": "交互流程",
-          "ordered": true,
-          "items": [
-            {
-              "label": "创建邀请",
-              "text": "管理员点击邀请老师，选择邀请范围或默认学校范围。"
-            },
-            {
-              "label": "复制链接",
-              "text": "系统生成邀请链接后，管理员复制给老师。"
-            },
-            {
-              "label": "老师打开",
-              "text": "老师打开链接后进入加入学校页，看到学校名称和邀请说明。"
-            },
-            {
-              "label": "待加入跟踪",
-              "text": "已发出但未完成的邀请在列表中显示待加入状态。"
-            }
-          ]
-        },
-        {
-          "title": "业务规则",
-          "items": [
-            "邀请链接只绑定当前学校，不允许跨学校复用。",
-            "邀请链接失效后不能继续加入，需要管理员重新生成。",
-            "同一手机号重复打开邀请时，应识别其是否已在学校内。"
-          ]
-        },
-        {
-          "title": "数据说明",
-          "items": [
-            "邀请信息包含邀请链接、邀请人、学校名称、有效期和待加入状态。",
-            "待加入记录需要关联手机号或老师身份，避免重复创建成员。"
-          ]
-        },
-        {
-          "title": "异常场景",
-          "type": "table",
-          "columns": [
-            "场景",
-            "处理方式"
-          ],
-          "rows": [
-            {
-              "场景": "邀请链接过期",
-              "处理方式": "加入页提示链接已失效，并建议联系管理员重新邀请。"
-            },
-            {
-              "场景": "老师已在学校",
-              "处理方式": "直接提示已加入，不重复创建成员。"
-            },
-            {
-              "场景": "复制失败",
-              "处理方式": "保留链接文本并提示老师手动复制。"
-            },
-            {
-              "场景": "邀请被撤销",
-              "处理方式": "加入页提示邀请不可用。"
-            }
-          ]
-        },
-        {
-          "title": "关联模块",
-          "type": "table",
-          "columns": [
-            "关联对象",
-            "说明"
-          ],
-          "rows": [
-            {
-              "关联对象": "join-school.html",
-              "说明": "承接邀请链接校验、手机号验证和加入结果。"
-            },
-            {
-              "关联对象": "admin-teacher-list",
-              "说明": "加入成功后成员状态从待加入变为已加入。"
-            }
-          ]
-        },
-        {
-          "title": "QA 检查点",
-          "items": [
-            "邀请链接只绑定当前学校。",
-            "链接失效后不能继续加入。",
-            "老师已在学校时不重复创建成员。"
           ]
         }
       ]
@@ -255,7 +147,7 @@
             },
             {
               "label": "确认影响",
-              "text": "角色变更前展示影响范围，例如是否能邀请成员、管理学校资料。"
+              "text": "角色变更前展示影响范围，例如是否能管理学校资料。"
             },
             {
               "label": "保存结果",
@@ -633,7 +525,7 @@
     anomalyTab.addEventListener('click',()=>setWorkspace('students'));
     teacherTab.addEventListener('click',()=>setWorkspace('teachers'));
     const teacherView=document.getElementById('teachers-view');
-    teacherView.innerHTML='<header class="teacher-workspace-head"><div><h2>老师</h2><p>维护老师与学校的长期关系，不随学年学期变化。</p></div><div class="teacher-tools"><label class="teacher-search"><i data-lucide="search"></i><input id="teacher-search-input" placeholder="搜索姓名、手机号或学科"></label><button class="button" id="teacher-ai-import" type="button"><i data-lucide="sparkles"></i> AI 整理名单</button><button class="button primary" id="invite-teacher" type="button">邀请老师</button></div></header><div class="teacher-ai-note"><i data-lucide="info"></i><span>学科仅作为老师档案标签，用于展示和检索，不表示可授资格，也不会自动产生班级权限。</span></div><article class="teacher-table"><table><thead><tr><th>老师</th><th>手机号</th><th>学科标签</th><th>学校级角色</th><th>状态</th><th>最近活跃</th><th></th></tr></thead><tbody><tr data-name="张明" data-phone="138****2168" data-subject="语文 心理健康" data-roles="管理员"><td><div class="person"><span class="ava">张</span>张明</div></td><td class="muted">138****2168</td><td><span class="subject primary">语文</span><span class="subject">心理健康</span></td><td class="teacher-role-cell"><span class="role-chip">管理员</span></td><td class="teacher-state-cell"><span class="state">在职</span></td><td class="muted">今天 09:42</td><td><div class="teacher-actions"><button class="link teacher-manage" type="button">管理</button></div></td></tr><tr data-name="陈嘉" data-phone="186****5072" data-subject="数学" data-roles="教务老师"><td><div class="person"><span class="ava">陈</span>陈嘉</div></td><td class="muted">186****5072</td><td><span class="subject primary">数学</span></td><td class="teacher-role-cell"><span class="role-chip">教务老师</span></td><td class="teacher-state-cell"><span class="state">在职</span></td><td class="muted">昨天 16:18</td><td><div class="teacher-actions"><button class="link teacher-manage" type="button">管理</button></div></td></tr><tr data-name="王洁" data-phone="139****8041" data-subject="数学" data-roles=""><td><div class="person"><span class="ava">王</span>王洁</div></td><td class="muted">139****8041</td><td><span class="subject primary">数学</span></td><td class="teacher-role-cell"></td><td class="teacher-state-cell"><span class="state">在职</span></td><td class="muted">7 月 14 日</td><td><div class="teacher-actions"><button class="link teacher-manage" type="button">管理</button></div></td></tr></tbody></table></article>';
+    teacherView.innerHTML='<header class="teacher-workspace-head"><div><h2>老师</h2><p>维护老师与学校的长期关系，不随学年学期变化。</p></div><div class="teacher-tools"><label class="teacher-search"><i data-lucide="search"></i><input id="teacher-search-input" placeholder="搜索姓名、手机号或学科"></label><button class="button" id="teacher-ai-import" type="button"><i data-lucide="sparkles"></i> AI 整理名单</button></div></header><div class="teacher-ai-note"><i data-lucide="info"></i><span>学科仅作为老师档案标签，用于展示和检索，不表示可授资格，也不会自动产生班级权限。</span></div><article class="teacher-table"><table><thead><tr><th>老师</th><th>手机号</th><th>学科标签</th><th>学校级角色</th><th>状态</th><th>最近活跃</th><th></th></tr></thead><tbody><tr data-name="张明" data-phone="138****2168" data-subject="语文 心理健康" data-roles="管理员"><td><div class="person"><span class="ava">张</span>张明</div></td><td class="muted">138****2168</td><td><span class="subject primary">语文</span><span class="subject">心理健康</span></td><td class="teacher-role-cell"><span class="role-chip">管理员</span></td><td class="teacher-state-cell"><span class="state">在职</span></td><td class="muted">今天 09:42</td><td><div class="teacher-actions"><button class="link teacher-manage" type="button">管理</button></div></td></tr><tr data-name="陈嘉" data-phone="186****5072" data-subject="数学" data-roles="教务老师"><td><div class="person"><span class="ava">陈</span>陈嘉</div></td><td class="muted">186****5072</td><td><span class="subject primary">数学</span></td><td class="teacher-role-cell"><span class="role-chip">教务老师</span></td><td class="teacher-state-cell"><span class="state">在职</span></td><td class="muted">昨天 16:18</td><td><div class="teacher-actions"><button class="link teacher-manage" type="button">管理</button></div></td></tr><tr data-name="王洁" data-phone="139****8041" data-subject="数学" data-roles=""><td><div class="person"><span class="ava">王</span>王洁</div></td><td class="muted">139****8041</td><td><span class="subject primary">数学</span></td><td class="teacher-role-cell"></td><td class="teacher-state-cell"><span class="state">在职</span></td><td class="muted">7 月 14 日</td><td><div class="teacher-actions"><button class="link teacher-manage" type="button">管理</button></div></td></tr></tbody></table></article>';
     const teacherModal=document.getElementById('teacher-modal');
     teacherModal.querySelector('.modal-head h2').textContent='管理老师';
     teacherModal.querySelector('.modal-head p').textContent='维护老师的长期档案、学校级角色和成员状态。';
@@ -678,7 +570,6 @@
     importMask.querySelector('#teacher-list-file').onchange=e=>{const file=e.target.files[0];if(file){importMask.querySelector('.import-drop strong').textContent=file.name;importMask.querySelector('.import-drop span').textContent='AI 将检查重复手机号、缺失姓名与学科标签'}};
     importMask.querySelector('[data-preview]').onclick=()=>{const file=importMask.querySelector('#teacher-list-file').files[0];if(!file){toast('请先选择老师名单');return}closeImport();toast('AI 正在整理 '+file.name+'，稍后生成预览')};
     document.getElementById('teacher-ai-import').onclick=()=>importMask.classList.add('on');
-    document.getElementById('invite-teacher').onclick=()=>toast('邀请链接已生成');
     if(window.lucide)lucide.createIcons();
   })();
 </script>
@@ -748,7 +639,7 @@
     const teacherHead=document.querySelector('.teacher-workspace-head');
     if(teacherHead){
       teacherHead.querySelector('h2').textContent='老师档案';
-      teacherHead.querySelector('p').textContent='共 86 位老师 · 82 位在职 · 4 位待加入';
+      teacherHead.querySelector('p').textContent='共 86 位老师 · 82 位在职 · 4 位停用';
     }
     const teacherNote=document.querySelector('.teacher-ai-note');
     if(teacherNote)teacherNote.remove();
@@ -777,97 +668,6 @@
       anomalyTab.style.display='none';
     });
     if(window.lucide)lucide.createIcons();
-  })();
-</script>
-<style>
-  .invite-mask{z-index:9200;padding:24px;background:rgba(32,31,28,.42);backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px)}
-  .invite-dialog{display:flex;flex-direction:column;width:min(1120px,96vw);height:min(720px,90vh);max-width:none;border-radius:16px;background:#fff;box-shadow:0 30px 90px rgba(31,29,24,.24)}
-  .invite-dialog .modal-head{flex:0 0 auto;padding:26px 30px 22px}
-  .invite-dialog .modal-head h2{font-size:22px;letter-spacing:-.02em}
-  .invite-dialog .modal-head p{margin-top:8px;font-size:13px}
-  .invite-dialog .close{background:transparent;color:#777168;font-size:22px}
-  .invite-body{flex:1;min-height:0;padding:24px 30px 20px;overflow:auto}
-  .invite-create{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;margin-bottom:26px}
-  .invite-expiry{display:grid;gap:8px}
-  .invite-expiry label{color:#5f5a52;font-size:13px;font-weight:750}
-  .invite-expiry select{width:220px;height:44px;padding:0 38px 0 13px;border:1px solid #d9d3c7;border-radius:10px;background:#fff;color:var(--ink);font-size:14px;outline:0}
-  .invite-expiry select:focus{border-color:#8d7446;box-shadow:0 0 0 3px rgba(141,116,70,.12)}
-  .invite-generate{display:inline-flex;align-items:center;gap:8px;height:44px;padding:0 17px;border:0;border-radius:10px;background:#22231f;color:#fff;font-size:13px;font-weight:720}
-  .invite-generate:hover{background:#34352f}.invite-generate i{width:17px;height:17px}
-  .invite-history-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:10px}
-  .invite-history-head h3{margin:0;font-size:16px}.invite-history-head span{color:#a29d94;font-size:11px}
-  .invite-table-wrap{overflow:auto;border:1px solid #e7e3db;border-radius:12px}
-  .invite-table{width:100%;min-width:860px;border-collapse:collapse;font-size:12px}
-  .invite-table th{height:44px;padding:0 14px;background:#fbfaf7;color:#9a958c;text-align:left;font-size:11px;font-weight:700;white-space:nowrap}
-  .invite-table td{height:56px;padding:0 14px;border-top:1px solid #eeeae3;color:#67625a;white-space:nowrap}
-  .invite-link-cell{max-width:250px;color:#292824!important;font-size:12px;overflow:hidden;text-overflow:ellipsis}
-  .invite-status{display:inline-flex;align-items:center;height:25px;padding:0 9px;border:1px solid #cfe1d3;border-radius:20px;background:#f0f8f2;color:#39744d;font-size:11px;font-weight:720}
-  .invite-status.is-expired{border-color:#ded9cf;background:#f7f5f1;color:#99938a}
-  .invite-row-actions{display:flex;gap:4px}
-  .invite-icon-btn{display:grid;place-items:center;width:30px;height:30px;border:0;border-radius:7px;background:transparent;color:#878278}
-  .invite-icon-btn:hover{background:#f1efe9;color:#3f3d38}.invite-icon-btn:disabled{opacity:.28}
-  .invite-icon-btn i{width:16px;height:16px}
-  .invite-dialog .modal-foot{flex:0 0 auto;padding:14px 30px}
-  .invite-dialog .modal-foot .button{height:38px;padding:0 18px}
-  .invite-new-row{animation:inviteRow 1.5s ease-out}
-  @keyframes inviteRow{0%{background:#edf7f0}100%{background:transparent}}
-  @media(max-width:600px){.invite-mask{padding:10px}.invite-dialog{width:100%;height:94vh}.invite-dialog .modal-head,.invite-body,.invite-dialog .modal-foot{padding-left:18px;padding-right:18px}.invite-create{align-items:stretch;flex-direction:column}.invite-expiry select{width:100%}.invite-generate{justify-content:center}}
-</style>
-<script>
-  (function(){
-    const inviteButton=document.getElementById('invite-teacher');
-    if(!inviteButton)return;
-    const inviteMask=document.createElement('div');
-    inviteMask.className='modal-mask invite-mask';
-    inviteMask.id='invite-teacher-modal';
-    inviteMask.innerHTML='<div class="modal invite-dialog" role="dialog" aria-modal="true" aria-labelledby="invite-title"><header class="modal-head"><div><h2 id="invite-title">生成邀请链接</h2><p>生成后复制到老师群，老师用手机号登录并填写昵称即可加入。</p></div><button class="close" type="button" aria-label="关闭">×</button></header><div class="invite-body"><div class="invite-create"><div class="invite-expiry"><label for="invite-expiry">有效期</label><select id="invite-expiry"><option value="1">1 天</option><option value="7" selected>7 天</option><option value="30">30 天</option></select></div><button class="invite-generate" id="generate-invite" type="button"><i data-lucide="link"></i>生成新链接</button></div><div class="invite-history-head"><h3>历史链接</h3><span>仅展示最近 30 条</span></div><div class="invite-table-wrap"><table class="invite-table"><thead><tr><th>历史链接</th><th>生成时间</th><th>生成人</th><th>有效期</th><th>加入</th><th>状态</th><th>操作</th></tr></thead><tbody id="invite-history-body"></tbody></table></div></div><footer class="modal-foot"><button class="button" type="button" data-close-invite>关闭</button></footer></div>';
-    document.body.appendChild(inviteMask);
-    const historyBody=inviteMask.querySelector('#invite-history-body');
-    const inviteRows=[
-      {url:'https://teacher.feixiangai.com/join/fx-7d3ka9',time:'今天 10:18',creator:'张明',days:7,joined:6,status:'有效'},
-      {url:'https://teacher.feixiangai.com/join/fx-2m8cq4',time:'07-03 18:32',creator:'张明',days:7,joined:18,status:'已过期'},
-      {url:'https://teacher.feixiangai.com/join/fx-9p1hs6',time:'06-19 09:05',creator:'陈嘉',days:7,joined:12,status:'已过期'}
-    ];
-    function escapeText(value){return String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]))}
-    function renderInvites(newUrl){
-      historyBody.innerHTML=inviteRows.slice(0,30).map(row=>{
-        const valid=row.status==='有效';
-        return '<tr class="'+(row.url===newUrl?'invite-new-row':'')+'"><td class="invite-link-cell" title="'+escapeText(row.url)+'">'+escapeText(row.url)+'</td><td>'+escapeText(row.time)+'</td><td>'+escapeText(row.creator)+'</td><td>'+row.days+' 天</td><td>'+row.joined+' 位</td><td><span class="invite-status '+(valid?'':'is-expired')+'">'+row.status+'</span></td><td><div class="invite-row-actions"><button class="invite-icon-btn" type="button" data-copy="'+escapeText(row.url)+'" aria-label="复制链接"><i data-lucide="copy"></i></button><button class="invite-icon-btn" type="button" data-disable="'+escapeText(row.url)+'" aria-label="使链接失效" '+(valid?'':'disabled')+'><i data-lucide="ban"></i></button></div></td></tr>';
-      }).join('');
-      if(window.lucide)lucide.createIcons();
-    }
-    function formatNow(){
-      const now=new Date();
-      return '今天 '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-    }
-    function makeToken(){return Math.random().toString(36).slice(2,9)+Date.now().toString(36).slice(-4)}
-    function copyText(text){
-      if(navigator.clipboard&&window.isSecureContext)return navigator.clipboard.writeText(text);
-      const area=document.createElement('textarea');area.value=text;area.style.position='fixed';area.style.opacity='0';document.body.appendChild(area);area.select();document.execCommand('copy');area.remove();return Promise.resolve();
-    }
-    const closeInvite=()=>{inviteMask.classList.remove('on');inviteButton.focus()};
-    inviteButton.onclick=()=>{inviteMask.classList.add('on');setTimeout(()=>inviteMask.querySelector('#invite-expiry').focus(),0)};
-    inviteMask.querySelector('.close').onclick=closeInvite;
-    inviteMask.querySelector('[data-close-invite]').onclick=closeInvite;
-    inviteMask.onclick=event=>{if(event.target===inviteMask)closeInvite()};
-    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&inviteMask.classList.contains('on'))closeInvite()});
-    inviteMask.querySelector('#generate-invite').onclick=()=>{
-      const days=Number(inviteMask.querySelector('#invite-expiry').value);
-      const url='https://teacher.feixiangai.com/join/fx-'+makeToken();
-      inviteRows.unshift({url,time:formatNow(),creator:'张明',days,joined:0,status:'有效'});
-      renderInvites(url);
-      toast('新邀请链接已生成');
-    };
-    historyBody.addEventListener('click',event=>{
-      const copy=event.target.closest('[data-copy]');
-      if(copy)copyText(copy.dataset.copy).then(()=>toast('邀请链接已复制')).catch(()=>toast('复制失败，请手动复制'));
-      const disable=event.target.closest('[data-disable]');
-      if(disable){
-        const row=inviteRows.find(item=>item.url===disable.dataset.disable);
-        if(row){row.status='已失效';renderInvites();toast('邀请链接已失效')}
-      }
-    });
-    renderInvites();
   })();
 </script>
 <style>
@@ -1110,7 +910,6 @@
   if(!view||!tab)return;
   const demo=document.querySelector('.demo-role-switch [data-role="teacher"]');if(demo){demo.textContent='学科老师视角';demo.addEventListener('click',()=>toast('已切换为学科老师视角'))}
   const roles=['管理员','教务老师','学科老师'],subjects=['语文','数学','英语','物理','化学','生物','历史','地理','道德与法治','信息技术','体育','音乐','美术','心理健康'];
-  const inviteSubtitle=document.querySelector('#invite-teacher-modal .modal-head p');if(inviteSubtitle)inviteSubtitle.textContent='生成后将链接分享给老师，老师用手机号登录并填写昵称即可加入。';
   const raw=[
     ['张明','18511112222','管理员','语文|心理健康'],['陈嘉','18511113333','教务老师','数学'],['王洁','18511114444','学科老师','数学'],['李蕾','18511115555','管理员|教务老师|学科老师','英语'],
     ['赵启航','18511116666','','物理'],['孙静','18511117777','','化学|生物'],['周予安','18511118888','','历史'],['吴桐','18511119999','','地理'],
@@ -1121,8 +920,7 @@
   ];
   let data=raw.map((x,i)=>({id:i+1,name:x[0],phone:x[1],roles:x[2]?x[2].split('|'):[],subjects:x[3]?x[3].split('|'):[]})),page=1,q='',timer=null,editId=null;
   const size=20;
-  view.innerHTML='<header class="teacher-final-head"><div class="teacher-total"><span>共 </span><strong id="teacher-count">'+data.length+'</strong><span> 位老师</span></div><div class="teacher-final-tools"><label class="teacher-final-search"><i data-lucide="search"></i><input id="teacher-search-final" type="search" placeholder="搜索姓名、手机号或学科"></label><div class="teacher-add" id="teacher-add"><button class="teacher-add-trigger" type="button" aria-expanded="false"><i data-lucide="plus"></i>添加老师<i data-lucide="chevron-down"></i></button><div class="teacher-add-menu"><button class="teacher-add-item" data-mode="import"><span class="teacher-add-icon"><i data-lucide="sparkles"></i></span><span><strong>导入老师名单</strong><small>支持表格和图片，AI 自动整理</small></span></button><button class="teacher-add-item" data-mode="single"><span class="teacher-add-icon"><i data-lucide="user-plus"></i></span><span><strong>单个添加</strong><small>手动录入一位老师</small></span></button><button class="teacher-add-item" data-mode="invite"><span class="teacher-add-icon"><i data-lucide="link"></i></span><span><strong>邀请老师</strong><small>生成链接，发到老师群</small></span></button></div></div></div></header><section class="teacher-loading" id="teacher-loading-final" hidden><div class="teacher-loading-title"><span>姓名</span><span>手机号</span><span>角色</span><span>学科</span><span></span></div>'+Array.from({length:8},()=>'<div class="teacher-skeleton-row"><span class="teacher-skeleton"></span><span class="teacher-skeleton"></span><span class="teacher-skeleton"></span><span class="teacher-skeleton"></span><span class="teacher-skeleton"></span></div>').join('')+'</section><article class="teacher-final-card" id="teacher-card"><table><thead><tr><th>姓名</th><th>手机号</th><th>角色</th><th>学科</th><th></th></tr></thead><tbody id="teacher-body-final"></tbody></table><div class="teacher-no-result" id="teacher-no-result" hidden>无搜索结果</div><footer class="teacher-pagination" id="teacher-pages"></footer></article>';
-  const addMenuOrder=view.querySelector('.teacher-add-menu');['invite','single','import'].forEach(mode=>addMenuOrder.appendChild(addMenuOrder.querySelector('[data-mode="'+mode+'"]')));
+  view.innerHTML='<header class="teacher-final-head"><div class="teacher-total"><span>共 </span><strong id="teacher-count">'+data.length+'</strong><span> 位老师</span></div><div class="teacher-final-tools"><label class="teacher-final-search"><i data-lucide="search"></i><input id="teacher-search-final" type="search" placeholder="搜索姓名、手机号或学科"></label><div class="teacher-add" id="teacher-add"><button class="teacher-add-trigger" type="button" aria-expanded="false"><i data-lucide="plus"></i>添加老师<i data-lucide="chevron-down"></i></button><div class="teacher-add-menu"><button class="teacher-add-item" data-mode="import"><span class="teacher-add-icon"><i data-lucide="sparkles"></i></span><span><strong>导入老师名单</strong><small>支持表格和图片，AI 自动整理</small></span></button><button class="teacher-add-item" data-mode="single"><span class="teacher-add-icon"><i data-lucide="user-plus"></i></span><span><strong>单个添加</strong><small>手动录入一位老师</small></span></button></div></div></div></header><section class="teacher-loading" id="teacher-loading-final" hidden><div class="teacher-loading-title"><span>姓名</span><span>手机号</span><span>角色</span><span>学科</span><span></span></div>'+Array.from({length:8},()=>'<div class="teacher-skeleton-row"><span class="teacher-skeleton"></span><span class="teacher-skeleton"></span><span class="teacher-skeleton"></span><span class="teacher-skeleton"></span><span class="teacher-skeleton"></span></div>').join('')+'</section><article class="teacher-final-card" id="teacher-card"><table><thead><tr><th>姓名</th><th>手机号</th><th>角色</th><th>学科</th><th></th></tr></thead><tbody id="teacher-body-final"></tbody></table><div class="teacher-no-result" id="teacher-no-result" hidden>无搜索结果</div><footer class="teacher-pagination" id="teacher-pages"></footer></article>';
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const filtered=()=>data.filter(x=>!q||[x.name,x.phone,...x.subjects].join(' ').toLowerCase().includes(q.toLowerCase())).sort((a,b)=>a.name.localeCompare(b.name,'zh-CN'));
   const pills=(a,type)=>a.map(x=>'<span class="teacher-pill '+(type==='role'?'role-pill':'')+'">'+esc(x)+'</span>').join('');
@@ -1216,7 +1014,7 @@
   if(old){old.querySelector('#teacher-save-final').onclick=()=>{const x=data.find(x=>x.id===editId),name=old.querySelector('#edit-final-name').value.trim();if(!name){toast('请输入老师姓名');return}x.name=name;x.roles=values(old,'edit-final-role');x.subjects=values(old,'edit-final-subject');old.classList.remove('on');render();toast('老师信息已保存')};old.querySelector('#teacher-delete-final').onclick=()=>{const x=data.find(x=>x.id===editId);if(x){del.querySelector('.delete-name').textContent=x.name;del.classList.add('on')}}}
   del.querySelector('#teacher-delete-confirmed').onclick=()=>{const x=data.find(x=>x.id===editId);if(!x)return;data=data.filter(x=>x.id!==editId);del.classList.remove('on');old?.classList.remove('on');render();toast('已删除 '+x.name)};
   view.querySelector('#teacher-search-final').oninput=e=>{q=e.target.value;page=1;render()};
-  add.querySelector('.teacher-add-menu').onclick=e=>{const item=e.target.closest('[data-mode]');if(!item)return;closeMenu();if(item.dataset.mode==='single'){addModal.querySelector('#add-final-name').value='';addModal.querySelector('#add-final-phone').value='';setValues(addModal,'add-final-role',[]);setValues(addModal,'add-final-subject',[]);addModal.classList.add('on')}if(item.dataset.mode==='import'){resetImport();resetAnalysisSummary();importModal.classList.add('on')}if(item.dataset.mode==='invite'){document.getElementById('invite-teacher-modal')?.classList.add('on')}};
+  add.querySelector('.teacher-add-menu').onclick=e=>{const item=e.target.closest('[data-mode]');if(!item)return;closeMenu();if(item.dataset.mode==='single'){addModal.querySelector('#add-final-name').value='';addModal.querySelector('#add-final-phone').value='';setValues(addModal,'add-final-role',[]);setValues(addModal,'add-final-subject',[]);addModal.classList.add('on')}if(item.dataset.mode==='import'){resetImport();resetAnalysisSummary();importModal.classList.add('on')}};
   const teachersTab=document.querySelector('.tab[data-view="teachers"]'),studentsTab=document.querySelector('.tab[data-view="classes"]'),tabsNav=teachersTab?.parentElement,pageBody=document.querySelector('.page-body');
   if(tabsNav&&studentsTab)tabsNav.insertBefore(teachersTab,studentsTab);
   document.querySelector('.period')?.remove();
@@ -1899,4 +1697,122 @@
   .teacher-pagination,
   .sv2-pagination{font-size:10px}
 </style>
+<style>
+  /* 校园码与申请处理：将稳定凭证与待处理事项分离，待办优先。 */
+  #campus-access-card{grid-column:1/-1;display:grid;grid-template-columns:minmax(240px,.9fr) minmax(300px,1.1fr);gap:18px 20px;min-height:0;padding:24px;background:#fffefa}
+  #campus-access-card:after{display:none}
+  .campus-access-head{display:flex;grid-column:1/-1;align-items:flex-end;justify-content:space-between;gap:18px}
+  .campus-access-head .basic-card-label{margin-bottom:8px;color:#91897e;font-size:10px}
+  .campus-access-head h2{margin:0;color:#302d28;font-size:21px;letter-spacing:-.035em}
+  .campus-access-head p{margin:7px 0 0;color:#807a70;font-size:11px;line-height:1.55}
+  .campus-teachers-link{display:inline-flex;align-items:center;gap:5px;padding:0;border:0;background:transparent;color:#617464;font-size:11px;white-space:nowrap}
+  .campus-teachers-link svg{width:14px}
+  .campus-code-panel{display:flex;min-height:166px;flex-direction:column;padding:20px 21px;border:1px solid #dfddd6;border-radius:13px;background:#fff}
+  .campus-code-panel-label{color:#8c867d;font-size:11px;font-weight:700}
+  .campus-code-panel strong{margin:16px 0 18px;color:#293d30;font-family:Georgia,"Songti SC",serif;font-size:29px;font-weight:650;letter-spacing:.07em;line-height:1}
+  .campus-code-panel .button{height:40px;margin-top:auto;padding:0 13px;border-color:#d7d3ca;background:#fff;color:#4c554d;font-size:11px}
+  .campus-code-panel .button:hover{border-color:#9aa89d;background:#f6faf7}
+  .campus-queue-panel{display:flex;min-height:166px;flex-direction:column;justify-content:space-between;padding:20px 21px;border:1px solid #eadabe;border-radius:13px;background:#fff9ed}
+  .campus-queue-panel.is-clear{border-color:#dfe6e0;background:#f8fbf8}
+  .campus-queue-label{display:block;color:#86642d;font-size:11px;font-weight:730}
+  .campus-queue-panel.is-clear .campus-queue-label{color:#607263}
+  .campus-queue-data{display:flex;align-items:baseline;gap:8px;margin-top:8px}
+  .campus-queue-number{color:#704b16;font-family:Georgia,"Songti SC",serif;font-size:36px;font-weight:600;line-height:1}
+  .campus-queue-copy{margin:0!important;color:#806c4b!important;font-size:12px!important;line-height:1.3!important}
+  .campus-queue-panel.is-clear .campus-queue-copy{color:#7d8b80!important}
+  .campus-review-trigger{display:inline-flex;align-items:center;justify-content:center;width:100%;height:44px;gap:8px;padding:0 14px;border:0;border-radius:9px;background:#304d3b;color:#fff;font-size:12px;font-weight:730;box-shadow:0 5px 12px rgba(39,70,49,.14)}
+  .campus-review-trigger:hover{background:#263f31;transform:translateY(-1px)}.campus-review-trigger svg{width:15px}
+  .campus-queue-panel.is-clear .campus-review-trigger{border:1px solid #d3ddd5;background:#fff;color:#415b49;box-shadow:none}
+  .campus-review-modal{display:flex;flex-direction:column;width:min(900px,96vw);height:min(650px,88vh);max-width:none}
+  .campus-review-modal .modal-head{flex:0 0 auto;padding:24px 26px 19px}.campus-review-modal .modal-head h2{font-size:21px}
+  .campus-review-modal .modal-body{display:flex;min-height:0;flex:1;flex-direction:column;padding:0 26px 24px;background:#faf9f6}
+  .campus-review-tabs{display:flex;gap:22px;border-bottom:1px solid #e5e1d9}.campus-review-tab{position:relative;height:48px;padding:0;border:0;background:transparent;color:#8c867d;font-size:11px;font-weight:700}.campus-review-tab.active{color:#36332e}.campus-review-tab.active:after{content:"";position:absolute;right:0;bottom:-1px;left:0;height:2px;background:#7f632f}.campus-review-tab b{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;margin-left:5px;padding:0 5px;border-radius:9px;background:#f3e8d4;color:#8b652b;font-size:8px}
+  .campus-review-panel{display:none;min-height:0;overflow:auto;padding-top:14px}.campus-review-panel.active{display:block}.campus-review-list{display:grid;gap:8px}
+  .campus-review-head,.campus-review-row{display:grid;grid-template-columns:minmax(105px,1fr) 124px minmax(100px,.9fr) minmax(115px,1.1fr) 105px 72px;gap:12px;align-items:center}.campus-review-head{padding:0 13px;color:#948e84;font-size:9px;font-weight:700}.campus-review-head.pending,.campus-review-row.pending{grid-template-columns:minmax(130px,1fr) 124px 130px auto}.campus-review-row{min-height:66px;padding:11px 13px;border:1px solid #e3dfd7;border-radius:10px;background:#fff}.campus-review-name{color:#3d3933;font-size:12px;font-weight:700}.campus-review-meta{color:#918b82;font-size:10px}.campus-review-actions{display:flex;justify-content:flex-end;gap:6px}.campus-review-action{height:30px;padding:0 10px;border:1px solid #d9d4cb;border-radius:7px;background:#fff;color:#6d665c;font-size:10px;font-weight:700}.campus-review-action.approve{border-color:#416c51;background:#416c51;color:#fff}.campus-review-status{display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 8px;border-radius:6px;background:#e9f3ec;color:#3d6e4d;font-size:9px;font-weight:700}.campus-review-status.rejected{background:#f7eae7;color:#974c41}.campus-review-status.auto{background:#edf1f6;color:#526c83}.campus-review-empty{display:grid;place-items:center;min-height:280px;color:#918b82;font-size:11px;text-align:center}
+  .campus-confirm-modal{width:min(440px,94vw)}.campus-confirm-modal .modal-body{padding:22px 24px}.campus-confirm-copy{margin:0;color:#676158;font-size:12px;line-height:1.75}.campus-confirm-copy strong{color:#34312c}.campus-confirm-submit.reject{border-color:#a34f44!important;background:#a34f44!important}
+  @media(max-width:760px){#campus-access-card{grid-template-columns:1fr}.campus-access-head{align-items:flex-start;flex-direction:column}.campus-code-panel,.campus-queue-panel{min-height:148px}.campus-review-head{display:none}.campus-review-row,.campus-review-row.pending{grid-template-columns:1fr auto}.campus-review-row .campus-review-record,.campus-review-row .campus-review-reviewer,.campus-review-row .campus-review-time{display:none}.campus-review-actions{grid-column:1/-1;justify-content:flex-start}}
+</style>
+<script>
+  (function(){
+    const basicView=document.getElementById('basic-view'),basicGrid=basicView?.querySelector('.basic-grid');
+    basicView?.querySelector('.basic-term-card')?.remove();
+    basicView?.querySelector('.basic-login-card')?.remove();
+    document.getElementById('school-login-customize')?.remove();
+    document.getElementById('login-scope-select')?.remove();
+    if(!basicGrid||document.getElementById('campus-access-card'))return;
+    const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    const notify=message=>{if(typeof toast==='function')toast(message)};
+    const card=document.createElement('article');card.className='basic-card';card.id='campus-access-card';
+    card.innerHTML='<header class="campus-access-head"><div><div class="basic-card-label"><i data-lucide="key-round"></i>老师入校设置</div><h2>校园码与申请处理</h2><p>手机号已录入本校的老师会自动通过。</p></div><button class="campus-teachers-link" id="campus-manage-teachers" type="button">管理本校老师名单<i data-lucide="arrow-right"></i></button></header><section class="campus-code-panel"><span class="campus-code-panel-label">专属校园码</span><strong id="campus-code-value">ZSZX-7K9M</strong><button class="button" id="copy-campus-code" type="button"><i data-lucide="copy"></i>复制校园码</button></section><section class="campus-queue-panel" id="campus-queue-panel"><div><span class="campus-queue-label">处理申请</span><div class="campus-queue-data"><strong class="campus-queue-number" id="campus-pending-count">2</strong><p class="campus-queue-copy" id="campus-queue-copy">手机号未录入本校，等待审核</p></div></div><button class="campus-review-trigger" id="open-campus-reviews" type="button">查看 2 条申请<i data-lucide="arrow-right"></i></button></section>';
+    basicGrid.appendChild(card);
+    const review=document.createElement('div');review.className='modal-mask';review.id='campus-review-modal';review.innerHTML='<div class="modal campus-review-modal" role="dialog" aria-modal="true"><header class="modal-head"><div><h2>查看申请</h2><p>北京市实验中学</p></div><button class="close" type="button" data-campus-close>×</button></header><div class="modal-body"><nav class="campus-review-tabs"><button class="campus-review-tab active" type="button" data-campus-tab="pending">待审核<b id="campus-pending-tab-count">2</b></button><button class="campus-review-tab" type="button" data-campus-tab="history">审核记录</button></nav><section class="campus-review-panel active" data-campus-panel="pending"><div class="campus-review-list" id="campus-pending-list"></div></section><section class="campus-review-panel" data-campus-panel="history"><div class="campus-review-list" id="campus-history-list"></div></section></div></div>';
+    const confirmModal=document.createElement('div');confirmModal.className='modal-mask';confirmModal.id='campus-confirm-modal';confirmModal.innerHTML='<div class="modal campus-confirm-modal" role="dialog" aria-modal="true"><header class="modal-head"><div><h2 id="campus-confirm-title">确认审核操作</h2></div><button class="close" type="button" data-campus-close>×</button></header><div class="modal-body"><p class="campus-confirm-copy" id="campus-confirm-copy"></p></div><footer class="modal-foot"><button class="button" type="button" data-campus-close>取消</button><button class="button primary campus-confirm-submit" type="button" id="campus-confirm-submit">确认</button></footer></div>';
+    document.body.append(review,confirmModal);
+    [review,confirmModal].forEach(modal=>{modal.addEventListener('click',event=>{if(event.target===modal)modal.classList.remove('on')});modal.querySelectorAll('[data-campus-close]').forEach(button=>button.onclick=()=>modal.classList.remove('on'))});
+    let pending=[{id:1,name:'小君老师',phone:'13912340722',time:'10 分钟前'},{id:2,name:'敏敏数学',phone:'18676542831',time:'今天 09:12'}];
+    let history=[{name:'嘉嘉老师',phone:'18612345072',recordName:'陈嘉',reviewer:'系统',time:'今天 09:18',result:'自动通过',type:'auto'},{name:'予安同学',phone:'13845676149',recordName:'—',reviewer:'张明',time:'昨天 16:40',result:'已通过',type:'approved'},{name:'清清老师',phone:'13789079054',recordName:'—',reviewer:'张明',time:'7 月 20 日',result:'未通过',type:'rejected'}];
+    let decision=null;
+    const queue=card.querySelector('#campus-queue-panel'),queueCount=card.querySelector('#campus-pending-count'),queueCopy=card.querySelector('#campus-queue-copy'),reviewTrigger=card.querySelector('#open-campus-reviews'),pendingList=review.querySelector('#campus-pending-list'),historyList=review.querySelector('#campus-history-list');
+    function iconRefresh(){if(window.lucide)lucide.createIcons()}
+    function render(){const count=pending.length;queue.classList.toggle('is-clear',count===0);queueCount.hidden=count===0;queueCopy.textContent=count?'手机号未录入本校，等待审核':'当前没有待审核申请';reviewTrigger.innerHTML=count?'查看 '+count+' 条申请<i data-lucide="arrow-right"></i>':'查看审核记录<i data-lucide="arrow-right"></i>';review.querySelector('#campus-pending-tab-count').textContent=count;pendingList.innerHTML=count?'<div class="campus-review-head pending"><span>个人版昵称</span><span>手机号</span><span>提交时间</span><span>操作</span></div>'+pending.map(item=>'<article class="campus-review-row pending" data-campus-application="'+item.id+'"><strong class="campus-review-name">'+esc(item.name)+'</strong><span class="campus-review-meta">'+item.phone+'</span><span class="campus-review-meta">'+item.time+'</span><div class="campus-review-actions"><button class="campus-review-action" type="button" data-campus-action="reject">不通过</button><button class="campus-review-action approve" type="button" data-campus-action="approve">通过</button></div></article>').join(''):'<div class="campus-review-empty">暂无待审核申请</div>';historyList.innerHTML='<div class="campus-review-head"><span>个人版昵称</span><span>手机号</span><span>老师名单姓名</span><span>审核人</span><span>审核时间</span><span>结果</span></div>'+history.map(item=>'<article class="campus-review-row"><strong class="campus-review-name">'+esc(item.name)+'</strong><span class="campus-review-meta">'+item.phone+'</span><span class="campus-review-record campus-review-meta">'+esc(item.recordName)+'</span><span class="campus-review-reviewer campus-review-meta">'+esc(item.reviewer)+'</span><span class="campus-review-time campus-review-meta">'+item.time+'</span><span class="campus-review-status '+item.type+'">'+item.result+'</span></article>').join('');iconRefresh()}
+    function showTab(name){review.querySelectorAll('[data-campus-tab]').forEach(tab=>tab.classList.toggle('active',tab.dataset.campusTab===name));review.querySelectorAll('[data-campus-panel]').forEach(panel=>panel.classList.toggle('active',panel.dataset.campusPanel===name))}
+    card.querySelector('#copy-campus-code').onclick=async()=>{const code=card.querySelector('#campus-code-value').textContent;try{await navigator.clipboard.writeText(code)}catch(error){const input=document.createElement('textarea');input.value=code;document.body.appendChild(input);input.select();document.execCommand('copy');input.remove()}notify('校园码已复制')};
+    card.querySelector('#campus-manage-teachers').onclick=()=>document.querySelector('.tab[data-view="teachers"]')?.click();
+    reviewTrigger.onclick=()=>{showTab(pending.length?'pending':'history');render();review.classList.add('on')};
+    review.querySelector('.campus-review-tabs').onclick=event=>{const tab=event.target.closest('[data-campus-tab]');if(tab)showTab(tab.dataset.campusTab)};
+    pendingList.onclick=event=>{const action=event.target.closest('[data-campus-action]'),row=event.target.closest('[data-campus-application]');if(!action||!row)return;const item=pending.find(record=>record.id===Number(row.dataset.campusApplication));if(!item)return;const approved=action.dataset.campusAction==='approve';decision={id:item.id,approved};confirmModal.querySelector('#campus-confirm-title').textContent=approved?'确认通过申请？':'确认不通过申请？';confirmModal.querySelector('#campus-confirm-copy').innerHTML='将'+(approved?'通过':'不通过')+' <strong>'+esc(item.name)+'（'+item.phone+'）</strong> 的老师关联申请。'+(approved?'通过后，该老师可以进入校园版。':'本次操作会记录在审核记录中。');const submit=confirmModal.querySelector('#campus-confirm-submit');submit.textContent=approved?'确认通过':'确认不通过';submit.classList.toggle('reject',!approved);confirmModal.classList.add('on')};
+    confirmModal.querySelector('#campus-confirm-submit').onclick=()=>{if(!decision)return;const item=pending.find(record=>record.id===decision.id);if(!item)return;pending=pending.filter(record=>record.id!==decision.id);history.unshift({name:item.name,phone:item.phone,recordName:'—',reviewer:'张明',time:'刚刚',result:decision.approved?'已通过':'未通过',type:decision.approved?'approved':'rejected'});confirmModal.classList.remove('on');render();notify(decision.approved?'已通过申请，已发送短信通知':'申请已标记为未通过，已发送短信通知');decision=null};
+    render();iconRefresh();
+  })();
+</script>
+<style>
+  /* 区域管理员在老师页切换查看的学校，不改变名单数据。 */
+  .page-header[data-page-header="admin-teachers"] .teacher-school-switch{position:absolute;top:50%;right:40px;z-index:2;transform:translateY(-50%)}
+  .teacher-school-trigger{display:flex;align-items:center;gap:7px;max-width:246px;height:40px;padding:0 11px;border:1px solid #ddd8cf;border-radius:8px;background:#fff;color:#4a453d;font-size:11px;font-weight:700;white-space:nowrap}
+  .teacher-school-trigger:hover,.teacher-school-switch.open .teacher-school-trigger{border-color:#9cac9d;background:#f8fbf8;color:#304d3b}
+  .teacher-school-trigger svg{width:15px;height:15px;color:#697d6e;flex:0 0 auto}
+  .teacher-school-trigger .teacher-school-name{overflow:hidden;text-overflow:ellipsis}
+  .teacher-school-trigger .teacher-school-chevron{width:13px;margin-left:auto;color:#8a857b;transition:transform .16s ease}
+  .teacher-school-switch.open .teacher-school-chevron{transform:rotate(180deg)}
+  .teacher-school-menu{position:absolute;z-index:35;top:calc(100% + 7px);right:0;display:none;width:270px;padding:7px;border:1px solid #dfdbd3;border-radius:10px;background:#fff;box-shadow:0 12px 30px rgba(59,52,43,.13)}
+  .teacher-school-switch.open .teacher-school-menu{display:block}
+  .teacher-school-menu-label{display:block;padding:6px 8px 7px;color:#989188;font-size:9px;font-weight:700}
+  .teacher-school-option{display:flex;align-items:center;justify-content:space-between;width:100%;min-height:38px;padding:0 8px;border:0;border-radius:6px;background:transparent;color:#4b463f;font-size:11px;text-align:left}
+  .teacher-school-option:hover{background:#f4f7f4}.teacher-school-option.active{background:#eef5ef;color:#31513b;font-weight:700}
+  .teacher-school-option svg{width:14px;height:14px}
+  @media(max-width:760px){.page-header[data-page-header="admin-teachers"] .teacher-school-switch{right:14px}.teacher-school-trigger{max-width:190px}.teacher-school-menu{right:auto;left:0}}
+</style>
+<script>
+  (function(){
+    // 用学校切换替换页面顶部右侧的通用说明入口。
+    const headerHelp=document.querySelector('.header-help');
+    document.getElementById('help-modal')?.remove();
+    if(document.getElementById('teacher-school-switch'))return;
+    const initialSchool=document.querySelector('.ph-subtitle')?.textContent.trim()||'虹口区教育局';
+    const schools=[initialSchool,'上海市钟山初级中学','上海市第二实验学校'].filter((school,index,list)=>list.indexOf(school)===index);
+    let currentSchool=initialSchool;
+    const switcher=document.createElement('div');
+    switcher.className='teacher-school-switch';
+    switcher.id='teacher-school-switch';
+    switcher.innerHTML='<button class="teacher-school-trigger" type="button" aria-haspopup="menu" aria-expanded="false"><i data-lucide="building-2"></i><span class="teacher-school-name">'+currentSchool+'</span><i class="teacher-school-chevron" data-lucide="chevron-down"></i></button><div class="teacher-school-menu" role="menu"><span class="teacher-school-menu-label">切换学校</span>'+schools.map(school=>'<button class="teacher-school-option'+(school===currentSchool?' active':'')+'" type="button" role="menuitem" data-school="'+school+'"><span>'+school+'</span>'+(school===currentSchool?'<i data-lucide="check"></i>':'')+'</button>').join('')+'</div>';
+    if(headerHelp)headerHelp.replaceWith(switcher);
+    else document.querySelector('.page-header, .page-head')?.appendChild(switcher);
+    const trigger=switcher.querySelector('.teacher-school-trigger');
+    const refresh=()=>{if(window.lucide)window.lucide.createIcons()};
+    trigger.onclick=()=>{const opened=switcher.classList.toggle('open');trigger.setAttribute('aria-expanded',String(opened))};
+    switcher.querySelector('.teacher-school-menu').onclick=event=>{
+      const option=event.target.closest('[data-school]');
+      if(!option)return;
+      currentSchool=option.dataset.school;
+      switcher.querySelector('.teacher-school-name').textContent=currentSchool;
+      switcher.querySelectorAll('.teacher-school-option').forEach(item=>{const selected=item.dataset.school===currentSchool;item.classList.toggle('active',selected);item.innerHTML='<span>'+item.dataset.school+'</span>'+(selected?'<i data-lucide="check"></i>':'')});
+      document.querySelector('.ph-subtitle')?.replaceChildren(currentSchool);
+      switcher.classList.remove('open');trigger.setAttribute('aria-expanded','false');
+      if(typeof toast==='function')toast('已切换至'+currentSchool);
+      refresh();
+    };
+    document.addEventListener('click',event=>{if(!switcher.contains(event.target)){switcher.classList.remove('open');trigger.setAttribute('aria-expanded','false')}});
+    refresh();
+  })();
+</script>
 </body></html>
