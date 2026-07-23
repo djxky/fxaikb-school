@@ -226,6 +226,24 @@
       .fx-workspace { position: relative; }
       .fx-ws-arrow { transition: transform .2s; }
       .fx-workspace.open .fx-ws-arrow { transform: rotate(180deg); }
+      .fx-campus-code-mask { position:fixed; inset:0; z-index:100000; display:grid; place-items:center; padding:20px; background:rgba(30,28,23,.34); }
+      .fx-campus-code-dialog { width:min(360px,100%); padding:24px; border:1px solid rgba(74,67,56,.12); border-radius:14px; background:#fffefa; box-shadow:0 24px 64px rgba(37,33,25,.2); }
+      .fx-campus-code-eyebrow { display:flex; align-items:center; gap:6px; color:#8a8378; font-size:11px; font-weight:700; }
+      .fx-campus-code-dialog h2 { margin:12px 0 4px; color:#2e4937; font-family:Georgia,"Songti SC",serif; font-size:28px; font-weight:650; letter-spacing:.07em; }
+      .fx-campus-code-school { margin:0; color:#827b70; font-size:12px; }
+      .fx-campus-code-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:22px; }
+      .fx-campus-code-actions button { width:auto; min-width:76px; height:34px; padding:0 12px; border:1px solid #d9d4ca; border-radius:7px; background:#fff; color:#575147; font-size:12px; font-weight:650; }
+      .fx-campus-code-actions button.fx-campus-code-copy { border-color:#304d3b; background:#304d3b; color:#fff; }
+      .fx-space-pop { position:fixed; z-index:100000; width:330px; padding:10px; border:1px solid rgba(67,61,51,.12); border-radius:16px; background:#fffefa; box-shadow:0 22px 58px rgba(37,33,25,.18); }
+      .fx-space-pop-head { display:flex; align-items:center; gap:8px; padding:4px 5px 11px; color:#35312b; font-size:13px; font-weight:720; }
+      .fx-space-pop-head button { display:grid; place-items:center; width:28px; height:28px; padding:0; border:0; border-radius:7px; background:transparent; color:#777066; font-size:21px; line-height:1; }
+      .fx-space-pop-head button:hover { background:#f1eee7; }
+      .fx-space-option { display:flex; align-items:center; width:100%; min-height:66px; gap:11px; padding:10px; border:0; border-radius:11px; background:transparent; color:#312e29; text-align:left; font-family:inherit; }
+      .fx-space-option:hover { background:#f5f3ee; }.fx-space-option.active { background:#f0efe9; }
+      .fx-space-mark { display:grid; place-items:center; width:40px; height:40px; flex:0 0 40px; border-radius:10px; background:#315844; color:#fff; font-size:14px; font-weight:750; }
+      .fx-space-mark.alt { background:#846d42; }.fx-space-mark.personal { background:#685947; }
+      .fx-space-copy { min-width:0; flex:1; }.fx-space-name { overflow:hidden; color:#322f29; font-size:13px; font-weight:700; text-overflow:ellipsis; white-space:nowrap; }.fx-space-type { display:inline-block; margin-top:4px; padding:2px 5px; border-radius:4px; background:#f1efe9; color:#8b857b; font-size:10px; line-height:1.25; }
+      .fx-space-check { width:18px; height:18px; flex:0 0 18px; color:#315844; }
     `;
     const style = document.createElement('style');
     style.id = 'fx-pop-styles';
@@ -236,10 +254,68 @@
   function closeAllPops() {
     document.getElementById('fx-ws-pop')?.remove();
     document.getElementById('fx-notif-pop')?.remove();
+    document.getElementById('fx-space-pop')?.remove();
     document.querySelector('.fx-user-btn')?.classList.remove('open');
   }
 
   const FX_NOTIF_READ_KEY = 'fx-school-demo-notifications-read';
+
+  window.openFxCampusCode = function () {
+    closeAllPops();
+    document.getElementById('fx-campus-code-modal')?.remove();
+    const campusCode = 'ZSZX-7K9M';
+    const schoolName = document.querySelector('.ph-subtitle')?.textContent.trim() || '北京市实验中学';
+    const modal = document.createElement('div');
+    modal.className = 'fx-campus-code-mask';
+    modal.id = 'fx-campus-code-modal';
+    modal.innerHTML = `
+      <section class="fx-campus-code-dialog" role="dialog" aria-modal="true" aria-labelledby="fx-campus-code-title">
+        <div class="fx-campus-code-eyebrow">我的校园码</div>
+        <h2 id="fx-campus-code-title">${campusCode}</h2>
+        <p class="fx-campus-code-school">${schoolName}</p>
+        <div class="fx-campus-code-actions"><button type="button" data-campus-code-close>关闭</button><button class="fx-campus-code-copy" type="button" data-campus-code-copy>复制校园码</button></div>
+      </section>`;
+    const close = () => modal.remove();
+    modal.addEventListener('click', (event) => { if (event.target === modal) close(); });
+    modal.querySelector('[data-campus-code-close]').onclick = close;
+    modal.querySelector('[data-campus-code-copy]').onclick = async () => {
+      try { await navigator.clipboard.writeText(campusCode); }
+      catch (error) {
+        const input = document.createElement('textarea');
+        input.value = campusCode; document.body.appendChild(input); input.select(); document.execCommand('copy'); input.remove();
+      }
+      close(); showToast('校园码已复制');
+    };
+    document.body.appendChild(modal);
+  };
+
+  window.openFxSpaceSwitcher = function (event) {
+    event?.stopPropagation();
+    const anchor = document.getElementById('fx-ws-pop') || document.querySelector('.fx-user-btn');
+    const rect = anchor?.getBoundingClientRect();
+    closeAllPops();
+    document.getElementById('fx-space-pop')?.remove();
+    const pop = document.createElement('div');
+    pop.className = 'fx-space-pop';
+    pop.id = 'fx-space-pop';
+    pop.setAttribute('role', 'menu');
+    pop.style.left = Math.max(12, rect?.left || 12) + 'px';
+    pop.style.bottom = Math.max(12, window.innerHeight - (rect?.bottom || window.innerHeight - 12)) + 'px';
+    pop.innerHTML = `
+      <div class="fx-space-pop-head"><button type="button" aria-label="返回" data-space-back>‹</button><span>切换空间</span></div>
+      <button class="fx-space-option active" type="button" role="menuitem" data-space-name="北京市实验中学"><span class="fx-space-mark">北</span><span class="fx-space-copy"><span class="fx-space-name">北京市实验中学</span><span class="fx-space-type">校园版</span></span><svg class="fx-space-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7"/></svg></button>
+      <button class="fx-space-option" type="button" role="menuitem" data-space-name="人大附中"><span class="fx-space-mark alt">人</span><span class="fx-space-copy"><span class="fx-space-name">人大附中</span><span class="fx-space-type">校园版</span></span></button>
+      <button class="fx-space-option" type="button" role="menuitem" data-space-name="张老师 · 飞象个人版"><span class="fx-space-mark personal">张</span><span class="fx-space-copy"><span class="fx-space-name">张老师</span><span class="fx-space-type">个人版</span></span></button>`;
+    pop.querySelector('[data-space-back]').onclick = () => {
+      pop.remove();
+      document.querySelector('.fx-user-btn')?.click();
+    };
+    pop.querySelectorAll('[data-space-name]').forEach((option) => {
+      option.onclick = () => { closeAllPops(); showToast(option.classList.contains('active') ? '当前 · ' + option.dataset.spaceName : '（演示）切换到 · ' + option.dataset.spaceName); };
+    });
+    document.body.appendChild(pop);
+    setTimeout(() => document.addEventListener('click', closeAllPops, { once: true }), 50);
+  };
 
   function hasUnreadFxNotifs() {
     try {
@@ -277,33 +353,14 @@
         <div style="font-size:13.5px;font-weight:700;color:#111110">张老师</div>
         <div style="font-size:11.5px;color:#6b6a65;margin-top:2px">13800138000</div>
       </div>
-      <div class="fx-pop-submenu">
-        <button onclick="event.stopPropagation()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
-          <div class="fx-pop-row-body"><div class="fx-pop-row-title">切换空间</div></div>
-        </button>
-        <div class="fx-pop-flyout">
-          <div class="fx-pop-section-title">校园版</div>
-          <button class="active" onclick="event.stopPropagation();closeFxAll();showToast('当前 · 北京市实验中学')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            <div class="fx-pop-row-body"><div class="fx-pop-row-title">北京市实验中学</div></div>
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:#a87e2c"><path d="M5 13l4 4L19 7"/></svg>
-          </button>
-          <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）切换到 · 人大附中')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-            <div class="fx-pop-row-body"><div class="fx-pop-row-title">人大附中</div></div>
-          </button>
-          <div class="fx-pop-section-title">个人版</div>
-          <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）切换到 · 飞象个人版')">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="7" r="4"/><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/></svg>
-            <div class="fx-pop-row-body"><div class="fx-pop-row-title">张老师 · 飞象个人版</div></div>
-          </button>
-        </div>
-      </div>
+      <button onclick="openFxSpaceSwitcher(event)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 2v4M16 2v4M3 10h18"/></svg>
+        <div class="fx-pop-row-body"><div class="fx-pop-row-title">切换空间</div></div>
+      </button>
       <div class="fx-pop-divider"></div>
-      <button onclick="event.stopPropagation();closeFxAll();showToast('（演示）账号设置')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-        <div class="fx-pop-row-body"><div class="fx-pop-row-title">账号设置</div></div>
+      <button onclick="event.stopPropagation();openFxCampusCode()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><path d="M9 7h7M9 11h7"/></svg>
+        <div class="fx-pop-row-body"><div class="fx-pop-row-title">我的校园码</div></div>
       </button>
       <button onclick="event.stopPropagation();closeFxAll();window.location.href='teacher-login.html?logout=1'">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
@@ -566,11 +623,11 @@
 
       <div class="fx-nav-section">管理</div>
       ${navItem({ key: 'school-dashboard', icon: ICONS.dashboard, label: '区域数据看板', href: '飞象老师区域AI教育指挥中枢.html', activeKey })}
-      ${navItem({ key: 'admin-teachers', icon: ICONS.shield, label: '区域学校管理', href: 'school-selector.html', activeKey })}
+      ${navItem({ key: 'admin-teachers', icon: ICONS.shield, label: '区域学校管理', href: 'admin-teachers.html?school=上海市钟山初级中学', activeKey })}
 
       <div class="fx-spacer"></div>
 
-      <button type="button" class="fx-user fx-user-btn" onclick="toggleFxUserMenu(event)" data-tooltip="账号设置" onmouseenter="window.showFxTooltip(event)" onmouseleave="window.hideFxTooltip()">
+      <button type="button" class="fx-user fx-user-btn" onclick="toggleFxUserMenu(event)" data-tooltip="个人菜单" onmouseenter="window.showFxTooltip(event)" onmouseleave="window.hideFxTooltip()">
         <div class="fx-avatar">张</div>
         <div style="flex:1;min-width:0;text-align:left">
           <div class="fx-user-name">张老师</div>
