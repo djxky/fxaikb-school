@@ -3,61 +3,137 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>学校管理 · 虹口区教育局</title>
-  <script src="assets/lucide-loader.js"></script>
-  <link rel="stylesheet" href="assets/feixiang-shell.css">
-  <link rel="stylesheet" href="assets/page-header.css">
+  <title>请选择学校 · 飞象老师校园版</title>
   <style>
-    :root{--ink:#292720;--sub:#757167;--line:#e5e1d7;--gold:#9b7532;--paper:#fffefa}
-    *{box-sizing:border-box}body{margin:0;background:#f7f6f1;color:var(--ink);font-family:"Songti SC","STSong","Noto Serif CJK SC",serif}.app{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}.main{min-width:0}.wrap{max-width:1280px;margin:auto;padding:38px 42px 72px}
-    .hero{position:relative;overflow:hidden;padding:36px 40px 32px;border:1px solid #e4d8c2;border-radius:20px;background:linear-gradient(118deg,#fffdf8 0%,#f8f0e2 57%,#edf3eb 100%);box-shadow:0 18px 45px rgba(83,68,38,.08)}.hero:after{content:"";position:absolute;right:-54px;bottom:-95px;width:330px;height:330px;border:1px solid rgba(132,104,51,.18);border-radius:50%;box-shadow:0 0 0 32px rgba(132,104,51,.045),0 0 0 65px rgba(132,104,51,.035)}.hero h1{position:relative;z-index:1;margin:0 0 10px;font-size:32px;letter-spacing:-.035em}.hero p{position:relative;z-index:1;max-width:570px;margin:0;color:var(--sub);font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px;line-height:1.8}.stats{position:relative;z-index:1;display:flex;margin-top:27px}.stat{min-width:158px;padding:0 24px;border-left:1px solid rgba(109,92,58,.2)}.stat:first-child{padding-left:0;border-left:0}.stat strong{display:flex;align-items:baseline;gap:6px;font-family:Georgia,"Songti SC",serif;font-size:29px;font-weight:500;letter-spacing:-.04em;white-space:nowrap}.stat small{color:#80786b;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:11px;font-weight:500;letter-spacing:0}
-    .head{display:flex;align-items:end;justify-content:space-between;gap:20px;margin:34px 2px 15px}.head h2{margin:0;font-size:20px}.head p{margin:5px 0 0;color:#8d877b;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:12px}.search{display:flex;align-items:center;width:250px;height:36px;padding:0 11px;gap:7px;border:1px solid #ded9ce;border-radius:9px;background:#fffefa}.search:focus-within{border-color:#ad8750;box-shadow:0 0 0 3px rgba(169,128,67,.1)}.search svg{width:15px;color:#999184}.search input{width:100%;border:0;outline:0;background:transparent;color:var(--ink);font:12px "PingFang SC","Microsoft YaHei",sans-serif}
-    .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.card{position:relative;display:block;min-height:102px;padding:18px 17px;text-decoration:none;color:inherit;border:1px solid var(--line);border-radius:13px;background:var(--paper);overflow:hidden;transition:.18s}.card:before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;background:linear-gradient(#b08b4d,#e8d9b9);opacity:0;transition:.18s}.card:hover{z-index:1;transform:translateY(-3px);border-color:#c8ad7a;box-shadow:0 14px 26px rgba(85,63,27,.1)}.card:hover:before{opacity:1}.card.hidden{display:none}.tag{display:inline-flex;align-items:center;height:21px;padding:0 7px;border-radius:5px;background:#fbf5e8;color:#98713a;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:10px;font-weight:700}.card h3{margin:9px 28px 0 0;font-size:16px;letter-spacing:-.015em}.arrow{position:absolute;right:15px;bottom:16px;width:24px;height:24px;padding:5px;border-radius:50%;background:#f4f1e9;color:#8b7245;transition:.18s}.card:hover .arrow{background:#9b7532;color:#fff;transform:translateX(2px)}.empty{display:none;padding:52px;text-align:center;color:#91897e;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:13px}.empty.show{display:block}
-    @media(max-width:1050px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}@media(max-width:780px){.app{grid-template-columns:56px minmax(0,1fr)}.wrap{padding:24px 20px}.hero{padding:29px 25px}.hero h1{font-size:26px}.stats{flex-wrap:wrap;gap:16px}.stat{min-width:130px}.head{align-items:start;flex-direction:column}.search{width:100%}}@media(max-width:520px){.app{display:block}.fx-sidebar{display:none}.wrap{padding:20px 14px}.grid{grid-template-columns:1fr}}
+    :root { --ink:#161614; --muted:#a7a39b; --line:#ebe7df; --page:#f8f7f3; --green:#254e3e; }
+    * { box-sizing:border-box; }
+    html,body { min-height:100%; margin:0; }
+    body {
+      display:grid;
+      min-height:100vh;
+      place-items:center;
+      overflow-x:hidden;
+      background:var(--page);
+      color:var(--ink);
+      font-family:"PingFang SC","Microsoft YaHei",sans-serif;
+      -webkit-font-smoothing:antialiased;
+    }
+    body::before,body::after {
+      position:fixed;
+      z-index:-1;
+      color:rgba(191,166,106,.16);
+      font-family:Georgia,serif;
+      font-size:24px;
+      letter-spacing:9px;
+      line-height:1.55;
+      white-space:pre;
+      pointer-events:none;
+      content:"⌄  ⌄  ⌄  ⌄\A⌄  ⌄  ⌄  ⌄\A  ⌄  ⌄  ⌄\A⌄  ⌄  ⌄  ⌄";
+    }
+    body::before { top:-18px; right:-11px; transform:rotate(-7deg); }
+    body::after { bottom:-28px; left:-15px; transform:rotate(8deg); }
+    .selector-card {
+      width:min(900px,calc(100vw - 48px));
+      min-height:590px;
+      padding:74px 72px 64px;
+      border:1px solid var(--line);
+      border-radius:26px;
+      background:rgba(255,255,255,.96);
+      box-shadow:0 20px 56px rgba(57,48,34,.045);
+    }
+    h1 {
+      margin:0;
+      font-family:Georgia,"Songti SC",STSong,serif;
+      font-size:38px;
+      font-weight:650;
+      letter-spacing:-.05em;
+      line-height:1.2;
+    }
+    .intro { margin:17px 0 56px; color:var(--muted); font-size:18px; line-height:1.65; }
+    .school-list { display:grid; gap:18px; }
+    .school-option {
+      position:relative;
+      display:flex;
+      align-items:center;
+      width:100%;
+      min-height:86px;
+      padding:0 28px;
+      border:1px solid transparent;
+      border-radius:14px;
+      background:#f8f8f6;
+      color:#191917;
+      cursor:pointer;
+      text-align:left;
+      transition:border-color .16s ease,background .16s ease,transform .16s ease;
+    }
+    .school-option:hover { border-color:#d9e3dc; background:#f5f8f5; transform:translateY(-1px); }
+    .school-option.active { border-color:#749080; background:#f2f7f3; }
+    .school-option.active::after {
+      position:absolute;
+      top:50%; right:25px;
+      width:21px; height:11px;
+      border-bottom:2px solid var(--green);
+      border-left:2px solid var(--green);
+      content:"";
+      transform:translateY(-65%) rotate(-45deg);
+    }
+    .school-name { font-size:22px; font-weight:650; letter-spacing:-.025em; }
+    .school-option:focus-visible,.enter-button:focus-visible { outline:3px solid rgba(74,117,91,.2); outline-offset:3px; }
+    .enter-button {
+      width:100%;
+      height:74px;
+      margin-top:88px;
+      border:0;
+      border-radius:13px;
+      background:var(--green);
+      color:#fff;
+      cursor:pointer;
+      font-family:Georgia,"Songti SC",STSong,serif;
+      font-size:27px;
+      font-weight:650;
+      letter-spacing:-.03em;
+      transition:background .16s ease,transform .16s ease;
+    }
+    .enter-button:hover:not(:disabled) { background:#193f31; transform:translateY(-1px); }
+    .enter-button:disabled { background:#cbc9c4; cursor:not-allowed; }
+    @media(max-width:680px) {
+      body { display:block; }
+      .selector-card { width:calc(100% - 28px); min-height:0; margin:28px auto; padding:44px 26px 32px; border-radius:20px; }
+      h1 { font-size:31px; }
+      .intro { margin:13px 0 38px; font-size:15px; }
+      .school-option { min-height:72px; padding:0 18px; }
+      .school-name { font-size:17px; }
+      .enter-button { height:60px; margin-top:52px; font-size:22px; }
+    }
   </style>
 </head>
 <body>
-  <div class="app">
-    <aside id="feixiang-sidebar"></aside>
-    <main class="main">
-      <header class="page-header" data-page-header="admin-teachers"><div class="ph-left"><i data-lucide="landmark" class="ph-icon"></i><div class="ph-title">区域学校管理</div><div class="ph-subtitle">虹口区教育局</div></div></header>
-      <div class="wrap">
-        <section class="hero"><h1>学校管理</h1><p>进入学校后，可查看和维护该校的班级、学生及老师信息。</p><div class="stats"><div class="stat"><strong>23<small>所学校</small></strong></div><div class="stat"><strong>5,743<small>位教师</small></strong></div><div class="stat"><strong>57,113<small>名学生</small></strong></div></div></section>
-        <div class="head"><div><h2>学校列表</h2></div><label class="search"><i data-lucide="search"></i><input id="search" type="search" placeholder="搜索学校名称"></label></div>
-        <section class="grid" id="grid">
-          <a class="card" href="admin-teachers.html?school=上海市钟山初级中学"><span class="tag">公办初中</span><h3>上海市钟山初级中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市江湾初级中学"><span class="tag">公办初中</span><h3>上海市江湾初级中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市复兴实验中学"><span class="tag">公办初中</span><h3>上海市复兴实验中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市虹口区教育学院实验中学"><span class="tag">公办初中</span><h3>上海市虹口区教育学院实验中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市第五中学"><span class="tag">公办初中</span><h3>上海市第五中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市曲阳第二中学"><span class="tag">公办初中</span><h3>上海市曲阳第二中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市虹口区教育学院附属中学"><span class="tag">公办初中</span><h3>上海市虹口区教育学院附属中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市北虹初级中学"><span class="tag">公办初中</span><h3>上海市北虹初级中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市海南中学"><span class="tag">公办初中</span><h3>上海市海南中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市丰镇中学"><span class="tag">公办初中</span><h3>上海市丰镇中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市澄衷初级中学"><span class="tag">公办初中</span><h3>上海市澄衷初级中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市鲁迅初级中学"><span class="tag">公办初中</span><h3>上海市鲁迅初级中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市继光初级中学"><span class="tag">公办初中</span><h3>上海市继光初级中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=华东师范大学第一附属初级中学"><span class="tag">公办初中</span><h3>华东师范大学第一附属初级中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海外国语大学附属外国语学校"><span class="tag">公办初中</span><h3>上海外国语大学附属外国语学校</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市第五十二中学"><span class="tag">公办初中</span><h3>上海市第五十二中学</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海外国语大学附属外国语学校东校"><span class="tag">公办初中</span><h3>上海外国语大学附属外国语学校东校</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市北郊学校"><span class="tag">公办初中</span><h3>上海市北郊学校</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市霍山学校"><span class="tag">公办初中</span><h3>上海市霍山学校</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市长青学校"><span class="tag">公办初中</span><h3>上海市长青学校</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市培华学校"><span class="tag">公办初中</span><h3>上海市培华学校</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市虹口实验学校"><span class="tag">公办初中</span><h3>上海市虹口实验学校</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-          <a class="card" href="admin-teachers.html?school=上海市虹口区密云学校"><span class="tag">公办初中</span><h3>上海市虹口区密云学校</h3><i class="arrow" data-lucide="arrow-up-right"></i></a>
-        </section><div class="empty" id="empty">未找到匹配的学校，请调整搜索关键词。</div>
-      </div>
-    </main>
-  </div>
-  <script src="assets/feixiang-shell.js"></script>
+  <main class="selector-card" aria-labelledby="selector-title">
+    <h1 id="selector-title">请选择学校</h1>
+    <p class="intro">检测到当前账号属于多个学校，请选择本次进入的校园空间。</p>
+    <section class="school-list" id="school-list" aria-label="可进入的学校">
+      <button class="school-option" type="button" data-school="回测-QA公共测试小学"><span class="school-name">回测-QA公共测试小学</span></button>
+      <button class="school-option" type="button" data-school="虹口区教育局"><span class="school-name">虹口区教育局</span></button>
+    </section>
+    <button class="enter-button" id="enter-school" type="button" disabled>进入学校</button>
+  </main>
   <script>
-    renderFeixiangSidebar('admin-teachers');
-    const input=document.getElementById('search'),cards=[...document.querySelectorAll('.card')],empty=document.getElementById('empty');
-    input.addEventListener('input',()=>{const q=input.value.trim();const count=cards.reduce((total,card)=>{const show=card.querySelector('h3').textContent.includes(q);card.classList.toggle('hidden',!show);return total+(show?1:0)},0);empty.classList.toggle('show',count===0)});
-    if(window.lucide)lucide.createIcons();
+    let selectedSchool = '';
+    const options = [...document.querySelectorAll('.school-option')];
+    const enterButton = document.getElementById('enter-school');
+
+    options.forEach((option) => {
+      option.addEventListener('click', () => {
+        selectedSchool = option.dataset.school;
+        options.forEach((item) => item.classList.toggle('active', item === option));
+        enterButton.disabled = false;
+      });
+    });
+
+    enterButton.addEventListener('click', () => {
+      if (!selectedSchool) return;
+      window.location.href = 'index.html?school=' + encodeURIComponent(selectedSchool) + '&firstLogin=1';
+    });
   </script>
 </body>
 </html>

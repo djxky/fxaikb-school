@@ -263,7 +263,7 @@
   window.openFxCampusCode = function () {
     closeAllPops();
     document.getElementById('fx-campus-code-modal')?.remove();
-    const campusCode = 'ZSZX-7K9M';
+    const campusCode = 'ABCD33';
     const schoolName = document.querySelector('.ph-subtitle')?.textContent.trim() || '北京市实验中学';
     const modal = document.createElement('div');
     modal.className = 'fx-campus-code-mask';
@@ -637,4 +637,42 @@
     `;
     applySidebarState(container, container.dataset.fxSidebar || 'open');
   };
+
+  function showFirstLoginSuccess() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('firstLogin') !== '1' || document.getElementById('fx-first-login-modal')) return;
+
+    const schoolName = params.get('school') || document.querySelector('.fx-school-name')?.textContent.trim() || '当前学校';
+    const safeSchoolName = String(schoolName).replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
+    const style = document.createElement('style');
+    style.id = 'fx-first-login-style';
+    style.textContent = `
+      .fx-first-login-mask{position:fixed;inset:0;z-index:100100;display:grid;place-items:center;padding:20px;background:rgba(25,29,25,.32);backdrop-filter:blur(3px)}
+      .fx-first-login-dialog{width:min(420px,100%);padding:37px 34px 30px;border:1px solid rgba(53,73,60,.12);border-radius:19px;background:#fffefa;box-shadow:0 24px 70px rgba(19,28,22,.22);text-align:center}
+      .fx-first-login-mark{display:grid;place-items:center;width:64px;height:64px;margin:0 auto 20px;border-radius:22px;background:#eaf4ec;color:#356148}
+      .fx-first-login-mark svg{width:31px;height:31px}.fx-first-login-dialog h2{margin:0;color:#242a25;font-family:Georgia,"Songti SC",serif;font-size:25px;font-weight:650;letter-spacing:-.04em}.fx-first-login-dialog p{margin:12px 0 27px;color:#77776f;font-size:14px;line-height:1.75}.fx-first-login-dialog strong{color:#415e4b;font-weight:700}.fx-first-login-dialog button{width:100%;height:46px;border:0;border-radius:10px;background:#294e3d;color:#fff;cursor:pointer;font-size:14px;font-weight:700}.fx-first-login-dialog button:hover{background:#1d4031}
+    `;
+    document.head.appendChild(style);
+
+    const modal = document.createElement('div');
+    modal.className = 'fx-first-login-mask';
+    modal.id = 'fx-first-login-modal';
+    modal.innerHTML = `<section class="fx-first-login-dialog" role="dialog" aria-modal="true" aria-labelledby="fx-first-login-title"><div class="fx-first-login-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M20 6 9 17l-5-5"/></svg></div><h2 id="fx-first-login-title">已成功关联校园版</h2><p>恭喜你已成功关联<strong>「${safeSchoolName}」</strong>的飞象老师校园版账号。现在可以开始使用校园空间。</p><button type="button" data-first-login-close>开始使用</button></section>`;
+    const close = () => {
+      modal.remove();
+      style.remove();
+      params.delete('firstLogin');
+      const query = params.toString();
+      history.replaceState(null, '', window.location.pathname + (query ? '?' + query : '') + window.location.hash);
+    };
+    modal.addEventListener('click', (event) => { if (event.target === modal) close(); });
+    modal.querySelector('[data-first-login-close]').onclick = close;
+    document.body.appendChild(modal);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', showFirstLoginSuccess);
+  } else {
+    showFirstLoginSuccess();
+  }
 })();
